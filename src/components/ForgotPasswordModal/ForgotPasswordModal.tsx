@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
-  email: z.string().min(2).max(50),
+  email: z.string().email("Please enter a valid email"),
 });
 
 interface ForgotPasswordModalProps {
@@ -47,7 +46,7 @@ export default function ForgotPasswordModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md top-[20%]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Reset your password
@@ -66,13 +65,14 @@ export default function ForgotPasswordModal({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel className="font-semibold">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="Please enter your work email..."
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
