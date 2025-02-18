@@ -1,4 +1,4 @@
-import { AuthForm } from "@/components/AuthForm.tsx/AuthForm";
+import { AuthForm } from "@/components/AuthForm/AuthForm";
 import Logo from "@/components/Logo/Logo";
 
 export default function SignInPage() {

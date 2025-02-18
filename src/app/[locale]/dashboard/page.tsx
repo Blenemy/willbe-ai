@@ -1,7 +1,13 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import {} from "@/components/ui/breadcrumb";
+import { SidebarProvider } from "@/components/ui/sidebar";
+
 export default function Dashboard() {
   return (
-    <main className="font-[family-name:var(--font-geist-sans)] flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      Dashboard
+    <main className="font-[family-name:var(--font-geist-sans)] flex min-h-svh w-full">
+      <SidebarProvider>
+        <AppSidebar />
+      </SidebarProvider>
     </main>
   );
 }

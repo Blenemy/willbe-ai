@@ -26,18 +26,26 @@ import {
   FormMessage,
 } from "../ui/form";
 
-const formSchema = z.object({
+const signInSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z
     .string()
-    .min(8, "A password must have at lest 8 characters")
-    .max(128, "A password must have max 128 characters"),
-  confirmPassword: z
-    .string()
-    .min(8, "A password must have at lest 8 characters")
-    .max(128, "A password must have max 128 characters"),
-  remember: z.boolean().optional(),
+    .min(8, "A password must have at least 8 characters")
+    .max(128, "A password must have a maximum of 128 characters"),
+  remember: z.boolean(),
 });
+
+const signUpSchema = signInSchema
+  .extend({
+    confirmPassword: z
+      .string()
+      .min(8, "A password must have at least 8 characters")
+      .max(128, "A password must have a maximum of 128 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 export function AuthForm({
   className,
@@ -52,8 +60,8 @@ export function AuthForm({
 
   const isSignIn = mode === "sign-in";
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    resolver: zodResolver(isSignIn ? signInSchema : signUpSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -62,7 +70,7 @@ export function AuthForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof signUpSchema>) {
     console.log(values);
   }
 
