@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/AuthForm"
+    "src/components/AuthForm",
+    "src/app/[locale]/dashboard/profile/components/ProfileSidebar"
   ],
   "exclude": ["node_modules"]
 }

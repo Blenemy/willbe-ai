@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Card } from "@/components/ui/card";
@@ -26,16 +27,22 @@ import Link from "next/link";
 import Logo from "./Logo/Logo";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
-const ICON_SIZE = 25;
+const getIcon = (IconComponent: any, size: number, isActive: boolean) => (
+  <IconComponent
+    style={{ width: size, height: size }}
+    className={isActive ? "text-black" : "text-gray-500"}
+  />
+);
 
 const data = {
   navMain: [
     {
       title: "Home",
-      url: "/dashboard",
-      isSingle: true,
-      icon: <Home size={ICON_SIZE} />,
+      url: "/dashboard/home",
+      icon: Home,
     },
     {
       title: "Lead Generation",
@@ -43,14 +50,13 @@ const data = {
       items: [
         {
           title: "Account scenarios",
-          url: "#",
-          icon: <List size={ICON_SIZE} />,
+          url: "/dashboard/lead-generation/account-scenarios",
+          icon: List,
         },
         {
           title: "Lead scenarios",
-          url: "#",
-          isActive: true,
-          icon: <Users size={ICON_SIZE} />,
+          url: "/dashboard/lead-generation/lead-scenarios",
+          icon: Users,
         },
       ],
     },
@@ -60,13 +66,13 @@ const data = {
       items: [
         {
           title: "Scenario list (6)",
-          url: "#",
-          icon: <Mail size={ICON_SIZE} />,
+          url: "/dashboard/messages/scenario-list",
+          icon: Mail,
         },
         {
           title: "Message structures",
-          url: "#",
-          icon: <Settings size={ICON_SIZE} />,
+          url: "/dashboard/messages/message-structures",
+          icon: Settings,
         },
       ],
     },
@@ -76,8 +82,8 @@ const data = {
       items: [
         {
           title: "Account List",
-          url: "#",
-          icon: <List size={ICON_SIZE} />,
+          url: "/dashboard/data/account-list",
+          icon: List,
         },
       ],
     },
@@ -87,8 +93,8 @@ const data = {
       items: [
         {
           title: "Analytics",
-          url: "#",
-          icon: <BarChart size={ICON_SIZE} />,
+          url: "/dashboard/analytics",
+          icon: BarChart,
         },
       ],
     },
@@ -98,13 +104,13 @@ const data = {
       items: [
         {
           title: "Willbe",
-          url: "#",
-          icon: <Settings size={ICON_SIZE} />,
+          url: "/dashboard/settings/willbe",
+          icon: Settings,
         },
         {
           title: "Users",
-          url: "#",
-          icon: <Users size={ICON_SIZE} />,
+          url: "/dashboard/settings/users",
+          icon: Users,
         },
       ],
     },
@@ -112,86 +118,105 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [open, setOpen] = useState(true);
+  const pathname = usePathname();
+  const ICON_SIZE = open ? 24 : 20;
 
   return (
-    <Sidebar {...props} className={collapsed ? "w-20" : "w-64"}>
-      <SidebarContent className="flex flex-col h-full gap-0 py-5">
-        <div
-          className={cn("flex items-center justify-center mb-5", {
-            "flex-col": collapsed,
-            "gap-2": collapsed,
+    <SidebarProvider
+      open={open}
+      className={cn("", {
+        "max-w-64": open,
+        "max-w-20": !open,
+      })}
+    >
+      <Sidebar {...props} className="min-w-20" collapsible="icon">
+        <SidebarContent
+          className={cn("flex flex-col h-full gap-0 py-5", {
+            "items-center": !open,
           })}
         >
-          <Logo width={collapsed ? 40 : 100} height={40} />
-          <button onClick={() => setCollapsed(!collapsed)}>
-            <ChevronLeft size={30} className={collapsed ? "rotate-180" : ""} />
-          </button>
-        </div>
-        <SidebarSeparator />
-        <SidebarGroup className="p-0 xmd:p-2">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link
-                  href="/dashboard"
-                  className={cn("p-0, justify-center", {
-                    "p-2": !collapsed,
-                    "justify-start": !collapsed,
-                  })}
-                >
-                  {data.navMain[0].icon} {!collapsed && data.navMain[0].title}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarSeparator />
-        {data.navMain
-          .filter((item) => !item.isSingle)
-          .map((item) => (
+          <div
+            className={cn("flex items-center justify-center mb-5", {
+              "flex-col": !open,
+              "gap-4": !open,
+            })}
+          >
+            {open ? (
+              <Logo width={100} height={40} />
+            ) : (
+              <Logo width={40} height={40} isCircleLogo />
+            )}
+            <button onClick={() => setOpen((prev) => !prev)}>
+              <ChevronLeft size={30} className={!open ? "rotate-180" : ""} />
+            </button>
+          </div>
+
+          {data.navMain.map((item, index) => (
             <React.Fragment key={item.title}>
-              <SidebarGroup>
-                {!collapsed && (
+              <SidebarGroup className="py-3 flex flex-col">
+                {open && index !== 0 && (
                   <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
                 )}
-
                 <SidebarGroupContent>
-                  <SidebarMenu>
-                    {item.items?.map((subItem) => (
-                      <SidebarMenuItem key={subItem.title}>
-                        <SidebarMenuButton asChild isActive={subItem.isActive}>
-                          <Link
-                            href={subItem.url}
-                            className={cn("p-0, justify-center", {
-                              "p-2": !collapsed,
-                              "justify-start": !collapsed,
-                            })}
-                          >
-                            {subItem.icon} {!collapsed && subItem.title}
-                          </Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
+                  <SidebarMenu
+                    className={cn("gap-3 flex flex-col", {
+                      "items-center": !open,
+                    })}
+                  >
+                    {(item.items || [item]).map((subItem) => {
+                      const isActive = pathname.includes(subItem.url);
+                      return (
+                        <SidebarMenuItem key={subItem.title}>
+                          <SidebarMenuButton asChild isActive={isActive}>
+                            <Link
+                              href={subItem.url}
+                              className={cn(
+                                "p-0 justify-center flex items-center gap-2",
+                                {
+                                  "p-2": open,
+                                  "justify-start": open,
+                                  "bg-gray-200 rounded-md": isActive,
+                                }
+                              )}
+                            >
+                              {getIcon(subItem.icon, ICON_SIZE, isActive)}
+                              {open && subItem.title}
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>
-              <SidebarSeparator />
+              {index !== data.navMain.length - 1 && <SidebarSeparator />}
             </React.Fragment>
           ))}
 
-        {!collapsed && (
-          <div className="p-4 mt-auto">
-            <Card className="p-4 text-sm flex flex-col gap-3">
-              <p className="font-semibold">Available credits</p>
-              <p>
-                Account generation: <span className="font-bold">97</span>
-              </p>
-              <p className="text-xs text-gray-500">(Renews to: al mes)</p>
-            </Card>
+          {open && (
+            <div className="p-4 mt-auto">
+              <Card className="p-4 text-sm flex flex-col gap-3">
+                <p className="font-semibold">Available credits</p>
+                <p>
+                  Account generation: <span className="font-bold">97</span>
+                </p>
+                <p className="text-xs text-gray-500">(Renews to: al mes)</p>
+              </Card>
+            </div>
+          )}
+
+          <div className="flex flex-col items-center gap-2 mt-3">
+            <div className="flex gap-2 items-center">
+              <Link href={"/dashboard/profile"}>
+                <Logo width={40} height={40} isCircleLogo />
+              </Link>
+              {open && <p>{"{{User name}}"}</p>}
+            </div>
+            {open && <Button variant={"link"}>Log out</Button>}
           </div>
-        )}
-      </SidebarContent>
-    </Sidebar>
+        </SidebarContent>
+      </Sidebar>
+    </SidebarProvider>
   );
 }
