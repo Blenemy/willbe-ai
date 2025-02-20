@@ -1,0 +1,166 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Get Azure Account Name
+        run: |
+          # Get branch name and generate Azure account name
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+
+          # Use tail -n1 to get only the last line of output (the actual name)
+          AZURE_ACCOUNT_NAME=$(node .github/scripts/azure-name/azure-name.generator.js "$BRANCH_NAME" | tail -n1)
+
+          # Debug output
+          echo "Generated Azure account name for branch $BRANCH_NAME: $AZURE_ACCOUNT_NAME"
+
+          # Save to environment
+          echo "AZURE_ACCOUNT_NAME=$AZURE_ACCOUNT_NAME" >> $GITHUB_ENV
+
+      - name: Check and Get Config
+        run: |
+          CONFIG_FILE="config.json"
+
+          echo "Checking if storage account exists..."
+          if ! az storage account show --name "$AZURE_ACCOUNT_NAME" &> /dev/null; then
+            echo "::error::Storage account '$AZURE_ACCOUNT_NAME' not found"
+            exit 1
+          fi
+
+          echo "Checking if config file exists..."
+          EXISTS=$(az storage blob exists \
+            --account-name "$AZURE_ACCOUNT_NAME" \
+            --container-name config \
+            --name "$CONFIG_FILE" \
+            --auth-mode key \
+            --query "exists" \
+            --output tsv)
+
+          if [ "$EXISTS" != "true" ]; then
+            echo "::error::Config file '$CONFIG_FILE' not found in storage account '$AZURE_ACCOUNT_NAME'"
+            exit 1
+          fi
+
+          echo "Config file exists. Downloading..."
+          az storage blob download \
+            --account-name "$AZURE_ACCOUNT_NAME" \
+            --container-name config \
+            --name "$CONFIG_FILE" \
+            --file "$CONFIG_FILE" \
+            --auth-mode key
+
+          echo "Setting up environment variables..."
+          # Save variables to environment
+          echo "VM_NAME=$(cat config.json | jq -r '.vm.name')" >> $GITHUB_ENV
+          echo "VM_USERNAME=$(cat config.json | jq -r '.vm.admin_username')" >> $GITHUB_ENV
+          echo "RESOURCE_GROUP=$(cat config.json | jq -r '.resource_group_name')" >> $GITHUB_ENV
+          echo "DEPLOYMENT_CONTAINER_NAME=$(cat config.json | jq -r '.storage.deployment.name')" >> $GITHUB_ENV
+
+          echo "Successfully configured environment variables"
+
+      - name: Get Environment Variables Info
+        run: |
+          BRANCH_NAME=${{ github.ref_name }}
+          SECRET_NAME="${BRANCH_NAME^^}_ENV_VARS"
+          echo "Will try to use secret: $SECRET_NAME"
+          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+
+      - name: Generate .env File
+        env:
+          ENV_VARS: ${{ secrets[env.SECRET_NAME] }}
+        run: |
+          if [ -n "$ENV_VARS" ]; then
+            echo "Found environment variables secret: $SECRET_NAME"
+            node .github/scripts/generate-env.js
+          else
+            echo "::error::Required secret '$SECRET_NAME' not found"
+            exit 1
+          fi
+
+      - name: Build Applications
+        run: npm run build
+
+      - name: Prepare Deploy Flow
+        run: |
+          # Copy deploy-flow from .github to root
+          cp -r .github/deploy-flow ./deploy-flow
+          chmod -R +x ./deploy-flow/scripts
+
+      - name: Generate Archive Name
+        run: |
+          # Format: repository-{branch}-{sha}-{run_number}.tar.gz
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          BRANCH_NAME=${BRANCH_NAME//\//-}  # Replace / with - in branch name
+          ARCHIVE_NAME="repository-${BRANCH_NAME}-${GITHUB_SHA::8}-${GITHUB_RUN_NUMBER}.tar.gz"
+          echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> $GITHUB_ENV
+
+      - name: Create Repository Archive
+        run: |
+          # Create archive of the entire repository
+          tar -czf $ARCHIVE_NAME ./* .github/ .env.local .next
+
+      - name: Upload to Azure Storage
+        run: |
+          az storage blob upload \
+            --account-name "$AZURE_ACCOUNT_NAME" \
+            --container-name $DEPLOYMENT_CONTAINER_NAME \
+            --name $ARCHIVE_NAME \
+            --file $ARCHIVE_NAME \
+            --auth-mode key \
+            --overwrite true
+
+      - name: Generate SAS URL
+        run: |
+          # Set expiration time (30 minutes from current time)
+          END_TIME=$(date -u -d "30 minutes" '+%Y-%m-%dT%H:%MZ')
+
+          # Generate SAS URL
+          SAS_URL=$(az storage blob generate-sas \
+            --account-name "$AZURE_ACCOUNT_NAME" \
+            --container-name $DEPLOYMENT_CONTAINER_NAME \
+            --name $ARCHIVE_NAME \
+            --permissions r \
+            --expiry $END_TIME \
+            --https-only \
+            --auth-mode key \
+            --full-uri \
+            --output tsv)
+
+          echo "DOWNLOAD_URL=$SAS_URL" >> $GITHUB_ENV
+
+          echo "Generated SAS URL (masked for security):"
+          echo "${SAS_URL:0:60}...${SAS_URL: -20}"
+          echo "SAS token will expire at: $END_TIME"
+          echo "Archive name: $ARCHIVE_NAME"
+
+      - name: Deploy to VM
+        run: |
+          SCRIPT_CONTENT=$(cat .github/scripts/deploy.sh)
+          DIR_NAME="portal"
+          
+          echo "Running script on VM..."
+          az vm run-command invoke \
+            --resource-group $RESOURCE_GROUP \
+            --name $VM_NAME \
+            --command-id RunShellScript \
+            --scripts "$SCRIPT_CONTENT" \
+            --parameters \
+              "DOWNLOAD_URL='$DOWNLOAD_URL'" \
+              "USERNAME='$VM_USERNAME'" \
+              "DIR_NAME='$DIR_NAME'"

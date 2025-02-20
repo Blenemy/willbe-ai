@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "$schema",
+    "config"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "config": {
+      "type": "object",
+      "description": "Take these values from terraform output. Look for them in the azureName.config section.",
+      "required": [
+        "instance",
+        "prefix",
+        "project",
+        "region_short"
+      ],
+      "properties": {
+        "instance": {
+          "type": "string",
+          "description": "Three digit instance number"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "Two letter service prefix"
+        },
+        "project": {
+          "type": "string",
+          "description": "Project name in lowercase"
+        },
+        "region_short": {
+          "type": "string",
+          "description": "Short region name in lowercase"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
