@@ -41,6 +41,10 @@ const ProfileTab = () => {
             <p className="text-gray-400 font-semibold">Last Name</p>
             <p className="font-semibold">Rahman</p>
           </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-gray-400 font-semibold">Email</p>
+            <p className="font-semibold">rahmantest@gmail.com</p>
+          </div>
         </div>
       </ProfileCard>
 

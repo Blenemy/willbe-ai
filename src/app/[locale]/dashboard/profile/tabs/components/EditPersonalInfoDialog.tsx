@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 const schema = z.object({
   firstName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
   lastName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
+  email: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
 });
 
 const EditPersonalInfoDialog = ({
@@ -29,7 +30,7 @@ const EditPersonalInfoDialog = ({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { firstName: "Rafiqur", lastName: "Rahman" },
+    defaultValues: { firstName: "", lastName: "", email: "" },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,6 +60,14 @@ const EditPersonalInfoDialog = ({
             <Input id="lastName" {...register("lastName")} />
             {errors.lastName && (
               <p className="text-red-500 text-sm">{errors.lastName.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" {...register("email")} />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
           </div>
 

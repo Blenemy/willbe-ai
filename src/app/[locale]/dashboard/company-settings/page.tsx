@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import YourCompanyTab from "./tabs/YourCompanyTab";
+import ProductsAndServicesTab from "./tabs/ProductsAndServicesTab";
 
 const ProfilePage = () => {
   return (
@@ -19,6 +20,9 @@ const ProfilePage = () => {
         <Separator orientation="vertical" />
         <TabsContent value="your-company" className="w-full">
           <YourCompanyTab />
+        </TabsContent>
+        <TabsContent value="products-and-services" className="w-full">
+          <ProductsAndServicesTab />
         </TabsContent>
       </Tabs>
     </div>
