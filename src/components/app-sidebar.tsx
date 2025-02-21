@@ -31,6 +31,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getIcon = (IconComponent: any, size: number, isActive: boolean) => (
   <IconComponent
     style={{ width: size, height: size }}
