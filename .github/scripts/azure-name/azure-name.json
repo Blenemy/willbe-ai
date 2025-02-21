@@ -1,0 +1,9 @@
+{
+  "$schema": "./azure-name.schema.json",
+  "config": {
+    "instance": "001",
+    "prefix": "st",
+    "project": "willbe",
+    "region_short": "itynh"
+  }
+}
