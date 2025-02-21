@@ -1,5 +1,9 @@
 {
-  "HomePage": {
-    "title": "Willbe-app-es"
+  "homepage": {
+    "header": {
+      "title": "blog",
+      "sign_in": "Conectarse",
+      "talk_to_sales": "¿Hablamos?"
+    }
   }
 }

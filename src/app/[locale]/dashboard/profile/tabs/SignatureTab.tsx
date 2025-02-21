@@ -1,0 +1,9 @@
+const SignatureTab = () => {
+  return (
+    <div className="px-6 flex flex-col gap-5">
+      <h2 className="font-bold text-xl">Email Signature</h2>
+    </div>
+  );
+};
+
+export default SignatureTab;
