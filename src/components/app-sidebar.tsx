@@ -20,6 +20,7 @@ import {
   Mail,
   BarChart,
   Users,
+  User,
   Settings,
   ChevronLeft,
 } from "lucide-react";
@@ -103,14 +104,19 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Willbe",
-          url: "/dashboard/settings/willbe",
+          title: "Company settings",
+          url: "/dashboard/company-settings",
           icon: Settings,
         },
         {
           title: "Users",
-          url: "/dashboard/settings/users",
+          url: "/dashboard/users",
           icon: Users,
+        },
+        {
+          title: "My account",
+          url: "/dashboard/profile",
+          icon: User,
         },
       ],
     },
@@ -207,12 +213,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           )}
 
           <div className="flex flex-col items-center gap-2 mt-3">
-            <div className="flex gap-2 items-center">
-              <Link href={"/dashboard/profile"}>
-                <Logo width={40} height={40} isCircleLogo />
-              </Link>
-              {open && <p>{"{{User name}}"}</p>}
-            </div>
             {open && <Button variant={"link"}>Log out</Button>}
           </div>
         </SidebarContent>

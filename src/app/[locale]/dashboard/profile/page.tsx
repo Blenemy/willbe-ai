@@ -1,16 +1,10 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileTab from "./tabs/ProfileTab";
+import { Separator } from "@/components/ui/separator";
+import SecurityTab from "./tabs/SecurityTab";
+import BillingTab from "./tabs/BillingTab";
+import ConnectionsTab from "./tabs/ConnectionsTab";
+import SignatureTab from "./tabs/SignatureTab";
 
 const ProfilePage = () => {
   return (
@@ -23,38 +17,27 @@ const ProfilePage = () => {
         <TabsList className="flex flex-col items-start justify-start bg-white gap-1">
           <TabsTrigger value="profile">My profile</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="teams">Teams</TabsTrigger>
-          <TabsTrigger value="team-member">Team member</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="connections">Connections</TabsTrigger>
+          <TabsTrigger value="e-signature">Email signature</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="data export">Data export</TabsTrigger>
         </TabsList>
+        <Separator orientation="vertical" />
         <TabsContent value="profile" className="w-full">
           <ProfileTab />
         </TabsContent>
-        <TabsContent value="security">
-          <Card>
-            <CardHeader>
-              <CardTitle>Password</CardTitle>
-              <CardDescription>
-                Change your password here. After saving, you&apos;ll be logged
-                out.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="current">Current password</Label>
-                <Input id="current" type="password" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="new">New password</Label>
-                <Input id="new" type="password" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save password</Button>
-            </CardFooter>
-          </Card>
+        <TabsContent value="security" className="w-full">
+          <SecurityTab />
+        </TabsContent>
+        <TabsContent value="billing" className="w-full">
+          <BillingTab />
+        </TabsContent>
+        <TabsContent value="connections" className="w-full">
+          <ConnectionsTab />
+        </TabsContent>
+        <TabsContent value="e-signature" className="w-full">
+          <SignatureTab />
         </TabsContent>
       </Tabs>
     </div>
