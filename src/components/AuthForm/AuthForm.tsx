@@ -25,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { useAuth } from "@/hooks/useAuth";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -37,6 +38,14 @@ const signInSchema = z.object({
 
 const signUpSchema = signInSchema
   .extend({
+    firstName: z
+      .string()
+      .min(2, "First name must be at least 2 characters")
+      .max(50, "First name must be at most 50 characters"),
+    lastName: z
+      .string()
+      .min(2, "Last name must be at least 2 characters")
+      .max(50, "Last name must be at most 50 characters"),
     confirmPassword: z
       .string()
       .min(8, "A password must have at least 8 characters")
@@ -57,6 +66,7 @@ export function AuthForm({
 }) {
   const [mode, setMode] = useState<"sign-in" | "sign-up">(defaultMode);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const { login, register } = useAuth({ enableFetch: false });
 
   const isSignIn = mode === "sign-in";
 
@@ -65,13 +75,21 @@ export function AuthForm({
     defaultValues: {
       email: "",
       password: "",
+      firstName: "",
+      lastName: "",
       confirmPassword: "",
       remember: false,
     },
   });
 
   function onSubmit(values: z.infer<typeof signUpSchema>) {
-    console.log(values);
+    const { email, password, firstName, lastName } = values;
+
+    if (isSignIn) {
+      login({ email, password });
+    } else {
+      register({ email, password, firstName, lastName });
+    }
   }
 
   return (
@@ -94,6 +112,42 @@ export function AuthForm({
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
+                {!isSignIn && (
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold">
+                          First name
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="First name" {...field} />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {!isSignIn && (
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-semibold">
+                          Last name
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder="Last name" {...field} />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormField
                   control={form.control}
                   name="email"
