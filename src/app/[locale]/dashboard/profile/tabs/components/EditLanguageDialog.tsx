@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { LANGUAGES } from "@/constants/languages";
+import { useAuth } from "@/hooks/useAuth";
 
 const EditLanguageDialog = ({
   open,
@@ -20,8 +21,10 @@ const EditLanguageDialog = ({
   const router = useRouter();
   const currentLocale = useLocale();
   const [selectedLanguage, setSelectedLanguage] = useState(currentLocale);
+  const { updateUserLanguage } = useAuth({ enableFetch: false });
 
   const handleSave = () => {
+    updateUserLanguage({ language: selectedLanguage });
     router.push(`/${selectedLanguage}/dashboard/profile`);
     setOpen(false);
   };

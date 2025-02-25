@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,8 +8,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/hooks/useAuth";
 
 const schema = z
   .object({
@@ -33,11 +39,8 @@ const EditPasswordDialog = ({
   open: boolean;
   setOpen: (o: boolean) => void;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { updateUserPassword } = useAuth({ enableFetch: false });
+  const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       oldPassword: "",
@@ -48,7 +51,12 @@ const EditPasswordDialog = ({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    console.log("Password change request:", data);
+    updateUserPassword({
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword,
+    });
+
+    setOpen(false);
   };
 
   return (
@@ -58,60 +66,67 @@ const EditPasswordDialog = ({
           <DialogTitle>Change Password</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="oldPassword">Old Password</Label>
-            <Input
-              id="oldPassword"
-              type="password"
-              {...register("oldPassword")}
-            />
-            {errors.oldPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.oldPassword.message}
-              </p>
-            )}
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Old password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Old password" {...field} />
+                  </FormControl>
 
-          <div>
-            <Label htmlFor="newPassword">New Password</Label>
-            <Input
-              id="newPassword"
-              type="password"
-              {...register("newPassword")}
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.newPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.newPassword.message}
-              </p>
-            )}
-          </div>
 
-          <div>
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              {...register("confirmPassword")}
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">New password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="New password" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div>
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Save</Button>
-          </div>
-        </form>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">
+                    Confirm Password
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Confirm password" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
