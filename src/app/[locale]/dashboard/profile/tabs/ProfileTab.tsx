@@ -5,10 +5,21 @@ import { useState } from "react";
 import ProfileCard from "./components/ProfileCard";
 import EditPersonalInfoDialog from "./components/EditPersonalInfoDialog";
 import EditLanguageDialog from "./components/EditLanguageDialog";
+import { useAuthStore } from "@/store/useAuthStore";
+import { LANGUAGES } from "@/constants/languages";
 
 const ProfileTab = () => {
   const [editPersonalOpen, setEditPersonalOpen] = useState(false);
   const [editLanguageOpen, setEditLanguageOpen] = useState(false);
+  const { user } = useAuthStore();
+
+  const currentLanguage = LANGUAGES.find(
+    (language) => language.code === user?.language
+  )?.label;
+
+  if (!user) {
+    return <div>No user found</div>;
+  }
 
   return (
     <div className="px-6 flex flex-col gap-5">
@@ -21,9 +32,9 @@ const ProfileTab = () => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <div className="flex flex-col gap-1">
-            <p className="font-bold">User name</p>
-            <p className="text-gray-500">User role</p>
-            <p className="text-gray-500">User location</p>
+            <p className="font-bold">{user.firstName}</p>
+            <p className="text-gray-500">{user.lastName}</p>
+            <p className="text-gray-500">{user.position}</p>
           </div>
         </div>
       </ProfileCard>
@@ -34,22 +45,22 @@ const ProfileTab = () => {
       >
         <div className="grid grid-cols-2 w-full gap-y-3">
           <div className="flex flex-col gap-2">
-            <p className="text-gray-400 font-semibold">First Name</p>
-            <p className="font-semibold">Rafiqur</p>
+            <p className="text-gray-400 font-semibold">First name</p>
+            <p className="font-semibold">{user.firstName}</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-gray-400 font-semibold">Last Name</p>
-            <p className="font-semibold">Rahman</p>
+            <p className="font-semibold">{user.lastName}</p>
           </div>
           <div className="flex flex-col gap-2">
             <p className="text-gray-400 font-semibold">Email</p>
-            <p className="font-semibold">rahmantest@gmail.com</p>
+            <p className="font-semibold">{user.email}</p>
           </div>
         </div>
       </ProfileCard>
 
       <ProfileCard title="Language" onEdit={() => setEditLanguageOpen(true)}>
-        <p className="font-semibold">English</p>
+        <p className="font-semibold">{currentLanguage}</p>
       </ProfileCard>
 
       <EditPersonalInfoDialog
