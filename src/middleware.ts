@@ -6,7 +6,7 @@ const protectedRoutes = ["/dashboard"];
 
 export function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const token = req.cookies.get("token")?.value || true; // remove true when auth is ready
+  const token = req.cookies.get("accessToken")?.value;
 
   const locale =
     req.cookies.get("NEXT_LOCALE")?.value || req.nextUrl.locale || "en";

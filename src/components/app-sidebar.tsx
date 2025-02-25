@@ -30,6 +30,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getIcon = (IconComponent: any, size: number, isActive: boolean) => (
@@ -126,6 +127,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [open, setOpen] = useState(true);
+  const { logout } = useAuth({ enableFetch: true });
   const pathname = usePathname();
   const ICON_SIZE = open ? 24 : 20;
 
@@ -214,7 +216,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           )}
 
           <div className="flex flex-col items-center gap-2 mt-3">
-            {open && <Button variant={"link"}>Log out</Button>}
+            {open && (
+              <Button onClick={() => logout()} variant={"link"}>
+                Log out
+              </Button>
+            )}
           </div>
         </SidebarContent>
       </Sidebar>
