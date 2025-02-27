@@ -83,7 +83,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     onSuccess: handleAuthSuccess,
   });
 
-  const handleRegistrationSuccess = (data: {
+  const handleRegistrationSuccess = async (data: {
     accessToken: string;
     refreshToken: string;
   }) => {
@@ -95,7 +95,14 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       secure: true,
       sameSite: "Strict",
     });
-    queryClient.setQueryData(["authUser"], data);
+
+    try {
+      const response = await protectedAxiosInstance.get("/auth/me");
+      queryClient.setQueryData(["authUser"], response.data);
+    } catch (error) {
+      console.error("Error fetching a user:", error);
+    }
+
     router.push("/dashboard/home");
   };
 
