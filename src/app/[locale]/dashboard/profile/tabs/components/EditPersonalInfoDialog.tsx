@@ -8,8 +8,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/hooks/useAuth";
+import { useLocale } from "next-intl";
 
 const schema = z.object({
   firstName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
@@ -24,18 +33,20 @@ const EditPersonalInfoDialog = ({
   open: boolean;
   setOpen: (o: boolean) => void;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { updateUser } = useAuth({ enableFetch: false });
+  const locale = useLocale();
+  const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { firstName: "", lastName: "", email: "" },
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+    },
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = async (data: any) => {
-    console.log("Submitting:", data);
+    updateUser({ ...data, language: locale });
     setOpen(false);
   };
 
@@ -46,42 +57,65 @@ const EditPersonalInfoDialog = ({
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="firstName">First Name</Label>
-            <Input id="firstName" {...register("firstName")} />
-            {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName.message}</p>
-            )}
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">First name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="First name" {...field} />
+                  </FormControl>
 
-          <div>
-            <Label htmlFor="lastName">Last Name</Label>
-            <Input id="lastName" {...register("lastName")} />
-            {errors.lastName && (
-              <p className="text-red-500 text-sm">{errors.lastName.message}</p>
-            )}
-          </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" {...register("email")} />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-          </div>
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Last name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Last name" {...field} />
+                  </FormControl>
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Save</Button>
-          </div>
-        </form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

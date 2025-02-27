@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import Cookies from "js-cookie";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from "react";
 
 export interface LoginPayload {
   email: string;
@@ -21,6 +23,14 @@ export interface ResetPasswordPayload {
   password: string;
 }
 
+export interface UpdateUserPayload {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  language: string;
+}
+
 interface UseAuthProps {
   enableFetch: boolean;
 }
@@ -29,6 +39,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const locale = useLocale();
+  const { setUser, logout } = useAuthStore();
 
   const { data: user, isLoading } = useQuery({
     queryKey: ["authUser"],
@@ -72,7 +83,24 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     onSuccess: handleAuthSuccess,
   });
 
-  const logout = () => {
+  const handleRegistrationSuccess = (data: {
+    accessToken: string;
+    refreshToken: string;
+  }) => {
+    Cookies.set("accessToken", data.accessToken, {
+      secure: true,
+      sameSite: "Strict",
+    });
+    Cookies.set("refreshToken", data.refreshToken, {
+      secure: true,
+      sameSite: "Strict",
+    });
+    queryClient.setQueryData(["authUser"], data);
+    router.push("/dashboard/home");
+  };
+
+  const logoutHandler = () => {
+    logout();
     queryClient.setQueryData(["authUser"], null);
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
@@ -84,10 +112,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       const response = await axiosInstance.post("/auth/registration", data);
       return response.data;
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(["authUser"], data);
-      router.push("/dashboard/home");
-    },
+    onSuccess: handleRegistrationSuccess,
   });
 
   const forgotPasswordMutation = useMutation({
@@ -130,15 +155,68 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     },
   });
 
+  const updateUserMutation = useMutation({
+    mutationFn: async (data: UpdateUserPayload) => {
+      const response = await protectedAxiosInstance.patch(
+        `auth/users/${user.id}`,
+        data
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["authUser"], data);
+    },
+  });
+
+  const updateUserLanguageMutation = useMutation({
+    mutationFn: async (data: { language: string }) => {
+      const response = await protectedAxiosInstance.patch(
+        `auth/users/${user.id}`,
+        {
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          language: data.language,
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["authUser"], data);
+    },
+  });
+
+  const updateUserPassword = useMutation({
+    mutationFn: async (data: { oldPassword: string; newPassword: string }) => {
+      const response = await protectedAxiosInstance.put(
+        `auth/users/${user.id}/password`,
+        data
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["authUser"], data);
+    },
+  });
+
+  useEffect(() => {
+    if (user) {
+      setUser(user);
+    }
+  }, [user, setUser]);
+
   return {
     user,
     isLoading,
     login: loginMutation.mutate,
-    logout,
+    logout: logoutHandler,
     register: registerMutation.mutate,
     refreshTokens: refreshTokensMutation.mutate,
     forgotPassword: forgotPasswordMutation.mutate,
     resetPassword: resetPasswordMutation.mutate,
     validateResetToken: validateResetTokenQuery.mutate,
+    updateUser: updateUserMutation.mutate,
+    updateUserLanguage: updateUserLanguageMutation.mutate,
+    updateUserPassword: updateUserPassword.mutate,
   };
 };
