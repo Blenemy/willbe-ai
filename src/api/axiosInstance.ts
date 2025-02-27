@@ -32,11 +32,9 @@ protectedAxiosInstance.interceptors.response.use(
         });
 
         Cookies.set("accessToken", data.accessToken, {
-          secure: true,
           sameSite: "Strict",
         });
         Cookies.set("refreshToken", data.refreshToken, {
-          secure: true,
           sameSite: "Strict",
         });
 
