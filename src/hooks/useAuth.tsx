@@ -41,7 +41,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     enabled: enableFetch,
   });
 
-  const handleAuthSuccess = (data: {
+  const handleAuthSuccess = async (data: {
     accessToken: string;
     refreshToken: string;
   }) => {
@@ -53,7 +53,14 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       secure: true,
       sameSite: "Strict",
     });
-    queryClient.setQueryData(["authUser"], data);
+
+    try {
+      const response = await protectedAxiosInstance.get("/auth/me");
+      queryClient.setQueryData(["authUser"], response.data);
+    } catch (error) {
+      console.error("Error fetching a user:", error);
+    }
+
     router.push("/dashboard/home");
   };
 
@@ -85,13 +92,16 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
-      await axiosInstance.post("/auth/forgot-password", { email });
+      await axiosInstance.post(`/auth/forgot-password?email=${email}`);
     },
   });
 
   const resetPasswordMutation = useMutation({
     mutationFn: async (data: ResetPasswordPayload) => {
       await axiosInstance.post("/auth/reset-password", data);
+    },
+    onSuccess: () => {
+      router.replace(`/${locale}/sign-in`);
     },
   });
 
