@@ -57,17 +57,15 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     refreshToken: string;
   }) => {
     Cookies.set("accessToken", data.accessToken, {
-      secure: true,
       sameSite: "Strict",
     });
     Cookies.set("refreshToken", data.refreshToken, {
-      secure: true,
       sameSite: "Strict",
     });
 
     try {
       const response = await protectedAxiosInstance.get("/auth/me");
-      queryClient.setQueryData(["authUser"], response.data);
+      await queryClient.setQueryData(["authUser"], response.data);
     } catch (error) {
       console.error("Error fetching a user:", error);
     }

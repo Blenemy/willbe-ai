@@ -3,13 +3,20 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 
 const protectedRoutes = ["/dashboard"];
+const locales = ["en", "es"];
 
 export function middleware(req: NextRequest) {
-  const pathname = req.nextUrl.pathname;
+  const { pathname } = req.nextUrl;
   const token = req.cookies.get("accessToken")?.value;
 
   const locale =
     req.cookies.get("NEXT_LOCALE")?.value || req.nextUrl.locale || "en";
+
+  const hasLocale = locales.some((loc) => pathname.startsWith(`/${loc}`));
+
+  if (!hasLocale) {
+    return NextResponse.redirect(new URL(`/${locale}${pathname}`, req.url));
+  }
 
   const normalizedPath = pathname.replace(/^\/(en|es)/, "");
 
@@ -28,5 +35,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(en|es)/:path*", "/dashboard/:path*"],
+  matcher: ["/((?!_next|api|static|favicon.ico).*)"],
 };
