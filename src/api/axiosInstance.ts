@@ -33,9 +33,13 @@ protectedAxiosInstance.interceptors.response.use(
 
         Cookies.set("accessToken", data.accessToken, {
           sameSite: "Strict",
+          // uncomment this when the production server runs on the https protocol
+          // secure: true
         });
         Cookies.set("refreshToken", data.refreshToken, {
           sameSite: "Strict",
+          // uncomment this when the production server runs on the https protocol
+          // secure: true,
         });
 
         error.config.headers.Authorization = `Bearer ${data.accessToken}`;

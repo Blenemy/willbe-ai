@@ -8,8 +8,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Company } from "@/types/Company";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useCompany } from "@/hooks/useCompany";
 
 const schema = z.object({
   companySector: z.string().min(1, "Required").max(60, "Maximum 60 characters"),
@@ -18,22 +27,27 @@ const schema = z.object({
 const EditCompanySectorDialog = ({
   open,
   setOpen,
+  company,
 }: {
   open: boolean;
   setOpen: (o: boolean) => void;
+  company: Company;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { companySector: "Technology" },
+    defaultValues: {
+      companySector: company.sector,
+    },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
-    console.log("Updating Company Sector:", data);
+  const { updateCompany } = useCompany({ enableFetch: false });
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    updateCompany({
+      name: company.name,
+      description: company.description,
+      sector: values.companySector,
+    });
     setOpen(false);
   };
 
@@ -44,28 +58,41 @@ const EditCompanySectorDialog = ({
           <DialogTitle>Company Sector</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="companySector">Company Sector</Label>
-            <Input id="companySector" {...register("companySector")} />
-            {errors.companySector && (
-              <p className="text-red-500 text-sm">
-                {errors.companySector.message}
-              </p>
-            )}
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="companySector"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">
+                    Company Sector
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your company sector"
+                      {...field}
+                      type="text"
+                    />
+                  </FormControl>
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Save</Button>
-          </div>
-        </form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

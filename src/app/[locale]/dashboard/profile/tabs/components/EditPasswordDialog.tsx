@@ -49,11 +49,10 @@ const EditPasswordDialog = ({
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (values: z.infer<typeof schema>) => {
     updateUserPassword({
-      oldPassword: data.oldPassword,
-      newPassword: data.newPassword,
+      oldPassword: values.oldPassword,
+      newPassword: values.newPassword,
     });
 
     setOpen(false);

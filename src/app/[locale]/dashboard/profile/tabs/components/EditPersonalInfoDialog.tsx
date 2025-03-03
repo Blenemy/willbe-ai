@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocale } from "next-intl";
+import { User } from "@/types/User";
 
 const schema = z.object({
   firstName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
@@ -29,24 +30,25 @@ const schema = z.object({
 const EditPersonalInfoDialog = ({
   open,
   setOpen,
+  user,
 }: {
   open: boolean;
   setOpen: (o: boolean) => void;
+  user: User;
 }) => {
   const { updateUser } = useAuth({ enableFetch: false });
   const locale = useLocale();
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
-    updateUser({ ...data, language: locale });
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    updateUser({ ...values, language: locale });
     setOpen(false);
   };
 
