@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Product } from "../tabs/ProductsAndServicesTab";
 import {
   Form,
   FormControl,
@@ -20,9 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ProductsAndServices } from "@/types/Company";
+import { useCompany } from "@/hooks/useCompany";
 
 const schema = z.object({
-  title: z.string().min(1, "Required").max(15, "Maximum 15 characters"),
+  name: z.string().min(1, "Required").max(15, "Maximum 15 characters"),
   description: z
     .string()
     .min(1, "Required")
@@ -33,45 +34,49 @@ const EditProductDialog = ({
   open,
   setOpen,
   product,
-  setProducts,
 }: {
   open: boolean;
   setOpen: (o: boolean) => void;
-  product: Product | null;
-  setProducts: Dispatch<SetStateAction<Product[]>>;
+  product: ProductsAndServices | null;
 }) => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
+      name: "",
       description: "",
     },
   });
 
+  const { createProductAndService, updateCompanyProductAndService } =
+    useCompany({ enableFetch: false });
+
   useEffect(() => {
     if (product) {
       form.reset({
-        title: product.title,
+        name: product.name,
         description: product.description,
       });
     } else {
       form.reset({
-        title: "",
+        name: "",
         description: "",
       });
     }
   }, [product, open, form]);
 
-  function onSubmit(values: { title: string; description: string }) {
-    setProducts((prevProducts) => {
-      const updatedProducts = product
-        ? prevProducts.map((p) =>
-            p.id === product.id ? { ...p, ...values } : p
-          )
-        : [...prevProducts, { id: Date.now(), ...values }];
-
-      return updatedProducts;
-    });
+  function onSubmit(values: { name: string; description: string }) {
+    if (product) {
+      updateCompanyProductAndService({
+        name: values.name,
+        description: values.description,
+        id: product.id,
+      });
+    } else {
+      createProductAndService({
+        name: values.name,
+        description: values.description,
+      });
+    }
 
     setOpen(false);
   }
@@ -87,10 +92,10 @@ const EditProductDialog = ({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Title</FormLabel>
+                  <FormLabel className="font-semibold">Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

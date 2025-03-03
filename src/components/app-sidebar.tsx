@@ -127,11 +127,9 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [open, setOpen] = useState(true);
-  const { logout, user } = useAuth({ enableFetch: true });
+  const { logout } = useAuth({ enableFetch: true });
   const pathname = usePathname();
   const ICON_SIZE = open ? 24 : 20;
-
-  console.log(user);
 
   return (
     <SidebarProvider

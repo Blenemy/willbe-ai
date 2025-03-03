@@ -3,29 +3,42 @@ import { Separator } from "@/components/ui/separator";
 import YourCompanyTab from "./tabs/YourCompanyTab";
 import ProductsAndServicesTab from "./tabs/ProductsAndServicesTab";
 
-const ProfilePage = () => {
+const tabsConfig = [
+  {
+    value: "your-company",
+    label: "Your company",
+    component: <YourCompanyTab />,
+  },
+  {
+    value: "products-and-services",
+    label: "Product & services",
+    component: <ProductsAndServicesTab />,
+  },
+];
+
+const CompanyPage = () => {
   return (
     <div className="bg-gray-100 w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">Company settings</h2>
       <Tabs
-        defaultValue="profile"
+        defaultValue="your-company"
         className="flex gap-2 bg-white p-4 rounded-xl h-full w-full"
       >
         <TabsList className="flex flex-col items-start justify-start bg-white gap-1">
-          <TabsTrigger value="your-company">Your company</TabsTrigger>
-          <TabsTrigger value="products-and-services">
-            Product & services
-          </TabsTrigger>
+          {tabsConfig.map((tab) => (
+            <TabsTrigger key={tab.value} value={tab.value}>
+              {tab.label}
+            </TabsTrigger>
+          ))}
         </TabsList>
         <Separator orientation="vertical" />
-        <TabsContent value="your-company" className="w-full">
-          <YourCompanyTab />
-        </TabsContent>
-        <TabsContent value="products-and-services" className="w-full">
-          <ProductsAndServicesTab />
-        </TabsContent>
+        {tabsConfig.map((tab) => (
+          <TabsContent key={tab.value} value={tab.value} className="w-full">
+            {tab.component}
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );
 };
-export default ProfilePage;
+export default CompanyPage;

@@ -7,9 +7,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Company } from "@/types/Company";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useCompany } from "@/hooks/useCompany";
 
 const schema = z.object({
   companyDescription: z
@@ -21,25 +30,27 @@ const schema = z.object({
 const EditCompanyDescriptionDialog = ({
   open,
   setOpen,
+  company,
 }: {
   open: boolean;
   setOpen: (o: boolean) => void;
+  company: Company;
 }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      companyDescription:
-        "Acme Corporation is a leading provider of innovative solutions for businesses...",
+      companyDescription: company.description,
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (data: any) => {
-    console.log("Updating Company Description:", data);
+  const { updateCompany } = useCompany({ enableFetch: false });
+
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    updateCompany({
+      name: company.name,
+      description: values.companyDescription,
+      sector: company.sector,
+    });
     setOpen(false);
   };
 
@@ -50,31 +61,41 @@ const EditCompanyDescriptionDialog = ({
           <DialogTitle>Company Description</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="companyDescription">Company Description</Label>
-            <Textarea
-              id="companyDescription"
-              {...register("companyDescription")}
-            />
-            {errors.companyDescription && (
-              <p className="text-red-500 text-sm">
-                {errors.companyDescription.message}
-              </p>
-            )}
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="companyDescription"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-semibold">
+                    Company Description
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your company description"
+                      {...field}
+                      type="text"
+                    />
+                  </FormControl>
 
-          <div className="flex justify-end gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Save</Button>
-          </div>
-        </form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

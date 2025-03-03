@@ -66,6 +66,7 @@ const ProfileTab = () => {
       <EditPersonalInfoDialog
         open={editPersonalOpen}
         setOpen={setEditPersonalOpen}
+        user={user}
       />
       <EditLanguageDialog
         open={editLanguageOpen}
