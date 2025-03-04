@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { ADMINS_ONLY, ALL_ROLES } from "@/types/Roles";
 
 const getIcon = (
   IconComponent: React.ForwardRefExoticComponent<
@@ -52,6 +53,7 @@ const data = {
       title: "Home",
       url: "/dashboard/home",
       icon: Home,
+      allowedRoles: ALL_ROLES,
     },
     {
       title: "Lead Generation",
@@ -61,11 +63,13 @@ const data = {
           title: "Account scenarios",
           url: "/dashboard/lead-generation/account-scenarios",
           icon: List,
+          allowedRoles: ALL_ROLES,
         },
         {
           title: "Lead scenarios",
           url: "/dashboard/lead-generation/lead-scenarios",
           icon: Users,
+          allowedRoles: ALL_ROLES,
         },
       ],
     },
@@ -77,11 +81,13 @@ const data = {
           title: "Scenario list (6)",
           url: "/dashboard/messages/scenario-list",
           icon: Mail,
+          allowedRoles: ALL_ROLES,
         },
         {
           title: "Message structures",
           url: "/dashboard/messages/message-structures",
           icon: Settings,
+          allowedRoles: ALL_ROLES,
         },
       ],
     },
@@ -93,6 +99,7 @@ const data = {
           title: "Account List",
           url: "/dashboard/data/account-list",
           icon: List,
+          allowedRoles: ALL_ROLES,
         },
       ],
     },
@@ -104,6 +111,7 @@ const data = {
           title: "Analytics",
           url: "/dashboard/analytics",
           icon: BarChart,
+          allowedRoles: ALL_ROLES,
         },
       ],
     },
@@ -115,16 +123,19 @@ const data = {
           title: "Company settings",
           url: "/dashboard/company-settings",
           icon: Settings,
+          allowedRoles: ALL_ROLES,
         },
         {
           title: "Users",
           url: "/dashboard/users",
           icon: Users,
+          allowedRoles: ADMINS_ONLY,
         },
         {
           title: "My account",
           url: "/dashboard/profile",
           icon: User,
+          allowedRoles: ALL_ROLES,
         },
       ],
     },
@@ -133,7 +144,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [open, setOpen] = useState(true);
-  const { logout } = useAuth({ enableFetch: true });
+  const { logout, user } = useAuth({ enableFetch: true });
   const pathname = usePathname();
   const ICON_SIZE = open ? 24 : 20;
 
@@ -179,29 +190,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       "items-center": !open,
                     })}
                   >
-                    {(item.items || [item]).map((subItem) => {
-                      const isActive = pathname.includes(subItem.url);
-                      return (
-                        <SidebarMenuItem key={subItem.title}>
-                          <SidebarMenuButton asChild isActive={isActive}>
-                            <Link
-                              href={subItem.url}
-                              className={cn(
-                                "p-0 justify-center flex items-center gap-2",
-                                {
-                                  "p-2": open,
-                                  "justify-start": open,
-                                  "bg-gray-200 rounded-md": isActive,
-                                }
-                              )}
-                            >
-                              {getIcon(subItem.icon, ICON_SIZE, isActive)}
-                              {open && subItem.title}
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
-                    })}
+                    {(item.items || [item])
+                      .filter(
+                        (subItem) =>
+                          !subItem.allowedRoles ||
+                          subItem.allowedRoles.includes(user?.role)
+                      )
+                      .map((subItem) => {
+                        const isActive = pathname.includes(subItem.url);
+                        return (
+                          <SidebarMenuItem key={subItem.title}>
+                            <SidebarMenuButton asChild isActive={isActive}>
+                              <Link
+                                href={subItem.url}
+                                className={cn(
+                                  "p-0 justify-center flex items-center gap-2",
+                                  {
+                                    "p-2": open,
+                                    "justify-start": open,
+                                    "bg-gray-200 rounded-md": isActive,
+                                  }
+                                )}
+                              >
+                                {getIcon(subItem.icon, ICON_SIZE, isActive)}
+                                {open && subItem.title}
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
                   </SidebarMenu>
                 </SidebarGroupContent>
               </SidebarGroup>
