@@ -1,33 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "../../profile/tabs/components/ProfileCard";
 import EditProductDialog from "../components/EditProductDialog";
 import { useCompany } from "@/hooks/useCompany";
 import { ProductsAndServices } from "@/types/Company";
+import DeleteDialog from "../components/DeleteDialog";
+import ProductsList from "../components/ProductsList";
 
 const ProductsAndServicesTab = () => {
-  const { productsAndServices, deleteCompanyProductAndService } = useCompany({
+  const { productsAndServices } = useCompany({
     enableFetch: true,
   });
   const [selectedProduct, setSelectedProduct] =
     useState<ProductsAndServices | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] =
+    useState<ProductsAndServices | null>(null);
 
-  const handleEdit = (product: ProductsAndServices) => {
+  const handleEdit = useCallback((product: ProductsAndServices) => {
     setSelectedProduct(product);
     setEditDialogOpen(true);
-  };
+  }, []);
 
-  const handleAddProduct = () => {
+  const handleAddProduct = useCallback(() => {
     setSelectedProduct(null);
     setEditDialogOpen(true);
-  };
+  }, []);
 
-  const handleDelete = (productId: number) => {
-    deleteCompanyProductAndService({ id: productId });
-  };
+  const handleDelete = useCallback((product: ProductsAndServices) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  }, []);
 
   return (
     <div className="px-6 flex flex-col gap-5">
@@ -37,36 +42,22 @@ const ProductsAndServicesTab = () => {
         <Button onClick={handleAddProduct}>Add</Button>
       </div>
 
-      {productsAndServices && (
-        <>
-          {productsAndServices.map((product) => (
-            <ProfileCard key={product.id} title={product.name}>
-              <p className="text-gray-500 truncate">{product.description}</p>
-              <div className="flex gap-2 mt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleEdit(product)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDelete(product.id)}
-                >
-                  Delete
-                </Button>
-              </div>
-            </ProfileCard>
-          ))}
-        </>
-      )}
+      <ProductsList
+        productsList={productsAndServices}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+      />
 
       <EditProductDialog
         open={editDialogOpen}
         setOpen={setEditDialogOpen}
         product={selectedProduct}
+      />
+
+      <DeleteDialog
+        open={deleteDialogOpen}
+        setOpen={setDeleteDialogOpen}
+        productToDelete={productToDelete}
       />
     </div>
   );
