@@ -18,6 +18,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -44,6 +45,12 @@ export default function ForgotPasswordModal({
   function onSubmit(values: z.infer<typeof formSchema>) {
     forgotPassword(values.email);
   }
+
+  useEffect(() => {
+    if (open) {
+      form.reset();
+    }
+  }, [open, form]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

@@ -23,6 +23,7 @@ import {
   User,
   Settings,
   ChevronLeft,
+  LucideProps,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo/Logo";
@@ -32,8 +33,13 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getIcon = (IconComponent: any, size: number, isActive: boolean) => (
+const getIcon = (
+  IconComponent: React.ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+  >,
+  size: number,
+  isActive: boolean
+) => (
   <IconComponent
     style={{ width: size, height: size }}
     className={isActive ? "text-black" : "text-gray-500"}

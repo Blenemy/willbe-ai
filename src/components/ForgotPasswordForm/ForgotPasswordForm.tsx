@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,10 +16,15 @@ import {
 } from "../ui/form";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { PasswordInput } from "../ui/password-input";
+import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 
 const schema = z
   .object({
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(PASSWORD_REGEX, "Password contains forbidden characters"),
     confirmPassword: z
       .string()
       .min(8, "Password must be at least 8 characters"),
@@ -46,8 +50,6 @@ export function ForgotPasswordForm({
       confirmPassword: "",
     },
   });
-
-  console.log(token);
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { newPassword } = values;
@@ -79,11 +81,11 @@ export function ForgotPasswordForm({
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-semibold">
+                      <FormLabel className="font-semibold text-foreground">
                         New password
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="New password" {...field} />
+                        <PasswordInput placeholder="New password" {...field} />
                       </FormControl>
 
                       <FormMessage />
@@ -95,11 +97,14 @@ export function ForgotPasswordForm({
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-semibold">
+                      <FormLabel className="font-semibold text-foreground">
                         Confirm password
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Confirm password" {...field} />
+                        <PasswordInput
+                          placeholder="Confirm password"
+                          {...field}
+                        />
                       </FormControl>
 
                       <FormMessage />
