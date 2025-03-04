@@ -26,13 +26,16 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useAuth } from "@/hooks/useAuth";
+import { PasswordInput } from "../ui/password-input";
+import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 
 const signInSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z
     .string()
     .min(8, "A password must have at least 8 characters")
-    .max(128, "A password must have a maximum of 128 characters"),
+    .max(64, "A password must have a maximum of 64 characters")
+    .regex(PASSWORD_REGEX, "Password contains forbidden characters"),
   remember: z.boolean(),
 });
 
@@ -41,15 +44,17 @@ const signUpSchema = signInSchema
     firstName: z
       .string()
       .min(2, "First name must be at least 2 characters")
-      .max(50, "First name must be at most 50 characters"),
+      .max(50, "First name must be at most 50 characters")
+      .regex(/^[A-Za-z]+$/, "Only letters are allowed"),
     lastName: z
       .string()
       .min(2, "Last name must be at least 2 characters")
-      .max(50, "Last name must be at most 50 characters"),
+      .max(50, "Last name must be at most 50 characters")
+      .regex(/^[A-Za-z]+$/, "Only letters are allowed"),
     confirmPassword: z
       .string()
       .min(8, "A password must have at least 8 characters")
-      .max(128, "A password must have a maximum of 128 characters"),
+      .max(64, "A password must have a maximum of 64 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",
@@ -118,7 +123,7 @@ export function AuthForm({
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">
+                        <FormLabel className="font-semibold text-foreground">
                           First name
                         </FormLabel>
                         <FormControl>
@@ -136,7 +141,7 @@ export function AuthForm({
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">
+                        <FormLabel className="font-semibold text-foreground">
                           Last name
                         </FormLabel>
                         <FormControl>
@@ -153,7 +158,9 @@ export function AuthForm({
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-semibold">Email</FormLabel>
+                      <FormLabel className="font-semibold text-foreground">
+                        Email
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Enter your work email..."
@@ -171,12 +178,13 @@ export function AuthForm({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-semibold">Password</FormLabel>
+                      <FormLabel className="font-semibold text-foreground">
+                        Password
+                      </FormLabel>
                       <FormControl>
-                        <Input
+                        <PasswordInput
                           placeholder="Enter your password"
                           {...field}
-                          type="password"
                         />
                       </FormControl>
 
@@ -191,14 +199,13 @@ export function AuthForm({
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-semibold">
+                        <FormLabel className="font-semibold text-foreground">
                           Confirm password
                         </FormLabel>
                         <FormControl>
-                          <Input
+                          <PasswordInput
                             placeholder="Re-enter your password"
                             {...field}
-                            type="password"
                           />
                         </FormControl>
 

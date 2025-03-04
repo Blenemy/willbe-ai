@@ -5,29 +5,37 @@ import { useLocale } from "next-intl";
 import Cookies from "js-cookie";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect } from "react";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
-export interface LoginPayload {
+interface LoginPayload {
   email: string;
   password: string;
 }
 
-export interface RegisterPayload {
+interface RegisterPayload {
   email: string;
   password: string;
   firstName: string;
   lastName: string;
 }
 
-export interface ResetPasswordPayload {
+interface ResetPasswordPayload {
   token: string;
   password: string;
 }
 
-export interface UpdateUserPayload {
+interface UpdateUserPayload {
   email: string;
   firstName: string;
   lastName: string;
   language: string;
+}
+
+interface APIRequestErrorPayload {
+  message: string;
+  error: string;
+  statusCode: number;
 }
 
 interface UseAuthProps {
@@ -78,6 +86,10 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       return response.data;
     },
     onSuccess: handleAuthSuccess,
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage = error.response?.data.message || "Login failed.";
+      toast(errorMessage);
+    },
   });
 
   const handleRegistrationSuccess = async (data: {
@@ -117,11 +129,24 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       return response.data;
     },
     onSuccess: handleRegistrationSuccess,
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage =
+        error.response?.data.message || "Registration failed.";
+      toast(errorMessage);
+    },
   });
 
   const forgotPasswordMutation = useMutation({
     mutationFn: async (email: string) => {
       await axiosInstance.post(`/auth/forgot-password?email=${email}`);
+    },
+    onSuccess: () => {
+      toast("Password reset link sent successfully");
+    },
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage =
+        error.response?.data.message || "Failed to send password reset link";
+      toast(errorMessage);
     },
   });
 
@@ -131,6 +156,11 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     },
     onSuccess: () => {
       router.replace(`/${locale}/sign-in`);
+    },
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage =
+        error.response?.data.message || "Failed to reset password";
+      toast(errorMessage);
     },
   });
 
