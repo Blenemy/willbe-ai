@@ -33,6 +33,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ADMINS_ONLY, ALL_ROLES } from "@/types/Roles";
+import { Skeleton } from "./ui/skeleton";
 
 const getIcon = (
   IconComponent: React.ForwardRefExoticComponent<
@@ -144,7 +145,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [open, setOpen] = useState(true);
-  const { logout, user } = useAuth({ enableFetch: true });
+  const { logout, user, isLoading } = useAuth({ enableFetch: true });
   const pathname = usePathname();
   const ICON_SIZE = open ? 24 : 20;
 
@@ -178,73 +179,92 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </button>
           </div>
 
-          {data.navMain.map((item, index) => (
-            <React.Fragment key={item.title}>
-              <SidebarGroup className="py-3 flex flex-col">
-                {open && index !== 0 && (
-                  <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-                )}
-                <SidebarGroupContent>
-                  <SidebarMenu
-                    className={cn("gap-3 flex flex-col", {
-                      "items-center": !open,
-                    })}
-                  >
-                    {(item.items || [item])
-                      .filter(
-                        (subItem) =>
-                          !subItem.allowedRoles ||
-                          subItem.allowedRoles.includes(user?.role)
-                      )
-                      .map((subItem) => {
-                        const isActive = pathname.includes(subItem.url);
-                        return (
-                          <SidebarMenuItem key={subItem.title}>
-                            <SidebarMenuButton asChild isActive={isActive}>
-                              <Link
-                                href={subItem.url}
-                                className={cn(
-                                  "p-0 justify-center flex items-center gap-2",
-                                  {
-                                    "p-2": open,
-                                    "justify-start": open,
-                                    "bg-gray-200 rounded-md": isActive,
-                                  }
-                                )}
-                              >
-                                {getIcon(subItem.icon, ICON_SIZE, isActive)}
-                                {open && subItem.title}
-                              </Link>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        );
+          {isLoading ? (
+            <SidebarMenu className="gap-4 flex flex-col mb-5">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <SidebarMenuItem key={index}>
+                  <Skeleton className="w-full h-8 bg-gray-200" />
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          ) : (
+            data.navMain.map((item, index) => (
+              <React.Fragment key={item.title}>
+                <SidebarGroup className="py-3 flex flex-col">
+                  {open && index !== 0 && (
+                    <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+                  )}
+                  <SidebarGroupContent>
+                    <SidebarMenu
+                      className={cn("gap-3 flex flex-col", {
+                        "items-center": !open,
                       })}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-              {index !== data.navMain.length - 1 && <SidebarSeparator />}
-            </React.Fragment>
-          ))}
-
-          {open && (
-            <div className="p-4 mt-auto">
-              <Card className="p-4 text-sm flex flex-col gap-3">
-                <p className="font-semibold">Available credits</p>
-                <p>
-                  Account generation: <span className="font-bold">97</span>
-                </p>
-                <p className="text-xs text-gray-500">(Renews to: al mes)</p>
-              </Card>
-            </div>
+                    >
+                      {(item.items || [item])
+                        .filter(
+                          (subItem) =>
+                            !subItem.allowedRoles ||
+                            subItem.allowedRoles.includes(user?.role)
+                        )
+                        .map((subItem) => {
+                          const isActive = pathname.includes(subItem.url);
+                          return (
+                            <SidebarMenuItem key={subItem.title}>
+                              <SidebarMenuButton asChild isActive={isActive}>
+                                <Link
+                                  href={subItem.url}
+                                  className={cn(
+                                    "p-0 justify-center flex items-center gap-2",
+                                    {
+                                      "p-2": open,
+                                      "justify-start": open,
+                                      "bg-gray-200 rounded-md": isActive,
+                                    }
+                                  )}
+                                >
+                                  {getIcon(subItem.icon, ICON_SIZE, isActive)}
+                                  {open && subItem.title}
+                                </Link>
+                              </SidebarMenuButton>
+                            </SidebarMenuItem>
+                          );
+                        })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+                {index !== data.navMain.length - 1 && <SidebarSeparator />}
+              </React.Fragment>
+            ))
           )}
 
-          <div className="flex flex-col items-center gap-2 mt-3">
-            {open && (
-              <Button onClick={() => logout()} variant={"link"}>
-                Log out
-              </Button>
-            )}
-          </div>
+          {isLoading ? (
+            <div className="flex flex-col gap-2 items-center">
+              <Skeleton className="w-full h-52 bg-gray-200" />
+              <Skeleton className="w-1/2 h-12 bg-gray-200 rounded-md" />
+            </div>
+          ) : (
+            <>
+              {open && (
+                <div className="p-4 mt-auto">
+                  <Card className="p-4 text-sm flex flex-col gap-3">
+                    <p className="font-semibold">Available credits</p>
+                    <p>
+                      Account generation: <span className="font-bold">97</span>
+                    </p>
+                    <p className="text-xs text-gray-500">(Renews to: al mes)</p>
+                  </Card>
+                </div>
+              )}
+
+              <div className="flex flex-col items-center gap-2 mt-3">
+                {open && (
+                  <Button onClick={() => logout()} variant={"link"}>
+                    Log out
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
         </SidebarContent>
       </Sidebar>
     </SidebarProvider>
