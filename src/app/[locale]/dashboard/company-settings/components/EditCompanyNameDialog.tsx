@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Company } from "@/types/Company";
 import { useCompany } from "@/hooks/useCompany";
+import { useEffect } from "react";
 
 const schema = z.object({
   companyName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
@@ -36,7 +37,7 @@ const EditCompanyNameDialog = ({
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      companyName: company.name,
+      companyName: company.name || "",
     },
   });
 
@@ -50,6 +51,15 @@ const EditCompanyNameDialog = ({
     });
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        companyName: company?.name || "",
+      });
+      form.clearErrors();
+    }
+  }, [open, company, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

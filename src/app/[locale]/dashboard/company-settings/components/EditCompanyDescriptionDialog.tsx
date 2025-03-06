@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useCompany } from "@/hooks/useCompany";
+import { useEffect } from "react";
 
 const schema = z.object({
   companyDescription: z
@@ -39,7 +40,7 @@ const EditCompanyDescriptionDialog = ({
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      companyDescription: company.description,
+      companyDescription: company.description || "",
     },
   });
 
@@ -53,6 +54,15 @@ const EditCompanyDescriptionDialog = ({
     });
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        companyDescription: company?.name || "",
+      });
+      form.clearErrors();
+    }
+  }, [open, company, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

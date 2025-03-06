@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCompany } from "@/hooks/useCompany";
+import { useEffect } from "react";
 
 const schema = z.object({
   companySector: z.string().min(1, "Required").max(60, "Maximum 60 characters"),
@@ -36,7 +37,7 @@ const EditCompanySectorDialog = ({
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      companySector: company.sector,
+      companySector: company.sector || "",
     },
   });
 
@@ -50,6 +51,15 @@ const EditCompanySectorDialog = ({
     });
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        companySector: company?.name || "",
+      });
+      form.clearErrors();
+    }
+  }, [open, company, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

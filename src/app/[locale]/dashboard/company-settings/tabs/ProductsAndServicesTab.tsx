@@ -7,9 +7,10 @@ import { useCompany } from "@/hooks/useCompany";
 import { ProductsAndServices } from "@/types/Company";
 import DeleteDialog from "../components/DeleteDialog";
 import ProductsList from "../components/ProductsList";
+import ProductsAndServicesSkeleton from "../skeletons/products-and-services-skeleton";
 
 const ProductsAndServicesTab = () => {
-  const { productsAndServices } = useCompany({
+  const { productsAndServices, productsAndServicesLoading } = useCompany({
     enableFetch: true,
   });
   const [selectedProduct, setSelectedProduct] =
@@ -33,6 +34,10 @@ const ProductsAndServicesTab = () => {
     setProductToDelete(product);
     setDeleteDialogOpen(true);
   }, []);
+
+  if (productsAndServicesLoading) {
+    return <ProductsAndServicesSkeleton />;
+  }
 
   return (
     <div className="px-6 flex flex-col gap-5">

@@ -24,11 +24,11 @@ interface UpdateCompanyAndServicePayload
 }
 
 export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
-  const { user } = useAuth({ enableFetch: false });
+  const { user } = useAuth({ enableFetch: true });
   const queryClient = useQueryClient();
 
-  const { data: company } = useQuery<Company>({
-    queryKey: ["company"],
+  const { data: company, isLoading } = useQuery<Company>({
+    queryKey: ["company", user?.companyId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
         `/auth/companies/${user.companyId}`
@@ -37,7 +37,7 @@ export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
     },
     retry: true,
     staleTime: 1000 * 60 * 5,
-    enabled: enableFetch,
+    enabled: enableFetch && !!user?.companyId,
   });
 
   const updateCompanyMutation = useMutation({
@@ -49,22 +49,23 @@ export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["company"] });
+      queryClient.invalidateQueries({ queryKey: ["company", user?.companyId] });
     },
   });
 
-  const { data: productsAndServices } = useQuery<ProductsAndServices[]>({
-    queryKey: ["productsAndServices"],
-    queryFn: async () => {
-      const response = await protectedAxiosInstance.get(
-        `/auth/companies/${user.companyId}/products-and-services`
-      );
-      return response.data;
-    },
-    retry: true,
-    staleTime: 1000 * 60 * 5,
-    enabled: enableFetch,
-  });
+  const { data: productsAndServices, isLoading: productsAndServicesLoading } =
+    useQuery<ProductsAndServices[]>({
+      queryKey: ["productsAndServices", user?.companyId],
+      queryFn: async () => {
+        const response = await protectedAxiosInstance.get(
+          `/auth/companies/${user.companyId}/products-and-services`
+        );
+        return response.data;
+      },
+      retry: true,
+      staleTime: 1000 * 60 * 5,
+      enabled: enableFetch,
+    });
 
   const createCompanyProductAndService = useMutation({
     mutationFn: async (data: CreateCompanyAndServicePayload) => {
@@ -107,6 +108,8 @@ export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
   return {
     company,
     productsAndServices,
+    isLoading,
+    productsAndServicesLoading,
     updateCompany: updateCompanyMutation.mutate,
     createProductAndService: createCompanyProductAndService.mutate,
     deleteCompanyProductAndService: deleteCompanyProductAndService.mutate,
