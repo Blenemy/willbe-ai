@@ -73,6 +73,8 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     try {
       const response = await protectedAxiosInstance.get("/auth/me");
       await queryClient.setQueryData(["authUser"], response.data);
+
+      Cookies.set("userRole", response.data.role, { sameSite: "Strict" });
     } catch (error) {
       console.error("Error fetching a user:", error);
     }
@@ -118,6 +120,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     queryClient.setQueryData(["authUser"], null);
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
+    Cookies.remove("userRole");
     router.replace(`/${locale}/sign-in`);
   };
 
