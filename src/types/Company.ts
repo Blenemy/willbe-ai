@@ -13,3 +13,11 @@ export interface ProductsAndServices {
   description: string;
   sector: string;
 }
+
+export interface Invitation {
+  id: string;
+  email: string;
+  role: string;
+  position: string;
+  isAccepted: boolean;
+}

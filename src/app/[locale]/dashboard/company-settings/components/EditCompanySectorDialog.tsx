@@ -75,7 +75,7 @@ const EditCompanySectorDialog = ({
               name="companySector"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     Company Sector
                   </FormLabel>
                   <FormControl>

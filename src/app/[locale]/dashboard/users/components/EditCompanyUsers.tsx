@@ -73,7 +73,10 @@ export const EditCompanyUser = ({ open, setOpen, user }: EditUserProps) => {
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <FormControl>
-                      <Select {...field}>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select Role" />
                         </SelectTrigger>
