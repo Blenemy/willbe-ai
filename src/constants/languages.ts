@@ -1,4 +1,7 @@
+import esFlag from "../assets/flags/es.png";
+import enFlag from "../assets/flags/en.png";
+
 export const LANGUAGES = [
-  { code: "en", label: "English", flag: "/flags/en.png" },
-  { code: "es", label: "Español", flag: "/flags/es.png" },
+  { code: "en", label: "English", flag: enFlag },
+  { code: "es", label: "Español", flag: esFlag },
 ];
