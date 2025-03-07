@@ -25,6 +25,7 @@ export const DeleteCompanyUser = ({
   });
   const handleRemoveClick = () => {
     deleteCompanyUser(user.id);
+    setOpen(false);
   };
 
   return (

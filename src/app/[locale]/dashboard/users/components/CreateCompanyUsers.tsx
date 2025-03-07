@@ -90,7 +90,10 @@ export const CreateCompanyUsers = ({
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <FormControl>
-                      <Select {...field}>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select Role" />
                         </SelectTrigger>

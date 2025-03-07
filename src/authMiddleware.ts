@@ -22,15 +22,12 @@ export function checkUserAccess(req: NextRequest) {
 
   const normalizedPath = pathname.replace(/^\/(en|es)/, "");
 
-  if (!token || !userRole) {
-    if (!pathname.includes("/sign-in")) {
-      return NextResponse.redirect(new URL(`/${locale}/sign-in`, req.url));
-    }
-    return null;
+  if (normalizedPath.startsWith("/dashboard") && !token) {
+    return NextResponse.redirect(new URL(`/${locale}/sign-in`, req.url));
   }
 
   for (const [route, allowedRoles] of Object.entries(protectedRoutes)) {
-    if (normalizedPath.startsWith(route) && !allowedRoles.includes(userRole)) {
+    if (normalizedPath.startsWith(route) && !allowedRoles.includes(userRole!)) {
       if (normalizedPath !== "/dashboard/home") {
         return NextResponse.redirect(
           new URL(`/${locale}/dashboard/home`, req.url)
