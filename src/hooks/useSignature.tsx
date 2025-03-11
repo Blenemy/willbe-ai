@@ -49,8 +49,7 @@ export const useSignature = ({ enableFetch }: UseAuthProps) => {
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
       const errorMessage =
-        error.response?.data.message ||
-        "Failed to update user signature password";
+        error.response?.data.message || "Failed to update user signature";
       toast(errorMessage);
     },
   });
