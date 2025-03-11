@@ -219,6 +219,12 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     onSuccess: (data) => {
       queryClient.setQueryData(["authUser"], data);
     },
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage =
+        error.response?.data.message ||
+        "Failed to update user language password";
+      toast(errorMessage);
+    },
   });
 
   const updateUserPassword = useMutation({
@@ -231,6 +237,11 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(["authUser"], data);
+    },
+    onError: (error: AxiosError<APIRequestErrorPayload>) => {
+      const errorMessage =
+        error.response?.data.message || "Failed to update password";
+      toast(errorMessage);
     },
   });
 

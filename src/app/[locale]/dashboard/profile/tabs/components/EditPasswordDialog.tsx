@@ -74,7 +74,11 @@ const EditPasswordDialog = ({
                 <FormItem>
                   <FormLabel className="font-semibold">Old password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Old password" {...field} />
+                    <Input
+                      placeholder="Old password"
+                      {...field}
+                      type="password"
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -89,7 +93,11 @@ const EditPasswordDialog = ({
                 <FormItem>
                   <FormLabel className="font-semibold">New password</FormLabel>
                   <FormControl>
-                    <Input placeholder="New password" {...field} />
+                    <Input
+                      placeholder="New password"
+                      {...field}
+                      type="password"
+                    />
                   </FormControl>
 
                   <FormMessage />
@@ -106,7 +114,11 @@ const EditPasswordDialog = ({
                     Confirm Password
                   </FormLabel>
                   <FormControl>
-                    <Input placeholder="Confirm password" {...field} />
+                    <Input
+                      placeholder="Confirm password"
+                      {...field}
+                      type="password"
+                    />
                   </FormControl>
 
                   <FormMessage />

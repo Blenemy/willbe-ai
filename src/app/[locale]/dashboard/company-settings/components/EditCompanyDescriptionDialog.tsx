@@ -78,7 +78,7 @@ const EditCompanyDescriptionDialog = ({
               name="companyDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     Company Description
                   </FormLabel>
                   <FormControl>

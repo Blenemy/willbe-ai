@@ -75,7 +75,9 @@ const EditCompanyNameDialog = ({
               name="companyName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Company Name</FormLabel>
+                  <FormLabel className="font-semibold text-foreground">
+                    Company Name
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Enter your company name"
