@@ -21,25 +21,10 @@ log "Copying portal configuration..."
 sudo -n cp ".github/res/portal-nginx" /etc/nginx/sites-available/portal
 check_error "Failed to copy portal nginx configuration" "Successfully copied portal nginx configuration"
 
-# Create symbolic link (force overwrite if exists)
-log "Creating symbolic link..."
-sudo -n ln -sf /etc/nginx/sites-available/portal /etc/nginx/sites-enabled/
-check_error "Failed to create symbolic link" "Successfully created symbolic link"
-
-# Test nginx configuration
-log "Testing nginx configuration..."
-sudo -n nginx -t
-check_error "Invalid Nginx configuration" "Nginx configuration is valid"
-
-# Reload nginx configuration
-log "Reloading nginx configuration..."
-sudo -n nginx -s reload
-check_error "Failed to reload Nginx" "Successfully reloaded Nginx configuration"
-
-# Check status after reload
-log "Checking nginx status after reload..."
-sudo -n systemctl status nginx
-check_error "Nginx failed to start after reload" "Nginx successfully started after reload"
+# Run the Nginx configuration combiner script
+log "Running Nginx configuration combiner script..."
+sudo bash /home/azureuser/splice-nginx/run.sh
+check_error "Failed to run Nginx configuration combiner" "Successfully ran Nginx configuration combiner"
 
 # Log script completion
 log "Portal nginx configuration process completed successfully"
