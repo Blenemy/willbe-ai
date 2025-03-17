@@ -86,15 +86,5 @@ export function preparePayload(
     }
   });
 
-  if (values.seniority.length > 0 || values.seniority_exclude.length > 0) {
-    payload.filterValues.push({
-      filterKey: "job_title",
-      filterValue: {
-        include: values.seniority || [],
-        exclude: values.seniority_exclude || [],
-      },
-    });
-  }
-
   return payload;
 }

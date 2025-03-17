@@ -45,7 +45,7 @@ const LeadScenariousPresets = ({
           onChange={(e) => setNewPreset(e.target.value)}
           className="w-full"
         />
-        <Button onClick={() => {}} className="flex items-center gap-2">
+        <Button className="flex items-center gap-2" type="submit">
           <Save size={16} /> Save
         </Button>
       </div>

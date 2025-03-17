@@ -46,6 +46,7 @@ import {
 import { useLeadFilters } from "@/hooks/useLeadFilters";
 import { preparePayload } from "@/utils/prepareLeadFiltersPayload";
 import { transformFilterValues } from "@/utils/transformFilterValues";
+import { useLeadScenarios } from "@/hooks/useLeadScenarious";
 
 const seniorityList = [
   { value: "owner", label: "Owner / Partner", icon: Crown },
@@ -129,6 +130,11 @@ const CreateLeadScenarios = () => {
     filterId: selectedScenarioId,
   });
 
+  const { leadScenarioById } = useLeadScenarios({
+    enableFetch: false,
+    scenarioId,
+  });
+
   const form = useForm({
     resolver: zodResolver(leadScenariosFiltersSchema),
     defaultValues: {
@@ -171,7 +177,6 @@ const CreateLeadScenarios = () => {
   async function onSubmit(values: z.infer<typeof leadScenariosFiltersSchema>) {
     if (scenarioId && newPreset) {
       const payload = preparePayload(values, scenarioId, newPreset);
-      console.log(payload);
 
       await createLeadFilter(payload);
       setNewPreset("");
@@ -179,11 +184,29 @@ const CreateLeadScenarios = () => {
   }
 
   useEffect(() => {
-    if (leadFilterById) {
-      const updatedValues = transformFilterValues(leadFilterById.filterValues);
-      form.reset(updatedValues);
+    let updatedValues = {};
+
+    if (leadScenarioById?.filter) {
+      updatedValues = transformFilterValues(
+        leadScenarioById.filter.filterValues
+      );
     }
-  }, [leadFilterById, form]);
+
+    if (leadFilterById) {
+      updatedValues = transformFilterValues(leadFilterById.filterValues);
+    }
+
+    if (Object.keys(updatedValues).length > 0) {
+      Object.entries(updatedValues).forEach(([key, value]) => {
+        //@ts-expect-error value is a type of unkwown
+        form.setValue(key as keyof typeof updatedValues, value, {
+          shouldDirty: true,
+        });
+      });
+
+      form.trigger();
+    }
+  }, [leadScenarioById, leadFilterById, form]);
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
