@@ -33,7 +33,7 @@ export const useLeadScenarios = ({
     enabled: enableFetch,
   });
 
-  const { data: leadScenarioById } = useQuery<LeadScenarios[]>({
+  const { data: leadScenarioById } = useQuery<LeadScenarios>({
     queryKey: ["lead-scenarios-by-id", scenarioId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
@@ -54,7 +54,7 @@ export const useLeadScenarios = ({
       return response.data;
     },
     onSuccess: () => {
-      toast.success("Lead Scenario was created");
+      toast.success("Lead Scenario was deleted");
       queryClient.invalidateQueries({ queryKey: ["lead-scenarios"] });
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
@@ -73,7 +73,7 @@ export const useLeadScenarios = ({
       return response.data;
     },
     onSuccess: (data: LeadScenarios) => {
-      toast.success("Lead Scenario was deleted");
+      toast.success("Lead Scenario was created");
       queryClient.invalidateQueries({ queryKey: ["lead-scenarios"] });
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("scenarioId", data.id.toString());

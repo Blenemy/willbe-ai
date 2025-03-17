@@ -110,7 +110,7 @@ const LeadScenariosPage = () => {
             <TableRow key={scenario.id}>
               <TableCell>{scenario.name}</TableCell>
               <TableCell>
-                <Badge variant={"secondary"}>{"Lead save"}</Badge>
+                <Badge variant={"secondary"}>{scenario.status}</Badge>
               </TableCell>
               <TableCell>
                 {scenario.user.firstName + " " + scenario.user.lastName}
