@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Save, Trash, Upload } from "lucide-react";
+import { Save, Trash, Upload, RefreshCw } from "lucide-react";
 import { Users } from "lucide-react";
 import { useLeadFilters } from "@/hooks/useLeadFilters";
 
@@ -22,7 +22,7 @@ const LeadScenariousPresets = ({
 }: {
   setNewPreset: Dispatch<SetStateAction<string>>;
   newPreset: string;
-  handleLoadFilter: (id: string) => void;
+  handleLoadFilter: (id: string, flag: boolean) => void;
 }) => {
   const { leadFiltersTableData, deleteLeadFilter } = useLeadFilters({
     enableFetch: true,
@@ -65,9 +65,16 @@ const LeadScenariousPresets = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => handleLoadFilter(preset.id)}
+                  onClick={() => handleLoadFilter(preset.id, true)}
                 >
                   <Upload size={16} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleLoadFilter(preset.id, false)}
+                >
+                  <RefreshCw size={16} />
                 </Button>
                 <Button
                   variant="ghost"

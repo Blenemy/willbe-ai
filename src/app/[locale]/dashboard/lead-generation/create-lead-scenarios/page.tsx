@@ -117,12 +117,14 @@ const CreateLeadScenarios = () => {
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId");
   const [newPreset, setNewPreset] = useState("");
+  const [applyWithReset, setApplyWithReset] = useState(false);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string | null>(
     null
   );
 
-  const handleLoadFilter = (id: string) => {
+  const handleLoadFilter = (id: string, applyWithReset: boolean) => {
     setSelectedScenarioId(id);
+    setApplyWithReset(applyWithReset);
   };
 
   const { createLeadFilter, leadFilterById } = useLeadFilters({
@@ -184,6 +186,8 @@ const CreateLeadScenarios = () => {
   }
 
   useEffect(() => {
+    if (!leadFilterById && !leadScenarioById) return; // Если данных нет, ничего не делаем
+
     let updatedValues = {};
 
     if (leadScenarioById?.filter) {
@@ -197,16 +201,57 @@ const CreateLeadScenarios = () => {
     }
 
     if (Object.keys(updatedValues).length > 0) {
-      Object.entries(updatedValues).forEach(([key, value]) => {
-        //@ts-expect-error value is a type of unkwown
-        form.setValue(key as keyof typeof updatedValues, value, {
-          shouldDirty: true,
+      if (applyWithReset) {
+        // 1️⃣ Полностью сбрасываем форму перед загрузкой значений
+        form.reset({
+          first_name: "",
+          last_name: "",
+          language: "",
+          job_title: "",
+          job_tenure_from: "",
+          job_tenure_to: "",
+          past_job_title: "",
+          department: "",
+          seniority: [],
+          seniority_exclude: [],
+          experience_years_from: "",
+          experience_years_to: "",
+          school: "",
+          location: "",
+          posted_on_linkedin: false,
+          mentioned_in_news: false,
+          viewed_your_profile: false,
+          following_your_company: false,
+          past_colleague: false,
+          shared_experiences: false,
+          network_distance: "",
+          changed_jobs: false,
+          keywords: "",
+          persona: "",
+          current_company: "",
+          past_company: "",
+          company_headcount_from: "",
+          company_headcount_to: "",
+          company_industry: "",
+          company_location: "",
+          company_type: [],
+          company_tenure_from: "",
+          company_tenure_to: "",
+          ...updatedValues, // Применяем пресет
         });
-      });
+      } else {
+        // 2️⃣ Только обновляем загруженные значения, не сбрасывая остальные
+        Object.entries(updatedValues).forEach(([key, value]) => {
+          //@ts-expect-error value is a type of unknown
+          form.setValue(key as keyof typeof updatedValues, value, {
+            shouldDirty: true,
+          });
+        });
+      }
 
-      form.trigger();
+      form.trigger(); // Принудительно обновляем валидацию формы
     }
-  }, [leadScenarioById, leadFilterById, form]);
+  }, [leadScenarioById, leadFilterById, applyWithReset, form]);
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
