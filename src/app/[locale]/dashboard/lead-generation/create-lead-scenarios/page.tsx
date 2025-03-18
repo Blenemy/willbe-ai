@@ -186,7 +186,7 @@ const CreateLeadScenarios = () => {
   }
 
   useEffect(() => {
-    if (!leadFilterById && !leadScenarioById) return; // Если данных нет, ничего не делаем
+    if (!leadFilterById && !leadScenarioById) return;
 
     let updatedValues = {};
 
@@ -202,7 +202,6 @@ const CreateLeadScenarios = () => {
 
     if (Object.keys(updatedValues).length > 0) {
       if (applyWithReset) {
-        // 1️⃣ Полностью сбрасываем форму перед загрузкой значений
         form.reset({
           first_name: "",
           last_name: "",
