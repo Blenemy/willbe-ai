@@ -2,7 +2,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { LeadScenarios } from "@/types/LeadScenarios";
+import { Lead, LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
 
 interface APIRequestErrorPayload {
@@ -31,6 +31,19 @@ export const useLeadScenarios = ({
     retry: true,
     staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
+  });
+
+  const { data: leads } = useQuery<Lead[]>({
+    queryKey: ["leads"],
+    queryFn: async () => {
+      const response = await protectedAxiosInstance.get(
+        `/auth/lead-scenarios/${scenarioId}/leads`
+      );
+      return response.data;
+    },
+    retry: true,
+    staleTime: 1000 * 60 * 5,
+    enabled: false,
   });
 
   const { data: leadScenarioById } = useQuery<LeadScenarios>({
@@ -89,7 +102,10 @@ export const useLeadScenarios = ({
   });
 
   const updateLeadScenario = useMutation({
-    mutationFn: async (payload: { name: string; filterId: string }) => {
+    mutationFn: async (payload: {
+      name: string;
+      filterId: string | undefined;
+    }) => {
       const response = await protectedAxiosInstance.patch(
         `/auth/lead-scenarios/${payload.filterId}`,
         payload
@@ -113,6 +129,7 @@ export const useLeadScenarios = ({
   });
 
   return {
+    leads,
     leadScenariousTableData,
     leadScenarioById,
     postLeadScenarious: postLeadScenarious.mutate,

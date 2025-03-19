@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useLeadScenarios } from "@/hooks/useLeadScenarious";
+import { LeadScenarios } from "@/types/LeadScenarios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -19,7 +20,11 @@ const leadScenariosName = z.object({
   name: z.string(),
 });
 
-const ScenarioNameForm = () => {
+const ScenarioNameForm = ({
+  leadScenarioById,
+}: {
+  leadScenarioById: LeadScenarios | undefined;
+}) => {
   const form = useForm({
     resolver: zodResolver(leadScenariosName),
     defaultValues: {
@@ -38,7 +43,10 @@ const ScenarioNameForm = () => {
 
   function onSubmit(values: z.infer<typeof leadScenariosName>) {
     if (scenarioId) {
-      updateLeadScenario({ name: values.name, filterId: scenarioId });
+      updateLeadScenario({
+        name: values.name,
+        filterId: leadScenarioById?.filterId,
+      });
     } else {
       postLeadScenarious({ name: values.name });
     }

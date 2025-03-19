@@ -52,7 +52,7 @@ export const useLeadFilters = ({
   const createLeadFilter = useMutation({
     mutationFn: async (payload: {
       leadScenarioId: string;
-      name: string;
+      name?: string;
       filterValues: never[];
     }) => {
       const response = await protectedAxiosInstance.post(

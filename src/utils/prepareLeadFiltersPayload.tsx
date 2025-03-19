@@ -1,21 +1,23 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 //@ts-nocheck
 
-import { leadScenariosFiltersSchema } from "@/app/[locale]/dashboard/lead-generation/create-lead-scenarios/page";
-import { z } from "zod";
+import { LeadScenariosFormType } from "@/app/[locale]/dashboard/lead-generation/create-lead-scenarios/page";
 
 export function preparePayload(
-  values: z.infer<typeof leadScenariosFiltersSchema>,
+  values: LeadScenariosFormType,
   scenarioId: string,
   scenarioName: string
 ) {
   const payload = {
     leadScenarioId: scenarioId,
-    name: scenarioName,
     filterValues: [],
   };
 
-  const textFields = [
+  if (scenarioName) {
+    payload.name = scenarioName;
+  }
+
+  const simpleFields: (keyof LeadScenariosFormType)[] = [
     "first_name",
     "last_name",
     "language",
@@ -29,15 +31,8 @@ export function preparePayload(
     "past_company",
     "company_industry",
     "company_location",
+    "network_distance",
     "keywords",
-  ];
-  textFields.forEach((key) => {
-    if (values[key]) {
-      payload.filterValues.push({ filterKey: key, filterValue: values[key] });
-    }
-  });
-
-  const booleanFields = [
     "posted_on_linkedin",
     "mentioned_in_news",
     "viewed_your_profile",
@@ -46,15 +41,9 @@ export function preparePayload(
     "shared_experiences",
     "changed_jobs",
   ];
-  booleanFields.forEach((key) => {
-    if (values[key] !== undefined) {
-      payload.filterValues.push({ filterKey: key, filterValue: values[key] });
-    }
-  });
 
-  const arrayFields = ["seniority", "seniority_exclude", "company_type"];
-  arrayFields.forEach((key) => {
-    if (values[key] && values[key].length > 0) {
+  simpleFields.forEach((key) => {
+    if (values[key]) {
       payload.filterValues.push({ filterKey: key, filterValue: values[key] });
     }
   });
@@ -77,11 +66,85 @@ export function preparePayload(
       key: "company_tenure",
     },
   ];
+
   rangeFields.forEach(({ from, to, key }) => {
     if (values[from] || values[to]) {
       payload.filterValues.push({
         filterKey: key,
         filterValue: { from: values[from] || "0", to: values[to] || "0" },
+      });
+    }
+  });
+
+  const includeExcludeFields = [
+    {
+      include: "job_title_include",
+      exclude: "job_title_exclude",
+      key: "job_title",
+    },
+    {
+      include: "past_job_title_include",
+      exclude: "past_job_title_exclude",
+      key: "past_job_title",
+    },
+    {
+      include: "department_include",
+      exclude: "department_exclude",
+      key: "department",
+    },
+    {
+      include: "company_location_include",
+      exclude: "company_location_exclude",
+      key: "company_location",
+    },
+    {
+      include: "company_industry_include",
+      exclude: "company_industry_exclude",
+      key: "company_industry",
+    },
+    {
+      include: "past_company_include",
+      exclude: "past_company_exclude",
+      key: "past_company",
+    },
+    { include: "school_include", exclude: "school_exclude", key: "school" },
+    {
+      include: "location_include",
+      exclude: "location_exclude",
+      key: "location",
+    },
+  ];
+
+  includeExcludeFields.forEach(({ include, exclude, key }) => {
+    const includeValues = values[include] as
+      | { title: string; id: string }[]
+      | undefined;
+    const excludeValues = values[exclude] as
+      | { title: string; id: string }[]
+      | undefined;
+
+    if (includeValues || excludeValues) {
+      payload.filterValues.push({
+        filterKey: key,
+        filterValue: {
+          include: includeValues?.map(({ title, id }) => ({ title, id })) || [],
+          exclude: excludeValues?.map(({ title, id }) => ({ title, id })) || [],
+        },
+      });
+    }
+  });
+
+  const arrayFields = [
+    "seniority_include",
+    "seniority_exclude",
+    "company_type",
+  ];
+
+  arrayFields.forEach((key) => {
+    if (values[key] && Array.isArray(values[key]) && values[key].length > 0) {
+      payload.filterValues.push({
+        filterKey: key.replace("_include", "").replace("_exclude", ""),
+        filterValue: values[key],
       });
     }
   });
