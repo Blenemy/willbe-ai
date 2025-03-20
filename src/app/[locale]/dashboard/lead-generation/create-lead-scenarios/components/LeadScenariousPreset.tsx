@@ -42,9 +42,8 @@ const LeadScenariousPresets = ({
   const handleUpdateScenario = () => {
     if (leadScenarioById) {
       updateLeadScenario({
-        name: leadScenarioById.name,
-        filterId: leadScenarioById.id,
         status: "select",
+        id: leadScenarioById.id,
       });
     }
   };
