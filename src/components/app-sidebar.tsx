@@ -61,14 +61,32 @@ const data = {
       url: "#",
       items: [
         {
-          title: "Account scenarios",
-          url: "/dashboard/lead-generation/account-scenarios",
+          title: "Lead scenarios",
+          url: "/dashboard/lead-generation/lead-scenarios",
           icon: List,
           allowedRoles: ALL_ROLES,
         },
         {
-          title: "Lead scenarios",
-          url: "/dashboard/lead-generation/lead-scenarios",
+          title: "Create lead scenarios",
+          url: "/dashboard/lead-generation/create-lead-scenarios",
+          icon: Users,
+          allowedRoles: ALL_ROLES,
+        },
+      ],
+    },
+    {
+      title: "Account Generation",
+      url: "#",
+      items: [
+        {
+          title: "Account scenarios",
+          url: "/dashboard/account-generation/account-scenarios",
+          icon: List,
+          allowedRoles: ALL_ROLES,
+        },
+        {
+          title: "Create account scenarios",
+          url: "/dashboard/account-generation/create-account-scenarios",
           icon: Users,
           allowedRoles: ALL_ROLES,
         },

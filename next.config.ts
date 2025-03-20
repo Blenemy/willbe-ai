@@ -6,6 +6,12 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig: NextConfig = {
   images: {
     domains: ["d1muf25xaso8hp.cloudfront.net"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "media.licdn.com",
+      },
+    ],
   },
 };
 

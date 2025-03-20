@@ -55,7 +55,7 @@ export const useInvitation = ({
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
       toast.error(
-        error.response?.data.message || "Failure yo accept the invite"
+        error.response?.data.message || "Failure to accept the invite"
       );
     },
   });
