@@ -44,6 +44,7 @@ import {
   useDropdownOptionsQuery,
   useLanguagesQuery,
 } from "@/hooks/useDropdownOptionsQuery";
+import LeadTable from "./components/LeadTable/LeadTable";
 
 const searchOptionSchema = z.object({
   title: z.string(),
@@ -221,6 +222,14 @@ const CreateLeadScenarios = () => {
       setNewPreset("");
     }
   }
+
+  useEffect(() => {
+    if (leadScenarioById) {
+      if (leadScenarioById?.status !== "search") {
+        setActiveStep(1);
+      }
+    }
+  }, [leadScenarioById]);
 
   useEffect(() => {
     if (!leadFilterById && !leadScenarioById) return;
@@ -1215,10 +1224,14 @@ const CreateLeadScenarios = () => {
                   setNewPreset={setNewPreset}
                   newPreset={newPreset}
                   handleLoadFilter={handleLoadFilter}
+                  setActiveStep={setActiveStep}
+                  leadScenarioById={leadScenarioById}
                 />
               </form>
             </Form>
           )}
+
+          {activeStep === 1 && <LeadTable />}
         </>
       )}
     </div>

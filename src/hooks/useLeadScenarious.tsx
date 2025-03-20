@@ -13,11 +13,13 @@ interface APIRequestErrorPayload {
 interface UseAuthProps {
   enableFetch: boolean;
   scenarioId?: string | null;
+  fetchLeads?: boolean;
 }
 
 export const useLeadScenarios = ({
   enableFetch = false,
   scenarioId,
+  fetchLeads,
 }: UseAuthProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -39,11 +41,11 @@ export const useLeadScenarios = ({
       const response = await protectedAxiosInstance.get(
         `/auth/lead-scenarios/${scenarioId}/leads`
       );
-      return response.data;
+      return response.data.items;
     },
     retry: true,
     staleTime: 1000 * 60 * 5,
-    enabled: !!scenarioId,
+    enabled: !!fetchLeads,
   });
 
   const { data: leadScenarioById } = useQuery<LeadScenarios>({
@@ -105,6 +107,7 @@ export const useLeadScenarios = ({
     mutationFn: async (payload: {
       name: string;
       filterId: string | undefined;
+      status: string;
     }) => {
       const response = await protectedAxiosInstance.patch(
         `/auth/lead-scenarios/${payload.filterId}`,

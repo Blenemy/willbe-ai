@@ -14,19 +14,40 @@ import {
 import { Save, Trash, Upload, RefreshCw } from "lucide-react";
 import { Users } from "lucide-react";
 import { useLeadFilters } from "@/hooks/useLeadFilters";
+import { LeadScenarios } from "@/types/LeadScenarios";
+import { useLeadScenarios } from "@/hooks/useLeadScenarious";
 
 const LeadScenariousPresets = ({
   setNewPreset,
   newPreset,
   handleLoadFilter,
+  setActiveStep,
+  leadScenarioById,
 }: {
   setNewPreset: Dispatch<SetStateAction<string>>;
   newPreset: string;
   handleLoadFilter: (id: string, flag: boolean) => void;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  leadScenarioById: LeadScenarios | undefined;
 }) => {
   const { leadFiltersTableData, deleteLeadFilter } = useLeadFilters({
     enableFetch: true,
   });
+
+  const { updateLeadScenario } = useLeadScenarios({
+    enableFetch: false,
+    scenarioId: leadScenarioById?.id,
+  });
+
+  const handleUpdateScenario = () => {
+    if (leadScenarioById) {
+      updateLeadScenario({
+        name: leadScenarioById.name,
+        filterId: leadScenarioById.id,
+        status: "select",
+      });
+    }
+  };
 
   const handleDeleteFilter = (id: string) => {
     deleteLeadFilter({ id });
@@ -58,48 +79,55 @@ const LeadScenariousPresets = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {leadFiltersTableData?.map((preset) => (
-            <TableRow key={preset.id}>
-              <TableCell>{preset.name}</TableCell>
-              <TableCell className="text-right">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  type="button"
-                  onClick={() => handleLoadFilter(preset.id, true)}
-                >
-                  <Upload size={16} />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  type="button"
-                  onClick={() => handleLoadFilter(preset.id, false)}
-                >
-                  <RefreshCw size={16} />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  type="button"
-                  onClick={() => handleDeleteFilter(preset.id)}
-                >
-                  <Trash size={16} />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {leadFiltersTableData
+            ?.filter((preset) => preset.name)
+            .map((preset) => (
+              <TableRow key={preset.id}>
+                <TableCell>{preset.name}</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    onClick={() => handleLoadFilter(preset.id, true)}
+                  >
+                    <Upload size={16} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    onClick={() => handleLoadFilter(preset.id, false)}
+                  >
+                    <RefreshCw size={16} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    type="button"
+                    onClick={() => handleDeleteFilter(preset.id)}
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 
       <div className="flex justify-center gap-4 mt-6">
-        <Button className="flex items-center gap-2">
+        <Button
+          className="flex items-center gap-2"
+          type="button"
+          onClick={handleUpdateScenario}
+        >
           <Save size={16} /> Save/select lead scenario filters
         </Button>
         <Button
           variant="outline"
           className="flex items-center gap-2"
-          type="submit"
+          type="button"
+          onClick={() => setActiveStep((prev) => prev + 1)}
         >
           <Users size={16} /> Search leads
         </Button>

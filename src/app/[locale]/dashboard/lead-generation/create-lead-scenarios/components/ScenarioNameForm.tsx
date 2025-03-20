@@ -31,20 +31,13 @@ const ScenarioNameForm = () => {
   const scenarioName = searchParams.get("scenarioName");
   const scenarioId = searchParams.get("scenarioId");
 
-  const { postLeadScenarious, updateLeadScenario } = useLeadScenarios({
+  const { postLeadScenarious } = useLeadScenarios({
     enableFetch: false,
     scenarioId,
   });
 
   function onSubmit(values: z.infer<typeof leadScenariosName>) {
-    if (scenarioId) {
-      updateLeadScenario({
-        name: values.name,
-        filterId: scenarioId,
-      });
-    } else {
-      postLeadScenarious({ name: values.name });
-    }
+    postLeadScenarious({ name: values.name });
   }
 
   useEffect(() => {
@@ -80,9 +73,11 @@ const ScenarioNameForm = () => {
           )}
         />
 
-        <Button type="submit" className="max-w-fit">
-          {scenarioName ? "Update" : "Create"} a scenario
-        </Button>
+        {!scenarioName && (
+          <Button type="submit" className="max-w-fit">
+            Create a scenario
+          </Button>
+        )}
       </form>
     </Form>
   );
