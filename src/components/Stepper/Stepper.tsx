@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -7,7 +7,13 @@ import Box from "@mui/material/Box";
 
 const steps = ["Lead Search", "Lead Select", "Lead Save"];
 
-const CustomStepper = ({ activeStep, setActiveStep }) => {
+const CustomStepper = ({
+  activeStep,
+  setActiveStep,
+}: {
+  activeStep: number;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+}) => {
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
       setActiveStep(activeStep + 1);

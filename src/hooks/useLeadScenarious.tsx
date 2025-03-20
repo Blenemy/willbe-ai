@@ -105,13 +105,16 @@ export const useLeadScenarios = ({
 
   const updateLeadScenario = useMutation({
     mutationFn: async (payload: {
-      name: string;
-      filterId: string | undefined;
-      status: string;
+      name?: string;
+      filterId?: string | undefined;
+      status?: string;
+      id: string;
     }) => {
+      const { id, ...data } = payload;
+
       const response = await protectedAxiosInstance.patch(
-        `/auth/lead-scenarios/${payload.filterId}`,
-        payload
+        `/auth/lead-scenarios/${id}`,
+        data
       );
       return response.data;
     },
