@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-//@ts-nocheck
-
-import { LeadScenariosFormType } from "@/app/[locale]/dashboard/lead-generation/create-lead-scenarios/page";
+// @ts-nocheck
 
 export function preparePayload(
-  values: LeadScenariosFormType,
+  values: any,
   scenarioId: string,
   scenarioName: string
 ) {
@@ -17,19 +16,11 @@ export function preparePayload(
     payload.name = scenarioName;
   }
 
-  const simpleFields: (keyof LeadScenariosFormType)[] = [
+  const simpleFields: (keyof any)[] = [
     "first_name",
     "last_name",
     "language",
-    // "job_title",
-    // "past_job_title",
-    // "department",
-    // "school",
-    // "location",
-    // "persona",
     "current_company",
-    // "past_company",
-    // "company_industry",
     "company_location",
     "network_distance",
     "keywords",
@@ -157,11 +148,7 @@ export function preparePayload(
     }
   });
 
-  const arrayFields = [
-    // "seniority_include",
-    // "seniority_exclude",
-    "company_type",
-  ];
+  const arrayFields = ["company_type"];
 
   arrayFields.forEach((key) => {
     if (values[key] && Array.isArray(values[key]) && values[key].length > 0) {
