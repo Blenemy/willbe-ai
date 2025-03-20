@@ -310,7 +310,7 @@ const CreateLeadScenarios = () => {
 
       <CustomStepper activeStep={activeStep} setActiveStep={setActiveStep} />
 
-      <ScenarioNameForm leadScenarioById={leadScenarioById} />
+      <ScenarioNameForm />
 
       {scenarioId && (
         <>

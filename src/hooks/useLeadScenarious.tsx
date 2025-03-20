@@ -43,7 +43,7 @@ export const useLeadScenarios = ({
     },
     retry: true,
     staleTime: 1000 * 60 * 5,
-    enabled: false,
+    enabled: !!scenarioId,
   });
 
   const { data: leadScenarioById } = useQuery<LeadScenarios>({

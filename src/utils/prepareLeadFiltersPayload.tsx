@@ -21,15 +21,15 @@ export function preparePayload(
     "first_name",
     "last_name",
     "language",
-    "job_title",
-    "past_job_title",
-    "department",
-    "school",
-    "location",
-    "persona",
+    // "job_title",
+    // "past_job_title",
+    // "department",
+    // "school",
+    // "location",
+    // "persona",
     "current_company",
-    "past_company",
-    "company_industry",
+    // "past_company",
+    // "company_industry",
     "company_location",
     "network_distance",
     "keywords",
@@ -109,6 +109,11 @@ export function preparePayload(
     },
     { include: "school_include", exclude: "school_exclude", key: "school" },
     {
+      include: "seniority_include",
+      exclude: "seniority_exclude",
+      key: "seniority",
+    },
+    {
       include: "location_include",
       exclude: "location_exclude",
       key: "location",
@@ -116,27 +121,45 @@ export function preparePayload(
   ];
 
   includeExcludeFields.forEach(({ include, exclude, key }) => {
-    const includeValues = values[include] as
-      | { title: string; id: string }[]
-      | undefined;
-    const excludeValues = values[exclude] as
-      | { title: string; id: string }[]
-      | undefined;
+    const includeValues = values[include] as { title: string; id: string }[];
+    const excludeValues = values[exclude] as { title: string; id: string }[];
 
-    if (includeValues || excludeValues) {
+    if (
+      key === "seniority" &&
+      (includeValues.length > 0 || excludeValues.length > 0)
+    ) {
       payload.filterValues.push({
         filterKey: key,
         filterValue: {
-          include: includeValues?.map(({ title, id }) => ({ title, id })) || [],
-          exclude: excludeValues?.map(({ title, id }) => ({ title, id })) || [],
+          include: includeValues || [],
+          exclude: excludeValues || [],
+        },
+      });
+
+      return;
+    }
+
+    const filteredInclude = includeValues?.filter(
+      (item) => item?.title && item?.id
+    );
+    const filteredExclude = excludeValues?.filter(
+      (item) => item?.title && item?.id
+    );
+
+    if (filteredInclude.length > 0 || filteredExclude.length > 0) {
+      payload.filterValues.push({
+        filterKey: key,
+        filterValue: {
+          include: filteredInclude || [],
+          exclude: filteredExclude || [],
         },
       });
     }
   });
 
   const arrayFields = [
-    "seniority_include",
-    "seniority_exclude",
+    // "seniority_include",
+    // "seniority_exclude",
     "company_type",
   ];
 

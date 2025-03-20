@@ -65,6 +65,7 @@ const LeadScenariousPresets = ({
                 <Button
                   variant="ghost"
                   size="icon"
+                  type="button"
                   onClick={() => handleLoadFilter(preset.id, true)}
                 >
                   <Upload size={16} />
@@ -72,6 +73,7 @@ const LeadScenariousPresets = ({
                 <Button
                   variant="ghost"
                   size="icon"
+                  type="button"
                   onClick={() => handleLoadFilter(preset.id, false)}
                 >
                   <RefreshCw size={16} />
@@ -79,6 +81,7 @@ const LeadScenariousPresets = ({
                 <Button
                   variant="ghost"
                   size="icon"
+                  type="button"
                   onClick={() => handleDeleteFilter(preset.id)}
                 >
                   <Trash size={16} />
