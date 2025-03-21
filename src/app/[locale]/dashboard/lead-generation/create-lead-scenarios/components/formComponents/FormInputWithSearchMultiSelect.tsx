@@ -51,7 +51,6 @@ const FormInputWithSearchMultiSelect = ({
     refetch();
   };
 
-  // 🔥 Объединяем данные с бэка и сохраненные значения
   const mergedOptions = [
     ...new Map(
       [...includeOptions, ...excludeOptions, ...fetchedOptions].map((item) => [

@@ -19,7 +19,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge";
 import { Trash, Pencil } from "lucide-react";
 import {
   Dialog,
@@ -28,24 +27,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useAccountScenarios } from "@/hooks/useAccountScenarios";
+import { AccountScenario } from "@/types/AccountScenario";
 
 const ITEMS_PER_PAGE = 5;
 
 const AccountScenariosPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
-  const { accountScenariosDataTable = [] } = useAccountScenarios({
-    enableFetch: true,
-  });
+  const { accountScenariosDataTable = [], deleteAccountScenario } =
+    useAccountScenarios({
+      enableFetch: true,
+    });
 
   const locale = useLocale();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedScenario, setSelectedScenario] =
-    useState<LeadScenarios | null>(null);
+    useState<AccountScenario | null>(null);
 
   const totalPages = Math.ceil(
     accountScenariosDataTable.length / ITEMS_PER_PAGE
@@ -57,30 +57,30 @@ const AccountScenariosPage = () => {
     indexOfLastItem
   );
 
-  const handleDeleteClick = (scenario: LeadScenarios) => {
+  const handleDeleteClick = (scenario: AccountScenario) => {
     setSelectedScenario(scenario);
     setIsDialogOpen(true);
   };
 
   const confirmDelete = () => {
     if (selectedScenario) {
-      // deleteLeadScenarious({ id: selectedScenario.id });
+      deleteAccountScenario({ id: selectedScenario.id });
       setIsDialogOpen(false);
       setSelectedScenario(null);
     }
   };
 
-  const handleEditScenario = (scenario: LeadScenarios) => {
+  const handleEditAccount = (scenario: AccountScenario) => {
     const newUrl = new URL(
       `/${locale}/dashboard/account-generation/create-account-scenarios`,
       window.location.origin
     );
-    newUrl.searchParams.set("scenarioId", scenario.id.toString());
-    newUrl.searchParams.set("scenarioName", scenario.name.toString());
+    newUrl.searchParams.set("accountId", scenario.id.toString());
+    newUrl.searchParams.set("accountName", scenario.name.toString());
     router.replace(newUrl.toString());
   };
 
-  const handleAddScenario = () => {
+  const handleAddAccount = () => {
     const newUrl = new URL(
       `/${locale}/dashboard/account-generation/create-account-scenarios`,
       window.location.origin
@@ -93,16 +93,13 @@ const AccountScenariosPage = () => {
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">Lead Scenarios</h2>
       <div className="flex justify-end mb-4">
-        <Button onClick={handleAddScenario}>Add New Scenario</Button>
+        <Button onClick={handleAddAccount}>Add New Scenario</Button>
       </div>
       <Table>
         <TableCaption>A list of lead scenarios</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Account Name</TableHead>
-            <TableHead>Account Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created Date</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -110,18 +107,11 @@ const AccountScenariosPage = () => {
           {currentItems.map((scenario) => (
             <TableRow key={scenario.id}>
               <TableCell>{scenario.name}</TableCell>
-              <TableCell>
-                <Badge variant={"secondary"}>{scenario.status}</Badge>
-              </TableCell>
-              <TableCell>
-                {scenario.user.firstName + " " + scenario.user.lastName}
-              </TableCell>
-              <TableCell>{scenario.createdAt}</TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button
                   size="icon"
                   variant="ghost"
-                  onClick={() => handleEditScenario(scenario)}
+                  onClick={() => handleEditAccount(scenario)}
                 >
                   <Pencil className="w-4 h-4" />
                 </Button>

@@ -4,7 +4,6 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { LeadPreset } from "@/types/LeadPreset";
 import { LeadFilter } from "@/types/LeadFilter";
-// import { useRouter } from "next/navigation";
 
 interface APIRequestErrorPayload {
   message: string;
@@ -21,7 +20,6 @@ export const useLeadFilters = ({
   filterId,
 }: UseAuthProps) => {
   const queryClient = useQueryClient();
-  // const router = useRouter();
 
   const { data: leadFiltersTableData } = useQuery<LeadPreset[]>({
     queryKey: ["lead-filters"],
@@ -65,6 +63,9 @@ export const useLeadFilters = ({
       toast.success("Lead Scenario was created");
       queryClient.invalidateQueries({
         queryKey: ["lead-filters"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads"],
       });
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {

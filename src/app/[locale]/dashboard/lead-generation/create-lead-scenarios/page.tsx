@@ -260,7 +260,11 @@ const CreateLeadScenarios = () => {
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">Create Lead Scenarios</h2>
 
-      <CustomStepper activeStep={activeStep} setActiveStep={setActiveStep} />
+      <CustomStepper
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        steps={["Lead search", "Lead select"]}
+      />
 
       <ScenarioNameForm />
 
