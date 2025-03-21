@@ -15,13 +15,13 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const leadScenariosName = z.object({
+const accountScenariosName = z.object({
   account_name: z.string(),
 });
 
 const AccountNameForm = () => {
   const form = useForm({
-    resolver: zodResolver(leadScenariosName),
+    resolver: zodResolver(accountScenariosName),
     defaultValues: {
       account_name: "",
     },
@@ -37,7 +37,7 @@ const AccountNameForm = () => {
       accountId,
     });
 
-  function onSubmit(values: z.infer<typeof leadScenariosName>) {
+  function onSubmit(values: z.infer<typeof accountScenariosName>) {
     if (accountId) {
       updateAccountScenario({
         accountId,
@@ -49,10 +49,10 @@ const AccountNameForm = () => {
   }
 
   useEffect(() => {
-    if (accountScenarioById?.name) {
+    if (accountId && accountScenarioById?.name) {
       form.setValue("account_name", accountScenarioById.name);
     }
-  }, [accountScenarioById, form]);
+  }, [accountScenarioById, form, accountId]);
 
   return (
     <Form {...form}>
