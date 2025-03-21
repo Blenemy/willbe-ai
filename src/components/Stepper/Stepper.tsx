@@ -5,14 +5,14 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-const steps = ["Lead Search", "Lead Select", "Lead Save"];
-
 const CustomStepper = ({
   activeStep,
   setActiveStep,
+  steps,
 }: {
   activeStep: number;
   setActiveStep: Dispatch<SetStateAction<number>>;
+  steps: string[];
 }) => {
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
