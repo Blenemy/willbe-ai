@@ -1,14 +1,28 @@
 "use client";
 
-import { useState } from "react";
 import ProfileCard from "./components/ProfileCard";
 import { Button } from "@/components/ui/button";
+import { useConnections } from "@/hooks/useConnections";
 
 const ConnectionsTab = () => {
-  const [linkedInConnected, setLinkedInConnected] = useState(false);
-  const [emailConnected, setEmailConnected] = useState<
-    "none" | "gmail" | "outlook"
-  >("none");
+  const {
+    userStatus,
+    connectLinkedIn,
+    disconnectLinkedIn,
+    connectGmail,
+    connectOutlook,
+    disconnectEmail,
+  } = useConnections({
+    enableFetch: true,
+  });
+
+  console.log(userStatus);
+
+  const linkedInConnected = userStatus?.linkedin ?? false;
+  const emailConnected = (userStatus?.email ?? "none") as
+    | "none"
+    | "gmail"
+    | "outlook";
 
   return (
     <div className="px-6 flex flex-col gap-5">
@@ -23,12 +37,14 @@ const ConnectionsTab = () => {
             {linkedInConnected ? (
               <Button
                 variant="destructive"
-                onClick={() => setLinkedInConnected(false)}
+                onClick={() => {
+                  disconnectLinkedIn.mutate();
+                }}
               >
                 Remove
               </Button>
             ) : (
-              <Button onClick={() => setLinkedInConnected(true)}>
+              <Button onClick={() => connectLinkedIn.mutate()}>
                 Connect LinkedIn
               </Button>
             )}
@@ -47,17 +63,27 @@ const ConnectionsTab = () => {
           <div className="flex gap-2">
             {emailConnected === "none" ? (
               <>
-                <Button onClick={() => setEmailConnected("gmail")}>
+                <Button
+                  onClick={() => {
+                    connectGmail.mutate();
+                  }}
+                >
                   Connect Gmail
                 </Button>
-                <Button onClick={() => setEmailConnected("outlook")}>
+                <Button
+                  onClick={() => {
+                    connectOutlook.mutate();
+                  }}
+                >
                   Connect Outlook
                 </Button>
               </>
             ) : (
               <Button
                 variant="destructive"
-                onClick={() => setEmailConnected("none")}
+                onClick={() => {
+                  disconnectEmail.mutate();
+                }}
               >
                 Remove
               </Button>
