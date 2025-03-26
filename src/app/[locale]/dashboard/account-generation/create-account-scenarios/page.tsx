@@ -40,6 +40,7 @@ import { prepareAccountPayload } from "@/utils/prepareAccountPayload";
 import { useAccountScenarios } from "@/hooks/useAccountScenarios";
 import { transformFilterValues } from "@/utils/transformFilterValues";
 import AccountTable from "./components/AccountTable/AccountTable";
+import AccountSave from "./components/AccountSave/AccountSave";
 
 export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
@@ -193,7 +194,8 @@ const CreateAccountScenarios = () => {
       <CustomStepper
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        steps={["Account search", "Account select"]}
+        steps={["Account search", "Account select", "Account save"]}
+        disabled={!accountId}
       />
 
       <AccountNameForm />
@@ -1059,6 +1061,7 @@ const CreateAccountScenarios = () => {
           )}
 
           {activeStep === 1 && <AccountTable />}
+          {activeStep === 2 && <AccountSave />}
         </>
       )}
     </div>
