@@ -15,34 +15,36 @@ interface UseAuthProps {
   scenarioId?: string | null;
 }
 
+export interface SaveLeadPayload {
+  type: string;
+  id: string;
+  industry: string | null;
+  name: string;
+  first_name: string;
+  last_name: string;
+  member_urn: string;
+  public_identifier: string;
+  public_profile_url: string;
+  profile_url: string;
+  profile_picture_url: string;
+  profile_picture_url_large: string;
+  network_distance: string;
+  location: string;
+  headline: string;
+  summary: string;
+  pending_invitation: boolean;
+  current_positions: {
+    company: string;
+    company_id: string;
+    location: string;
+    industry: string[];
+    role?: string;
+  }[];
+}
+
 interface SaveLeadsPayload {
   scenarioId: string;
-  leads: {
-    type: string;
-    id: string;
-    industry: string | null;
-    name: string;
-    first_name: string;
-    last_name: string;
-    member_urn: string;
-    public_identifier: string;
-    public_profile_url: string;
-    profile_url: string;
-    profile_picture_url: string;
-    profile_picture_url_large: string;
-    network_distance: string;
-    location: string;
-    headline: string;
-    summary: string;
-    pending_invitation: boolean;
-    current_positions: {
-      company: string;
-      company_id: string;
-      location: string;
-      industry: string[];
-      role?: string;
-    }[];
-  }[];
+  leads: SaveLeadPayload[];
 }
 
 export const useSavedLeads = ({ enableFetch, scenarioId }: UseAuthProps) => {
@@ -83,13 +85,7 @@ export const useSavedLeads = ({ enableFetch, scenarioId }: UseAuthProps) => {
   });
 
   const saveSelectedLeads = useMutation({
-    mutationFn: async ({
-      scenarioId,
-      leads,
-    }: {
-      scenarioId: string;
-      leads: SaveLeadsPayload[];
-    }) => {
+    mutationFn: async ({ scenarioId, leads }: SaveLeadsPayload) => {
       return await protectedAxiosInstance.post(
         `/auth/lead-scenarios/${scenarioId}/leads`,
         { leads }
