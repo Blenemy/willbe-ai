@@ -46,6 +46,7 @@ import {
 } from "@/hooks/useDropdownOptionsQuery";
 import LeadTable from "./components/LeadTable/LeadTable";
 import { leadScenariosFiltersSchema } from "@/schemas/leadScenariosFiltersSchema";
+import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
 
 export type LeadScenariosFormType = z.infer<typeof leadScenariosFiltersSchema>;
 
@@ -63,9 +64,9 @@ const CreateLeadScenarios = () => {
 
   const seniorityList = useMemo(() => {
     if (!data) return [];
-    return data.seniorities.map((item: string) => ({
-      value: item.toLowerCase().replace(/\s+/g, "-"),
-      label: item,
+    return data.seniorities.map((item: { value: string; title: string }) => ({
+      value: item.value.toLowerCase().replace(/\s+/g, "-"),
+      label: item.title,
     }));
   }, [data]);
 
@@ -263,7 +264,7 @@ const CreateLeadScenarios = () => {
       <CustomStepper
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        steps={["Lead search", "Lead select"]}
+        steps={["Lead search", "Lead select", "Lead save"]}
       />
 
       <ScenarioNameForm />
@@ -1179,6 +1180,7 @@ const CreateLeadScenarios = () => {
           )}
 
           {activeStep === 1 && <LeadTable />}
+          {activeStep === 2 && <LeadsSaved />}
         </>
       )}
     </div>

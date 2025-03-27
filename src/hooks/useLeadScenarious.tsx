@@ -2,7 +2,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { Lead, LeadScenarios } from "@/types/LeadScenarios";
+import { LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
 
 interface APIRequestErrorPayload {
@@ -19,7 +19,6 @@ interface UseAuthProps {
 export const useLeadScenarios = ({
   enableFetch = false,
   scenarioId,
-  fetchLeads,
 }: UseAuthProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -33,19 +32,6 @@ export const useLeadScenarios = ({
     retry: true,
     staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
-  });
-
-  const { data: leads } = useQuery<Lead[]>({
-    queryKey: ["leads"],
-    queryFn: async () => {
-      const response = await protectedAxiosInstance.get(
-        `/auth/lead-scenarios/${scenarioId}/leads`
-      );
-      return response.data.items;
-    },
-    retry: true,
-    staleTime: 1000 * 60 * 5,
-    enabled: !!fetchLeads,
   });
 
   const { data: leadScenarioById } = useQuery<LeadScenarios>({
@@ -135,7 +121,6 @@ export const useLeadScenarios = ({
   });
 
   return {
-    leads,
     leadScenariousTableData,
     leadScenarioById,
     postLeadScenarious: postLeadScenarious.mutate,

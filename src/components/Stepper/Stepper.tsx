@@ -9,10 +9,12 @@ const CustomStepper = ({
   activeStep,
   setActiveStep,
   steps,
+  disabled,
 }: {
   activeStep: number;
   setActiveStep: Dispatch<SetStateAction<number>>;
   steps: string[];
+  disabled?: boolean;
 }) => {
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -45,7 +47,7 @@ const CustomStepper = ({
           Back
         </Button>
         <Box sx={{ flex: "1 1 auto" }} />
-        <Button onClick={handleNext}>
+        <Button onClick={handleNext} disabled={disabled}>
           {activeStep === steps.length - 1 ? "Finish" : "Next"}
         </Button>
       </Box>

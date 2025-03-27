@@ -4,7 +4,6 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { AccountScenario } from "@/types/AccountScenario";
-import { AccountSearch } from "@/types/AccountSearch";
 
 interface APIRequestErrorPayload {
   message: string;
@@ -47,19 +46,6 @@ export const useAccountScenarios = ({
     retry: true,
     staleTime: 1000 * 60 * 5,
     enabled: !!accountId,
-  });
-
-  const { data: accountsSearchData } = useQuery<AccountSearch[]>({
-    queryKey: ["account-search"],
-    queryFn: async () => {
-      const response = await protectedAxiosInstance.get(
-        `/auth/account-scenarios/${accountId}/accounts`
-      );
-      return response.data.items;
-    },
-    retry: true,
-    staleTime: 1000 * 60 * 5,
-    enabled: !!accountId && enableFetch,
   });
 
   const deleteAccountScenario = useMutation({
@@ -135,7 +121,6 @@ export const useAccountScenarios = ({
   });
 
   return {
-    accountsSearchData,
     accountScenariosDataTable,
     accountScenarioById,
     createAccountScenario: createAccountScenario.mutate,
