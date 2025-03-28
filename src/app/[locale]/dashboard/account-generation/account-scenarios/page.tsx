@@ -91,7 +91,7 @@ const AccountScenariosPage = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Lead Scenarios</h2>
+      <h2 className="mb-5 font-semibold text-2xl">Account Scenarios</h2>
       <div className="flex justify-end mb-4">
         <Button onClick={handleAddAccount}>Add New Account</Button>
       </div>

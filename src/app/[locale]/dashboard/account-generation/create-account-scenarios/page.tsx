@@ -167,8 +167,6 @@ const CreateAccountScenarios = () => {
       annual_revenue_currency: "",
     });
 
-    console.log(form.getValues());
-
     form.trigger();
   };
 
