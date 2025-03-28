@@ -36,7 +36,7 @@ export const useAccountScenarios = ({
   });
 
   const { data: accountScenarioById } = useQuery<AccountScenario>({
-    queryKey: ["account-scenario-by-id"],
+    queryKey: ["account-scenario-by-id", accountId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
         `/auth/account-scenarios/${accountId}`
