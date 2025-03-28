@@ -167,6 +167,8 @@ const CreateAccountScenarios = () => {
       annual_revenue_currency: "",
     });
 
+    console.log(form.getValues());
+
     form.trigger();
   };
 
@@ -251,6 +253,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -285,6 +288,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -330,6 +334,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -364,6 +369,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -409,6 +415,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -443,6 +450,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -488,6 +496,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -522,6 +531,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -566,6 +576,7 @@ const CreateAccountScenarios = () => {
                               <FormItem className="flex-1">
                                 <FormControl>
                                   <Select
+                                    key={field.value}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
@@ -660,6 +671,7 @@ const CreateAccountScenarios = () => {
                                     <FormItem className="flex-1">
                                       <FormControl>
                                         <Select
+                                          key={field.value}
                                           onValueChange={field.onChange}
                                           defaultValue={field.value}
                                         >
@@ -764,6 +776,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -798,6 +811,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -843,6 +857,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -877,6 +892,7 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
@@ -941,6 +957,7 @@ const CreateAccountScenarios = () => {
                               <FormItem className="flex-1">
                                 <FormControl>
                                   <Select
+                                    key={field.value}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
@@ -975,6 +992,7 @@ const CreateAccountScenarios = () => {
                               <FormItem className="flex-1">
                                 <FormControl>
                                   <Select
+                                    key={field.value}
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
@@ -1010,6 +1028,7 @@ const CreateAccountScenarios = () => {
                                 <FormItem className="flex-1">
                                   <FormControl>
                                     <Select
+                                      key={field.value}
                                       onValueChange={field.onChange}
                                       defaultValue={field.value}
                                     >
