@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -28,7 +29,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
+import { useMessageStructures } from "@/hooks/useMessageStructures";
+import { MessageStructure } from "@/types/MessageStructure";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -36,31 +38,17 @@ const MessageStructures = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedStructureId, setSelectedStructureId] = useState<number | null>(
+  const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
   );
 
+  const { structures, isLoading, deleteStructure, copyStructure } =
+    useMessageStructures();
+
   const router = useRouter();
 
-  const messageStructures = [
-    {
-      id: 1,
-      title: "Welcome Email",
-      languages: ["en", "fr"],
-      createdBy: "John Doe",
-      createdAt: "2025-03-20T10:30:00Z",
-    },
-    {
-      id: 2,
-      title: "Password Reset",
-      languages: ["en", "de"],
-      createdBy: "Jane Smith",
-      createdAt: "2025-03-21T12:15:00Z",
-    },
-  ];
-
-  const filteredData = messageStructures.filter((item) =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = structures.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
@@ -69,31 +57,34 @@ const MessageStructures = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setSelectedStructureId(id);
     setIsDialogOpen(true);
   };
 
   const confirmDelete = () => {
-    if (selectedStructureId !== null) {
-      console.log("Delete structure with ID:", selectedStructureId);
+    if (selectedStructureId) {
+      deleteStructure(selectedStructureId);
       setIsDialogOpen(false);
       setSelectedStructureId(null);
     }
   };
 
-  const handleCopy = (structure: (typeof messageStructures)[0]) => {
-    const copyTitle = `Copy of ${structure.title}`;
-    console.log("Copy structure:", copyTitle);
+  const handleCopy = (structure: MessageStructure) => {
+    copyStructure(structure);
   };
 
-  const handleOpen = (structureId: number) => {
-    router.push(`/dashboard/message-structures/${structureId}`);
+  const handleOpen = (structureId: string) => {
+    router.push(`/dashboard/messages/message-structures/${structureId}`);
   };
 
   const handleAddNew = () => {
-    router.push(`/dashboard/message-structures/create`);
+    router.push(`/dashboard/messages/message-structures/create`);
   };
+
+  if (isLoading) {
+    return <div className="p-6">Loading message structures...</div>;
+  }
 
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-6">
@@ -106,7 +97,7 @@ const MessageStructures = () => {
       </div>
 
       <Input
-        placeholder="Search by Email structure title"
+        placeholder="Search by structure title"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -124,13 +115,15 @@ const MessageStructures = () => {
         <TableBody>
           {currentItems.map((structure) => (
             <TableRow key={structure.id}>
-              <TableCell>{structure.title}</TableCell>
+              <TableCell>{structure.name}</TableCell>
               <TableCell className="flex gap-1">
                 {structure.languages.map((lang) => (
                   <Badge key={lang}>{lang}</Badge>
                 ))}
               </TableCell>
-              <TableCell>{structure.createdBy}</TableCell>
+              <TableCell>
+                {structure.user.firstName} {structure.user.lastName}
+              </TableCell>
               <TableCell>
                 {new Date(structure.createdAt).toLocaleString()}
               </TableCell>

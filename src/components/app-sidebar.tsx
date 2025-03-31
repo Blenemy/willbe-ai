@@ -96,16 +96,16 @@ const data = {
       title: "Messages generator",
       url: "#",
       items: [
-        {
-          title: "Scenario list (6)",
-          url: "/dashboard/messages/scenario-list",
-          icon: Mail,
-          allowedRoles: ALL_ROLES,
-        },
+        // {
+        //   title: "Scenario list (6)",
+        //   url: "/dashboard/messages/scenario-list",
+        //   icon: Mail,
+        //   allowedRoles: ALL_ROLES,
+        // },
         {
           title: "Message structures",
           url: "/dashboard/messages/message-structures",
-          icon: Settings,
+          icon: Mail,
           allowedRoles: ALL_ROLES,
         },
       ],
