@@ -76,7 +76,12 @@ export const useAccountScenarios = ({
     },
     onSuccess: (data: AccountScenario) => {
       toast.success("Account Scenario was created");
-      queryClient.invalidateQueries({ queryKey: ["account-scenarios"] });
+      queryClient.invalidateQueries({
+        queryKey: ["account-scenarios"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["account-scenario-by-id"],
+      });
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("accountId", data.id.toString());
       currentUrl.searchParams.set("accountName", data.name.toString());
@@ -106,7 +111,12 @@ export const useAccountScenarios = ({
     },
     onSuccess: (data: AccountScenario) => {
       toast.success("Account Scenario was updated");
-      queryClient.invalidateQueries({ queryKey: ["account-scenarios"] });
+      queryClient.invalidateQueries({
+        queryKey: ["account-scenarios"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["account-scenario-by-id"],
+      });
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set("accountId", data.id.toString());
       currentUrl.searchParams.set("accountName", data.name.toString());
