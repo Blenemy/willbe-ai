@@ -41,6 +41,7 @@ import { useAccountScenarios } from "@/hooks/useAccountScenarios";
 import { transformFilterValues } from "@/utils/transformFilterValues";
 import AccountTable from "./components/AccountTable/AccountTable";
 import AccountSave from "./components/AccountSave/AccountSave";
+import { XIcon } from "lucide-react";
 
 export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
@@ -84,9 +85,10 @@ const CreateAccountScenarios = () => {
 
         has_job_offers: false,
 
-        technology: "",
-        technology_include: [],
-        technology_exclude: [],
+        technology_search_input: "",
+        technology: [],
+        // technology_include: [],
+        // technology_exclude: [],
 
         network_distance: "",
 
@@ -143,9 +145,10 @@ const CreateAccountScenarios = () => {
 
       has_job_offers: false,
 
-      technology: "",
-      technology_include: [],
-      technology_exclude: [],
+      technology_search_input: "",
+      technology: [],
+      // technology_include: [],
+      // technology_exclude: [],
 
       network_distance: "",
 
@@ -251,13 +254,33 @@ const CreateAccountScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
-                                        key={field.value}
+                                        value={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "headcount_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.headcounts.from.map(
@@ -279,6 +302,7 @@ const CreateAccountScenarios = () => {
                                   </FormItem>
                                 )}
                               />
+
                               <FormField
                                 control={form.control}
                                 name="headcount_to"
@@ -290,8 +314,27 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="To (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="To (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "headcount_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -336,8 +379,27 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "headcount_growth_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -371,8 +433,27 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="To (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="To (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "headcount_growth_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -417,8 +498,27 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "fortune_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -452,9 +552,26 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="To (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="To (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue("fortune_to", "");
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.fortunes.to.map(
@@ -498,9 +615,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "followers_count_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.followersCounts.from.map(
@@ -533,9 +670,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="To (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="To (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "followers_count_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.followersCounts.to.map(
@@ -578,9 +735,29 @@ const CreateAccountScenarios = () => {
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select an activity" />
+                                    <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                      <div className="flex items-center flex-1 overflow-hidden">
+                                        <SelectValue
+                                          placeholder="Select an activity"
+                                          className="truncate"
+                                        />
+                                      </div>
+
+                                      {field.value && (
+                                        <XIcon
+                                          className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                          onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            form.setValue(
+                                              "recent_activities",
+                                              ""
+                                            );
+                                          }}
+                                        />
+                                      )}
                                     </SelectTrigger>
+
                                     <SelectContent>
                                       <SelectGroup>
                                         <SelectLabel>
@@ -635,11 +812,11 @@ const CreateAccountScenarios = () => {
                           <MultiSelectWithSearchButton
                             label="Find companies using specific technologies or software solutions."
                             form={form}
-                            searchName="technology"
+                            searchName="technology_search_input"
+                            valueName="technology"
                             placeholder="Search by technology"
                             searchType="TECHNOLOGIES"
-                            includeName="technology_include"
-                            excludeName="technology_exclude"
+                            isSingleSelect
                           />
                         </FormAccordion>
                       </div>
@@ -673,9 +850,29 @@ const CreateAccountScenarios = () => {
                                           onValueChange={field.onChange}
                                           defaultValue={field.value}
                                         >
-                                          <SelectTrigger>
-                                            <SelectValue placeholder="Select a degree" />
+                                          <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                            <div className="flex items-center flex-1 overflow-hidden">
+                                              <SelectValue
+                                                placeholder="Select a degree"
+                                                className="truncate"
+                                              />
+                                            </div>
+
+                                            {field.value && (
+                                              <XIcon
+                                                className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                onPointerDown={(e) => {
+                                                  e.preventDefault();
+                                                  e.stopPropagation();
+                                                  form.setValue(
+                                                    "network_distance",
+                                                    ""
+                                                  );
+                                                }}
+                                              />
+                                            )}
                                           </SelectTrigger>
+
                                           <SelectContent>
                                             <SelectGroup>
                                               <SelectLabel>
@@ -778,9 +975,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "department_headcount_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.headcounts.from.map(
@@ -813,9 +1030,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="To (in no. employees)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="To (in no. employees)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "department_headcount_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.headcounts.to.map(
@@ -859,9 +1096,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="From (in %)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="From (in %)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "department_headcount_growth_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.headcounts.from.map(
@@ -894,9 +1151,29 @@ const CreateAccountScenarios = () => {
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue placeholder="to (in %)" />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder="to (in %)"
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "department_headcount_growth_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
+
                                         <SelectContent>
                                           <SelectGroup>
                                             {dropdowns?.headcounts.to.map(
@@ -959,9 +1236,29 @@ const CreateAccountScenarios = () => {
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="From (in %)" />
+                                    <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                      <div className="flex items-center flex-1 overflow-hidden">
+                                        <SelectValue
+                                          placeholder="From (in %)"
+                                          className="truncate"
+                                        />
+                                      </div>
+
+                                      {field.value && (
+                                        <XIcon
+                                          className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                          onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            form.setValue(
+                                              "annual_revenue_from",
+                                              ""
+                                            );
+                                          }}
+                                        />
+                                      )}
                                     </SelectTrigger>
+
                                     <SelectContent>
                                       <SelectGroup>
                                         {dropdowns?.annualRevenues.from.map(
@@ -994,9 +1291,29 @@ const CreateAccountScenarios = () => {
                                     onValueChange={field.onChange}
                                     defaultValue={field.value}
                                   >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="to (in %)" />
+                                    <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                      <div className="flex items-center flex-1 overflow-hidden">
+                                        <SelectValue
+                                          placeholder="to (in %)"
+                                          className="truncate"
+                                        />
+                                      </div>
+
+                                      {field.value && (
+                                        <XIcon
+                                          className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                          onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            form.setValue(
+                                              "annual_revenue_to",
+                                              ""
+                                            );
+                                          }}
+                                        />
+                                      )}
                                     </SelectTrigger>
+
                                     <SelectContent>
                                       <SelectGroup>
                                         {dropdowns?.annualRevenues.to.map(
@@ -1030,9 +1347,29 @@ const CreateAccountScenarios = () => {
                                       onValueChange={field.onChange}
                                       defaultValue={field.value}
                                     >
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select currency" />
+                                      <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                        <div className="flex items-center flex-1 overflow-hidden">
+                                          <SelectValue
+                                            placeholder="Select currency"
+                                            className="truncate"
+                                          />
+                                        </div>
+
+                                        {field.value && (
+                                          <XIcon
+                                            className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                            onPointerDown={(e) => {
+                                              e.preventDefault();
+                                              e.stopPropagation();
+                                              form.setValue(
+                                                "annual_revenue_currency",
+                                                ""
+                                              );
+                                            }}
+                                          />
+                                        )}
                                       </SelectTrigger>
+
                                       <SelectContent>
                                         <SelectGroup>
                                           {dropdowns?.annualRevenues.currencies.map(
