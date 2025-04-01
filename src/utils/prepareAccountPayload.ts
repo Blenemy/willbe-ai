@@ -76,11 +76,6 @@ export function prepareAccountPayload(values: any, accountName: string) {
       key: "location",
     },
     {
-      include: "technology_include",
-      exclude: "technology_exclude",
-      key: "technology",
-    },
-    {
       include: "saved_accounts_include",
       exclude: "saved_accounts_exclude",
       key: "saved_accounts",
@@ -108,6 +103,18 @@ export function prepareAccountPayload(values: any, accountName: string) {
       });
     }
   });
+
+  if (Array.isArray(values.technology) && values.technology.length > 0) {
+    const cleanTech = values.technology.filter(
+      (item: any) => item?.title && item?.id
+    );
+    if (cleanTech.length > 0) {
+      payload.filterValues.push({
+        filterKey: "technology",
+        filterValue: cleanTech,
+      });
+    }
+  }
 
   return payload;
 }

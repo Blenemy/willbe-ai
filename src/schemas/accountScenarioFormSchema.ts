@@ -30,9 +30,8 @@ export const accountScenarioFormSchema = z.object({
 
   has_job_offers: z.boolean().optional(),
 
-  technology: z.string().optional(),
-  technology_include: z.array(searchOptionSchema).optional(),
-  technology_exclude: z.array(searchOptionSchema).optional(),
+  technology_search_input: z.string().optional(),
+  technology: z.array(searchOptionSchema).optional(),
 
   network_distance: z.string().optional(),
 
