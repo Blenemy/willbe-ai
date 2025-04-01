@@ -66,11 +66,11 @@ const AccountNameForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground">
-                Account name
+                Account scenario name
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Scenario name"
+                  placeholder="Account scenario name"
                   className="mb-3"
                   {...field}
                 />
