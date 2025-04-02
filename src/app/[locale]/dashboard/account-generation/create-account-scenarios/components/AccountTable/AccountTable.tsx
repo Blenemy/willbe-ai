@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePaginatedAccountsSearch } from "@/hooks/usePaginatedAccountsSearch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
@@ -33,17 +33,20 @@ const AccountTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
   const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
+  const [cursor, setCursor] = useState<string | null>(null);
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(
     INITIAL_NUMBER_ITEMS_PER_PAGE
   );
 
-  const currentCursor = cursorStack[currentCursorIndex];
+  useEffect(() => {
+    setCursor(cursorStack.at(currentCursorIndex) ?? null);
+  }, [cursorStack, currentCursorIndex]);
 
   const { data, saveSelectedAccounts } = usePaginatedAccountsSearch({
     accountId,
     limit: itemsPerPage,
-    cursor: currentCursor,
+    cursor,
   });
 
   const companies = data?.items || [];
@@ -63,9 +66,11 @@ const AccountTable = () => {
   };
 
   const handleNext = () => {
-    if (data?.cursor) {
-      const newStack = [...cursorStack];
-      newStack.push(data.cursor);
+    if (data?.cursor && data.cursor !== cursorStack.at(currentCursorIndex)) {
+      const newStack = [
+        ...cursorStack.slice(0, currentCursorIndex + 1),
+        data.cursor,
+      ];
       setCursorStack(newStack);
       setCurrentCursorIndex((prev) => prev + 1);
     }
@@ -220,13 +225,17 @@ const AccountTable = () => {
       </Table>
 
       <div className="flex items-center gap-4 mt-6">
-        <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
+        <Button
+          onClick={handlePrev}
+          disabled={currentCursorIndex === 0}
+          type="button"
+        >
           Previous
         </Button>
         <span>
           Page {currentPage} of {totalPages}
         </span>
-        <Button onClick={handleNext} disabled={!data?.cursor}>
+        <Button onClick={handleNext} disabled={!data?.cursor} type="button">
           Next
         </Button>
       </div>
