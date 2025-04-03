@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { toast } from "sonner";
 import { useRef } from "react";
-import { LANGUAGES } from "@/app/[locale]/dashboard/messages/message-structures/[id]/page";
+import { LANGUAGES } from "@/constants/languagesMessageStructure";
 
 interface CreateTemplateInput {
   language: string;
