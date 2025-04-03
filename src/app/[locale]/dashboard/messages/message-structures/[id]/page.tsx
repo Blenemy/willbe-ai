@@ -1,12 +1,26 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { useMessageStructureForm } from "@/hooks/useMessageStructureForm";
 import { LanguageForm } from "../components/LanguageForm";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { LanguageTranslateUI } from "../components/LanguageTranslateUI";
 
 export const LANGUAGES = [
   { label: "English", code: "en" },
@@ -18,6 +32,20 @@ export const LANGUAGES = [
   { label: "Hebrew", code: "he" },
 ];
 
+const EMAIL_TYPES = [
+  { label: "First email", value: "first_email" },
+  { label: "Follow up email", value: "follow_up_email" },
+  { label: "LinkedIn Connection", value: "linkedin_connection" },
+  { label: "LinkedIn Message", value: "linkedin_message" },
+  { label: "LinkedIn Follow up", value: "linkedin_follow_up" },
+];
+
+const SUBJECT_TYPES = [
+  { label: "Account <> Your company", value: "account_company" },
+  { label: "Account <> Your company + Text", value: "account_company_text" },
+  { label: "Text", value: "text" },
+];
+
 export default function MessageStructureEditor() {
   const { id } = useParams();
   const {
@@ -26,13 +54,26 @@ export default function MessageStructureEditor() {
     isCreating,
     currentLang,
     handleLanguageChange,
+    fetchedStructure,
+    updateMessageStructure,
   } = useMessageStructureForm(id as string);
 
   const emailType = form.watch("emailType");
   const isFirstEmail = emailType === "first_email";
+  const subjectType = form.watch("subjectType");
+
+  const handleSave = () => {
+    const safeId = Array.isArray(id) ? id[0] : id;
+
+    if (safeId) {
+      updateMessageStructure({ id: safeId });
+    } else {
+      createStructure();
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6">
+    <div className="p-6 flex flex-col gap-6 w-full">
       <h1 className="text-2xl font-bold">Create Message Structure</h1>
 
       <Form {...form}>
@@ -54,12 +95,21 @@ export default function MessageStructureEditor() {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="Email Type (e.g. first_email)"
-                    {...field}
-                  />
-                </FormControl>
+                <FormLabel>Email type</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select email type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {EMAIL_TYPES.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
@@ -82,9 +132,21 @@ export default function MessageStructureEditor() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormControl>
-                    <Input placeholder="Subject type" {...field} />
-                  </FormControl>
+                  <FormLabel>Subject type</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select subject type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {SUBJECT_TYPES.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormItem>
               )}
             />
@@ -92,12 +154,8 @@ export default function MessageStructureEditor() {
         </form>
       </Form>
 
-      <Button
-        type="button"
-        onClick={() => createStructure()}
-        disabled={isCreating}
-      >
-        {isCreating ? "Creating..." : "Create structure"}
+      <Button type="button" onClick={handleSave} disabled={isCreating}>
+        {id ? "Update structure" : "Create structure"}
       </Button>
 
       <Tabs defaultValue={currentLang} onValueChange={handleLanguageChange}>
@@ -111,7 +169,18 @@ export default function MessageStructureEditor() {
 
         {LANGUAGES.map((lang) => (
           <TabsContent key={lang.code} value={lang.code} className="mt-4">
-            <LanguageForm languageCode={lang.code} />
+            {fetchedStructure?.languages.includes(lang.label) ? (
+              <LanguageForm
+                languageCode={lang.code}
+                subjectType={subjectType}
+              />
+            ) : (
+              <LanguageTranslateUI
+                currentLang={lang.code}
+                availableLangs={fetchedStructure?.languages || []}
+                structureId={fetchedStructure?.id}
+              />
+            )}
           </TabsContent>
         ))}
       </Tabs>

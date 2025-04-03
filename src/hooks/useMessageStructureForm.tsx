@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useRouter } from "next/navigation";
@@ -42,6 +42,7 @@ export type MessageStructureFormSchema = z.infer<typeof schema>;
 
 export const useMessageStructureForm = (editingId?: string) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const form = useForm<MessageStructureFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -86,6 +87,31 @@ export const useMessageStructureForm = (editingId?: string) => {
       form.setValue("subjectType", fetchedStructure.subjectType || "");
     }
   }, [fetchedStructure, form]);
+
+  const updateMessageStructure = useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const values = form.getValues();
+      const res = await protectedAxiosInstance.patch(
+        `/auth/message-structures/${id}`,
+        {
+          name: values.title,
+          messageType: values.emailType,
+          wordsLimit: Number(values.maxWords),
+          subjectType: values.subjectType,
+        }
+      );
+      return res.data;
+    },
+    onSuccess: (_, { id }) => {
+      toast.success("Structure was updated");
+      queryClient.invalidateQueries({
+        queryKey: ["message-structure", id],
+      });
+    },
+    onError: () => {
+      toast.error("Failed to update structure");
+    },
+  });
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -134,11 +160,13 @@ export const useMessageStructureForm = (editingId?: string) => {
     form,
     fields,
     append,
+    fetchedStructure,
     remove,
     createStructure: createMutation.mutate,
     eraseStructure,
     handleLanguageChange,
     currentLang,
     isCreating: createMutation.isPending,
+    updateMessageStructure: updateMessageStructure.mutate,
   };
 };
