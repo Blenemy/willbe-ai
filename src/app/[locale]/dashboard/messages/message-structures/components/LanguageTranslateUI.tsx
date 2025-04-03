@@ -21,12 +21,12 @@ export const LanguageTranslateUI = ({
   structureId,
 }: Props) => {
   const [fromLang, setFromLang] = useState<string>();
-  const [isTranslating, setIsTranslating] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { createTemplate } = useMessageTemplates();
 
   const handleTranslate = async () => {
     if (!fromLang) return;
-    setIsTranslating(true);
+    setIsLoading(true);
     try {
       await createTemplate({
         language: currentLang,
@@ -34,31 +34,55 @@ export const LanguageTranslateUI = ({
         from: fromLang,
       });
     } finally {
-      setIsTranslating(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreateFromScratch = async () => {
+    setIsLoading(true);
+    try {
+      await createTemplate({
+        language: currentLang,
+        structureId,
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="border rounded p-4 space-y-4">
       <p>This template has not been created yet for this language.</p>
-      <div className="space-y-2">
-        <label className="font-medium">Translate from:</label>
-        <Select onValueChange={setFromLang} value={fromLang}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select source language" />
-          </SelectTrigger>
-          <SelectContent>
-            {availableLangs.map((lang) => (
-              <SelectItem key={lang} value={lang}>
-                {lang}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+      <div className="flex flex-col gap-2">
+        <Button
+          variant="outline"
+          onClick={handleCreateFromScratch}
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating..." : "Create from scratch"}
+        </Button>
+
+        <div className="space-y-2">
+          <label className="font-medium">Or translate from:</label>
+          <Select onValueChange={setFromLang} value={fromLang}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select source language" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableLangs.map((lang) => (
+                <SelectItem key={lang} value={lang}>
+                  {lang}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Button onClick={handleTranslate} disabled={!fromLang || isLoading}>
+          {isLoading ? "Translating..." : "Translate"}
+        </Button>
       </div>
-      <Button onClick={handleTranslate} disabled={!fromLang || isTranslating}>
-        {isTranslating ? "Translating..." : "Translate"}
-      </Button>
     </div>
   );
 };

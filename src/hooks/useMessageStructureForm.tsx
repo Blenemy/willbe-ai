@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const LANGUAGES = [
   "English",
@@ -116,14 +116,21 @@ export const useMessageStructureForm = (editingId?: string) => {
   const createMutation = useMutation({
     mutationFn: async () => {
       const values = form.getValues();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const payload: any = {
+        name: values.title,
+        messageType: values.emailType,
+        wordsLimit: Number(values.maxWords),
+      };
+
+      if (values.subjectType) {
+        payload.subjectType = values.subjectType;
+      }
+
       const res = await protectedAxiosInstance.post(
         "/auth/message-structures",
-        {
-          name: values.title,
-          messageType: values.emailType,
-          wordsLimit: Number(values.maxWords),
-          subjectType: values.subjectType,
-        }
+        payload
       );
       return res.data;
     },
@@ -143,19 +150,6 @@ export const useMessageStructureForm = (editingId?: string) => {
     form.reset({ ...form.getValues(), ...(formsByLang.current[lang] || {}) });
   };
 
-  const eraseStructure = () => {
-    form.reset({
-      ...form.getValues(),
-      objective: "",
-      subject: "",
-      greeting: "",
-      introduction: { text: "", maxWords: "" },
-      body: [{ text: "", maxWords: "" }],
-      goodbye: { text: "", maxWords: "" },
-      sample: "",
-    });
-  };
-
   return {
     form,
     fields,
@@ -163,7 +157,6 @@ export const useMessageStructureForm = (editingId?: string) => {
     fetchedStructure,
     remove,
     createStructure: createMutation.mutate,
-    eraseStructure,
     handleLanguageChange,
     currentLang,
     isCreating: createMutation.isPending,

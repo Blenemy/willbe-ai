@@ -80,7 +80,26 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
   useEffect(() => {
     const loadTemplate = async () => {
       const data = await fetchTemplateId(structureId as string, languageCode);
-      if (!data) return;
+
+      if (!data) {
+        form.reset({
+          objective: "",
+          subject: "",
+          greeting: "",
+          introduction: { text: "", wordsLimit: "" },
+          body: [{ text: "", wordsLimit: "" }],
+          goodbye: { text: "", wordsLimit: "" },
+          sample: "",
+        });
+        return;
+      }
+
+      const paragraphs = data.paragraphs?.length
+        ? data.paragraphs.map((p: any) => ({
+            text: p.text || "",
+            wordsLimit: p.wordsLimit?.toString() || "",
+          }))
+        : [{ text: "", wordsLimit: "" }];
 
       form.reset({
         objective: data.objective || "",
@@ -90,10 +109,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           text: data.introduction?.text || "",
           wordsLimit: data.introduction?.wordsLimit?.toString() || "",
         },
-        body: (data.paragraphs || []).map((p: any) => ({
-          text: p.text || "",
-          wordsLimit: p.wordsLimit?.toString() || "",
-        })),
+        body: paragraphs,
         goodbye: {
           text: data.goodbye?.text || "",
           wordsLimit: data.goodbye?.wordsLimit?.toString() || "",
@@ -261,8 +277,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
         />
 
         <FormLabel className="font-semibold">Body paragraphs</FormLabel>
+
         {fields.map((item, index) => (
-          <div key={item.id} className="space-y-2">
+          <div key={item.id} className="border rounded p-4 space-y-2">
             <FormField
               name={`body.${index}.text`}
               control={form.control}
@@ -275,6 +292,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
                 </FormItem>
               )}
             />
+
             <FormField
               name={`body.${index}.wordsLimit`}
               control={form.control}
@@ -282,23 +300,32 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
                 <FormItem>
                   <FormLabel>Words limit</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input type="number" placeholder="Limit" {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <div className="flex gap-2">
+
+            <div className="flex gap-2 items-center">
               <Button
                 type="button"
+                size="icon"
                 onClick={() => append({ text: "", wordsLimit: "" })}
               >
                 <Plus className="w-4 h-4" />
               </Button>
+
               {fields.length > 1 && (
-                <Button type="button" onClick={() => remove(index)}>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => remove(index)}
+                >
                   <Minus className="w-4 h-4" />
                 </Button>
               )}
+
               <Button
                 type="button"
                 size="sm"
