@@ -154,7 +154,12 @@ export default function MessageStructureEditor() {
         </form>
       </Form>
 
-      <Button type="button" onClick={handleSave} disabled={isCreating}>
+      <Button
+        type="button"
+        onClick={handleSave}
+        disabled={isCreating}
+        className="max-w-fit"
+      >
         {id ? "Update structure" : "Create structure"}
       </Button>
 

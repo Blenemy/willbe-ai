@@ -51,8 +51,13 @@ interface Props {
 
 export function LanguageForm({ languageCode, subjectType }: Props) {
   const { id: structureId } = useParams();
-  const { createTemplate, updateTemplate, hasTemplate, fetchTemplateId } =
-    useMessageTemplates();
+  const {
+    createTemplate,
+    updateTemplate,
+    hasTemplate,
+    fetchTemplateId,
+    deleteTemplate,
+  } = useMessageTemplates();
 
   const form = useForm<LanguageFormValues>({
     resolver: zodResolver(schema),
@@ -130,8 +135,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
     }
   };
 
-  const handleErase = () => {
-    form.reset();
+  const handleErase = async () => {
+    await deleteTemplate(languageCode);
   };
 
   const handleSave = async () => {

@@ -86,9 +86,28 @@ export const useMessageTemplates = () => {
     }
   };
 
+  const deleteTemplateMutation = useMutation({
+    mutationFn: async (language: string) => {
+      const id = templateMap.current[language];
+      if (!id) throw new Error("Template ID not found for language");
+
+      await protectedAxiosInstance.delete(`/auth/message-templates/${id}`);
+      return id;
+    },
+    onSuccess: (deletedId, language) => {
+      toast.success("Template deleted");
+      delete templateMap.current[language];
+      queryClient.invalidateQueries({ queryKey: ["message-structure"] });
+    },
+    onError: () => {
+      toast.error("Failed to delete template");
+    },
+  });
+
   return {
     createTemplate: createTemplateMutation.mutateAsync,
     updateTemplate: updateTemplateMutation.mutateAsync,
+    deleteTemplate: deleteTemplateMutation.mutateAsync,
     hasTemplate,
     getTemplateId,
     fetchTemplateId,
