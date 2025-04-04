@@ -107,19 +107,15 @@ const AccountTable = ({
     );
 
     const accounts = selectedData.map((company) => ({
+      type: company.type,
       id: company.id,
-      accountScenarioId: accountId,
-      accountData: {
-        type: company.type,
-        id: company.id,
-        name: company.name,
-        profile_url: company.profile_url,
-        summary: company.summary,
-        industry: company.industry,
-        location: company.location,
-        headcount: company.headcount,
-        logo: company.logo,
-      },
+      name: company.name,
+      profile_url: company.profile_url,
+      summary: company.summary,
+      industry: company.industry,
+      location: company.location,
+      headcount: company.headcount,
+      logo: company.logo,
     }));
 
     await saveSelectedAccounts({ accountScenarioId: accountId, accounts });

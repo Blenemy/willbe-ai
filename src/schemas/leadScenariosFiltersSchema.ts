@@ -41,6 +41,8 @@ export const leadScenariosFiltersSchema = z.object({
   keywords: z.string(),
   persona: z.string(),
   current_company: z.string(),
+  current_company_include: z.array(searchOptionSchema),
+  current_company_exclude: z.array(searchOptionSchema),
   past_company: z.string(),
   past_company_include: z.array(searchOptionSchema),
   past_company_exclude: z.array(searchOptionSchema),

@@ -70,7 +70,7 @@ const AccountSave = () => {
         </TableHeader>
         <TableBody>
           {savedAccounts?.map((item) => {
-            const data = item.accountData.accountData;
+            const data = item.accountData;
             const [city, country] = data.location?.split(",") ?? ["-", "-"];
             return (
               <TableRow key={item.id}>

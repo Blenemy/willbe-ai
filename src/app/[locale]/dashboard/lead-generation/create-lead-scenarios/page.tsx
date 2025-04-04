@@ -141,6 +141,8 @@ const CreateLeadScenarios = () => {
       keywords: "",
       persona: "",
       current_company: "",
+      current_company_include: [],
+      current_company_exclude: [],
       past_company: "",
       past_company_include: [],
       past_company_exclude: [],
@@ -228,6 +230,8 @@ const CreateLeadScenarios = () => {
           keywords: "",
           persona: "",
           current_company: "",
+          current_company_include: [],
+          current_company_exclude: [],
           past_company: "",
           past_company_include: [],
           past_company_exclude: [],
@@ -252,6 +256,8 @@ const CreateLeadScenarios = () => {
           });
         });
       }
+
+      console.log(form.getValues());
 
       form.trigger();
     }
@@ -596,6 +602,18 @@ const CreateLeadScenarios = () => {
                             </AccordionContent>
                           </AccordionItem>
                         </Accordion>
+
+                        <FormAccordion label="🏢 Current company">
+                          <FormInputWithSearchMultiSelect
+                            label="Find people currently employed at specific companies."
+                            form={form}
+                            searchName="current_company"
+                            placeholder="Search by company name..."
+                            searchType="COMPANY"
+                            includeName="current_company_include"
+                            excludeName="current_company_exclude"
+                          />
+                        </FormAccordion>
 
                         <FormAccordion label="🕰️🏢 Past company">
                           <FormInputWithSearchMultiSelect
