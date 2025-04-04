@@ -43,7 +43,7 @@ const MessageStructures = () => {
   );
 
   const { structures, isLoading, deleteStructure, copyStructure } =
-    useMessageStructures();
+    useMessageStructures({ enableFetch: true });
 
   const router = useRouter();
 
