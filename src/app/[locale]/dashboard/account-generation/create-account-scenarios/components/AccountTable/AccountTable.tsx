@@ -22,11 +22,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePaginatedAccountsSearch } from "@/hooks/usePaginatedAccountsSearch";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
-const AccountTable = () => {
+const AccountTable = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}) => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId") || "";
 
@@ -43,16 +47,18 @@ const AccountTable = () => {
     setCursor(cursorStack.at(currentCursorIndex) ?? null);
   }, [cursorStack, currentCursorIndex]);
 
-  const { data, saveSelectedAccounts } = usePaginatedAccountsSearch({
-    accountId,
-    limit: itemsPerPage,
-    cursor,
-  });
+  const { data, saveSelectedAccounts, isFetching } = usePaginatedAccountsSearch(
+    {
+      accountId,
+      limit: itemsPerPage,
+      cursor,
+    }
+  );
 
   const companies = data?.items || [];
 
   const totalPages = data?.paging
-    ? Math.ceil(data.paging.total_count / data.paging.page_count / itemsPerPage)
+    ? Math.ceil(data.paging.total_count / data.paging.page_count)
     : 1;
 
   const currentPage = data?.paging
@@ -93,7 +99,7 @@ const AccountTable = () => {
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!accountId || !data) return;
 
     const selectedData = data.items.filter((item) =>
@@ -116,7 +122,8 @@ const AccountTable = () => {
       },
     }));
 
-    saveSelectedAccounts({ accountScenarioId: accountId, accounts });
+    await saveSelectedAccounts({ accountScenarioId: accountId, accounts });
+    setCurrentStep((prev) => prev + 1);
   };
 
   return (
@@ -224,28 +231,30 @@ const AccountTable = () => {
         </TableBody>
       </Table>
 
-      <div className="flex items-center gap-4 mt-6">
-        <Button
-          onClick={handlePrev}
-          disabled={currentCursorIndex === 0}
-          type="button"
-        >
-          Previous
-        </Button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <Button onClick={handleNext} disabled={!data?.cursor} type="button">
-          Next
-        </Button>
-      </div>
+      {!isFetching && (
+        <div className="flex items-center gap-4 mt-6">
+          <Button
+            onClick={handlePrev}
+            disabled={currentCursorIndex === 0}
+            type="button"
+          >
+            Previous
+          </Button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button onClick={handleNext} disabled={!data?.cursor} type="button">
+            Next
+          </Button>
+        </div>
+      )}
 
       <Button
         className="self-start mt-4"
         onClick={handleSubmit}
         disabled={selectedCompanies.length === 0}
       >
-        Submit Selected Companies
+        Save selected companies
       </Button>
     </div>
   );

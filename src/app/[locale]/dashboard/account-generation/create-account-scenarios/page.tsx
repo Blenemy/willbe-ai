@@ -1414,7 +1414,7 @@ const CreateAccountScenarios = () => {
             </Form>
           )}
 
-          {activeStep === 1 && <AccountTable />}
+          {activeStep === 1 && <AccountTable setCurrentStep={setActiveStep} />}
           {activeStep === 2 && <AccountSave />}
         </>
       )}

@@ -20,14 +20,18 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
-const LeadTable = () => {
+const LeadTable = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}) => {
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId") || "";
 
@@ -45,7 +49,7 @@ const LeadTable = () => {
 
   const currentCursor = cursorStack[currentCursorIndex];
 
-  const { searchLeads, paging, cursor } = useSearchLeads({
+  const { searchLeads, paging, cursor, isFetching } = useSearchLeads({
     enableFetch: true,
     scenarioId,
     limit: itemsPerPage,
@@ -90,7 +94,7 @@ const LeadTable = () => {
     lead.first_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const selectedData = searchLeads.filter((item) =>
       selectedLeads.includes(item.id)
     );
@@ -116,7 +120,8 @@ const LeadTable = () => {
       current_positions: lead.current_positions,
     }));
 
-    saveSelectedLeads({ scenarioId, leads: payload });
+    await saveSelectedLeads({ scenarioId, leads: payload });
+    setCurrentStep((prev) => prev + 1);
   };
 
   return (
@@ -227,24 +232,26 @@ const LeadTable = () => {
         </TableBody>
       </Table>
 
-      <div className="flex items-center gap-4 mt-6">
-        <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
-          Previous
-        </Button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <Button onClick={handleNext} disabled={!cursor}>
-          Next
-        </Button>
-      </div>
+      {!isFetching && (
+        <div className="flex items-center gap-4 mt-6">
+          <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
+            Previous
+          </Button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button onClick={handleNext} disabled={!cursor}>
+            Next
+          </Button>
+        </div>
+      )}
 
       <Button
         className="self-start mt-4"
         onClick={handleSubmit}
         disabled={selectedLeads.length === 0}
       >
-        Submit Selected Leads
+        Save Selected Leads
       </Button>
     </div>
   );
