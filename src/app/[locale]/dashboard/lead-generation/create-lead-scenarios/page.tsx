@@ -1179,7 +1179,7 @@ const CreateLeadScenarios = () => {
             </Form>
           )}
 
-          {activeStep === 1 && <LeadTable />}
+          {activeStep === 1 && <LeadTable setCurrentStep={setActiveStep} />}
           {activeStep === 2 && <LeadsSaved />}
         </>
       )}

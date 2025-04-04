@@ -177,17 +177,13 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
       sampleMessage: data.sample,
     };
 
-    try {
-      if (!hasTemplate(languageCode)) {
-        await createTemplate({
-          language: languageCode,
-          structureId: structureId as string,
-        });
-      }
-      await updateTemplate({ language: languageCode, data: payload });
-    } catch {
-      toast.error("Error saving template");
+    if (!hasTemplate(languageCode)) {
+      await createTemplate({
+        language: languageCode,
+        structureId: structureId as string,
+      });
     }
+    await updateTemplate({ language: languageCode, data: payload });
   };
 
   return (
