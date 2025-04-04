@@ -136,6 +136,9 @@ export const useMessageStructureForm = (editingId?: string) => {
     },
     onSuccess: (data) => {
       toast.success("Structure created");
+      queryClient.invalidateQueries({
+        queryKey: ["message-structures"],
+      });
       router.push(`/dashboard/messages/message-structures/${data.id}`);
     },
     onError: () => {

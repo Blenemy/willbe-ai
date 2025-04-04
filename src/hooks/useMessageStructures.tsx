@@ -3,6 +3,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { MessageStructure } from "@/types/MessageStructure";
+import { useAuth } from "./useAuth";
 
 interface CreateMessageStructurePayload {
   name: string;
@@ -17,14 +18,19 @@ interface APIRequestErrorPayload {
   statusCode: number;
 }
 
-export const useMessageStructures = () => {
+export const useMessageStructures = ({
+  enableFetch,
+}: {
+  enableFetch?: boolean;
+}) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth({ enableFetch: false });
 
   const { data, isLoading, error } = useQuery<
     MessageStructure[],
     AxiosError<APIRequestErrorPayload>
   >({
-    queryKey: ["message-structures"],
+    queryKey: ["message-structures", user?.id],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
         "/auth/message-structures"
@@ -33,6 +39,7 @@ export const useMessageStructures = () => {
     },
     staleTime: 1000 * 60 * 5,
     retry: false,
+    enabled: enableFetch,
   });
 
   const deleteStructure = useMutation({
