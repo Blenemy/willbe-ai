@@ -20,7 +20,6 @@ export function preparePayload(
     "first_name",
     "last_name",
     "language",
-    "current_company",
     "company_location",
     "network_distance",
     "keywords",
@@ -77,6 +76,11 @@ export function preparePayload(
       include: "past_job_title_include",
       exclude: "past_job_title_exclude",
       key: "past_job_title",
+    },
+    {
+      include: "current_company_include",
+      exclude: "current_company_exclude",
+      key: "current_company",
     },
     {
       include: "department_include",
