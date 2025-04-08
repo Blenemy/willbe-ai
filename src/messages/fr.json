@@ -776,5 +776,24 @@
     "groupedby_countries": "Groupé par les 10 premiers pays",
     "groupedby_date": "Groupé par date",
     "groupedby_employees": "Groupé par nombre d'employés"
+  },
+  "Sidebar": {
+    "Home": "Accueil",
+    "Lead Generation": "Génération de leads",
+    "Lead scenarios": "Scénarios de leads",
+    "Create lead scenarios": "Créer des scénarios de leads",
+    "Account Generation": "Génération de comptes",
+    "Account scenarios": "Scénarios de comptes",
+    "Create account scenarios": "Créer des scénarios de comptes",
+    "Messages generator": "Générateur de messages",
+    "Message structures": "Structures de messages",
+    "Data": "Données",
+    "Account List": "Liste des comptes",
+    "Advanced analytics": "Analytique avancée",
+    "Analytics": "Analytique",
+    "Settings": "Paramètres",
+    "Company settings": "Paramètres de l'entreprise",
+    "Users": "Utilisateurs",
+    "My account": "Mon compte"
   }
 }
