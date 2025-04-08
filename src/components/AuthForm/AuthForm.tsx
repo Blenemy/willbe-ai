@@ -31,55 +31,65 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { PasswordInput } from "../ui/password-input";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
-
-const signInSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z
-    .string()
-    .min(8, "A password must have at least 8 characters")
-    .max(64, "A password must have a maximum of 64 characters")
-    .regex(PASSWORD_REGEX, "Password contains forbidden characters"),
-  remember: z.boolean(),
-});
-
-const signUpSchema = signInSchema
-  .extend({
-    firstName: z
-      .string()
-      .min(2, "First name must be at least 2 characters")
-      .max(50, "First name must be at most 50 characters")
-      .regex(/^[A-Za-z]+$/, "Only letters are allowed"),
-    lastName: z
-      .string()
-      .min(2, "Last name must be at least 2 characters")
-      .max(50, "Last name must be at most 50 characters")
-      .regex(/^[A-Za-z]+$/, "Only letters are allowed"),
-    confirmPassword: z
-      .string()
-      .min(8, "A password must have at least 8 characters")
-      .max(64, "A password must have a maximum of 64 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
 
 export function AuthForm({
+  translations,
   className,
   defaultMode = "sign-in",
   ...props
 }: {
+  translations: AuthTranslations;
   className?: string;
   defaultMode?: "sign-in" | "sign-up";
 }) {
+  function getSignInSchema(t: AuthTranslations) {
+    return z.object({
+      email: z.string().email(t["validation_email"]),
+      password: z
+        .string()
+        .min(8, t["validation_password_min"])
+        .max(64, t["validation_password_max"])
+        .regex(PASSWORD_REGEX, t["validation_password_regex"]),
+      remember: z.boolean(),
+    });
+  }
+
+  function getSignUpSchema(t: AuthTranslations) {
+    return getSignInSchema(t)
+      .extend({
+        firstName: z
+          .string()
+          .min(2, t["validation_first_name_min"])
+          .max(50, t["validation_first_name_max"])
+          .regex(/^[A-Za-z]+$/, t["validation_first_name_regex"]),
+        lastName: z
+          .string()
+          .min(2, t["validation_last_name_min"])
+          .max(50, t["validation_last_name_max"])
+          .regex(/^[A-Za-z]+$/, t["validation_last_name_regex"]),
+        confirmPassword: z
+          .string()
+          .min(8, t["validation_password_min"])
+          .max(64, t["validation_password_max"]),
+      })
+      .refine((data) => data.password === data.confirmPassword, {
+        message: t["validation_password_match"],
+        path: ["confirmPassword"],
+      });
+  }
+
   const [mode, setMode] = useState<"sign-in" | "sign-up">(defaultMode);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const { login, register } = useAuth({ enableFetch: false });
 
   const isSignIn = mode === "sign-in";
+  const schema = isSignIn
+    ? getSignInSchema(translations)
+    : getSignUpSchema(translations);
 
   const form = useForm({
-    resolver: zodResolver(isSignIn ? signInSchema : signUpSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       email: "",
       password: "",
@@ -108,12 +118,12 @@ export function AuthForm({
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-semibold">
-            {isSignIn ? "Welcome back to Willbe 🙂" : "Welcome to Willbe 🙂"}
+            {isSignIn ? translations.welcome_back : translations.welcome}
           </CardTitle>
           <CardDescription className="text-black">
             {isSignIn
-              ? "Please include your login details"
-              : "Create your account"}
+              ? translations.please_include_login
+              : translations.new_password}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -127,10 +137,13 @@ export function AuthForm({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-semibold text-foreground">
-                          First name
+                          {translations.firstname}
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="First name" {...field} />
+                          <Input
+                            placeholder={translations.firstname}
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />
@@ -145,10 +158,13 @@ export function AuthForm({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-semibold text-foreground">
-                          Last name
+                          {translations.lastname}
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Last name" {...field} />
+                          <Input
+                            placeholder={translations.lastname}
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />
@@ -162,15 +178,14 @@ export function AuthForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-semibold text-foreground">
-                        Email
+                        {translations.Email}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Enter your work email..."
+                          placeholder={translations.enter_email}
                           {...field}
                         />
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   )}
@@ -182,15 +197,14 @@ export function AuthForm({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-semibold text-foreground">
-                        Password
+                        {translations.password}
                       </FormLabel>
                       <FormControl>
                         <PasswordInput
-                          placeholder="Enter your password"
+                          placeholder={translations.enter_password}
                           {...field}
                         />
                       </FormControl>
-
                       <FormMessage />
                     </FormItem>
                   )}
@@ -235,7 +249,7 @@ export function AuthForm({
                         </FormItem>
                       )}
                     />
-                    <Label htmlFor="remember">Remember me</Label>
+                    <Label htmlFor="remember">{translations.remember_me}</Label>
                   </div>
 
                   <Button
@@ -244,26 +258,26 @@ export function AuthForm({
                     type="button"
                     onClick={() => setIsForgotPasswordOpen(true)}
                   >
-                    I have forgotten my password
+                    {translations.forgot_password}
                   </Button>
                 </div>
 
                 <Button type="submit" className="w-full">
-                  {isSignIn ? "Login" : "Sign Up"}
+                  {isSignIn ? translations.login : translations.signup}
                 </Button>
               </div>
 
               <div className="mt-4 text-center text-sm">
                 {isSignIn
-                  ? "Don't have an account?"
-                  : "Already have an account?"}{" "}
+                  ? `${translations.dont_have_account} `
+                  : `${translations.already_have_account} `}
                 <Button
                   type="button"
                   variant={"link"}
                   className="no-underline"
                   onClick={() => setMode(isSignIn ? "sign-up" : "sign-in")}
                 >
-                  {isSignIn ? "Sign Up" : "Login"}
+                  {isSignIn ? translations.signup : translations.login}
                 </Button>
               </div>
             </form>
