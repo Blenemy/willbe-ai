@@ -87,8 +87,6 @@ const CreateAccountScenarios = () => {
 
         technology_search_input: "",
         technology: [],
-        // technology_include: [],
-        // technology_exclude: [],
 
         network_distance: "",
 
@@ -190,6 +188,11 @@ const CreateAccountScenarios = () => {
     form.trigger();
   }, [accountScenarioById, form]);
 
+  const hasAnnualRevenueError =
+    !!form.formState.errors.annual_revenue_from ||
+    !!form.formState.errors.annual_revenue_to ||
+    !!form.formState.errors.annual_revenue_currency;
+
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">Create Account Scenarios</h2>
@@ -218,7 +221,7 @@ const CreateAccountScenarios = () => {
                       <div className="flex flex-col gap-4">
                         <FormAccordion label="🏭 Industry">
                           <MultiSelectWithSearchButton
-                            label="Find companies operating in specific sectors or fields"
+                            label="Filter by companies saved on your LinkedIn lists."
                             form={form}
                             searchName="industry"
                             placeholder="Search by industry"
@@ -1218,7 +1221,14 @@ const CreateAccountScenarios = () => {
                       </div>
                     </div>
 
-                    <FormAccordion label="🗓️💶 Annual revenue">
+                    <FormAccordion
+                      label="🗓️💶 Annual revenue"
+                      className={
+                        hasAnnualRevenueError
+                          ? "border border-red-500"
+                          : "border border-border"
+                      }
+                    >
                       <div className="flex gap-2 flex-col">
                         <h4>
                           Filter companies based on their estimated or reported
