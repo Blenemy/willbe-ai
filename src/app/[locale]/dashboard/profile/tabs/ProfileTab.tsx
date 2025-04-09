@@ -67,7 +67,10 @@ const ProfileTab = () => {
         </div>
       </ProfileCard>
 
-      <ProfileCard title="Language" onEdit={() => setEditLanguageOpen(true)}>
+      <ProfileCard
+        title={t("profile_section_language")}
+        onEdit={() => setEditLanguageOpen(true)}
+      >
         <p className="font-semibold">{currentLanguage}</p>
       </ProfileCard>
 

@@ -72,14 +72,16 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
 
     try {
       const response = await protectedAxiosInstance.get("/auth/me");
-      await queryClient.setQueryData(["authUser"], response.data);
+      const user = response.data;
 
-      Cookies.set("userRole", response.data.role, { sameSite: "Strict" });
+      await queryClient.setQueryData(["authUser"], user);
+      Cookies.set("userRole", user.role, { sameSite: "Strict" });
+
+      const lang = user.language || "en";
+      router.push(`/${lang}/dashboard/home`);
     } catch (error) {
       console.error("Error fetching a user:", error);
     }
-
-    router.push("/dashboard/home");
   };
 
   const loginMutation = useMutation({
@@ -107,12 +109,16 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
 
     try {
       const response = await protectedAxiosInstance.get("/auth/me");
-      queryClient.setQueryData(["authUser"], response.data);
+      const user = response.data;
+
+      queryClient.setQueryData(["authUser"], user);
+      Cookies.set("userRole", user.role, { sameSite: "Strict" });
+
+      const lang = user.language || "en";
+      router.push(`/${lang}/dashboard/home`);
     } catch (error) {
       console.error("Error fetching a user:", error);
     }
-
-    router.push("/dashboard/home");
   };
 
   const logoutHandler = () => {
