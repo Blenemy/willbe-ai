@@ -288,6 +288,7 @@ export function AuthForm({
       <ForgotPasswordModal
         open={isForgotPasswordOpen}
         onClose={() => setIsForgotPasswordOpen(false)}
+        translations={translations}
       />
     </div>
   );

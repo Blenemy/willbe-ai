@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +18,6 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
-import { Dispatch, SetStateAction } from "react";
 import {
   Form,
   FormField,
@@ -26,24 +27,26 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useCompanyUsers } from "@/hooks/useCompanyUsers";
-
-const schema = z.object({
-  email: z.string().email("Invalid email address"),
-  role: z.enum(["admin", "member"]),
-  position: z.string().min(1, "Position is required"),
-});
-
-interface CreateCompanyUsersProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
+import { Dispatch, SetStateAction } from "react";
+import { useTranslations } from "next-intl";
 
 type Role = "admin" | "member";
 
-export const CreateCompanyUsers = ({
+const CreateCompanyUsers = ({
   open,
   setOpen,
-}: CreateCompanyUsersProps) => {
+}: {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const t = useTranslations("Users");
+
+  const schema = z.object({
+    email: z.string().email(t("validation_email")),
+    role: z.enum(["admin", "member"]),
+    position: z.string().min(1, t("validation_position_required")),
+  });
+
   const { createCompanyUsers } = useCompanyUsers({ enableFetch: true });
 
   const form = useForm({
@@ -64,7 +67,7 @@ export const CreateCompanyUsers = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Invite User</DialogTitle>
+          <DialogTitle>{t("invite_title")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -74,9 +77,9 @@ export const CreateCompanyUsers = ({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="User Email" {...field} />
+                      <Input placeholder={t("email_placeholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -88,18 +91,22 @@ export const CreateCompanyUsers = ({
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>{t("role")}</FormLabel>
                     <FormControl>
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Role" />
+                          <SelectValue placeholder={t("select_role")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="member">Member</SelectItem>
+                          <SelectItem value="admin">
+                            {t("role_admin")}
+                          </SelectItem>
+                          <SelectItem value="member">
+                            {t("role_member")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
@@ -113,16 +120,19 @@ export const CreateCompanyUsers = ({
                 name="position"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Position</FormLabel>
+                    <FormLabel>{t("position")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Position" {...field} />
+                      <Input
+                        placeholder={t("position_placeholder")}
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button type="submit">Invite</Button>
+              <Button type="submit">{t("invite_button")}</Button>
             </div>
           </form>
         </Form>
@@ -130,3 +140,5 @@ export const CreateCompanyUsers = ({
     </Dialog>
   );
 };
+
+export { CreateCompanyUsers };

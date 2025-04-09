@@ -7,8 +7,10 @@ import EditPersonalInfoDialog from "./components/EditPersonalInfoDialog";
 import EditLanguageDialog from "./components/EditLanguageDialog";
 import { useAuthStore } from "@/store/useAuthStore";
 import { LANGUAGES } from "@/constants/languages";
+import { useTranslations } from "next-intl";
 
 const ProfileTab = () => {
+  const t = useTranslations("Profile");
   const [editPersonalOpen, setEditPersonalOpen] = useState(false);
   const [editLanguageOpen, setEditLanguageOpen] = useState(false);
   const { user } = useAuthStore();
@@ -23,7 +25,7 @@ const ProfileTab = () => {
 
   return (
     <div className="px-6 flex flex-col gap-5">
-      <h2 className="font-bold text-xl">My profile</h2>
+      <h2 className="font-bold text-xl">{t("tab_profile")}</h2>
 
       <ProfileCard>
         <div className="flex gap-4 items-center">
@@ -45,15 +47,21 @@ const ProfileTab = () => {
       >
         <div className="grid grid-cols-2 w-full gap-y-3">
           <div className="flex flex-col gap-2">
-            <p className="text-gray-400 font-semibold">First name</p>
+            <p className="text-gray-400 font-semibold">
+              {t("profile_label_firstname")}
+            </p>
             <p className="font-semibold">{user.firstName}</p>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-gray-400 font-semibold">Last Name</p>
+            <p className="text-gray-400 font-semibold">
+              {t("profile_label_lastname")}
+            </p>
             <p className="font-semibold">{user.lastName}</p>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-gray-400 font-semibold">Email</p>
+            <p className="text-gray-400 font-semibold">
+              {t("profile_label_email")}
+            </p>
             <p className="font-semibold">{user.email}</p>
           </div>
         </div>

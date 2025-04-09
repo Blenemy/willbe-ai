@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,17 +20,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations } from "next-intl";
+import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 
 const schema = z
   .object({
-    oldPassword: z.string().min(6, "Password must be at least 6 characters"),
-    newPassword: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z
+    oldPassword: z.string().min(8, "validation_password_min"),
+    newPassword: z
       .string()
-      .min(6, "Password must be at least 6 characters"),
+      .min(8, "validation_password_min")
+      .regex(PASSWORD_REGEX, "validation_password_regex"),
+    confirmPassword: z.string().min(8, "validation_password_min"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "validation_password_match",
     path: ["confirmPassword"],
   });
 
@@ -39,7 +44,9 @@ const EditPasswordDialog = ({
   open: boolean;
   setOpen: (o: boolean) => void;
 }) => {
+  const t = useTranslations("Authentication");
   const { updateUserPassword } = useAuth({ enableFetch: false });
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -54,7 +61,6 @@ const EditPasswordDialog = ({
       oldPassword: values.oldPassword,
       newPassword: values.newPassword,
     });
-
     setOpen(false);
   };
 
@@ -62,7 +68,7 @@ const EditPasswordDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Change Password</DialogTitle>
+          <DialogTitle>{t("change_password")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -72,15 +78,16 @@ const EditPasswordDialog = ({
               name="oldPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Old password</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("old_password")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Old password"
+                      placeholder={t("old_password")}
                       {...field}
                       type="password"
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -91,15 +98,16 @@ const EditPasswordDialog = ({
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">New password</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("new_password_title")}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="New password"
+                      placeholder={t("new_password_title")}
                       {...field}
                       type="password"
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -111,16 +119,15 @@ const EditPasswordDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold">
-                    Confirm Password
+                    {t("confirm_password")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Confirm password"
+                      placeholder={t("confirm_password")}
                       {...field}
                       type="password"
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -132,9 +139,9 @@ const EditPasswordDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("save")}</Button>
             </div>
           </form>
         </Form>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Dialog,
@@ -7,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { LANGUAGES } from "@/constants/languages";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -18,6 +20,7 @@ const EditLanguageDialog = ({
   open: boolean;
   setOpen: (o: boolean) => void;
 }) => {
+  const t = useTranslations("Authentication");
   const router = useRouter();
   const currentLocale = useLocale();
   const [selectedLanguage, setSelectedLanguage] = useState(currentLocale);
@@ -33,7 +36,7 @@ const EditLanguageDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Languages</DialogTitle>
+          <DialogTitle>{t("languages")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-2">
@@ -58,10 +61,10 @@ const EditLanguageDialog = ({
             variant="outline"
             onClick={() => setOpen(false)}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="button" onClick={handleSave}>
-            Save
+            {t("save")}
           </Button>
         </div>
       </DialogContent>

@@ -48,6 +48,11 @@ export async function getAuthTranslations() {
     validation_last_name_min: t("validation_last_name_min"),
     validation_last_name_max: t("validation_last_name_max"),
     validation_last_name_regex: t("validation_last_name_regex"),
+
+    reset_password_modal_description: t("reset_password_modal_description"),
+
+    setup_profile_title: t("setup_profile_title"),
+    create_profile: t("create_profile"),
   };
 }
 
