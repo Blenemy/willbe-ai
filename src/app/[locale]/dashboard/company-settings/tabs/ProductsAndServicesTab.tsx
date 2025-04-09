@@ -8,11 +8,13 @@ import { ProductsAndServices } from "@/types/Company";
 import DeleteDialog from "../components/DeleteDialog";
 import ProductsList from "../components/ProductsList";
 import ProductsAndServicesSkeleton from "../skeletons/products-and-services-skeleton";
+import { useTranslations } from "next-intl";
 
 const ProductsAndServicesTab = () => {
   const { productsAndServices, productsAndServicesLoading } = useCompany({
     enableFetch: true,
   });
+  const t = useTranslations("Company");
   const [selectedProduct, setSelectedProduct] =
     useState<ProductsAndServices | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -41,10 +43,10 @@ const ProductsAndServicesTab = () => {
 
   return (
     <div className="px-6 flex flex-col gap-5">
-      <h2 className="font-bold text-xl">Products & Services</h2>
+      <h2 className="font-bold text-xl">{t("products_and_services")}</h2>
 
       <div className="flex justify-end">
-        <Button onClick={handleAddProduct}>Add</Button>
+        <Button onClick={handleAddProduct}>{t("add_product")}</Button>
       </div>
 
       <ProductsList

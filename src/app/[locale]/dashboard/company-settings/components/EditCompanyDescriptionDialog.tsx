@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,12 +22,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useCompany } from "@/hooks/useCompany";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   companyDescription: z
     .string()
-    .min(1, "Required")
-    .max(3000, "Maximum 3000 characters"),
+    .min(1, "Company.validation_required")
+    .max(3000, "Company.validation_description_max"),
 });
 
 const EditCompanyDescriptionDialog = ({
@@ -37,6 +40,8 @@ const EditCompanyDescriptionDialog = ({
   setOpen: (o: boolean) => void;
   company: Company;
 }) => {
+  const t = useTranslations("Company");
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -58,7 +63,7 @@ const EditCompanyDescriptionDialog = ({
   useEffect(() => {
     if (open) {
       form.reset({
-        companyDescription: company?.name || "",
+        companyDescription: company?.description || "",
       });
       form.clearErrors();
     }
@@ -68,7 +73,7 @@ const EditCompanyDescriptionDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Company Description</DialogTitle>
+          <DialogTitle>{t("company_description")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -79,11 +84,11 @@ const EditCompanyDescriptionDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold text-foreground">
-                    Company Description
+                    {t("company_description")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter your company description"
+                      placeholder={t("company_description_placeholder")}
                       {...field}
                       type="text"
                     />
@@ -100,9 +105,9 @@ const EditCompanyDescriptionDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("save")}</Button>
             </div>
           </form>
         </Form>

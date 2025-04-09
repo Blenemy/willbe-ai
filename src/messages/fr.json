@@ -137,6 +137,47 @@
     "validation_email": "Veuillez entrer une adresse e-mail valide",
     "validation_position_required": "Le poste est requis"
   },
+  "Company": {
+    "your_company": "Votre entreprise",
+    "company_name": "Nom de l'entreprise",
+    "company_description": "Description de l'entreprise",
+    "company_sector": "Secteur de l'entreprise",
+
+    "products_and_services": "Produits et services",
+    "add_product": "Ajouter",
+    "edit_product": "Modifier le produit",
+    "add_product_title": "Ajouter un produit",
+    "product_name": "Nom",
+    "product_description": "Description",
+    "delete_product": "Supprimer",
+    "confirm_delete_product": "Êtes-vous sûr de vouloir supprimer {{product}} ?",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "go_back": "Retour",
+
+    "validation_name_required": "Le nom est requis",
+    "validation_name_max": "15 caractères maximum",
+    "validation_description_required": "La description est requise",
+    "validation_description_max": "3000 caractères maximum",
+
+    "company_settings": "Paramètres de l'entreprise",
+
+    "company_name_placeholder": "Entrez le nom de votre entreprise",
+    "validation_required": "Ce champ est requis",
+    "validation_max_length": "50 caractères maximum",
+
+    "company_description_placeholder": "Introduce la descripción de tu empresa",
+
+    "company_sector_placeholder": "Entrez le secteur de votre entreprise",
+    "validation_sector_max": "60 caractères maximum",
+
+    "product_add_title": "Ajouter un produit",
+    "product_edit_title": "Modifier le produit",
+    "product_field_name": "Nom",
+    "product_field_description": "Description",
+    "product_delete_confirm": "Êtes-vous sûr de vouloir supprimer {name} ?",
+    "delete": "Supprimer"
+  },
   "Account": {
     "account": "Compte",
     "account title": "Liste des comptes",

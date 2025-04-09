@@ -103,6 +103,46 @@
     "validation_email": "Please enter a valid email address",
     "validation_position_required": "Position is required"
   },
+  "Company": {
+    "your_company": "Your Company",
+    "company_name": "Company Name",
+    "company_description": "Company Description",
+    "company_sector": "Company Sector",
+
+    "products_and_services": "Products & Services",
+    "add_product": "Add",
+    "edit_product": "Edit Product",
+    "add_product_title": "Add Product",
+    "product_name": "Name",
+    "product_description": "Description",
+    "delete_product": "Delete",
+    "confirm_delete_product": "Are you sure you want to delete {{product}}?",
+    "cancel": "Cancel",
+    "save": "Save",
+    "go_back": "Go back",
+
+    "validation_name_required": "Name is required",
+    "validation_name_max": "Maximum 15 characters",
+    "validation_description_required": "Description is required",
+    "validation_description_max": "Maximum 3000 characters",
+    "company_settings": "Company settings",
+
+    "company_name_placeholder": "Enter your company name",
+    "validation_required": "This field is required",
+    "validation_max_length": "Maximum 50 characters",
+
+    "company_description_placeholder": "Enter your company description",
+
+    "company_sector_placeholder": "Enter your company sector",
+    "validation_sector_max": "Maximum 60 characters",
+
+    "product_add_title": "Add Product",
+    "product_edit_title": "Edit Product",
+    "product_field_name": "Name",
+    "product_field_description": "Description",
+    "product_delete_confirm": "Are you sure you want to delete {name}?",
+    "delete": "Delete"
+  },
   "Profile": {
     "account_settings": "Account Settings",
     "change_password": "Change password",

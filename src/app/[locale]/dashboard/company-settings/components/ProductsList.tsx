@@ -2,6 +2,7 @@ import { ProductsAndServices } from "@/types/Company";
 import ProfileCard from "../../profile/tabs/components/ProfileCard";
 import { Button } from "@/components/ui/button";
 import { memo } from "react";
+import { useTranslations } from "next-intl";
 
 interface ProductsListProps {
   productsList: ProductsAndServices[] | undefined;
@@ -14,6 +15,8 @@ const ProductsList = ({
   handleDelete,
   handleEdit,
 }: ProductsListProps) => {
+  const t = useTranslations("Company");
+
   if (!productsList) {
     return null;
   }
@@ -29,14 +32,14 @@ const ProductsList = ({
               size="sm"
               onClick={() => handleEdit(product)}
             >
-              Edit
+              {t("edit_product")}
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={() => handleDelete(product)}
             >
-              Delete
+              {t("delete_product")}
             </Button>
           </div>
         </ProfileCard>
