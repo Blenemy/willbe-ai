@@ -143,6 +143,8 @@ const CreateLeadScenarios = () => {
       keywords: "",
       persona: "",
       current_company: "",
+      current_company_include: [],
+      current_company_exclude: [],
       past_company: "",
       past_company_include: [],
       past_company_exclude: [],
@@ -230,6 +232,8 @@ const CreateLeadScenarios = () => {
           keywords: "",
           persona: "",
           current_company: "",
+          current_company_include: [],
+          current_company_exclude: [],
           past_company: "",
           past_company_include: [],
           past_company_exclude: [],
@@ -254,6 +258,8 @@ const CreateLeadScenarios = () => {
           });
         });
       }
+
+      console.log(form.getValues());
 
       form.trigger();
     }
@@ -1191,7 +1197,7 @@ const CreateLeadScenarios = () => {
             </Form>
           )}
 
-          {activeStep === 1 && <LeadTable />}
+          {activeStep === 1 && <LeadTable setCurrentStep={setActiveStep} />}
           {activeStep === 2 && <LeadsSaved />}
         </>
       )}

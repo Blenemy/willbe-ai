@@ -33,12 +33,6 @@ interface AccountData {
   logo: string;
 }
 
-interface SaveAccountPayload {
-  id: string;
-  accountScenarioId: string;
-  accountData: AccountData;
-}
-
 export const usePaginatedAccountsSearch = ({
   accountId,
   limit,
@@ -71,7 +65,7 @@ export const usePaginatedAccountsSearch = ({
       accounts,
     }: {
       accountScenarioId: string;
-      accounts: SaveAccountPayload[];
+      accounts: AccountData[];
     }) => {
       return await protectedAxiosInstance.post(
         `/auth/account-scenarios/${accountScenarioId}/accounts`,

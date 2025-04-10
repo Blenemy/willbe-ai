@@ -13,7 +13,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useGenerateLeadScenario } from "@/hooks/useGenerateLeadScenario";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -28,7 +27,6 @@ const LeadsSaved = () => {
     scenarioId,
   });
 
-  const { generateLeadScenario } = useGenerateLeadScenario();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const toggleSelection = (id: string) => {
@@ -45,13 +43,6 @@ const LeadsSaved = () => {
     if (url) {
       window.open(url, "_blank");
     }
-  };
-
-  const handleGenerateScenario = () => {
-    generateLeadScenario({
-      accountScenarioId: scenarioId,
-      accountIds: selectedIds,
-    });
   };
 
   return (
@@ -148,9 +139,7 @@ const LeadsSaved = () => {
       </Table>
 
       {selectedIds.length > 0 && (
-        <Button className="self-start mt-4" onClick={handleGenerateScenario}>
-          {t("generate")}
-        </Button>
+        <Button className="self-start mt-4">Generate message scenario</Button>
       )}
     </div>
   );

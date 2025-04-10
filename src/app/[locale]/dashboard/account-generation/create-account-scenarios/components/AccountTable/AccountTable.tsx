@@ -22,16 +22,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePaginatedAccountsSearch } from "@/hooks/usePaginatedAccountsSearch";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
-const AccountTable = () => {
-  const t = useTranslations("accountTable");
-
+const AccountTable = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}) => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId") || "";
+  const t = useTranslations("accountTable");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
@@ -55,7 +58,7 @@ const AccountTable = () => {
   const companies = data?.items || [];
 
   const totalPages = data?.paging
-    ? Math.ceil(data.paging.total_count / data.paging.page_count / itemsPerPage)
+    ? Math.ceil(data.paging.total_count / data.paging.page_count)
     : 1;
 
   const currentPage = data?.paging
@@ -96,7 +99,7 @@ const AccountTable = () => {
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!accountId || !data) return;
 
     const selectedData = data.items.filter((item) =>
@@ -104,22 +107,19 @@ const AccountTable = () => {
     );
 
     const accounts = selectedData.map((company) => ({
+      type: company.type,
       id: company.id,
-      accountScenarioId: accountId,
-      accountData: {
-        type: company.type,
-        id: company.id,
-        name: company.name,
-        profile_url: company.profile_url,
-        summary: company.summary,
-        industry: company.industry,
-        location: company.location,
-        headcount: company.headcount,
-        logo: company.logo,
-      },
+      name: company.name,
+      profile_url: company.profile_url,
+      summary: company.summary,
+      industry: company.industry,
+      location: company.location,
+      headcount: company.headcount,
+      logo: company.logo,
     }));
 
-    saveSelectedAccounts({ accountScenarioId: accountId, accounts });
+    await saveSelectedAccounts({ accountScenarioId: accountId, accounts });
+    setCurrentStep((prev) => prev + 1);
   };
 
   return (

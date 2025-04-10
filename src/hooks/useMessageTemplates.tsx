@@ -46,6 +46,9 @@ export const useMessageTemplates = () => {
       queryClient.invalidateQueries({
         queryKey: ["message-structure", variables.structureId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["message-structures"],
+      });
     },
     onError: () => toast.error("Failed to create template"),
   });
@@ -60,7 +63,15 @@ export const useMessageTemplates = () => {
       );
       return res.data;
     },
-    onSuccess: () => toast.success("Template updated"),
+    onSuccess: () => {
+      toast.success("Template updated");
+      queryClient.invalidateQueries({
+        queryKey: ["message-structure"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["message-structures"],
+      });
+    },
     onError: () => toast.error("Failed to update template"),
   });
 

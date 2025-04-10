@@ -15,9 +15,7 @@ export const useSearchLeads = ({
   limit = 10,
   cursor = null,
 }: UseSearchLeadsProps) => {
-  // const queryClient = useQueryClient();
-
-  const { data: searchLeads } = useQuery<LeadSearchResponse>({
+  const { data: searchLeads, isFetching } = useQuery<LeadSearchResponse>({
     queryKey: ["search-leads", scenarioId, limit, cursor],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
@@ -35,28 +33,10 @@ export const useSearchLeads = ({
     staleTime: 1000 * 60 * 5,
   });
 
-  // const deleteSavedAccounts = useMutation({
-  //   mutationFn: async (id: string) => {
-  //     const response = await protectedAxiosInstance.delete(
-  //       `/auth/account-scenarios/saved-accounts/${id}`
-  //     );
-  //     return response.data;
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ["accounts-saved"] });
-  //     toast("Account was deleted succesfully");
-  //   },
-  //   onError: (error: AxiosError<APIRequestErrorPayload>) => {
-  //     const errorMessage =
-  //       error.response?.data.message || "Failed to delete saved account";
-  //     toast(errorMessage);
-  //   },
-  // });
-
   return {
+    isFetching,
     searchLeads: searchLeads?.items || [],
     paging: searchLeads?.paging,
     cursor: searchLeads?.cursor || null,
-    // deleteSavedAccounts: deleteSavedAccounts.mutate,
   };
 };

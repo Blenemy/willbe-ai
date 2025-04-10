@@ -14,7 +14,6 @@ import {
 import { Save, Trash, Upload, RefreshCw, Users } from "lucide-react";
 import { useLeadFilters } from "@/hooks/useLeadFilters";
 import { LeadScenarios } from "@/types/LeadScenarios";
-import { useLeadScenarios } from "@/hooks/useLeadScenarious";
 import { useTranslations } from "next-intl";
 
 const LeadScenariousPresets = ({
@@ -22,7 +21,6 @@ const LeadScenariousPresets = ({
   newPreset,
   handleLoadFilter,
   setActiveStep,
-  leadScenarioById,
 }: {
   setNewPreset: Dispatch<SetStateAction<string>>;
   newPreset: string;
@@ -35,20 +33,6 @@ const LeadScenariousPresets = ({
   const { leadFiltersTableData, deleteLeadFilter } = useLeadFilters({
     enableFetch: true,
   });
-
-  const { updateLeadScenario } = useLeadScenarios({
-    enableFetch: false,
-    scenarioId: leadScenarioById?.id,
-  });
-
-  const handleUpdateScenario = () => {
-    if (leadScenarioById) {
-      updateLeadScenario({
-        status: "select",
-        id: leadScenarioById.id,
-      });
-    }
-  };
 
   const handleDeleteFilter = (id: string) => {
     deleteLeadFilter({ id });
@@ -115,13 +99,6 @@ const LeadScenariousPresets = ({
       </Table>
 
       <div className="flex justify-center gap-4 mt-6">
-        <Button
-          className="flex items-center gap-2"
-          type="button"
-          onClick={handleUpdateScenario}
-        >
-          <Save size={16} /> {t("actions.saveScenario")}
-        </Button>
         <Button
           variant="outline"
           className="flex items-center gap-2"

@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
@@ -28,7 +28,11 @@ import { useTranslations } from "next-intl";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
-const LeadTable = () => {
+const LeadTable = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}) => {
   const t = useTranslations("leadTable");
 
   const searchParams = useSearchParams();
@@ -94,7 +98,7 @@ const LeadTable = () => {
     lead.first_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const selectedData = searchLeads.filter((item) =>
       selectedLeads.includes(item.id)
     );
@@ -120,7 +124,8 @@ const LeadTable = () => {
       current_positions: lead.current_positions,
     }));
 
-    saveSelectedLeads({ scenarioId, leads: payload });
+    await saveSelectedLeads({ scenarioId, leads: payload });
+    setCurrentStep((prev) => prev + 1);
   };
 
   return (
