@@ -42,6 +42,7 @@ import { transformFilterValues } from "@/utils/transformFilterValues";
 import AccountTable from "./components/AccountTable/AccountTable";
 import AccountSave from "./components/AccountSave/AccountSave";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
@@ -50,6 +51,7 @@ const CreateAccountScenarios = () => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
   const accountName = searchParams.get("accountName");
+  const t = useTranslations("scenariosFilter");
   const { updateAccountScenario, accountScenarioById } = useAccountScenarios({
     enableFetch: false,
     accountId,
@@ -145,8 +147,6 @@ const CreateAccountScenarios = () => {
 
       technology_search_input: "",
       technology: [],
-      // technology_include: [],
-      // technology_exclude: [],
 
       network_distance: "",
 
@@ -195,12 +195,12 @@ const CreateAccountScenarios = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Create Account Scenarios</h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
 
       <CustomStepper
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        steps={["Account search", "Account select", "Account save"]}
+        steps={[t("stepper.0"), t("stepper.1"), t("stepper.2")]}
         disabled={!accountId}
       />
 
@@ -217,38 +217,35 @@ const CreateAccountScenarios = () => {
                 <div className="flex gap-6">
                   <div className="flex flex-col gap-8 basis-1/2">
                     <div className="flex flex-col gap-4">
-                      <h4 className="">🗃️ Basic data</h4>
+                      <h4 className="">🗃️ {t("title")}</h4>
                       <div className="flex flex-col gap-4">
-                        <FormAccordion label="🏭 Industry">
+                        <FormAccordion label={`${t("industry.label")}`}>
                           <MultiSelectWithSearchButton
-                            label="Filter by companies saved on your LinkedIn lists."
+                            label={t("industry.label")}
                             form={form}
                             searchName="industry"
-                            placeholder="Search by industry"
+                            placeholder={t("industry.placeholder")}
                             searchType="INDUSTRY"
                             includeName="industry_include"
                             excludeName="industry_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label="📍 Location">
+                        <FormAccordion label={`${t("location.label")}`}>
                           <MultiSelectWithSearchButton
-                            label="Find companies based on their geographical location"
+                            label={t("location.label")}
                             form={form}
                             searchName="location"
-                            placeholder="Search by location"
+                            placeholder={t("location.placeholder")}
                             searchType="LOCATION"
                             includeName="location_include"
                             excludeName="location_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label="👥 Headcount">
+                        <FormAccordion label={`${t("headcount.label")}`}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              Find companies based on the number of employees
-                              they have.
-                            </h4>
+                            <h4>{t("headcount.description")}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -264,7 +261,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in no. employees)"
+                                              placeholder={t("headcount.from")}
                                               className="truncate"
                                             />
                                           </div>
@@ -320,7 +317,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="To (in no. employees)"
+                                              placeholder={t("headcount.to")}
                                               className="truncate"
                                             />
                                           </div>
@@ -364,12 +361,9 @@ const CreateAccountScenarios = () => {
                           </div>
                         </FormAccordion>
 
-                        <FormAccordion label="👥📈 Headcount growth">
+                        <FormAccordion label={`${t("headcount_growth.label")}`}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              Find companies that are actively expanding their
-                              workforce.
-                            </h4>
+                            <h4>{t("headcount_growth.description")}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -385,7 +379,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in no. employees)"
+                                              placeholder={t("headcount.from")}
                                               className="truncate"
                                             />
                                           </div>
@@ -439,7 +433,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="To (in no. employees)"
+                                              placeholder={t("headcount.to")}
                                               className="truncate"
                                             />
                                           </div>
@@ -483,12 +477,9 @@ const CreateAccountScenarios = () => {
                           </div>
                         </FormAccordion>
 
-                        <FormAccordion label="💰 Fortune 500 List">
+                        <FormAccordion label={`${t("fortune.label")}`}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              Find companies recognized on the prestigious
-                              Fortune 500 list.
-                            </h4>
+                            <h4>{t("fortune.description")}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -504,7 +495,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in no. employees)"
+                                              placeholder={t("headcount.from")}
                                               className="truncate"
                                             />
                                           </div>
@@ -558,7 +549,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="To (in no. employees)"
+                                              placeholder={t("headcount.to")}
                                               className="truncate"
                                             />
                                           </div>
@@ -600,12 +591,9 @@ const CreateAccountScenarios = () => {
                           </div>
                         </FormAccordion>
 
-                        <FormAccordion label="🙋‍♀️ Followers count">
+                        <FormAccordion label={`${t("followers.label")}`}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              Filter companies based on the number of followers
-                              they have on the platform.
-                            </h4>
+                            <h4>{`${t("followers.description")}`}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -621,7 +609,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in no. employees)"
+                                              placeholder={t("headcount.from")}
                                               className="truncate"
                                             />
                                           </div>
@@ -676,7 +664,7 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="To (in no. employees)"
+                                              placeholder={t("headcount.to")}
                                               className="truncate"
                                             />
                                           </div>
@@ -724,9 +712,11 @@ const CreateAccountScenarios = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <h4 className="">🎯 Activity & focus</h4>
+                      <h4>{`${t("activity_focus")}`}</h4>
                       <div className="flex flex-col gap-4">
-                        <FormAccordion label="📣 Recent activities">
+                        <FormAccordion
+                          label={`${t("recent_activities.label")}`}
+                        >
                           <FormField
                             control={form.control}
                             name="recent_activities"
@@ -741,7 +731,9 @@ const CreateAccountScenarios = () => {
                                     <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                       <div className="flex items-center flex-1 overflow-hidden">
                                         <SelectValue
-                                          placeholder="Select an activity"
+                                          placeholder={`${t(
+                                            "recent_activities.placeholder"
+                                          )}`}
                                           className="truncate"
                                         />
                                       </div>
@@ -793,7 +785,7 @@ const CreateAccountScenarios = () => {
                         </FormAccordion>
 
                         <div className="flex justify-between items-center bg-slate-200 p-3">
-                          <span>💼 Has job offers</span>
+                          <span>{`${t("has_job_offers")}`}</span>
                           <FormField
                             control={form.control}
                             name="has_job_offers"
@@ -811,13 +803,13 @@ const CreateAccountScenarios = () => {
                           />
                         </div>
 
-                        <FormAccordion label="💻 Technology">
+                        <FormAccordion label={`${t("technology.label")}`}>
                           <MultiSelectWithSearchButton
-                            label="Find companies using specific technologies or software solutions."
+                            label={`${t("technology.description")}`}
                             form={form}
                             searchName="technology_search_input"
                             valueName="technology"
-                            placeholder="Search by technology"
+                            placeholder={`${t("technology.placeholder")}`}
                             searchType="TECHNOLOGIES"
                             isSingleSelect
                           />
@@ -826,21 +818,18 @@ const CreateAccountScenarios = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <h4 className="">🕸️ Connections & reach</h4>
+                      <h4>{t("connections")}</h4>
                       <Accordion type="single" collapsible>
                         <AccordionItem
                           value="network-distance"
                           className="bg-slate-200"
                         >
                           <AccordionTrigger className="p-3">
-                            🌍 Network distance
+                            {t("network_distance.label")}
                           </AccordionTrigger>
                           <AccordionContent className="p-3">
                             <div className="flex gap-2 flex-col">
-                              <h4>
-                                Find people within your extended network,
-                                including 1st, 2nd, and 3rd-degree connections.
-                              </h4>
+                              <h4>{t("network_distance.description")}</h4>
                               <div className="flex gap-2">
                                 <FormField
                                   control={form.control}
@@ -856,7 +845,9 @@ const CreateAccountScenarios = () => {
                                           <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                             <div className="flex items-center flex-1 overflow-hidden">
                                               <SelectValue
-                                                placeholder="Select a degree"
+                                                placeholder={t(
+                                                  "network_distance.placeholder"
+                                                )}
                                                 className="truncate"
                                               />
                                             </div>
@@ -913,7 +904,7 @@ const CreateAccountScenarios = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <h4>🎛️ Other filters</h4>
+                      <h4>{t("other_filters")}</h4>
                       <div className="flex flex-col gap-3">
                         <Accordion type="single" collapsible>
                           <AccordionItem
@@ -921,14 +912,11 @@ const CreateAccountScenarios = () => {
                             className="bg-slate-200"
                           >
                             <AccordionTrigger className="p-3">
-                              🏷️ Keywords
+                              {t("keywords.label")}
                             </AccordionTrigger>
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
-                                <h4>
-                                  Broaden your search using relevant terms that
-                                  appear in profiles.
-                                </h4>
+                                <h4>{t("keywords.description")}</h4>
                                 <div className="flex gap-2">
                                   <FormField
                                     control={form.control}
@@ -939,7 +927,9 @@ const CreateAccountScenarios = () => {
                                           <Input
                                             className="mb-3"
                                             {...field}
-                                            placeholder="Include keywords"
+                                            placeholder={t(
+                                              "keywords.placeholder"
+                                            )}
                                           />
                                         </FormControl>
 
@@ -958,14 +948,11 @@ const CreateAccountScenarios = () => {
 
                   <div className="flex flex-col gap-8 basis-1/2">
                     <div className="flex flex-col gap-4">
-                      <h4 className="">💼 Specific department filters</h4>
+                      <h4>{t("department_filters")}</h4>
                       <div className="flex flex-col gap-4">
-                        <FormAccordion label="💼👥 Department headcount">
+                        <FormAccordion label={t("department_headcount.label")}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              Find companies based on the number of employees
-                              within specific departments.
-                            </h4>
+                            <h4>{t("department_headcount.description")}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -981,7 +968,9 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in no. employees)"
+                                              placeholder={t(
+                                                "department_headcount.from"
+                                              )}
                                               className="truncate"
                                             />
                                           </div>
@@ -1036,7 +1025,9 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="To (in no. employees)"
+                                              placeholder={t(
+                                                "department_headcount.to"
+                                              )}
                                               className="truncate"
                                             />
                                           </div>
@@ -1081,11 +1072,12 @@ const CreateAccountScenarios = () => {
                           </div>
                         </FormAccordion>
 
-                        <FormAccordion label="💼👥📈 Department headcount growth">
+                        <FormAccordion
+                          label={t("department_headcount_growth.label")}
+                        >
                           <div className="flex gap-2 flex-col">
                             <h4>
-                              Find companies actively expanding specific
-                              departments within their workforce.
+                              {t("department_headcount_growth.description")}
                             </h4>
                             <div className="flex flex-col gap-3">
                               <FormField
@@ -1102,7 +1094,9 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="From (in %)"
+                                              placeholder={t(
+                                                "department_headcount_growth.from"
+                                              )}
                                               className="truncate"
                                             />
                                           </div>
@@ -1157,7 +1151,9 @@ const CreateAccountScenarios = () => {
                                         <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                           <div className="flex items-center flex-1 overflow-hidden">
                                             <SelectValue
-                                              placeholder="to (in %)"
+                                              placeholder={t(
+                                                "department_headcount_growth.to"
+                                              )}
                                               className="truncate"
                                             />
                                           </div>
@@ -1205,14 +1201,14 @@ const CreateAccountScenarios = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <h4 className="">📋 Account lists saved on LinkedIn</h4>
+                      <h4>{t("saved_accounts_title")}</h4>
                       <div className="flex flex-col gap-4">
-                        <FormAccordion label="📋 Accounts">
+                        <FormAccordion label={t("saved_accounts.label")}>
                           <MultiSelectWithSearchButton
-                            label="Find companies operating in specific sectors or fields"
+                            label={t("saved_accounts.description")}
                             form={form}
                             searchName="saved_accounts"
-                            placeholder="Search by list name"
+                            placeholder={t("saved_accounts.placeholder")}
                             searchType="SAVED_ACCOUNTS"
                             includeName="saved_accounts_include"
                             excludeName="saved_accounts_exclude"
@@ -1222,7 +1218,7 @@ const CreateAccountScenarios = () => {
                     </div>
 
                     <FormAccordion
-                      label="🗓️💶 Annual revenue"
+                      label={t("annual_revenue.label")}
                       className={
                         hasAnnualRevenueError
                           ? "border border-red-500"
@@ -1230,10 +1226,7 @@ const CreateAccountScenarios = () => {
                       }
                     >
                       <div className="flex gap-2 flex-col">
-                        <h4>
-                          Filter companies based on their estimated or reported
-                          annual revenue.
-                        </h4>
+                        <h4>{t("annual_revenue.description")}</h4>
                         <div className="flex flex-col gap-3">
                           <FormField
                             control={form.control}
@@ -1249,7 +1242,7 @@ const CreateAccountScenarios = () => {
                                     <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                       <div className="flex items-center flex-1 overflow-hidden">
                                         <SelectValue
-                                          placeholder="From (in %)"
+                                          placeholder={t("annual_revenue.from")}
                                           className="truncate"
                                         />
                                       </div>
@@ -1304,7 +1297,7 @@ const CreateAccountScenarios = () => {
                                     <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                       <div className="flex items-center flex-1 overflow-hidden">
                                         <SelectValue
-                                          placeholder="to (in %)"
+                                          placeholder={t("annual_revenue.to")}
                                           className="truncate"
                                         />
                                       </div>
@@ -1360,7 +1353,9 @@ const CreateAccountScenarios = () => {
                                       <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
                                         <div className="flex items-center flex-1 overflow-hidden">
                                           <SelectValue
-                                            placeholder="Select currency"
+                                            placeholder={t(
+                                              "annual_revenue.currency"
+                                            )}
                                             className="truncate"
                                           />
                                         </div>
@@ -1409,15 +1404,15 @@ const CreateAccountScenarios = () => {
                 </div>
 
                 <div className="flex gap-4 items-center justify-center">
-                  <Button type="submit">Save scenario</Button>
+                  <Button type="submit">{t("buttons.save")}</Button>
                   <Button
                     type="button"
                     onClick={() => setActiveStep((prev) => prev + 1)}
                   >
-                    Search account
+                    {t("buttons.search")}
                   </Button>
                   <Button type="button" onClick={handleClearAll}>
-                    Clear all
+                    {t("buttons.clear")}
                   </Button>
                 </div>
               </form>

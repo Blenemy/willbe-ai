@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAccountScenarios } from "@/hooks/useAccountScenarios";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -20,6 +21,8 @@ const accountScenariosName = z.object({
 });
 
 const AccountNameForm = () => {
+  const t = useTranslations("AccountScenarios");
+
   const form = useForm({
     resolver: zodResolver(accountScenariosName),
     defaultValues: {
@@ -66,11 +69,11 @@ const AccountNameForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground">
-                Account scenario name
+                {t("form_name_label")}
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Account scenario name"
+                  placeholder={t("form_name_placeholder")}
                   className="mb-3"
                   {...field}
                 />
@@ -81,8 +84,8 @@ const AccountNameForm = () => {
           )}
         />
 
-        <Button type="submit" className="max-w-fit">
-          {accountName ? "Update" : "Create"} an account scenario
+        <Button type="submit">
+          {accountName ? t("form_update_button") : t("form_create_button")}
         </Button>
       </form>
     </Form>

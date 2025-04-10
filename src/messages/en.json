@@ -974,5 +974,118 @@
     },
     "create_structure_button": "Create structure",
     "update_button": "Update structure"
+  },
+  "AccountScenarios": {
+    "title": "Account Scenarios",
+    "add_button": "Add New Account",
+    "table_caption": "A list of lead scenarios",
+    "table_name": "Account Name",
+    "table_actions": "Actions",
+    "confirm_title": "Confirm Deletion",
+    "confirm_description": "Are you sure you want to delete this scenario?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "form_name_label": "Account scenario name",
+    "form_name_placeholder": "Account scenario name",
+    "form_create_button": "Create an account scenario",
+    "form_update_button": "Update an account scenario"
+  },
+  "scenariosFilter": {
+    "title": "Create Account Scenarios",
+    "stepper": ["Account search", "Account select", "Account save"],
+    "stepper_buttons": {
+      "next": "Next",
+      "back": "Back",
+      "finish": "Finish"
+    },
+    "basic_data": "🗃️ Basic data",
+    "industry": {
+      "label": "🏭 Industry",
+      "description": "Filter by companies saved on your LinkedIn lists.",
+      "placeholder": "Search by industry"
+    },
+    "location": {
+      "label": "📍 Location",
+      "description": "Find companies based on their geographical location",
+      "placeholder": "Search by location"
+    },
+    "headcount": {
+      "label": "👥 Headcount",
+      "description": "Find companies based on the number of employees they have.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "headcount_growth": {
+      "label": "👥📈 Headcount growth",
+      "description": "Find companies that are actively expanding their workforce.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "fortune": {
+      "label": "💰 Fortune 500 List",
+      "description": "Find companies recognized on the prestigious Fortune 500 list.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "followers": {
+      "label": "🙋‍♀️ Followers count",
+      "description": "Filter companies based on the number of followers they have on the platform.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "activity_focus": "🎯 Activity & focus",
+    "recent_activities": {
+      "label": "📣 Recent activities",
+      "placeholder": "Select an activity"
+    },
+    "has_job_offers": "💼 Has job offers",
+    "technology": {
+      "label": "💻 Technology",
+      "description": "Find companies using specific technologies or software solutions.",
+      "placeholder": "Search by technology"
+    },
+    "connections": "🕸️ Connections & reach",
+    "network_distance": {
+      "label": "🌍 Network distance",
+      "description": "Find people within your extended network, including 1st, 2nd, and 3rd-degree connections.",
+      "placeholder": "Select a degree"
+    },
+    "other_filters": "🎛️ Other filters",
+    "keywords": {
+      "label": "🏷️ Keywords",
+      "description": "Broaden your search using relevant terms that appear in profiles.",
+      "placeholder": "Include keywords"
+    },
+    "department_filters": "💼 Specific department filters",
+    "department_headcount": {
+      "label": "💼👥 Department headcount",
+      "description": "Find companies based on the number of employees within specific departments.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "department_headcount_growth": {
+      "label": "💼👥📈 Department headcount growth",
+      "description": "Find companies actively expanding specific departments within their workforce.",
+      "from": "From (in %)",
+      "to": "to (in %)"
+    },
+    "saved_accounts_title": "📋 Account lists saved on LinkedIn",
+    "saved_accounts": {
+      "label": "📋 Accounts",
+      "description": "Find companies operating in specific sectors or fields",
+      "placeholder": "Search by list name"
+    },
+    "annual_revenue": {
+      "label": "🗓️💶 Annual revenue",
+      "description": "Filter companies based on their estimated or reported annual revenue.",
+      "from": "From (in %)",
+      "to": "to (in %)",
+      "currency": "Select currency"
+    },
+    "buttons": {
+      "save": "Save scenario",
+      "search": "Search account",
+      "clear": "Clear all"
+    }
   }
 }

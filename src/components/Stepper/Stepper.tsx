@@ -4,6 +4,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import { useTranslations } from "next-intl";
 
 const CustomStepper = ({
   activeStep,
@@ -16,6 +17,7 @@ const CustomStepper = ({
   steps: string[];
   disabled?: boolean;
 }) => {
+  const t = useTranslations("scenariosFilter.stepper_buttons");
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
       setActiveStep(activeStep + 1);
@@ -44,11 +46,11 @@ const CustomStepper = ({
           onClick={handleBack}
           sx={{ mr: 1 }}
         >
-          Back
+          {t("next")}
         </Button>
         <Box sx={{ flex: "1 1 auto" }} />
         <Button onClick={handleNext} disabled={disabled}>
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          {activeStep === steps.length - 1 ? t("finish") : t("back")}
         </Button>
       </Box>
     </Box>

@@ -974,5 +974,122 @@
     },
     "create_structure_button": "Crear estructura",
     "update_button": "Actualizar estructura"
+  },
+  "AccountScenarios": {
+    "title": "Escenarios de cuentas",
+    "add_button": "Agregar nueva cuenta",
+    "table_caption": "Una lista de escenarios de clientes potenciales",
+    "table_name": "Nombre de la cuenta",
+    "table_actions": "Acciones",
+    "confirm_title": "Confirmar eliminación",
+    "confirm_description": "¿Estás seguro de que deseas eliminar este escenario?",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "form_name_label": "Nombre del escenario de cuenta",
+    "form_name_placeholder": "Nombre del escenario de cuenta",
+    "form_create_button": "Crear un escenario de cuenta",
+    "form_update_button": "Actualizar un escenario de cuenta"
+  },
+  "scenariosFilter": {
+    "title": "Crear escenarios de cuentas",
+    "stepper": [
+      "Búsqueda de cuentas",
+      "Selección de cuentas",
+      "Guardar cuentas"
+    ],
+    "stepper_buttons": {
+      "next": "Siguiente",
+      "back": "Atrás",
+      "finish": "Finalizar"
+    },
+    "basic_data": "🗃️ Datos básicos",
+    "industry": {
+      "label": "🏭 Industria",
+      "description": "Filtra por empresas guardadas en tus listas de LinkedIn.",
+      "placeholder": "Buscar por industria"
+    },
+    "location": {
+      "label": "📍 Ubicación",
+      "description": "Encuentra empresas según su ubicación geográfica",
+      "placeholder": "Buscar por ubicación"
+    },
+    "headcount": {
+      "label": "👥 Número de empleados",
+      "description": "Encuentra empresas según la cantidad de empleados.",
+      "from": "Desde (n.º de empleados)",
+      "to": "Hasta (n.º de empleados)"
+    },
+    "headcount_growth": {
+      "label": "👥📈 Crecimiento del personal",
+      "description": "Encuentra empresas que están ampliando activamente su plantilla.",
+      "from": "Desde (n.º de empleados)",
+      "to": "Hasta (n.º de empleados)"
+    },
+    "fortune": {
+      "label": "💰 Lista Fortune 500",
+      "description": "Encuentra empresas reconocidas en la prestigiosa lista Fortune 500.",
+      "from": "Desde (n.º de empleados)",
+      "to": "Hasta (n.º de empleados)"
+    },
+    "followers": {
+      "label": "🙋‍♀️ Número de seguidores",
+      "description": "Filtra empresas según la cantidad de seguidores que tienen en la plataforma.",
+      "from": "Desde (n.º de empleados)",
+      "to": "Hasta (n.º de empleados)"
+    },
+    "activity_focus": "🎯 Actividad y enfoque",
+    "recent_activities": {
+      "label": "📣 Actividades recientes",
+      "placeholder": "Selecciona una actividad"
+    },
+    "has_job_offers": "💼 Tiene ofertas de trabajo",
+    "technology": {
+      "label": "💻 Tecnología",
+      "description": "Encuentra empresas que usan tecnologías o soluciones específicas.",
+      "placeholder": "Buscar por tecnología"
+    },
+    "connections": "🕸️ Conexiones y alcance",
+    "network_distance": {
+      "label": "🌍 Distancia de red",
+      "description": "Encuentra personas dentro de tu red ampliada, incluidos contactos de primer, segundo y tercer grado.",
+      "placeholder": "Seleccionar grado"
+    },
+    "other_filters": "🎛️ Otros filtros",
+    "keywords": {
+      "label": "🏷️ Palabras clave",
+      "description": "Amplía tu búsqueda con términos relevantes que aparecen en los perfiles.",
+      "placeholder": "Incluir palabras clave"
+    },
+    "department_filters": "💼 Filtros específicos por departamento",
+    "department_headcount": {
+      "label": "💼👥 Número de empleados por departamento",
+      "description": "Encuentra empresas según el número de empleados por departamento.",
+      "from": "Desde (n.º de empleados)",
+      "to": "Hasta (n.º de empleados)"
+    },
+    "department_headcount_growth": {
+      "label": "💼👥📈 Crecimiento del personal por departamento",
+      "description": "Encuentra empresas que están ampliando activamente departamentos específicos.",
+      "from": "Desde (en %)",
+      "to": "Hasta (en %)"
+    },
+    "saved_accounts_title": "📋 Listas de cuentas guardadas en LinkedIn",
+    "saved_accounts": {
+      "label": "📋 Cuentas",
+      "description": "Encuentra empresas que operan en sectores específicos",
+      "placeholder": "Buscar por nombre de lista"
+    },
+    "annual_revenue": {
+      "label": "🗓️💶 Ingresos anuales",
+      "description": "Filtra empresas según sus ingresos anuales estimados o declarados.",
+      "from": "Desde (en %)",
+      "to": "Hasta (en %)",
+      "currency": "Seleccionar moneda"
+    },
+    "buttons": {
+      "save": "Guardar escenario",
+      "search": "Buscar cuenta",
+      "clear": "Borrar todo"
+    }
   }
 }
