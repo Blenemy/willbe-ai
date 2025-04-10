@@ -1092,5 +1092,44 @@
       "search": "Rechercher un compte",
       "clear": "Effacer tout"
     }
+  },
+  "accountTable": {
+    "title": "Liste des entreprises",
+    "itemsPerPage": "Éléments par page",
+    "searchPlaceholder": "Rechercher par nom...",
+    "table": {
+      "selectAll": "Tout sélectionner",
+      "logo": "Logo",
+      "name": "Nom",
+      "industry": "Secteur",
+      "headcount": "Effectif",
+      "linkedin": "LinkedIn",
+      "summary": "Résumé"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pageInfo": "Page {current} sur {total}"
+    },
+    "submit": "Soumettre les entreprises sélectionnées"
+  },
+  "accountSave": {
+    "title": "Comptes enregistrés",
+    "table": {
+      "select": "Sélectionner",
+      "title": "Titre",
+      "description": "Description",
+      "industry": "Secteur",
+      "employees": "Employés",
+      "country": "Pays",
+      "city": "Ville",
+      "created": "Créé",
+      "website": "Site web",
+      "linkedin": "LinkedIn",
+      "actions": "Actions",
+      "open": "Ouvrir",
+      "delete": "Supprimer"
+    },
+    "generateScenario": "Générer un scénario de prospects"
   }
 }

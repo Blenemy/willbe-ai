@@ -1087,5 +1087,44 @@
       "search": "Search account",
       "clear": "Clear all"
     }
+  },
+  "accountTable": {
+    "title": "Company List",
+    "itemsPerPage": "Items per page",
+    "searchPlaceholder": "Search by name...",
+    "table": {
+      "selectAll": "Select all",
+      "logo": "Logo",
+      "name": "Name",
+      "industry": "Industry",
+      "headcount": "Headcount",
+      "linkedin": "LinkedIn",
+      "summary": "Summary"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {current} of {total}"
+    },
+    "submit": "Submit Selected Companies"
+  },
+  "accountSave": {
+    "title": "Saved Accounts",
+    "table": {
+      "select": "Select",
+      "title": "Title",
+      "description": "Description",
+      "industry": "Industry",
+      "employees": "Employees",
+      "country": "Country",
+      "city": "City",
+      "created": "Created",
+      "website": "Website",
+      "linkedin": "LinkedIn",
+      "actions": "Actions",
+      "open": "Open",
+      "delete": "Delete"
+    },
+    "generateScenario": "Generate lead scenario"
   }
 }

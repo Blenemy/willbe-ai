@@ -15,8 +15,11 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useSavedAccounts } from "@/hooks/useSavedAccounts";
 import { useGenerateLeadScenario } from "@/hooks/useGenerateLeadScenario";
+import { useTranslations } from "next-intl";
 
 const AccountSave = () => {
+  const t = useTranslations("accountSave");
+
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
   const { savedAccounts, deleteSavedAccounts } = useSavedAccounts({
@@ -50,22 +53,22 @@ const AccountSave = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-4">
-      <h2 className="text-2xl font-semibold">Saved Accounts</h2>
+      <h2 className="text-2xl font-semibold">{t("title")}</h2>
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead></TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Industry</TableHead>
-            <TableHead>Employees</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>City</TableHead>
-            <TableHead>Created</TableHead>
-            <TableHead>Website</TableHead>
-            <TableHead>LinkedIn</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t("table.title")}</TableHead>
+            <TableHead>{t("table.description")}</TableHead>
+            <TableHead>{t("table.industry")}</TableHead>
+            <TableHead>{t("table.employees")}</TableHead>
+            <TableHead>{t("table.country")}</TableHead>
+            <TableHead>{t("table.city")}</TableHead>
+            <TableHead>{t("table.created")}</TableHead>
+            <TableHead>{t("table.website")}</TableHead>
+            <TableHead>{t("table.linkedin")}</TableHead>
+            <TableHead>{t("table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -97,7 +100,7 @@ const AccountSave = () => {
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
                     >
-                      Website
+                      {t("table.website")}
                     </a>
                   ) : (
                     "-"
@@ -124,14 +127,14 @@ const AccountSave = () => {
                       size="sm"
                       onClick={() => handleOpenProfile(data.profile_url)}
                     >
-                      Open
+                      {t("table.open")}
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(item.id)}
                     >
-                      Delete
+                      {t("table.delete")}
                     </Button>
                   </div>
                 </TableCell>
@@ -143,7 +146,7 @@ const AccountSave = () => {
 
       {selectedIds.length > 0 && (
         <Button className="self-start mt-4" onClick={handleGenerateScenario}>
-          Generate lead scenario
+          {t("generateScenario")}
         </Button>
       )}
     </div>

@@ -1091,5 +1091,44 @@
       "search": "Buscar cuenta",
       "clear": "Borrar todo"
     }
+  },
+  "accountTable": {
+    "title": "Lista de empresas",
+    "itemsPerPage": "Elementos por página",
+    "searchPlaceholder": "Buscar por nombre...",
+    "table": {
+      "selectAll": "Seleccionar todo",
+      "logo": "Logo",
+      "name": "Nombre",
+      "industry": "Industria",
+      "headcount": "Número de empleados",
+      "linkedin": "LinkedIn",
+      "summary": "Resumen"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageInfo": "Página {current} de {total}"
+    },
+    "submit": "Enviar empresas seleccionadas"
+  },
+  "accountSave": {
+    "title": "Cuentas guardadas",
+    "table": {
+      "select": "Seleccionar",
+      "title": "Título",
+      "description": "Descripción",
+      "industry": "Industria",
+      "employees": "Empleados",
+      "country": "País",
+      "city": "Ciudad",
+      "created": "Creado",
+      "website": "Sitio web",
+      "linkedin": "LinkedIn",
+      "actions": "Acciones",
+      "open": "Abrir",
+      "delete": "Eliminar"
+    },
+    "generateScenario": "Generar escenario de clientes"
   }
 }
