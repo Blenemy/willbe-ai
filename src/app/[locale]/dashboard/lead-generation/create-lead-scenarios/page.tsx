@@ -816,15 +816,11 @@ const CreateLeadScenarios = () => {
                         <Accordion type="single" collapsible>
                           <AccordionItem value="name" className="bg-slate-200">
                             <AccordionTrigger className="p-3">
-                              🏢🛠️ Company type
+                              {t("companyType.label")}
                             </AccordionTrigger>
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
-                                <h4>
-                                  Find individuals working at specific types of
-                                  companies (e.g., publicly traded, privately
-                                  held, non-profit).
-                                </h4>
+                                <h4>{t("companyType.description")}</h4>
                                 <div className="flex gap-2">
                                   <FormField
                                     control={form.control}
@@ -838,7 +834,9 @@ const CreateLeadScenarios = () => {
                                               field.onChange(value)
                                             }
                                             defaultValue={field.value || []}
-                                            placeholder="Select company types"
+                                            placeholder={t(
+                                              "companyType.placeholder"
+                                            )}
                                             variant="secondary"
                                             className="bg-white hover:bg-white"
                                             animation={2}
