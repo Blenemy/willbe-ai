@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useMessageTemplates } from "@/hooks/useMessageTemplates";
+import { useTranslations } from "next-intl";
 
 interface Props {
   currentLang: string;
@@ -20,6 +21,7 @@ export const LanguageTranslateUI = ({
   availableLangs,
   structureId,
 }: Props) => {
+  const t = useTranslations("MessageStructures");
   const [fromLang, setFromLang] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const { createTemplate } = useMessageTemplates();
@@ -52,7 +54,7 @@ export const LanguageTranslateUI = ({
 
   return (
     <div className="border rounded p-4 space-y-4">
-      <p>This template has not been created yet for this language.</p>
+      <p>{t("template_not_created")}</p>
 
       <div className="flex flex-col gap-2">
         <Button
@@ -60,14 +62,14 @@ export const LanguageTranslateUI = ({
           onClick={handleCreateFromScratch}
           disabled={isLoading}
         >
-          {isLoading ? "Creating..." : "Create from scratch"}
+          {isLoading ? t("creating") : t("create_from_scratch")}
         </Button>
 
         <div className="space-y-2">
-          <label className="font-medium">Or translate from:</label>
+          <label className="font-medium">{t("translate_from_label")}</label>
           <Select onValueChange={setFromLang} value={fromLang}>
             <SelectTrigger>
-              <SelectValue placeholder="Select source language" />
+              <SelectValue placeholder={t("select_source_language")} />
             </SelectTrigger>
             <SelectContent>
               {availableLangs.map((lang) => (
@@ -80,7 +82,7 @@ export const LanguageTranslateUI = ({
         </div>
 
         <Button onClick={handleTranslate} disabled={!fromLang || isLoading}>
-          {isLoading ? "Translating..." : "Translate"}
+          {isLoading ? t("translating") : t("translate")}
         </Button>
       </div>
     </div>

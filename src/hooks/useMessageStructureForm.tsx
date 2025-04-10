@@ -10,9 +10,11 @@ import { useRouter } from "next/navigation";
 export const LANGUAGES = [
   "English",
   "Spanish",
-  "German",
+  "Portuguese",
   "French",
-  "Ukrainian",
+  "German",
+  "Hebrew",
+  "Italian",
 ];
 
 const schema = z.object({
@@ -80,13 +82,13 @@ export const useMessageStructureForm = (editingId?: string) => {
   });
 
   useEffect(() => {
-    if (fetchedStructure) {
+    if (fetchedStructure && editingId) {
       form.setValue("title", fetchedStructure.name);
       form.setValue("emailType", fetchedStructure.messageType);
       form.setValue("maxWords", String(fetchedStructure.wordsLimit));
       form.setValue("subjectType", fetchedStructure.subjectType || "");
     }
-  }, [fetchedStructure, form]);
+  }, [editingId, fetchedStructure]);
 
   const updateMessageStructure = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
