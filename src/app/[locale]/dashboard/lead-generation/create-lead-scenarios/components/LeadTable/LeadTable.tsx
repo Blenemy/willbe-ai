@@ -24,6 +24,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
+import { useTranslations } from "next-intl";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
@@ -32,6 +33,8 @@ const LeadTable = ({
 }: {
   setCurrentStep: Dispatch<SetStateAction<number>>;
 }) => {
+  const t = useTranslations("leadTable");
+
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId") || "";
 
@@ -42,6 +45,7 @@ const LeadTable = ({
   const [itemsPerPage, setItemsPerPage] = useState(
     INITIAL_NUMBER_ITEMS_PER_PAGE
   );
+
   const { saveSelectedLeads } = useSavedLeads({
     enableFetch: true,
     scenarioId,
@@ -49,7 +53,7 @@ const LeadTable = ({
 
   const currentCursor = cursorStack[currentCursorIndex];
 
-  const { searchLeads, paging, cursor, isFetching } = useSearchLeads({
+  const { searchLeads, paging, cursor } = useSearchLeads({
     enableFetch: true,
     scenarioId,
     limit: itemsPerPage,
@@ -126,7 +130,7 @@ const LeadTable = ({
 
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-4">
-      <h2 className="font-semibold text-2xl">Lead List</h2>
+      <h2 className="font-semibold text-2xl">{t("title")}</h2>
 
       <div className="flex items-center gap-4">
         <Select
@@ -134,7 +138,7 @@ const LeadTable = ({
           onValueChange={(value) => handleLimitChange(value)}
         >
           <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Items per page" />
+            <SelectValue placeholder={t("itemsPerPage")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="10">10</SelectItem>
@@ -144,7 +148,7 @@ const LeadTable = ({
         </Select>
 
         <Input
-          placeholder="Search by first name..."
+          placeholder={t("searchPlaceholder")}
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
@@ -179,13 +183,13 @@ const LeadTable = ({
                 }}
               />
             </TableHead>
-            <TableHead>Avatar</TableHead>
-            <TableHead>First Name</TableHead>
-            <TableHead>Last Name</TableHead>
-            <TableHead>Job Title</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead>LinkedIn</TableHead>
+            <TableHead>{t("table.avatar")}</TableHead>
+            <TableHead>{t("table.firstName")}</TableHead>
+            <TableHead>{t("table.lastName")}</TableHead>
+            <TableHead>{t("table.jobTitle")}</TableHead>
+            <TableHead>{t("table.location")}</TableHead>
+            <TableHead>{t("table.company")}</TableHead>
+            <TableHead>{t("table.linkedin")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -232,26 +236,27 @@ const LeadTable = ({
         </TableBody>
       </Table>
 
-      {!isFetching && (
-        <div className="flex items-center gap-4 mt-6">
-          <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
-            Previous
-          </Button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <Button onClick={handleNext} disabled={!cursor}>
-            Next
-          </Button>
-        </div>
-      )}
+      <div className="flex items-center gap-4 mt-6">
+        <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
+          {t("pagination.previous")}
+        </Button>
+        <span>
+          {t("pagination.pageInfo", {
+            current: currentPage,
+            total: totalPages,
+          })}
+        </span>
+        <Button onClick={handleNext} disabled={!cursor}>
+          {t("pagination.next")}
+        </Button>
+      </div>
 
       <Button
         className="self-start mt-4"
         onClick={handleSubmit}
         disabled={selectedLeads.length === 0}
       >
-        Save Selected Leads
+        {t("submit")}
       </Button>
     </div>
   );

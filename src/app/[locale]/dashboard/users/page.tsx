@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,12 +14,14 @@ import {
 } from "@/components/ui/table";
 import { useCompanyUsers } from "@/hooks/useCompanyUsers";
 import { EditCompanyUser } from "./components/EditCompanyUsers";
-import { User } from "@/types/User";
 import { DeleteCompanyUser } from "./components/DeleteCompanyUser";
 import { CreateCompanyUsers } from "./components/CreateCompanyUsers";
 import TableSkeleton from "./skeletons/TableSkeleton";
+import { User } from "@/types/User";
 
 const UsersPage = () => {
+  const t = useTranslations("Users");
+
   const [openInvite, setOpenInvite] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openRemove, setOpenRemove] = useState(false);
@@ -28,23 +31,25 @@ const UsersPage = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Users Settings</h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
       <div className="flex justify-end">
-        <Button onClick={() => setOpenInvite(true)}>Add New User</Button>
+        <Button onClick={() => setOpenInvite(true)}>
+          {t("invite_button")}
+        </Button>
       </div>
 
       {isLoading ? (
         <TableSkeleton />
       ) : (
         <Table className="mt-5">
-          <TableCaption>A list of your company users</TableCaption>
+          <TableCaption>{t("table_caption")}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>User name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Position</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("table_username")}</TableHead>
+              <TableHead>{t("table_role")}</TableHead>
+              <TableHead>{t("table_position")}</TableHead>
+              <TableHead>{t("table_email")}</TableHead>
+              <TableHead className="text-right">{t("table_actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -63,7 +68,7 @@ const UsersPage = () => {
                       setOpenEdit(true);
                     }}
                   >
-                    Edit
+                    {t("edit")}
                   </Button>
                   <Button
                     onClick={() => {
@@ -72,7 +77,7 @@ const UsersPage = () => {
                     }}
                     variant="destructive"
                   >
-                    Remove
+                    {t("remove")}
                   </Button>
                 </TableCell>
               </TableRow>

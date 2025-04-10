@@ -19,32 +19,42 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { cn } from "@/lib/utils";
 import { useInvitation } from "@/hooks/useInvitation";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
+import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
 
-const setupProfileSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, "First name must be at least 2 characters")
-    .max(50, "First name must be at most 50 characters"),
-  lastName: z
-    .string()
-    .min(2, "Last name must be at least 2 characters")
-    .max(50, "Last name must be at most 50 characters"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(PASSWORD_REGEX, "Password contains forbidden characters"),
-});
+function getSchema(t: AuthTranslations) {
+  return z.object({
+    firstName: z
+      .string()
+      .min(2, t.validation_first_name_min)
+      .max(50, t.validation_first_name_max)
+      .regex(/^[A-Za-z]+$/, t.validation_first_name_regex),
+    lastName: z
+      .string()
+      .min(2, t.validation_last_name_min)
+      .max(50, t.validation_last_name_max)
+      .regex(/^[A-Za-z]+$/, t.validation_last_name_regex),
+    password: z
+      .string()
+      .min(8, t.validation_password_min)
+      .regex(PASSWORD_REGEX, t.validation_password_regex),
+  });
+}
 
-export default function InvitationForm() {
+export default function InvitationForm({
+  translations,
+}: {
+  translations: AuthTranslations;
+}) {
   const searchParams = useSearchParams();
   const invitationId = searchParams.get("invitationId");
+
   const { acceptInvitation } = useInvitation({
     enableFetch: true,
     invitationId,
   });
 
   const form = useForm({
-    resolver: zodResolver(setupProfileSchema),
+    resolver: zodResolver(getSchema(translations)),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -52,7 +62,7 @@ export default function InvitationForm() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof setupProfileSchema>) => {
+  const onSubmit = async (values: z.infer<ReturnType<typeof getSchema>>) => {
     acceptInvitation(values);
   };
 
@@ -61,7 +71,7 @@ export default function InvitationForm() {
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl font-semibold">
-            Setup Your Profile
+            {translations.setup_profile_title}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -75,7 +85,7 @@ export default function InvitationForm() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>{translations.firstname}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -89,7 +99,7 @@ export default function InvitationForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>{translations.lastname}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -103,7 +113,7 @@ export default function InvitationForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{translations.password}</FormLabel>
                     <FormControl>
                       <PasswordInput {...field} />
                     </FormControl>
@@ -113,7 +123,7 @@ export default function InvitationForm() {
               />
 
               <Button type="submit" className="w-full">
-                Create Profile
+                {translations.create_profile}
               </Button>
             </form>
           </Form>

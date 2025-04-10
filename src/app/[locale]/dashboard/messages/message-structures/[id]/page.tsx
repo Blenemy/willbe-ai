@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { LanguageTranslateUI } from "../components/LanguageTranslateUI";
 import { LANGUAGES } from "@/constants/languagesMessageStructure";
+import { useTranslations } from "next-intl";
+import { Controller } from "react-hook-form";
 
 const EMAIL_TYPES = [
   { label: "First email", value: "first_email" },
@@ -38,6 +40,7 @@ const SUBJECT_TYPES = [
 ];
 
 export default function MessageStructureEditor() {
+  const t = useTranslations("MessageStructures");
   const { id } = useParams();
   const {
     form,
@@ -65,7 +68,7 @@ export default function MessageStructureEditor() {
 
   return (
     <div className="p-6 flex flex-col gap-6 w-full">
-      <h1 className="text-2xl font-bold">Create Message Structure</h1>
+      <h1 className="text-2xl font-bold">{t("create_Structure_title")}</h1>
 
       <Form {...form}>
         <form className="space-y-4">
@@ -75,22 +78,31 @@ export default function MessageStructureEditor() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Title" {...field} />
+                  <Input
+                    placeholder={t("input_title_placeholder")}
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
           />
 
-          <FormField
+          <Controller
             name="emailType"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email type</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <FormLabel>{t("email_type_label")}</FormLabel>
+                <Select
+                  key={field.value}
+                  value={field.value}
+                  onValueChange={(val) => {
+                    field.onChange(val);
+                  }}
+                >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select email type" />
+                      <SelectValue placeholder={t("email_type_placeholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -111,7 +123,11 @@ export default function MessageStructureEditor() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="number" placeholder="Max words" {...field} />
+                  <Input
+                    type="number"
+                    placeholder={t("max_words_placeholder")}
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -123,11 +139,13 @@ export default function MessageStructureEditor() {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject type</FormLabel>
+                  <FormLabel>{t("subject_type_label")}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select subject type" />
+                        <SelectValue
+                          placeholder={t("subject_type_placeholder")}
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -151,7 +169,7 @@ export default function MessageStructureEditor() {
         disabled={isCreating}
         className="max-w-fit"
       >
-        {id ? "Update structure" : "Create structure"}
+        {id ? t("update_button") : t("create_structure_button")}
       </Button>
 
       <Tabs defaultValue={currentLang} onValueChange={handleLanguageChange}>

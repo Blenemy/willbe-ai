@@ -28,13 +28,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useAccountScenarios } from "@/hooks/useAccountScenarios";
 import { AccountScenario } from "@/types/AccountScenario";
 
 const ITEMS_PER_PAGE = 5;
 
 const AccountScenariosPage = () => {
+  const t = useTranslations("AccountScenarios");
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { accountScenariosDataTable = [], deleteAccountScenario } =
@@ -91,16 +92,16 @@ const AccountScenariosPage = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Account Scenarios</h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
       <div className="flex justify-end mb-4">
-        <Button onClick={handleAddAccount}>Add New Account</Button>
+        <Button onClick={handleAddAccount}>{t("add_button")}</Button>
       </div>
       <Table>
-        <TableCaption>A list of lead scenarios</TableCaption>
+        <TableCaption>{t("table_caption")}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Account Name</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("table_name")}</TableHead>
+            <TableHead className="text-right">{t("table_actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -162,15 +163,15 @@ const AccountScenariosPage = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t("confirm_title")}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this scenario?</p>
+          <p>{t("confirm_description")}</p>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete
+              {t("delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

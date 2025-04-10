@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,6 +10,7 @@ import {
 import { useCompanyUsers } from "@/hooks/useCompanyUsers";
 import { User } from "@/types/User";
 import { Dispatch, SetStateAction } from "react";
+import { useTranslations } from "next-intl";
 
 interface DeleteCompanyUserProps {
   open: boolean;
@@ -20,9 +23,11 @@ export const DeleteCompanyUser = ({
   setOpen,
   user,
 }: DeleteCompanyUserProps) => {
+  const t = useTranslations("Users");
   const { deleteCompanyUser } = useCompanyUsers({
     enableFetch: false,
   });
+
   const handleRemoveClick = () => {
     deleteCompanyUser(user.id);
     setOpen(false);
@@ -33,14 +38,15 @@ export const DeleteCompanyUser = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Are you sure you want to remove the user {user.firstName}{" "}
-            {user.lastName}?
+            {t("delete_confirm", {
+              user: `${user.firstName} ${user.lastName}`,
+            })}
           </DialogTitle>
         </DialogHeader>
         <Button onClick={handleRemoveClick} variant="destructive">
-          Yes
+          {t("yes")}
         </Button>
-        <Button onClick={() => setOpen(false)}>No</Button>
+        <Button onClick={() => setOpen(false)}>{t("no")}</Button>
       </DialogContent>
     </Dialog>
   );

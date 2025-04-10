@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,9 +22,13 @@ import {
 import { Company } from "@/types/Company";
 import { useCompany } from "@/hooks/useCompany";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
-  companyName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
+  companyName: z
+    .string()
+    .min(1, "Company.validation_required")
+    .max(50, "Company.validation_max_length"),
 });
 
 const EditCompanyNameDialog = ({
@@ -34,8 +40,14 @@ const EditCompanyNameDialog = ({
   setOpen: (o: boolean) => void;
   company: Company;
 }) => {
+  const t = useTranslations("Company");
+
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(
+      schema.transform((val) => ({
+        companyName: val.companyName,
+      }))
+    ),
     defaultValues: {
       companyName: company.name || "",
     },
@@ -63,9 +75,9 @@ const EditCompanyNameDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent aria-describedby="comapnyName">
+      <DialogContent aria-describedby="companyName">
         <DialogHeader>
-          <DialogTitle>Company Name</DialogTitle>
+          <DialogTitle>{t("company_name")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -76,16 +88,15 @@ const EditCompanyNameDialog = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-semibold text-foreground">
-                    Company Name
+                    {t("company_name")}
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Enter your company name"
+                      placeholder={t("company_name_placeholder")}
                       {...field}
                       type="text"
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -97,9 +108,9 @@ const EditCompanyNameDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("save")}</Button>
             </div>
           </form>
         </Form>

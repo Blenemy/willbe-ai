@@ -16,12 +16,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   signatureField: z.string(),
 });
 
 const SignatureForm = () => {
+  const t = useTranslations("Profile");
+
   const { signature, updateUserSignature, isLoading } = useSignature({
     enableFetch: true,
   });
@@ -59,11 +62,11 @@ const SignatureForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground text-xl">
-                Your signature
+                {t("signature_label")}
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Enter your email signature in html format"
+                  placeholder={t("signature_placeholder")}
                   id="message"
                   className="min-h-40"
                   {...field}
@@ -76,7 +79,7 @@ const SignatureForm = () => {
         />
 
         <Button type="submit" className="max-w-64">
-          Submit your signature
+          {t("signature_submit")}
         </Button>
       </form>
     </Form>

@@ -7,12 +7,14 @@ import EditCompanyDescriptionDialog from "../components/EditCompanyDescriptionDi
 import EditCompanySectorDialog from "../components/EditCompanySectorDialog";
 import { useCompany } from "@/hooks/useCompany";
 import CompanyTabSkeleton from "../skeletons/company-tab-skeleton";
+import { useTranslations } from "next-intl";
 
 const YourCompanyTab = () => {
   const [editCompanyName, setEditCompanyName] = useState(false);
   const [editCompanyDescription, setEditCompanyDescription] = useState(false);
   const [editCompanySector, setEditCompanySector] = useState(false);
   const { company, isLoading } = useCompany({ enableFetch: true });
+  const t = useTranslations("Company");
 
   if (isLoading) {
     return <CompanyTabSkeleton />;
@@ -20,21 +22,24 @@ const YourCompanyTab = () => {
 
   return (
     <div className="px-6 flex flex-col gap-5">
-      <h2 className="font-bold text-xl">Your Company</h2>
+      <h2 className="font-bold text-xl">{t("your_company")}</h2>
 
-      <ProfileCard title="Company Name" onEdit={() => setEditCompanyName(true)}>
+      <ProfileCard
+        title={t("company_name")}
+        onEdit={() => setEditCompanyName(true)}
+      >
         <p className="font-semibold text-gray-500">{company?.name}</p>
       </ProfileCard>
 
       <ProfileCard
-        title="Company Description"
+        title={t("company_description")}
         onEdit={() => setEditCompanyDescription(true)}
       >
         <p className="font-semibold text-gray-500">{company?.description}</p>
       </ProfileCard>
 
       <ProfileCard
-        title="Company Sector"
+        title={t("company_sector")}
         onEdit={() => setEditCompanySector(true)}
       >
         <p className="font-semibold text-gray-500">{company?.sector}</p>

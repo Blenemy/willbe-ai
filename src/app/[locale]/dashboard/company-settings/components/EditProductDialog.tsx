@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,13 +23,17 @@ import {
 } from "@/components/ui/form";
 import { ProductsAndServices } from "@/types/Company";
 import { useCompany } from "@/hooks/useCompany";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
-  name: z.string().min(1, "Required").max(15, "Maximum 15 characters"),
+  name: z
+    .string()
+    .min(1, "Company.validation_required")
+    .max(15, "Company.validation_name_max"),
   description: z
     .string()
-    .min(1, "Required")
-    .max(3000, "Maximum 3000 characters"),
+    .min(1, "Company.validation_required")
+    .max(3000, "Company.validation_description_max"),
 });
 
 const EditProductDialog = ({
@@ -39,6 +45,8 @@ const EditProductDialog = ({
   setOpen: (o: boolean) => void;
   product: ProductsAndServices | null;
 }) => {
+  const t = useTranslations("Company");
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -85,7 +93,9 @@ const EditProductDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{product ? "Edit Product" : "Add Product"}</DialogTitle>
+          <DialogTitle>
+            {product ? t("product_edit_title") : t("product_add_title")}
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -95,7 +105,9 @@ const EditProductDialog = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Name</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("product_field_name")}
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -109,7 +121,9 @@ const EditProductDialog = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Description</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("product_field_description")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} rows={4} />
                   </FormControl>
@@ -124,9 +138,9 @@ const EditProductDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("save")}</Button>
             </div>
           </form>
         </Form>

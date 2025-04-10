@@ -3,8 +3,11 @@
 import ProfileCard from "./components/ProfileCard";
 import { Button } from "@/components/ui/button";
 import { useConnections } from "@/hooks/useConnections";
+import { useTranslations } from "next-intl";
 
 const ConnectionsTab = () => {
+  const t = useTranslations("Profile");
+
   const {
     userStatus,
     connectLinkedIn,
@@ -16,8 +19,6 @@ const ConnectionsTab = () => {
     enableFetch: true,
   });
 
-  console.log(userStatus);
-
   const linkedInConnected = userStatus?.linkedin ?? false;
   const emailConnected = (userStatus?.email ?? "none") as
     | "none"
@@ -26,66 +27,59 @@ const ConnectionsTab = () => {
 
   return (
     <div className="px-6 flex flex-col gap-5">
-      <h2 className="font-bold text-xl">Connections</h2>
+      <h2 className="font-bold text-xl">{t("connections_title")}</h2>
 
-      <ProfileCard title="LinkedIn">
+      <ProfileCard title={t("connections_linkedin")}>
         <div className="flex justify-between items-center">
           <p className="text-gray-500">
-            Status: {linkedInConnected ? "Connected" : "Not Connected"}
+            {t("connections_status")}:{" "}
+            {linkedInConnected
+              ? t("connections_connected")
+              : t("connections_not_connected")}
           </p>
           <div className="flex gap-2">
             {linkedInConnected ? (
               <Button
                 variant="destructive"
-                onClick={() => {
-                  disconnectLinkedIn.mutate();
-                }}
+                onClick={() => disconnectLinkedIn.mutate()}
               >
-                Remove
+                {t("connections_remove")}
               </Button>
             ) : (
               <Button onClick={() => connectLinkedIn.mutate()}>
-                Connect LinkedIn
+                {t("connections_connect_linkedin")}
               </Button>
             )}
           </div>
         </div>
       </ProfileCard>
 
-      <ProfileCard title="Email">
+      <ProfileCard title={t("connections_email")}>
         <div className="flex justify-between items-center">
           <p className="text-gray-500">
-            Status:{" "}
+            {t("connections_status")}:{" "}
             {emailConnected === "none"
-              ? "Not Connected"
-              : `Connected to ${emailConnected}`}
+              ? t("connections_not_connected")
+              : t("connections_connected_to", {
+                  provider: emailConnected,
+                })}
           </p>
           <div className="flex gap-2">
             {emailConnected === "none" ? (
               <>
-                <Button
-                  onClick={() => {
-                    connectGmail.mutate();
-                  }}
-                >
-                  Connect Gmail
+                <Button onClick={() => connectGmail.mutate()}>
+                  {t("connections_connect_gmail")}
                 </Button>
-                <Button
-                  onClick={() => {
-                    connectOutlook.mutate();
-                  }}
-                >
-                  Connect Outlook
+                <Button onClick={() => connectOutlook.mutate()}>
+                  {t("connections_connect_outlook")}
                 </Button>
               </>
             ) : (
               <Button
                 variant="destructive"
-                onClick={() => {
-                  disconnectEmail.mutate();
-                }}
+                onClick={() => disconnectEmail.mutate()}
               >
-                Remove
+                {t("connections_remove")}
               </Button>
             )}
           </div>

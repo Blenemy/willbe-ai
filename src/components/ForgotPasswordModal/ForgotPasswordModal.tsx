@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -19,21 +21,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
-
-const formSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-});
+import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
 
 interface ForgotPasswordModalProps {
   open: boolean;
   onClose: () => void;
+  translations: AuthTranslations;
 }
 
 export default function ForgotPasswordModal({
   open,
   onClose,
+  translations,
 }: ForgotPasswordModalProps) {
   const { forgotPassword } = useAuth({ enableFetch: false });
+
+  const formSchema = z.object({
+    email: z.string().email(translations.validation_email),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,11 +62,11 @@ export default function ForgotPasswordModal({
       <DialogContent className="max-w-md top-[20%]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            Reset your password
+            {translations.reset_password}
           </DialogTitle>
         </DialogHeader>
         <p className="text-gray-600 text-sm">
-          Please include your work email to reset your password.
+          {translations.reset_password_modal_description}
         </p>
         <Form {...form}>
           <form
@@ -73,21 +78,18 @@ export default function ForgotPasswordModal({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Email</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {translations.Email}
+                  </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Please enter your work email..."
-                      {...field}
-                    />
+                    <Input placeholder={translations.enter_email} {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <Button type="submit" className="w-full">
-              Reset password
+              {translations.reset_password}
             </Button>
           </form>
         </Form>

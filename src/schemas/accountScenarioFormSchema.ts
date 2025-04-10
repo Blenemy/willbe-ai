@@ -47,8 +47,13 @@ export const accountScenarioFormSchema = z.object({
   saved_accounts_include: z.array(searchOptionSchema).optional(),
   saved_accounts_exclude: z.array(searchOptionSchema).optional(),
 
-  annual_revenue_from: z.string().optional(),
-  annual_revenue_to: z.string().optional(),
-
-  annual_revenue_currency: z.string().optional(),
+  annual_revenue_from: z
+    .string()
+    .min(1, { message: "Annual revenue (from) is required" }),
+  annual_revenue_to: z
+    .string()
+    .min(1, { message: "Annual revenue (to) is required" }),
+  annual_revenue_currency: z
+    .string()
+    .min(1, { message: "Currency is required" }),
 });

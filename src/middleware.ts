@@ -3,7 +3,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { checkUserAccess } from "./authMiddleware";
 
-const locales = ["en", "es"];
+const locales = ["en", "es", "fr"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

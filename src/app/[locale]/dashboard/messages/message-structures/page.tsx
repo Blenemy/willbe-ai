@@ -31,10 +31,12 @@ import {
 } from "@/components/ui/dialog";
 import { useMessageStructures } from "@/hooks/useMessageStructures";
 import { MessageStructure } from "@/types/MessageStructure";
+import { useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 5;
 
 const MessageStructures = () => {
+  const t = useTranslations("MessageStructures");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -89,10 +91,10 @@ const MessageStructures = () => {
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-6">
       <div className="flex justify-between items-center">
-        <h2 className="font-semibold text-2xl">Message Structures</h2>
+        <h2 className="font-semibold text-2xl">{t("title")}</h2>
         <Button onClick={handleAddNew}>
           <Plus className="mr-2 h-4 w-4" />
-          Create
+          {t("create_button")}
         </Button>
       </div>
 
@@ -105,11 +107,11 @@ const MessageStructures = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Message structure title</TableHead>
-            <TableHead>Languages</TableHead>
-            <TableHead>Created by</TableHead>
-            <TableHead>Created date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("table_title")}</TableHead>
+            <TableHead>{t("table_languages")}</TableHead>
+            <TableHead>{t("table_created_by")}</TableHead>
+            <TableHead>{t("table_created_date")}</TableHead>
+            <TableHead className="text-right">{t("table_actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -190,15 +192,15 @@ const MessageStructures = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t("confirm_title")}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this message structure?</p>
+          <p>{t("confirm_description")}</p>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete
+              {t("delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

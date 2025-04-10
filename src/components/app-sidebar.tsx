@@ -34,6 +34,7 @@ import { Button } from "./ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ADMINS_ONLY, ALL_ROLES } from "@/types/Roles";
 import { Skeleton } from "./ui/skeleton";
+import { SidebarTranslations } from "@/hooks/translations/useSidebarTranslations";
 
 const getIcon = (
   IconComponent: React.ForwardRefExoticComponent<
@@ -48,124 +49,134 @@ const getIcon = (
   />
 );
 
-const data = {
-  navMain: [
-    {
-      title: "Home",
-      url: "/dashboard/home",
-      icon: Home,
-      allowedRoles: ALL_ROLES,
-    },
-    {
-      title: "Lead Generation",
-      url: "#",
-      items: [
-        {
-          title: "Lead scenarios",
-          url: "/dashboard/lead-generation/lead-scenarios",
-          icon: List,
-          allowedRoles: ALL_ROLES,
-        },
-        {
-          title: "Create lead scenarios",
-          url: "/dashboard/lead-generation/create-lead-scenarios",
-          icon: Users,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-    {
-      title: "Account Generation",
-      url: "#",
-      items: [
-        {
-          title: "Account scenarios",
-          url: "/dashboard/account-generation/account-scenarios",
-          icon: List,
-          allowedRoles: ALL_ROLES,
-        },
-        {
-          title: "Create account scenarios",
-          url: "/dashboard/account-generation/create-account-scenarios",
-          icon: Users,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-    {
-      title: "Messages generator",
-      url: "#",
-      items: [
-        {
-          title: "Message structures",
-          url: "/dashboard/messages/message-structures",
-          icon: Mail,
-          allowedRoles: ALL_ROLES,
-        },
-        {
-          title: "Create message structures",
-          url: "/dashboard/messages/message-structures/create",
-          icon: Mail,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-    {
-      title: "Data",
-      url: "#",
-      items: [
-        {
-          title: "Account List",
-          url: "/dashboard/data/account-list",
-          icon: List,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-    {
-      title: "Advanced analytics",
-      url: "#",
-      items: [
-        {
-          title: "Analytics",
-          url: "/dashboard/analytics",
-          icon: BarChart,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      items: [
-        {
-          title: "Company settings",
-          url: "/dashboard/company-settings",
-          icon: Settings,
-          allowedRoles: ALL_ROLES,
-        },
-        {
-          title: "Users",
-          url: "/dashboard/users",
-          icon: Users,
-          allowedRoles: ADMINS_ONLY,
-        },
-        {
-          title: "My account",
-          url: "/dashboard/profile",
-          icon: User,
-          allowedRoles: ALL_ROLES,
-        },
-      ],
-    },
-  ],
-};
-
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  translations,
+}: {
+  translations: SidebarTranslations;
+}) {
   const [open, setOpen] = useState(true);
   const { logout, user, isLoading } = useAuth({ enableFetch: true });
   const pathname = usePathname();
   const ICON_SIZE = open ? 24 : 20;
+
+  const data = {
+    navMain: [
+      {
+        title: translations.home,
+        url: "/dashboard/home",
+        icon: Home,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.leadGeneration,
+        url: "#",
+        items: [
+          {
+            title: translations.leadScenarios,
+            url: "/dashboard/lead-generation/lead-scenarios",
+            icon: List,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.createLeadScenarios,
+            url: "/dashboard/lead-generation/create-lead-scenarios",
+            icon: Users,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: List,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.accountGeneration,
+        url: "#",
+        items: [
+          {
+            title: translations.accountScenarios,
+            url: "/dashboard/account-generation/account-scenarios",
+            icon: List,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.createAccountScenarios,
+            url: "/dashboard/account-generation/create-account-scenarios",
+            icon: Users,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: List,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.messagesGenerator,
+        url: "#",
+        items: [
+          {
+            title: translations.messageStructures,
+            url: "/dashboard/messages/message-structures",
+            icon: Mail,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: Mail,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.data,
+        url: "#",
+        items: [
+          {
+            title: translations.accountList,
+            url: "/dashboard/data/account-list",
+            icon: List,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: List,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.advancedAnalytics,
+        url: "#",
+        items: [
+          {
+            title: translations.analytics,
+            url: "/dashboard/analytics",
+            icon: BarChart,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: BarChart,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.settings,
+        url: "#",
+        items: [
+          {
+            title: translations.companySettings,
+            url: "/dashboard/company-settings",
+            icon: Settings,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.users,
+            url: "/dashboard/users",
+            icon: Users,
+            allowedRoles: ADMINS_ONLY,
+          },
+          {
+            title: translations.myAccount,
+            url: "/dashboard/profile",
+            icon: User,
+            allowedRoles: ALL_ROLES,
+          },
+        ],
+        icon: Settings,
+        allowedRoles: ALL_ROLES,
+      },
+    ],
+  };
 
   return (
     <SidebarProvider
@@ -175,7 +186,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         "max-w-20": !open,
       })}
     >
-      <Sidebar {...props} className="min-w-20" collapsible="icon">
+      <Sidebar className="min-w-20" collapsible="icon">
         <SidebarContent
           className={cn("flex flex-col h-full gap-0 py-5", {
             "items-center": !open,

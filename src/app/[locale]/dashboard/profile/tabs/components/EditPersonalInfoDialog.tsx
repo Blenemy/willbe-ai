@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,14 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useAuth } from "@/hooks/useAuth";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { User } from "@/types/User";
-
-const schema = z.object({
-  firstName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
-  lastName: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
-  email: z.string().min(1, "Required").max(50, "Maximum 50 characters"),
-});
 
 const EditPersonalInfoDialog = ({
   open,
@@ -36,8 +32,25 @@ const EditPersonalInfoDialog = ({
   setOpen: (o: boolean) => void;
   user: User;
 }) => {
+  const t = useTranslations("Authentication");
   const { updateUser } = useAuth({ enableFetch: false });
   const locale = useLocale();
+
+  const schema = z.object({
+    firstName: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(50, t("validation_max")),
+    lastName: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(50, t("validation_max")),
+    email: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(50, t("validation_max")),
+  });
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -56,7 +69,7 @@ const EditPersonalInfoDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Personal Information</DialogTitle>
+          <DialogTitle>{t("personal_info")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -66,11 +79,12 @@ const EditPersonalInfoDialog = ({
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">First name</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("firstname")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="First name" {...field} />
+                    <Input placeholder={t("firstname")} {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -81,11 +95,12 @@ const EditPersonalInfoDialog = ({
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Last name</FormLabel>
+                  <FormLabel className="font-semibold">
+                    {t("lastname")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Last name" {...field} />
+                    <Input placeholder={t("lastname")} {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -96,11 +111,10 @@ const EditPersonalInfoDialog = ({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Email</FormLabel>
+                  <FormLabel className="font-semibold">{t("Email")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} />
+                    <Input placeholder={t("enter_email")} {...field} />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
@@ -112,9 +126,9 @@ const EditPersonalInfoDialog = ({
                 variant="outline"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
-              <Button type="submit">Save</Button>
+              <Button type="submit">{t("save")}</Button>
             </div>
           </form>
         </Form>

@@ -11,10 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Save, Trash, Upload, RefreshCw } from "lucide-react";
-import { Users } from "lucide-react";
+import { Save, Trash, Upload, RefreshCw, Users } from "lucide-react";
 import { useLeadFilters } from "@/hooks/useLeadFilters";
 import { LeadScenarios } from "@/types/LeadScenarios";
+import { useTranslations } from "next-intl";
 
 const LeadScenariousPresets = ({
   setNewPreset,
@@ -28,6 +28,8 @@ const LeadScenariousPresets = ({
   setActiveStep: Dispatch<SetStateAction<number>>;
   leadScenarioById: LeadScenarios | undefined;
 }) => {
+  const t = useTranslations("leadScenarioPreset");
+
   const { leadFiltersTableData, deleteLeadFilter } = useLeadFilters({
     enableFetch: true,
   });
@@ -38,27 +40,25 @@ const LeadScenariousPresets = ({
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">
-        Save/select lead scenario filters
-      </h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
 
       <div className="flex gap-3 mb-4">
         <Input
-          placeholder="Include scenario filter name..."
+          placeholder={t("inputPlaceholder")}
           value={newPreset}
           onChange={(e) => setNewPreset(e.target.value)}
           className="w-full"
         />
         <Button className="flex items-center gap-2" type="submit">
-          <Save size={16} /> Save
+          <Save size={16} /> {t("save")}
         </Button>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Scenario filter name</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("table.name")}</TableHead>
+            <TableHead className="text-right">{t("table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -105,7 +105,7 @@ const LeadScenariousPresets = ({
           type="button"
           onClick={() => setActiveStep((prev) => prev + 1)}
         >
-          <Users size={16} /> Search leads
+          <Users size={16} /> {t("actions.search")}
         </Button>
       </div>
     </div>

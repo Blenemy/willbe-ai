@@ -31,17 +31,17 @@ import {
 } from "@/components/ui/dialog";
 import { LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 5;
 
 const LeadScenariosPage = () => {
+  const t = useTranslations("leadScenarios");
+
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { leadScenariousTableData = [], deleteLeadScenarious } =
-    useLeadScenarios({
-      enableFetch: true,
-    });
+    useLeadScenarios({ enableFetch: true });
 
   const locale = useLocale();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -84,25 +84,24 @@ const LeadScenariosPage = () => {
       `/${locale}/dashboard/lead-generation/create-lead-scenarios`,
       window.location.origin
     );
-
     router.replace(newUrl.toString());
   };
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Lead Scenarios</h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
       <div className="flex justify-end mb-4">
-        <Button onClick={handleAddScenario}>Add New Scenario</Button>
+        <Button onClick={handleAddScenario}>{t("addButton")}</Button>
       </div>
       <Table>
-        <TableCaption>A list of lead scenarios</TableCaption>
+        <TableCaption>{t("tableCaption")}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>Scenario Name</TableHead>
-            <TableHead>Scenario Status</TableHead>
-            <TableHead>Created By</TableHead>
-            <TableHead>Created Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("table.name")}</TableHead>
+            <TableHead>{t("table.status")}</TableHead>
+            <TableHead>{t("table.createdBy")}</TableHead>
+            <TableHead>{t("table.createdDate")}</TableHead>
+            <TableHead className="text-right">{t("table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -110,7 +109,7 @@ const LeadScenariosPage = () => {
             <TableRow key={scenario.id}>
               <TableCell>{scenario.name}</TableCell>
               <TableCell>
-                <Badge variant={"secondary"}>{scenario.status}</Badge>
+                <Badge variant="secondary">{scenario.status}</Badge>
               </TableCell>
               <TableCell>
                 {scenario.user.firstName + " " + scenario.user.lastName}
@@ -171,15 +170,15 @@ const LeadScenariosPage = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t("dialog.title")}</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this scenario?</p>
+          <p>{t("dialog.description")}</p>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              {t("dialog.cancel")}
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete
+              {t("dialog.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
