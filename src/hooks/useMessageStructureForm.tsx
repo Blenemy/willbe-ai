@@ -88,7 +88,7 @@ export const useMessageStructureForm = (editingId?: string) => {
       form.setValue("maxWords", String(fetchedStructure.wordsLimit));
       form.setValue("subjectType", fetchedStructure.subjectType || "");
     }
-  }, [editingId, fetchedStructure]);
+  }, [editingId, fetchedStructure, form]);
 
   const updateMessageStructure = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
