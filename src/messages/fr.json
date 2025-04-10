@@ -1131,5 +1131,203 @@
       "delete": "Supprimer"
     },
     "generateScenario": "Générer un scénario de prospects"
+  },
+  "leadScenarios": {
+    "title": "Scénarios de prospects",
+    "addButton": "Ajouter un nouveau scénario",
+    "tableCaption": "Une liste de scénarios de prospects",
+    "table": {
+      "name": "Nom du scénario",
+      "status": "Statut du scénario",
+      "createdBy": "Créé par",
+      "createdDate": "Date de création",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "title": "Confirmer la suppression",
+      "description": "Êtes-vous sûr de vouloir supprimer ce scénario ?",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    }
+  },
+  "leadProfileForm": {
+    "title": "Créer des scénarios de leads",
+    "steps": [
+      "Recherche de leads",
+      "Sélection de leads",
+      "Enregistrement des leads"
+    ],
+    "label": "Nom du scénario",
+    "placeholder": "Nom du scénario",
+    "create": "Créer un scénario",
+    "update": "Mettre à jour le scénario",
+    "basicData": "🗃️ Données de base",
+    "name": "🧑 Nom",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "language": "💬 Langue",
+    "languagePlaceholder": "Sélectionnez les langues du profil",
+    "profileSection": "👔 Profil professionnel",
+    "jobTitle": {
+      "label": "🔨 Poste actuel",
+      "description": "Cibler des personnes occupant un poste ou un rôle spécifique.",
+      "placeholder": "Saisir le poste"
+    },
+    "pastJobTitle": {
+      "label": "🕰️ 🔨 Ancien poste",
+      "description": "Cibler des personnes selon leurs expériences professionnelles passées.",
+      "placeholder": "Rechercher par ancien poste..."
+    },
+    "jobTenure": {
+      "label": "⏳🔨 Ancienneté au poste",
+      "description": "Trouver des personnes en fonction de leur durée dans le poste actuel.",
+      "from": "Depuis (en années)",
+      "to": "Jusqu'à (en années)"
+    },
+    "department": {
+      "label": "💼 Département",
+      "description": "Personnes travaillant dans des services spécifiques d'une entreprise.",
+      "placeholder": "Rechercher par département..."
+    },
+    "seniority": {
+      "label": "🧓 Ancienneté",
+      "include": {
+        "description": "Cibler les personnes à inclure selon leur niveau de responsabilité.",
+        "placeholder": "Sélectionner les niveaux à inclure"
+      },
+      "exclude": {
+        "description": "Cibler les personnes à exclure selon leur niveau de responsabilité.",
+        "placeholder": "Sélectionner les niveaux à exclure"
+      }
+    },
+    "experience": {
+      "label": "⏳ Expérience professionnelle totale",
+      "description": "Trouver des personnes avec un certain nombre d'années d'expérience globale.",
+      "from": "Depuis (en années)",
+      "to": "Jusqu'à (en années)"
+    },
+    "pastCompany": {
+      "label": "🕰️🏢 Ancienne entreprise",
+      "description": "Cibler des personnes ayant travaillé dans des entreprises spécifiques.",
+      "placeholder": "Rechercher par nom d'entreprise..."
+    },
+    "companyLocation": {
+      "label": "🏢📍 Localisation de l’entreprise",
+      "description": "Personnes travaillant dans des entreprises situées dans des zones géographiques précises.",
+      "placeholder": "Rechercher par localisation"
+    },
+    "industry": {
+      "label": "🏭 Secteur d'activité",
+      "description": "Personnes travaillant dans des secteurs spécifiques.",
+      "placeholder": "Rechercher par secteur..."
+    },
+    "companyHeadcount": {
+      "label": "👥 Taille de l’entreprise",
+      "description": "Personnes en fonction de la taille de leur entreprise.",
+      "from": "Depuis (nombre d’employés)",
+      "to": "Jusqu’à (nombre d’employés)"
+    },
+    "companyTenure": {
+      "label": "⏳🏢 Ancienneté dans l’entreprise",
+      "description": "Trouver des personnes selon leur ancienneté dans l’entreprise actuelle.",
+      "from": "Depuis (en années)",
+      "to": "Jusqu’à (en années)"
+    },
+    "companyType": {
+      "label": "🏢🛠️ Type d’entreprise",
+      "description": "Personnes travaillant dans des types d’entreprises spécifiques (cotées, privées, ONG…).",
+      "placeholder": "Sélectionner des types d’entreprise"
+    },
+    "linkedinActivity": {
+      "title": "📢 Activité LinkedIn",
+      "posted": "A publié sur LinkedIn",
+      "mentioned": "Mentionné dans les actualités",
+      "viewedProfile": "A récemment consulté votre profil"
+    },
+    "connections": {
+      "title": "🕸️ Connexions",
+      "followingCompany": "🔗 Suit votre entreprise",
+      "pastColleague": "🕰️🙋‍♀️ Ancien collègue",
+      "sharedExperiences": "📷 Expériences partagées",
+      "changedJobs": "🔄💼 A changé d'emploi",
+      "networkDistance": {
+        "label": "🌍 Distance dans le réseau",
+        "description": "Trouvez des personnes dans votre réseau étendu, y compris les connexions de 1er, 2e et 3e degré.",
+        "placeholder": "Sélectionner un degré",
+        "selectLabel": "Niveau de connexion"
+      }
+    },
+    "otherFilters": {
+      "title": "🎛️ Autres filtres",
+      "keywords": {
+        "label": "🏷️ Mots-clés",
+        "description": "Élargissez votre recherche avec des termes pertinents figurant dans les profils.",
+        "placeholder": "Inclure des mots-clés"
+      },
+      "persona": {
+        "label": "👤 Persona",
+        "description": "Trouvez les prospects idéaux en fonction de personas prédéfinis correspondant à votre public cible.",
+        "placeholder": "Rechercher par persona"
+      },
+      "location": {
+        "label": "📍 Localisation",
+        "description": "Trouvez des personnes selon leur localisation géographique actuelle.",
+        "placeholder": "Rechercher par localisation..."
+      },
+      "school": {
+        "label": "🏫 École",
+        "description": "Recherchez des personnes selon leur parcours académique et les établissements fréquentés.",
+        "placeholder": "Rechercher par école..."
+      }
+    }
+  },
+  "leadScenarioPreset": {
+    "title": "Enregistrer/sélectionner des filtres de scénario de leads",
+    "inputPlaceholder": "Saisir le nom du filtre...",
+    "save": "Enregistrer",
+    "table": {
+      "name": "Nom du filtre",
+      "actions": "Actions"
+    },
+    "actions": {
+      "saveScenario": "Enregistrer/sélectionner des filtres de scénario",
+      "search": "Rechercher des leads"
+    }
+  },
+  "leadTable": {
+    "title": "Liste des Leads",
+    "itemsPerPage": "Éléments par page",
+    "searchPlaceholder": "Rechercher par prénom...",
+    "table": {
+      "avatar": "Avatar",
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "jobTitle": "Poste",
+      "location": "Localisation",
+      "company": "Entreprise",
+      "linkedin": "LinkedIn"
+    },
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant",
+      "pageInfo": "Page {current} sur {total}"
+    },
+    "submit": "Enregistrer les leads sélectionnés"
+  },
+  "leadsSaved": {
+    "title": "Leads Enregistrés",
+    "table": {
+      "avatar": "Avatar",
+      "fullName": "Nom Complet",
+      "headline": "Titre",
+      "industry": "Secteur",
+      "location": "Localisation",
+      "company": "Entreprise",
+      "linkedin": "LinkedIn",
+      "actions": "Actions",
+      "open": "Ouvrir",
+      "delete": "Supprimer"
+    },
+    "generate": "Générer un scénario de messages"
   }
 }

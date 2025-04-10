@@ -47,6 +47,7 @@ import {
 import LeadTable from "./components/LeadTable/LeadTable";
 import { leadScenariosFiltersSchema } from "@/schemas/leadScenariosFiltersSchema";
 import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
+import { useTranslations } from "next-intl";
 
 export type LeadScenariosFormType = z.infer<typeof leadScenariosFiltersSchema>;
 
@@ -61,6 +62,7 @@ const CreateLeadScenarios = () => {
   );
   const { data } = useDropdownOptionsQuery();
   const { data: languages } = useLanguagesQuery();
+  const t = useTranslations("leadProfileForm");
 
   const seniorityList = useMemo(() => {
     if (!data) return [];
@@ -259,12 +261,12 @@ const CreateLeadScenarios = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Create Lead Scenarios</h2>
+      <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
 
       <CustomStepper
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        steps={["Lead search", "Lead select", "Lead save"]}
+        steps={[t("steps.0"), t("steps.1"), t("steps.2")]}
       />
 
       <ScenarioNameForm />
@@ -277,22 +279,22 @@ const CreateLeadScenarios = () => {
                 <div className="flex gap-6">
                   <div className="flex flex-col gap-8 basis-1/2">
                     <div className="flex flex-col gap-4">
-                      <div>🗃️ Basic data</div>
-                      <FormAccordion label="🧑 Name">
+                      <div>{t("basicData")}</div>
+                      <FormAccordion label={t("name")}>
                         <LeadFormInput
                           form={form}
                           name="first_name"
-                          placeholder="First name"
+                          placeholder={t("firstName")}
                         />
                         <LeadFormInput
                           form={form}
                           name="last_name"
-                          placeholder="Last name"
+                          placeholder={t("lastName")}
                         />
                       </FormAccordion>
 
                       {languagesList?.length > 0 && (
-                        <FormAccordion label=" 💬 Language">
+                        <FormAccordion label={t("language")}>
                           <FormField
                             control={form.control}
                             name="language"
@@ -301,18 +303,15 @@ const CreateLeadScenarios = () => {
                                 <FormControl>
                                   <MultiSelect
                                     options={languagesList}
-                                    onValueChange={(value) =>
-                                      field.onChange(value)
-                                    }
+                                    onValueChange={field.onChange}
                                     defaultValue={field.value || []}
-                                    placeholder="Select profile languages"
+                                    placeholder={t("languagePlaceholder")}
                                     variant="secondary"
                                     className="bg-white hover:bg-white"
                                     animation={2}
                                     maxCount={3}
                                   />
                                 </FormControl>
-
                                 <FormMessage />
                               </FormItem>
                             )}
@@ -322,39 +321,36 @@ const CreateLeadScenarios = () => {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                      <h4 className="">👔 Professional profile</h4>
+                      <h4>{t("profileSection")}</h4>
                       <div className="flex flex-col gap-4">
-                        <FormAccordion label="🔨 Job title">
+                        <FormAccordion label={t("jobTitle.label")}>
                           <FormInputWithSearchMultiSelect
-                            label="Target individuals holding a specific position
-                                  or role."
+                            label={t("jobTitle.description")}
                             form={form}
                             searchName="job_title"
-                            placeholder="Enter job title"
+                            placeholder={t("jobTitle.placeholder")}
                             searchType="JOB_TITLE"
                             includeName="job_title_include"
                             excludeName="job_title_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label="🕰️ 🔨 Past job title">
+                        <FormAccordion label={t("pastJobTitle.label")}>
                           <FormInputWithSearchMultiSelect
-                            label="Search for individuals based on their previous
-                                  work experience."
+                            label={t("pastJobTitle.description")}
                             form={form}
                             searchName="past_job_title"
-                            placeholder="Search by past job title..."
+                            placeholder={t("pastJobTitle.placeholder")}
                             searchType="JOB_TITLE"
                             includeName="past_job_title_include"
                             excludeName="past_job_title_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label=" ⏳🔨 Tenure at job title">
+                        <FormAccordion label={t("jobTenure.label")}>
                           <div className="flex gap-2 flex-col">
                             <h4>
-                              Find people based on how long they&apos;ve been in
-                              their current role.
+                              <h4>{t("jobTenure.description")}</h4>
                             </h4>
                             <div className="flex flex-col gap-3">
                               <FormField
@@ -368,7 +364,9 @@ const CreateLeadScenarios = () => {
                                         defaultValue={field.value}
                                       >
                                         <SelectTrigger>
-                                          <SelectValue placeholder="Tenure at Job Title (From)" />
+                                          <SelectValue
+                                            placeholder={t("jobTenure.from")}
+                                          />
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -402,7 +400,9 @@ const CreateLeadScenarios = () => {
                                         defaultValue={field.value}
                                       >
                                         <SelectTrigger>
-                                          <SelectValue placeholder="Tenure at Job Title (To)" />
+                                          <SelectValue
+                                            placeholder={t("jobTenure.to")}
+                                          />
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -429,27 +429,22 @@ const CreateLeadScenarios = () => {
                           </div>
                         </FormAccordion>
 
-                        <FormAccordion label="💼 Department">
+                        <FormAccordion label={t("department.label")}>
                           <FormInputWithSearchMultiSelect
-                            label="Target individuals working in specific areas
-                                  or divisions within a company."
+                            label={t("department.description")}
                             form={form}
                             searchName="department"
-                            placeholder="Search by job department..."
+                            placeholder={t("department.placeholder")}
                             searchType="DEPARTMENT"
                             includeName="department_include"
                             excludeName="department_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label="🧓 Seniority">
+                        <FormAccordion label={t("seniority.label")}>
                           <div className="flex flex-col gap-4">
                             <div className="flex gap-2 flex-col">
-                              <h4>
-                                Find people based on their level of
-                                responsibility and experience within their
-                                company to include.
-                              </h4>
+                              <h4>{t("seniority.include.description")}</h4>
                               <div className="flex gap-2">
                                 <FormField
                                   control={form.control}
@@ -463,7 +458,9 @@ const CreateLeadScenarios = () => {
                                             field.onChange(value)
                                           }
                                           defaultValue={field.value || []}
-                                          placeholder="Select seniorities to include"
+                                          placeholder={t(
+                                            "seniority.include.placeholder"
+                                          )}
                                           variant="secondary"
                                           className="bg-white hover:bg-white"
                                           animation={2}
@@ -477,11 +474,7 @@ const CreateLeadScenarios = () => {
                               </div>
                             </div>
                             <div className="flex gap-2 flex-col">
-                              <h4>
-                                Find people based on their level of
-                                responsibility and experience within their
-                                company to exclude.
-                              </h4>
+                              <h4>{t("seniority.exclude.description")}</h4>
                               <div className="flex gap-2">
                                 <FormField
                                   control={form.control}
@@ -495,7 +488,9 @@ const CreateLeadScenarios = () => {
                                             field.onChange(value)
                                           }
                                           defaultValue={field.value || []}
-                                          placeholder="Select seniorities to exclude"
+                                          placeholder={t(
+                                            "seniority.exclude.placeholder"
+                                          )}
                                           variant="secondary"
                                           className="bg-white hover:bg-white"
                                           animation={2}
@@ -514,14 +509,11 @@ const CreateLeadScenarios = () => {
                         <Accordion type="single" collapsible>
                           <AccordionItem value="name" className="bg-slate-200">
                             <AccordionTrigger className="p-3">
-                              ⏳ Total years of experience
+                              {t("experience.label")}
                             </AccordionTrigger>
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
-                                <h4>
-                                  Find individuals with a specific amount of
-                                  overall professional experience.
-                                </h4>
+                                <h4>{t("experience.description")}</h4>
                                 <div className="flex flex-col gap-3">
                                   <FormField
                                     control={form.control}
@@ -534,7 +526,11 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="From (in years)" />
+                                              <SelectValue
+                                                placeholder={t(
+                                                  "experience.from"
+                                                )}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -568,7 +564,9 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="To (in years)" />
+                                              <SelectValue
+                                                placeholder={t("experience.to")}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -597,39 +595,36 @@ const CreateLeadScenarios = () => {
                           </AccordionItem>
                         </Accordion>
 
-                        <FormAccordion label="🕰️🏢 Past company">
+                        <FormAccordion label={t("pastCompany.label")}>
                           <FormInputWithSearchMultiSelect
-                            label="Target individuals who were previously
-                                  employed at specific companies."
+                            label={t("pastCompany.description")}
                             form={form}
                             searchName="past_company"
-                            placeholder="Search by company name..."
+                            placeholder={t("pastCompany.placeholder")}
                             searchType="COMPANY"
                             includeName="past_company_include"
                             excludeName="past_company_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label="🏢📍 Company location">
+                        <FormAccordion label={t("companyLocation.label")}>
                           <FormInputWithSearchMultiSelect
-                            label=" Target individuals working at companies
-                                  located in specific geographical areas."
+                            label={t("companyLocation.description")}
                             form={form}
                             searchName="company_location"
-                            placeholder="Search by location"
+                            placeholder={t("companyLocation.placeholder")}
                             searchType="LOCATION"
                             includeName="company_location_include"
                             excludeName="company_location_exclude"
                           />
                         </FormAccordion>
 
-                        <FormAccordion label=" 🏭 Industry">
+                        <FormAccordion label={t("industry.label")}>
                           <FormInputWithSearchMultiSelect
-                            label="Find individuals working in specific sectors
-                                  or fields."
+                            label={t("industry.description")}
                             form={form}
                             searchName="company_industry"
-                            placeholder="Search by industry..."
+                            placeholder={t("industry.placeholder")}
                             searchType="INDUSTRY"
                             includeName="company_industry_include"
                             excludeName="company_industry_exclude"
@@ -639,14 +634,11 @@ const CreateLeadScenarios = () => {
                         <Accordion type="single" collapsible>
                           <AccordionItem value="name" className="bg-slate-200">
                             <AccordionTrigger className="p-3">
-                              👥 Company headcount
+                              {t("companyHeadcount.label")}
                             </AccordionTrigger>
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
-                                <h4>
-                                  Find individuals with a specific amount of
-                                  overall professional experience.
-                                </h4>
+                                <h4>{t("companyHeadcount.description")}</h4>
                                 <div className="flex flex-col gap-3">
                                   <FormField
                                     control={form.control}
@@ -659,7 +651,11 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="From (in no. empoyees)" />
+                                              <SelectValue
+                                                placeholder={t(
+                                                  "companyHeadcount.from"
+                                                )}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -693,7 +689,11 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="To (in no. empoyees))" />
+                                              <SelectValue
+                                                placeholder={t(
+                                                  "companyHeadcount.to"
+                                                )}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -725,14 +725,11 @@ const CreateLeadScenarios = () => {
                         <Accordion type="single" collapsible>
                           <AccordionItem value="name" className="bg-slate-200">
                             <AccordionTrigger className="p-3">
-                              ⏳🏢 Tenure at company
+                              {t("companyTenure.label")}
                             </AccordionTrigger>
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
-                                <h4>
-                                  Find people based on how long they&apos;ve
-                                  been working at their current company.
-                                </h4>
+                                <h4>{t("companyTenure.description")}</h4>
                                 <div className="flex flex-col gap-3">
                                   <FormField
                                     control={form.control}
@@ -745,7 +742,11 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="From (in years)" />
+                                              <SelectValue
+                                                placeholder={t(
+                                                  "companyTenure.from"
+                                                )}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -779,7 +780,11 @@ const CreateLeadScenarios = () => {
                                             defaultValue={field.value}
                                           >
                                             <SelectTrigger>
-                                              <SelectValue placeholder="To (in years))" />
+                                              <SelectValue
+                                                placeholder={t(
+                                                  "companyTenure.to"
+                                                )}
+                                              />
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -856,10 +861,10 @@ const CreateLeadScenarios = () => {
                   <div className="flex flex-col gap-8 basis-1/2">
                     <div>
                       <div className="flex flex-col gap-4">
-                        <h4>📢 LinkedIn activity</h4>
+                        <h4>{t("linkedinActivity.title")}</h4>
                         <div className="flex flex-col gap-3">
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>Posted on LinkedIn</span>
+                            <span>{t("linkedinActivity.posted")}</span>
                             <FormField
                               control={form.control}
                               name="posted_on_linkedin"
@@ -877,7 +882,7 @@ const CreateLeadScenarios = () => {
                             />
                           </div>
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>Mentioned in News</span>
+                            <span>{t("linkedinActivity.mentioned")}</span>
                             <FormField
                               control={form.control}
                               name="mentioned_in_news"
@@ -895,7 +900,7 @@ const CreateLeadScenarios = () => {
                             />
                           </div>
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>Viewed Your Profile Recently</span>
+                            <span>{t("linkedinActivity.viewedProfile")}</span>
                             <FormField
                               control={form.control}
                               name="viewed_your_profile"
@@ -918,10 +923,10 @@ const CreateLeadScenarios = () => {
 
                     <div>
                       <div className="flex flex-col gap-4">
-                        <h4>🕸️ Connections</h4>
+                        <h4>{t("connections.title")}</h4>
                         <div className="flex flex-col gap-3">
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>🔗 Following your company</span>
+                            <span>{t("connections.followingCompany")}</span>
                             <FormField
                               control={form.control}
                               name="following_your_company"
@@ -939,7 +944,7 @@ const CreateLeadScenarios = () => {
                             />
                           </div>
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>🕰️🙋‍♀️ Past colleague</span>
+                            <span>{t("connections.pastColleague")}</span>
                             <FormField
                               control={form.control}
                               name="past_colleague"
@@ -957,7 +962,7 @@ const CreateLeadScenarios = () => {
                             />
                           </div>
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>📷 Shared experiences</span>
+                            <span>{t("connections.sharedExperiences")}</span>
                             <FormField
                               control={form.control}
                               name="shared_experiences"
@@ -975,7 +980,7 @@ const CreateLeadScenarios = () => {
                             />
                           </div>
                           <div className="flex justify-between items-center bg-slate-200 p-3">
-                            <span>🔄💼 Changed jobs</span>
+                            <span>{t("connections.changedJobs")}</span>
                             <FormField
                               control={form.control}
                               name="changed_jobs"
@@ -998,14 +1003,14 @@ const CreateLeadScenarios = () => {
                               className="bg-slate-200"
                             >
                               <AccordionTrigger className="p-3">
-                                🌍 Network distance
+                                {t("connections.networkDistance.label")}
                               </AccordionTrigger>
                               <AccordionContent className="p-3">
                                 <div className="flex gap-2 flex-col">
                                   <h4>
-                                    Find people within your extended network,
-                                    including 1st, 2nd, and 3rd-degree
-                                    connections.
+                                    {t(
+                                      "connections.networkDistance.description"
+                                    )}
                                   </h4>
                                   <div className="flex gap-2">
                                     <FormField
@@ -1019,12 +1024,18 @@ const CreateLeadScenarios = () => {
                                               defaultValue={field.value}
                                             >
                                               <SelectTrigger>
-                                                <SelectValue placeholder="Select a degree" />
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "connections.networkDistance.placeholder"
+                                                  )}
+                                                />
                                               </SelectTrigger>
                                               <SelectContent>
                                                 <SelectGroup>
                                                   <SelectLabel>
-                                                    Connection degree
+                                                    {t(
+                                                      "connections.networkDistance.selectLabel"
+                                                    )}
                                                   </SelectLabel>
                                                   {data.networkDistances.map(
                                                     ({
@@ -1061,7 +1072,7 @@ const CreateLeadScenarios = () => {
 
                     <div>
                       <div className="flex flex-col gap-4">
-                        <h4>🎛️ Other filters</h4>
+                        <h4>{t("otherFilters.title")}</h4>
                         <div className="flex flex-col gap-3">
                           <Accordion type="single" collapsible>
                             <AccordionItem
@@ -1069,13 +1080,12 @@ const CreateLeadScenarios = () => {
                               className="bg-slate-200"
                             >
                               <AccordionTrigger className="p-3">
-                                🏷️ Keywords
+                                {t("otherFilters.keywords.label")}
                               </AccordionTrigger>
                               <AccordionContent className="p-3">
                                 <div className="flex gap-2 flex-col">
                                   <h4>
-                                    Broaden your search using relevant terms
-                                    that appear in profiles.
+                                    {t("otherFilters.keywords.description")}
                                   </h4>
                                   <div className="flex gap-2">
                                     <FormField
@@ -1087,7 +1097,9 @@ const CreateLeadScenarios = () => {
                                             <Input
                                               className="mb-3"
                                               {...field}
-                                              placeholder="Include keywords"
+                                              placeholder={t(
+                                                "otherFilters.keywords.placeholder"
+                                              )}
                                             />
                                           </FormControl>
 
@@ -1106,14 +1118,12 @@ const CreateLeadScenarios = () => {
                               className="bg-slate-200"
                             >
                               <AccordionTrigger className="p-3">
-                                👤 Persona
+                                {t("otherFilters.persona.label")}
                               </AccordionTrigger>
                               <AccordionContent className="p-3">
                                 <div className="flex gap-2 flex-col">
                                   <h4>
-                                    Find the ideal prospects based on predefined
-                                    buyer personas aligning with your target
-                                    audience.
+                                    {t("otherFilters.persona.description")}
                                   </h4>
                                   <div className="flex gap-2">
                                     <FormField
@@ -1125,7 +1135,9 @@ const CreateLeadScenarios = () => {
                                             <Input
                                               className="mb-3"
                                               {...field}
-                                              placeholder="Search by persona"
+                                              placeholder={t(
+                                                "otherFilters.persona.placeholder"
+                                              )}
                                             />
                                           </FormControl>
 
@@ -1138,25 +1150,27 @@ const CreateLeadScenarios = () => {
                               </AccordionContent>
                             </AccordionItem>
                           </Accordion>
-                          <FormAccordion label="📍 Location">
+                          <FormAccordion
+                            label={t("otherFilters.location.label")}
+                          >
                             <FormInputWithSearchMultiSelect
-                              label="Find individuals based on their current
-                              geographical location."
+                              label={t("otherFilters.location.description")}
                               form={form}
                               searchName="location"
-                              placeholder="Search by location..."
+                              placeholder={t(
+                                "otherFilters.location.placeholder"
+                              )}
                               searchType="LOCATION"
                               includeName="location_include"
                               excludeName="location_exclude"
                             />
                           </FormAccordion>
-                          <FormAccordion label="🏫 School">
+                          <FormAccordion label={t("otherFilters.school.label")}>
                             <FormInputWithSearchMultiSelect
-                              label="Search for individuals based on their educational
-                              background and institutions attended."
+                              label={t("otherFilters.school.description")}
                               form={form}
                               searchName="school"
-                              placeholder="Search by school..."
+                              placeholder={t("otherFilters.school.placeholder")}
                               searchType="LOCATION"
                               includeName="school_include"
                               excludeName="school_exclude"

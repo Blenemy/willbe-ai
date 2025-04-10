@@ -1126,5 +1126,199 @@
       "delete": "Delete"
     },
     "generateScenario": "Generate lead scenario"
+  },
+  "leadScenarios": {
+    "title": "Lead Scenarios",
+    "addButton": "Add New Scenario",
+    "tableCaption": "A list of lead scenarios",
+    "table": {
+      "name": "Scenario Name",
+      "status": "Scenario Status",
+      "createdBy": "Created By",
+      "createdDate": "Created Date",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "title": "Confirm Deletion",
+      "description": "Are you sure you want to delete this scenario?",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  },
+  "leadProfileForm": {
+    "label": "Scenario name",
+    "placeholder": "Scenario name",
+    "create": "Create a scenario",
+    "update": "Update a scenario",
+    "title": "Create Lead Scenarios",
+    "steps": ["Lead search", "Lead select", "Lead save"],
+    "basicData": "🗃️ Basic data",
+    "name": "🧑 Name",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "language": "💬 Language",
+    "languagePlaceholder": "Select profile languages",
+    "profileSection": "👔 Professional profile",
+    "jobTitle": {
+      "label": "🔨 Job title",
+      "description": "Target individuals holding a specific position or role.",
+      "placeholder": "Enter job title"
+    },
+    "pastJobTitle": {
+      "label": "🕰️ 🔨 Past job title",
+      "description": "Search for individuals based on their previous work experience.",
+      "placeholder": "Search by past job title..."
+    },
+    "jobTenure": {
+      "label": "⏳🔨 Tenure at job title",
+      "description": "Find people based on how long they've been in their current role.",
+      "from": "Tenure at Job Title (From)",
+      "to": "Tenure at Job Title (To)"
+    },
+    "department": {
+      "label": "💼 Department",
+      "description": "Target individuals working in specific areas or divisions within a company.",
+      "placeholder": "Search by job department..."
+    },
+    "seniority": {
+      "label": "🧓 Seniority",
+      "include": {
+        "description": "Find people based on their level of responsibility and experience within their company to include.",
+        "placeholder": "Select seniorities to include"
+      },
+      "exclude": {
+        "description": "Find people based on their level of responsibility and experience within their company to exclude.",
+        "placeholder": "Select seniorities to exclude"
+      }
+    },
+    "experience": {
+      "label": "⏳ Total years of experience",
+      "description": "Find individuals with a specific amount of overall professional experience.",
+      "from": "From (in years)",
+      "to": "To (in years)"
+    },
+    "pastCompany": {
+      "label": "🕰️🏢 Past company",
+      "description": "Target individuals who were previously employed at specific companies.",
+      "placeholder": "Search by company name..."
+    },
+    "companyLocation": {
+      "label": "🏢📍 Company location",
+      "description": "Target individuals working at companies located in specific geographical areas.",
+      "placeholder": "Search by location"
+    },
+    "industry": {
+      "label": "🏭 Industry",
+      "description": "Find individuals working in specific sectors or fields.",
+      "placeholder": "Search by industry..."
+    },
+    "companyHeadcount": {
+      "label": "👥 Company headcount",
+      "description": "Find individuals based on company size.",
+      "from": "From (in no. employees)",
+      "to": "To (in no. employees)"
+    },
+    "companyTenure": {
+      "label": "⏳🏢 Tenure at company",
+      "description": "Find people based on how long they've been working at their current company.",
+      "from": "From (in years)",
+      "to": "To (in years)"
+    },
+    "companyType": {
+      "label": "🏢🛠️ Company type",
+      "description": "Find individuals working at specific types of companies (e.g., publicly traded, privately held, non-profit).",
+      "placeholder": "Select company types"
+    },
+    "linkedinActivity": {
+      "title": "📢 LinkedIn activity",
+      "posted": "Posted on LinkedIn",
+      "mentioned": "Mentioned in News",
+      "viewedProfile": "Viewed Your Profile Recently"
+    },
+    "connections": {
+      "title": "🕸️ Connections",
+      "followingCompany": "🔗 Following your company",
+      "pastColleague": "🕰️🙋‍♀️ Past colleague",
+      "sharedExperiences": "📷 Shared experiences",
+      "changedJobs": "🔄💼 Changed jobs",
+      "networkDistance": {
+        "label": "🌍 Network distance",
+        "description": "Find people within your extended network, including 1st, 2nd, and 3rd-degree connections.",
+        "placeholder": "Select a degree",
+        "selectLabel": "Connection degree"
+      }
+    },
+    "otherFilters": {
+      "title": "🎛️ Other filters",
+      "keywords": {
+        "label": "🏷️ Keywords",
+        "description": "Broaden your search using relevant terms that appear in profiles.",
+        "placeholder": "Include keywords"
+      },
+      "persona": {
+        "label": "👤 Persona",
+        "description": "Find the ideal prospects based on predefined buyer personas aligning with your target audience.",
+        "placeholder": "Search by persona"
+      },
+      "location": {
+        "label": "📍 Location",
+        "description": "Find individuals based on their current geographical location.",
+        "placeholder": "Search by location..."
+      },
+      "school": {
+        "label": "🏫 School",
+        "description": "Search for individuals based on their educational background and institutions attended.",
+        "placeholder": "Search by school..."
+      }
+    }
+  },
+  "leadScenarioPreset": {
+    "title": "Save/select lead scenario filters",
+    "inputPlaceholder": "Include scenario filter name...",
+    "save": "Save",
+    "table": {
+      "name": "Scenario filter name",
+      "actions": "Actions"
+    },
+    "actions": {
+      "saveScenario": "Save/select lead scenario filters",
+      "search": "Search leads"
+    }
+  },
+  "leadTable": {
+    "title": "Lead List",
+    "itemsPerPage": "Items per page",
+    "searchPlaceholder": "Search by first name...",
+    "table": {
+      "avatar": "Avatar",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "jobTitle": "Job Title",
+      "location": "Location",
+      "company": "Company",
+      "linkedin": "LinkedIn"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "pageInfo": "Page {current} of {total}"
+    },
+    "submit": "Submit Selected Leads"
+  },
+  "leadsSaved": {
+    "title": "Saved Leads",
+    "table": {
+      "avatar": "Avatar",
+      "fullName": "Full Name",
+      "headline": "Headline",
+      "industry": "Industry",
+      "location": "Location",
+      "company": "Company",
+      "linkedin": "LinkedIn",
+      "actions": "Actions",
+      "open": "Open",
+      "delete": "Delete"
+    },
+    "generate": "Generate message scenario"
   }
 }

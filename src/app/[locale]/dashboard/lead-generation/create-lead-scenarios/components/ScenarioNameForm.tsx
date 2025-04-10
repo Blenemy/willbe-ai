@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLeadScenarios } from "@/hooks/useLeadScenarious";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -20,6 +21,8 @@ const leadScenariosName = z.object({
 });
 
 const ScenarioNameForm = () => {
+  const t = useTranslations("leadProfileForm");
+
   const form = useForm({
     resolver: zodResolver(leadScenariosName),
     defaultValues: {
@@ -62,11 +65,11 @@ const ScenarioNameForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground">
-                Scenario name
+                {t("label")}
               </FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Scenario name"
+                  placeholder={t("placeholder")}
                   className="mb-3"
                   {...field}
                 />
@@ -78,7 +81,7 @@ const ScenarioNameForm = () => {
         />
 
         <Button type="submit" className="max-w-fit">
-          {scenarioId ? "Update" : "Create"} a scenario
+          {scenarioId ? t("update") : t("create")}
         </Button>
       </form>
     </Form>

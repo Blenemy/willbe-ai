@@ -16,8 +16,11 @@ import { useSearchParams } from "next/navigation";
 import { useGenerateLeadScenario } from "@/hooks/useGenerateLeadScenario";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const LeadsSaved = () => {
+  const t = useTranslations("leadsSaved");
+
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId");
   const { savedLeads, deleteLead } = useSavedLeads({
@@ -53,20 +56,20 @@ const LeadsSaved = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-4">
-      <h2 className="text-2xl font-semibold">Saved Leads</h2>
+      <h2 className="text-2xl font-semibold">{t("title")}</h2>
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead></TableHead>
-            <TableHead>Avatar</TableHead>
-            <TableHead>Full Name</TableHead>
-            <TableHead>Headline</TableHead>
-            <TableHead>Industry</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead>LinkedIn</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>{t("table.avatar")}</TableHead>
+            <TableHead>{t("table.fullName")}</TableHead>
+            <TableHead>{t("table.headline")}</TableHead>
+            <TableHead>{t("table.industry")}</TableHead>
+            <TableHead>{t("table.location")}</TableHead>
+            <TableHead>{t("table.company")}</TableHead>
+            <TableHead>{t("table.linkedin")}</TableHead>
+            <TableHead>{t("table.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -127,14 +130,14 @@ const LeadsSaved = () => {
                       size="sm"
                       onClick={() => handleOpenProfile(data.public_profile_url)}
                     >
-                      Open
+                      {t("table.open")}
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(item.id)}
                     >
-                      Delete
+                      {t("table.delete")}
                     </Button>
                   </div>
                 </TableCell>
@@ -146,7 +149,7 @@ const LeadsSaved = () => {
 
       {selectedIds.length > 0 && (
         <Button className="self-start mt-4" onClick={handleGenerateScenario}>
-          Generate message scenario
+          {t("generate")}
         </Button>
       )}
     </div>

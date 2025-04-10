@@ -1130,5 +1130,199 @@
       "delete": "Eliminar"
     },
     "generateScenario": "Generar escenario de clientes"
+  },
+  "leadScenarios": {
+    "title": "Escenarios de clientes potenciales",
+    "addButton": "Agregar nuevo escenario",
+    "tableCaption": "Una lista de escenarios de clientes potenciales",
+    "table": {
+      "name": "Nombre del escenario",
+      "status": "Estado del escenario",
+      "createdBy": "Creado por",
+      "createdDate": "Fecha de creación",
+      "actions": "Acciones"
+    },
+    "dialog": {
+      "title": "Confirmar eliminación",
+      "description": "¿Estás seguro de que deseas eliminar este escenario?",
+      "cancel": "Cancelar",
+      "delete": "Eliminar"
+    }
+  },
+  "leadProfileForm": {
+    "label": "Nombre del escenario",
+    "placeholder": "Nombre del escenario",
+    "create": "Crear un escenario",
+    "update": "Actualizar el escenario",
+    "title": "Crear escenarios de leads",
+    "steps": ["Búsqueda de leads", "Selección de leads", "Guardar leads"],
+    "basicData": "🗃️ Datos básicos",
+    "name": "🧑 Nombre",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "language": "💬 Idioma",
+    "languagePlaceholder": "Selecciona los idiomas del perfil",
+    "profileSection": "👔 Perfil profesional",
+    "jobTitle": {
+      "label": "🔨 Cargo",
+      "description": "Personas con un cargo o rol específico.",
+      "placeholder": "Introduce el cargo"
+    },
+    "pastJobTitle": {
+      "label": "🕰️ 🔨 Cargo anterior",
+      "description": "Personas con experiencia laboral anterior en cargos específicos.",
+      "placeholder": "Buscar por cargo anterior..."
+    },
+    "jobTenure": {
+      "label": "⏳🔨 Antigüedad en el cargo",
+      "description": "Buscar según el tiempo que llevan en su rol actual.",
+      "from": "Desde (años en el cargo)",
+      "to": "Hasta (años en el cargo)"
+    },
+    "department": {
+      "label": "💼 Departamento",
+      "description": "Personas que trabajan en áreas específicas de una empresa.",
+      "placeholder": "Buscar por departamento..."
+    },
+    "seniority": {
+      "label": "🧓 Nivel de responsabilidad",
+      "include": {
+        "description": "Personas con cierto nivel de responsabilidad a incluir.",
+        "placeholder": "Selecciona niveles a incluir"
+      },
+      "exclude": {
+        "description": "Personas con cierto nivel de responsabilidad a excluir.",
+        "placeholder": "Selecciona niveles a excluir"
+      }
+    },
+    "experience": {
+      "label": "⏳ Años totales de experiencia",
+      "description": "Personas con un nivel específico de experiencia profesional.",
+      "from": "Desde (en años)",
+      "to": "Hasta (en años)"
+    },
+    "pastCompany": {
+      "label": "🕰️🏢 Empresa anterior",
+      "description": "Personas que trabajaron previamente en empresas específicas.",
+      "placeholder": "Buscar por nombre de empresa..."
+    },
+    "companyLocation": {
+      "label": "🏢📍 Ubicación de la empresa",
+      "description": "Personas que trabajan en empresas ubicadas en zonas específicas.",
+      "placeholder": "Buscar por ubicación"
+    },
+    "industry": {
+      "label": "🏭 Industria",
+      "description": "Personas que trabajan en sectores específicos.",
+      "placeholder": "Buscar por industria..."
+    },
+    "companyHeadcount": {
+      "label": "👥 Tamaño de la empresa",
+      "description": "Personas según el tamaño de la empresa.",
+      "from": "Desde (n.º empleados)",
+      "to": "Hasta (n.º empleados)"
+    },
+    "companyTenure": {
+      "label": "⏳🏢 Antigüedad en la empresa",
+      "description": "Buscar personas según su antigüedad en la empresa actual.",
+      "from": "Desde (en años)",
+      "to": "Hasta (en años)"
+    },
+    "companyType": {
+      "label": "🏢🛠️ Tipo de empresa",
+      "description": "Personas que trabajan en tipos específicos de empresas (públicas, privadas, sin fines de lucro).",
+      "placeholder": "Selecciona tipos de empresa"
+    },
+    "linkedinActivity": {
+      "title": "📢 Actividad en LinkedIn",
+      "posted": "Publicó en LinkedIn",
+      "mentioned": "Mencionado en las noticias",
+      "viewedProfile": "Vió tu perfil recientemente"
+    },
+    "connections": {
+      "title": "🕸️ Conexiones",
+      "followingCompany": "🔗 Sigue tu empresa",
+      "pastColleague": "🕰️🙋‍♀️ Excolega",
+      "sharedExperiences": "📷 Experiencias compartidas",
+      "changedJobs": "🔄💼 Cambió de empleo",
+      "networkDistance": {
+        "label": "🌍 Distancia en la red",
+        "description": "Encuentra personas dentro de tu red extendida, incluyendo conexiones de primer, segundo y tercer grado.",
+        "placeholder": "Selecciona un grado",
+        "selectLabel": "Grado de conexión"
+      }
+    },
+    "otherFilters": {
+      "title": "🎛️ Otros filtros",
+      "keywords": {
+        "label": "🏷️ Palabras clave",
+        "description": "Amplía tu búsqueda con términos relevantes que aparezcan en los perfiles.",
+        "placeholder": "Incluir palabras clave"
+      },
+      "persona": {
+        "label": "👤 Persona",
+        "description": "Encuentra los prospectos ideales basándote en perfiles de compradores predefinidos.",
+        "placeholder": "Buscar por persona"
+      },
+      "location": {
+        "label": "📍 Ubicación",
+        "description": "Encuentra personas según su ubicación geográfica actual.",
+        "placeholder": "Buscar por ubicación..."
+      },
+      "school": {
+        "label": "🏫 Escuela",
+        "description": "Buscar personas según su formación académica y centros educativos.",
+        "placeholder": "Buscar por escuela..."
+      }
+    }
+  },
+  "leadScenarioPreset": {
+    "title": "Guardar/seleccionar filtros del escenario de leads",
+    "inputPlaceholder": "Introduce el nombre del filtro...",
+    "save": "Guardar",
+    "table": {
+      "name": "Nombre del filtro",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "saveScenario": "Guardar/seleccionar filtros del escenario",
+      "search": "Buscar leads"
+    }
+  },
+  "leadTable": {
+    "title": "Lista de Leads",
+    "itemsPerPage": "Elementos por página",
+    "searchPlaceholder": "Buscar por nombre...",
+    "table": {
+      "avatar": "Avatar",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "jobTitle": "Puesto",
+      "location": "Ubicación",
+      "company": "Empresa",
+      "linkedin": "LinkedIn"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageInfo": "Página {current} de {total}"
+    },
+    "submit": "Guardar leads seleccionados"
+  },
+  "leadsSaved": {
+    "title": "Leads Guardados",
+    "table": {
+      "avatar": "Avatar",
+      "fullName": "Nombre Completo",
+      "headline": "Titular",
+      "industry": "Industria",
+      "location": "Ubicación",
+      "company": "Empresa",
+      "linkedin": "LinkedIn",
+      "actions": "Acciones",
+      "open": "Abrir",
+      "delete": "Eliminar"
+    },
+    "generate": "Generar escenario de mensajes"
   }
 }
