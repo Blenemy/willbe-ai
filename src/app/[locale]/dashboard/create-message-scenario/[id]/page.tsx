@@ -4,7 +4,10 @@ import CustomStepper from "@/components/Stepper/Stepper";
 import { useParams } from "next/navigation";
 import CreateMessageForm from "../components/CreateMessageForm";
 import { useState } from "react";
-import { useMessageScenarioById } from "@/hooks/useMessageScenarios";
+import {
+  useMessageScenarioById,
+  usePostMessageScenarioLeads,
+} from "@/hooks/useMessageScenarios";
 import { EditScenarioTables } from "../components/EditScenariosTables";
 
 const EditMessageScenarioPage = () => {
@@ -14,6 +17,12 @@ const EditMessageScenarioPage = () => {
   const id = params?.id as string;
 
   const { data: scenario } = useMessageScenarioById(id);
+  const { mutate } = usePostMessageScenarioLeads();
+
+  const handleOnImport = async (selectedIds: string[]) => {
+    await mutate({ id, leadsIds: selectedIds });
+    setActiveStep(1);
+  };
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
@@ -28,7 +37,7 @@ const EditMessageScenarioPage = () => {
 
       <CreateMessageForm defaultTitle={scenario?.name} id={id} />
 
-      <EditScenarioTables onImport={() => setActiveStep(1)} />
+      <EditScenarioTables onImport={handleOnImport} />
     </div>
   );
 };

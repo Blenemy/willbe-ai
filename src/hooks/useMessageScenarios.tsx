@@ -74,6 +74,31 @@ export const useCreateMessageScenario = () => {
   });
 };
 
+interface UpdateScenarioPayload extends CreateScenarioPayload {
+  id: string;
+}
+
+export const useUpdateMessageScenario = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: UpdateScenarioPayload) => {
+      const res = await protectedAxiosInstance.patch(
+        `/auth/message-scenarios/${data.id}`,
+        data
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["message-scenarios"] });
+      toast("Message scenario was sucessfully updated");
+    },
+    onError: () => {
+      toast("Failed to update a message scenario");
+    },
+  });
+};
+
 export const useMessageScenarioById = (id?: string) => {
   return useQuery({
     queryKey: ["message-scenario", id],
@@ -84,5 +109,29 @@ export const useMessageScenarioById = (id?: string) => {
       return response.data;
     },
     enabled: !!id,
+  });
+};
+
+interface PostLeadsToMessageScenarios {
+  id: string;
+  leadsIds: string[];
+}
+
+export const usePostMessageScenarioLeads = () => {
+  return useMutation({
+    mutationFn: async (data: PostLeadsToMessageScenarios) => {
+      const payload = { leadsIds: data.leadsIds };
+      const res = await protectedAxiosInstance.post(
+        `/auth/message-scenarios/${data.id}/leads`,
+        payload
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast("Leads was sucessfully added to a message scenario");
+    },
+    onError: () => {
+      toast("Failed to add leads to a message scenario");
+    },
   });
 };

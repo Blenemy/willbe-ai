@@ -31,13 +31,14 @@ export interface AccountScenarioData {
 
 export interface AccountScenario {
   id: string;
-  accountData: {
-    id: string;
-    accountData?: AccountScenarioData;
-    accountScenarioId: string;
-  };
+  accountData:
+    | {
+        id: string;
+        accountScenarioId: string;
+        accountData: AccountScenarioData;
+      }
+    | AccountScenarioData;
 }
-
 export interface LeadPosition {
   role: string;
   company: string;

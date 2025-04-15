@@ -13,7 +13,7 @@ import { AccountsTable } from "./AccountsTable";
 import { LeadsTable } from "./LeadsTable";
 
 interface Props {
-  onImport: () => void;
+  onImport: (selectedIds: string[]) => Promise<void>;
 }
 
 export const EditScenarioTables = ({ onImport }: Props) => {

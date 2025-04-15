@@ -16,15 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
-} from "@/components/ui/pagination";
 import { useState, useMemo } from "react";
 import { LeadScenario } from "@/hooks/useEditScenarioData";
+import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 
 interface Props {
   data: LeadScenario[];
@@ -50,8 +44,6 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
     const start = page * rowsPerPage;
     return filtered.slice(start, start + rowsPerPage);
   }, [filtered, page, rowsPerPage]);
-
-  const totalPages = Math.ceil(filtered.length / rowsPerPage);
 
   const toggleSelection = (id: string) => {
     setSelected(
@@ -121,27 +113,12 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
           </Select>
         </div>
 
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                className={page === 0 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-            <span className="px-2 text-sm">
-              {page + 1} / {totalPages}
-            </span>
-            <PaginationItem>
-              <PaginationNext
-                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                className={
-                  page >= totalPages - 1 ? "pointer-events-none opacity-50" : ""
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          rowsPerPage={rowsPerPage}
+          totalCount={filtered.length}
+        />
       </div>
     </div>
   );

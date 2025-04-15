@@ -8,7 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCreateMessageScenario } from "@/hooks/useMessageScenarios";
+import {
+  useCreateMessageScenario,
+  useUpdateMessageScenario,
+} from "@/hooks/useMessageScenarios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -31,10 +34,15 @@ const CreateMessageForm = ({ defaultTitle, id }: Props) => {
     },
   });
 
-  const { mutate } = useCreateMessageScenario();
+  const { mutate: createMutation } = useCreateMessageScenario();
+  const { mutate: updateMutation } = useUpdateMessageScenario();
 
   const onSubmit = (values: { scenario_title: string }) => {
-    mutate({ name: values.scenario_title });
+    if (id) {
+      updateMutation({ name: values.scenario_title, id });
+    } else {
+      createMutation({ name: values.scenario_title });
+    }
   };
 
   useEffect(() => {
