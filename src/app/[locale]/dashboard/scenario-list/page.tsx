@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, Trash, ChevronDown, ChevronUp, Plus } from "lucide-react";
+import { Eye, Trash, Plus } from "lucide-react";
 import { useState } from "react";
 import {
   DropdownMenu,
@@ -38,6 +38,7 @@ import { useMessageScenarios } from "@/hooks/useMessageScenarios";
 import { useRouter } from "next/navigation";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { useClientPagination } from "@/hooks/useClientPagination";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 const columns = [
   { key: "title", label: "Scenario title" },
@@ -134,7 +135,7 @@ const ScenarioList = () => {
     <div className="px-6 py-10 space-y-6 w-full">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Scenario list</h2>
-        <div>
+        <div className="flex gap-2">
           <Button
             onClick={() => router.push("/dashboard/create-message-scenario")}
           >
@@ -172,7 +173,7 @@ const ScenarioList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Select onValueChange={setStatusFilter}>
+        <Select onValueChange={setStatusFilter} value={statusFilter}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Sort by status" />
           </SelectTrigger>
@@ -189,49 +190,46 @@ const ScenarioList = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
+            <TableHead className="w-[40px]">
               <Checkbox />
             </TableHead>
             {columns.map(
               (col) =>
-                visibleColumns[col.key] && (
-                  <TableHead
-                    key={col.key}
-                    className="cursor-pointer select-none"
-                    onClick={() => handleSort(col.key)}
-                  >
-                    <div className="flex items-center gap-1">
-                      {col.label}
-                      {sortKey === col.key &&
-                        (sortAsc ? (
-                          <ChevronUp className="w-4 h-4" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4" />
-                        ))}
-                    </div>
-                  </TableHead>
-                )
+                visibleColumns[col.key] &&
+                renderHeader(col.label, col.key, sortKey, sortAsc, handleSort)
             )}
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="text-right w-[80px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.slice(0, rowsPerPage).map((scenario) => (
+          {paginated.map((scenario) => (
             <TableRow key={scenario.id}>
-              <TableCell>
+              <TableCell className="w-[40px]">
                 <Checkbox />
               </TableCell>
-              {visibleColumns.title && <TableCell>{scenario.name}</TableCell>}
+              {visibleColumns.title && (
+                <TableCell className="max-w-[200px] break-words">
+                  {scenario.name}
+                </TableCell>
+              )}
               {visibleColumns.leads && (
-                <TableCell>{scenario.leadsInCadence}</TableCell>
+                <TableCell className="max-w-[100px] break-words">
+                  {scenario.leadsInCadence}
+                </TableCell>
               )}
               {visibleColumns.sent && (
-                <TableCell>{scenario.messagesSent || 0}</TableCell>
+                <TableCell className="max-w-[100px] break-words">
+                  {scenario.messagesSent || 0}
+                </TableCell>
               )}
-              {visibleColumns.responseRate && <TableCell>10%</TableCell>}
-              {visibleColumns.meetingRate && <TableCell>10%</TableCell>}
+              {visibleColumns.responseRate && (
+                <TableCell className="max-w-[100px] break-words">10%</TableCell>
+              )}
+              {visibleColumns.meetingRate && (
+                <TableCell className="max-w-[100px] break-words">10%</TableCell>
+              )}
               {visibleColumns.status && (
-                <TableCell>
+                <TableCell className="max-w-[140px]">
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
                       STATUS_STYLES[
@@ -247,32 +245,36 @@ const ScenarioList = () => {
                 </TableCell>
               )}
               {visibleColumns.createdBy && (
-                <TableCell>
+                <TableCell className="max-w-[180px] break-words">
                   {scenario.user.firstName + " " + scenario.user.lastName}
                 </TableCell>
               )}
               {visibleColumns.createdAt && (
-                <TableCell>{scenario.createdAt}</TableCell>
+                <TableCell className="max-w-[180px] break-words">
+                  {scenario.createdAt}
+                </TableCell>
               )}
-              <TableCell className="text-right space-x-2">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() =>
-                    router.push(
-                      `/dashboard/create-message-scenario/${scenario.id}`
-                    )
-                  }
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => openDeleteDialog(scenario.id)}
-                >
-                  <Trash className="w-4 h-4 text-red-500" />
-                </Button>
+              <TableCell className="text-right w-[80px] space-x-2">
+                <div className="flex gap-2">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() =>
+                      router.push(
+                        `/dashboard/create-message-scenario/${scenario.id}`
+                      )
+                    }
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => openDeleteDialog(scenario.id)}
+                  >
+                    <Trash className="w-4 h-4 text-red-500" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
