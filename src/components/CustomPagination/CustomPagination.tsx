@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/pagination";
 
 interface Props {
-  page: number; // zero-based
+  page: number;
   setPage: (page: number) => void;
   rowsPerPage: number;
   totalCount: number;
@@ -23,7 +23,7 @@ export const CustomPagination = ({
   totalCount,
 }: Props) => {
   const totalPages = Math.ceil(totalCount / rowsPerPage);
-  const currentPage = page + 1; // 1-based for display
+  const currentPage = page + 1;
 
   const getPages = (): (number | string)[] => {
     const pages: (number | string)[] = [];
@@ -62,7 +62,9 @@ export const CustomPagination = ({
         <PaginationItem>
           <PaginationPrevious
             onClick={() => setPage(Math.max(page - 1, 0))}
-            className={page === 0 ? "pointer-events-none opacity-50" : ""}
+            className={
+              page === 0 ? "pointer-events-none opacity-50" : "cursor-pointer"
+            }
           />
         </PaginationItem>
 
@@ -91,7 +93,9 @@ export const CustomPagination = ({
           <PaginationNext
             onClick={() => setPage(Math.min(page + 1, totalPages - 1))}
             className={
-              page >= totalPages - 1 ? "pointer-events-none opacity-50" : ""
+              page >= totalPages - 1
+                ? "pointer-events-none opacity-50"
+                : "cursor-pointer"
             }
           />
         </PaginationItem>
