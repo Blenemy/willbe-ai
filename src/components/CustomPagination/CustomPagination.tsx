@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/pagination";
 
 interface Props {
-  page: number;
+  page: number; // zero-based
   setPage: (page: number) => void;
   rowsPerPage: number;
   totalCount: number;
@@ -23,18 +23,35 @@ export const CustomPagination = ({
   totalCount,
 }: Props) => {
   const totalPages = Math.ceil(totalCount / rowsPerPage);
+  const currentPage = page + 1; // 1-based for display
 
-  const getPages = () => {
-    if (totalPages <= 5)
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+  const getPages = (): (number | string)[] => {
+    const pages: (number | string)[] = [];
 
-    const pages = [1];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
 
-    if (page > 2) pages.push("ellipsis-start");
-    if (page > 1 && page < totalPages - 2) pages.push(page + 1);
-    if (page < totalPages - 3) pages.push("ellipsis-end");
+      if (currentPage > 3) {
+        pages.push("ellipsis-start");
+      }
 
-    pages.push(totalPages);
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push("ellipsis-end");
+      }
+
+      pages.push(totalPages);
+    }
 
     return pages;
   };
@@ -51,15 +68,15 @@ export const CustomPagination = ({
 
         {getPages().map((p, i) =>
           typeof p === "string" ? (
-            <PaginationItem key={i}>
+            <PaginationItem key={p + i}>
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={i}>
+            <PaginationItem key={p}>
               <button
                 onClick={() => setPage(p - 1)}
-                className={`px-3 py-1 rounded-md text-sm ${
-                  p - 1 === page
+                className={`px-3 py-1 rounded-md text-sm min-w-[32px] text-center ${
+                  p === currentPage
                     ? "bg-primary text-white"
                     : "hover:bg-muted text-muted-foreground"
                 }`}
