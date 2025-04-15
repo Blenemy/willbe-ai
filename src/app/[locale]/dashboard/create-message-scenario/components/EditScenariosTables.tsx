@@ -29,18 +29,15 @@ export const EditScenarioTables = ({ onImport }: Props) => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (selectedAccounts.length && selectedScenarios.length) {
-        const leads = await fetchLeads({
-          accountsIds: selectedAccounts,
-          leadScenariosIds: selectedScenarios,
-        });
-        setLeads(leads);
-      } else {
-        setLeads([]);
-      }
+      const leads = await fetchLeads({
+        accountsIds: selectedAccounts,
+        leadScenariosIds: selectedScenarios,
+      });
+      setLeads(leads);
     };
+
     fetch();
-  }, [fetchLeads, selectedAccounts, selectedScenarios, activeTab]);
+  }, [fetchLeads, selectedAccounts, selectedScenarios]);
 
   return (
     <div className="space-y-4 mt-6">

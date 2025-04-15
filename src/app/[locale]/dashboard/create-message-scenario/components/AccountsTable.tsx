@@ -86,7 +86,13 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
     return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
   });
 
-  const paginated = sorted.slice(
+  const selectedFirstSorted = [...sorted].sort((a, b) => {
+    const aSelected = selected.includes(a.id);
+    const bSelected = selected.includes(b.id);
+    return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
+  });
+
+  const paginated = selectedFirstSorted.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );

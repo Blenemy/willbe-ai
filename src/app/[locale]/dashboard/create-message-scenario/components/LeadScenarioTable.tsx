@@ -4,9 +4,9 @@ import {
   Table,
   TableHeader,
   TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,31 +19,22 @@ import {
 import { useState, useMemo } from "react";
 import { LeadScenario } from "@/hooks/useEditScenarioData";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 interface Props {
   data: LeadScenario[];
   selected: string[];
   setSelected: (ids: string[]) => void;
 }
+
+type SortKey = "name" | "createdBy" | "createdAt" | "";
+
 export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
-
-  const filtered = useMemo(() => {
-    return data
-      .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
-      .sort((a, b) => {
-        const aSelected = selected.includes(a.id);
-        const bSelected = selected.includes(b.id);
-        return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
-      });
-  }, [data, selected, search]);
-
-  const paginated = useMemo(() => {
-    const start = page * rowsPerPage;
-    return filtered.slice(start, start + rowsPerPage);
-  }, [filtered, page, rowsPerPage]);
+  const [sortKey, setSortKey] = useState<SortKey>("");
+  const [sortAsc, setSortAsc] = useState(true);
 
   const toggleSelection = (id: string) => {
     setSelected(
@@ -53,38 +44,105 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
     );
   };
 
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
+  const filtered = useMemo(() => {
+    return data
+      .filter((s) => s.name.toLowerCase().includes(search.toLowerCase()))
+      .sort((a, b) => {
+        if (sortKey === "name") {
+          return sortAsc
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        }
+        if (sortKey === "createdBy") {
+          const fullNameA = `${a.user.firstName} ${a.user.lastName}`;
+          const fullNameB = `${b.user.firstName} ${b.user.lastName}`;
+          return sortAsc
+            ? fullNameA.localeCompare(fullNameB)
+            : fullNameB.localeCompare(fullNameA);
+        }
+        if (sortKey === "createdAt") {
+          return sortAsc
+            ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+
+        const aSelected = selected.includes(a.id);
+        const bSelected = selected.includes(b.id);
+        return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
+      });
+  }, [data, selected, search, sortKey, sortAsc]);
+
+  const paginated = useMemo(() => {
+    const start = page * rowsPerPage;
+    return filtered.slice(start, start + rowsPerPage);
+  }, [filtered, page, rowsPerPage]);
+
   return (
     <div className="space-y-4">
-      <Input
-        placeholder="Search by scenario title"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="flex justify-between items-center">
+        <Input
+          placeholder="Search by scenario title"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-sm"
+        />
+      </div>
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead />
-            <TableHead>Scenario name</TableHead>
-            <TableHead>Created by</TableHead>
-            <TableHead>Created date</TableHead>
+            <TableHead className="w-[40px]" />
+            {renderHeader(
+              "Scenario name",
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Created by",
+              "createdBy",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Created date",
+              "createdAt",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginated.map((s) => (
             <TableRow key={s.id}>
-              <TableCell>
+              <TableCell className="w-[40px]">
                 <input
                   type="checkbox"
                   checked={selected.includes(s.id)}
                   onChange={() => toggleSelection(s.id)}
                 />
               </TableCell>
-              <TableCell>{s.name}</TableCell>
-              <TableCell>
+              <TableCell className="max-w-[260px] break-words">
+                {s.name}
+              </TableCell>
+              <TableCell className="max-w-[240px] break-words">
                 {s.user.firstName} {s.user.lastName}
               </TableCell>
-              <TableCell>{new Date(s.createdAt).toLocaleString()}</TableCell>
+              <TableCell className="whitespace-nowrap">
+                {new Date(s.createdAt).toLocaleString()}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
