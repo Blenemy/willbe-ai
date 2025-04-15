@@ -123,7 +123,7 @@ export function AppSidebar({
           },
           {
             title: translations.createMessageScenario,
-            url: "/dashboard/messages/create-message-scenario",
+            url: "/dashboard/create-message-scenario",
             allowedRoles: ALL_ROLES,
           },
           {

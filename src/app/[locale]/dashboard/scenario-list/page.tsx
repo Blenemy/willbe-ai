@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Eye, Trash, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import { useState } from "react";
 import {
@@ -35,6 +34,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useMessageScenarios } from "@/hooks/useMessageScenarios";
+import { useRouter } from "next/navigation";
+import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { useClientPagination } from "@/hooks/useClientPagination";
 
 const columns = [
   { key: "title", label: "Scenario title" },
@@ -46,129 +49,6 @@ const columns = [
   { key: "createdBy", label: "Created by" },
   { key: "createdAt", label: "Created date" },
 ] as const;
-
-const mockScenarios = [
-  {
-    id: "1",
-    title: "Marketing",
-    leads: 48,
-    sent: 102,
-    responseRate: 28,
-    meetingRate: 14,
-    status: "in_progress",
-    createdBy: "Wade Warren",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar1.png",
-  },
-  {
-    id: "2",
-    title: "Head of sales",
-    leads: 45,
-    sent: 85,
-    responseRate: 13,
-    meetingRate: 10,
-    status: "done",
-    createdBy: "Jane Cooper",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar2.png",
-  },
-  {
-    id: "3",
-    title: "Bancos España",
-    leads: 57,
-    sent: 80,
-    responseRate: 53,
-    meetingRate: 25,
-    status: "in_progress",
-    createdBy: "Kathryn Murphy",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar3.png",
-  },
-  {
-    id: "4",
-    title: "Sales Development DACH",
-    leads: 32,
-    sent: 64,
-    responseRate: 34,
-    meetingRate: 16,
-    status: "in_progress",
-    createdBy: "Cody Fisher",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar4.png",
-  },
-  {
-    id: "5",
-    title: "Sales Development LATAM",
-    leads: 56,
-    sent: 85,
-    responseRate: 23,
-    meetingRate: 12,
-    status: "done",
-    createdBy: "Annette Black",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar5.png",
-  },
-  {
-    id: "6",
-    title: "Head of Sales (Benelux)",
-    leads: 74,
-    sent: 94,
-    responseRate: 52,
-    meetingRate: 21,
-    status: "done",
-    createdBy: "Jerome Bell",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar6.png",
-  },
-  {
-    id: "7",
-    title: "Directores IT Bancos",
-    leads: 93,
-    sent: 153,
-    responseRate: 24,
-    meetingRate: 9,
-    status: "in_progress",
-    createdBy: "Cameron Williamson",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar7.png",
-  },
-  {
-    id: "8",
-    title: "Compliance Mexico",
-    leads: 45,
-    sent: 63,
-    responseRate: 43,
-    meetingRate: 20,
-    status: "not_started",
-    createdBy: "Dianne Russell",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar8.png",
-  },
-  {
-    id: "9",
-    title: "PME France",
-    leads: 62,
-    sent: 87,
-    responseRate: 13,
-    meetingRate: 6,
-    status: "in_progress",
-    createdBy: "Esther Howard",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar9.png",
-  },
-  {
-    id: "10",
-    title: "CE Consulting",
-    leads: 32,
-    sent: 46,
-    responseRate: 45,
-    meetingRate: 17,
-    status: "not_started",
-    createdBy: "Arlene McCoy",
-    createdAt: "29/3/2025, 17:10",
-    avatar: "/avatar10.png",
-  },
-];
 
 const STATUS_OPTIONS = [
   { value: "all", label: "All statuses" },
@@ -185,16 +65,41 @@ const STATUS_STYLES = {
 
 const ScenarioList = () => {
   const [search, setSearch] = useState("");
+  const router = useRouter();
   const [statusFilter, setStatusFilter] = useState("all");
-  const [sortKey, setSortKey] = useState("");
-  const [sortAsc, setSortAsc] = useState(true);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [scenarios, setScenarios] = useState(mockScenarios);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [scenarioToDelete, setScenarioToDelete] = useState<string | null>(null);
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
     columns.map((col) => [col.key, true])
   );
+
+  const { data = [] } = useMessageScenarios({ name: search });
+  const {
+    paginated,
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    sortKey,
+    setSortKey,
+    sortAsc,
+    setSortAsc,
+    totalCount,
+  } = useClientPagination({
+    data,
+    search,
+    searchField: "name",
+    statusFilter,
+    statusField: "status",
+    sortFieldMap: {
+      title: "name",
+      leads: "leadsInCadence",
+      sent: "messagesSent",
+      status: "status",
+      createdAt: "createdAt",
+      createdBy: "user",
+    },
+  });
 
   const [visibleColumns, setVisibleColumns] = useState(DEFAULT_VISIBLE_COLUMNS);
 
@@ -212,7 +117,6 @@ const ScenarioList = () => {
 
   const confirmDelete = () => {
     if (scenarioToDelete) {
-      setScenarios((prev) => prev.filter((s) => s.id !== scenarioToDelete));
       setIsDeleteDialogOpen(false);
       setScenarioToDelete(null);
     }
@@ -226,22 +130,14 @@ const ScenarioList = () => {
     }
   };
 
-  const filtered = scenarios
-    .filter((s) => s.title.toLowerCase().includes(search.toLowerCase()))
-    .filter((s) => statusFilter === "all" || s.status === statusFilter)
-    .sort((a, b) => {
-      if (!sortKey) return 0;
-      const valA = a[sortKey as keyof typeof a];
-      const valB = b[sortKey as keyof typeof b];
-      return sortAsc ? (valA > valB ? 1 : -1) : valA < valB ? 1 : -1;
-    });
-
   return (
     <div className="px-6 py-10 space-y-6 w-full">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Scenario list</h2>
         <div>
-          <Button>
+          <Button
+            onClick={() => router.push("/dashboard/create-message-scenario")}
+          >
             <Plus className="mr-2 h-4 w-4" />
             Create scenario
           </Button>
@@ -320,20 +216,20 @@ const ScenarioList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filtered.slice(0, rowsPerPage).map((scenario) => (
+          {paginated.slice(0, rowsPerPage).map((scenario) => (
             <TableRow key={scenario.id}>
               <TableCell>
                 <Checkbox />
               </TableCell>
-              {visibleColumns.title && <TableCell>{scenario.title}</TableCell>}
-              {visibleColumns.leads && <TableCell>{scenario.leads}</TableCell>}
-              {visibleColumns.sent && <TableCell>{scenario.sent}</TableCell>}
-              {visibleColumns.responseRate && (
-                <TableCell>{scenario.responseRate}%</TableCell>
+              {visibleColumns.title && <TableCell>{scenario.name}</TableCell>}
+              {visibleColumns.leads && (
+                <TableCell>{scenario.leadsInCadence}</TableCell>
               )}
-              {visibleColumns.meetingRate && (
-                <TableCell>{scenario.meetingRate}%</TableCell>
+              {visibleColumns.sent && (
+                <TableCell>{scenario.messagesSent || 0}</TableCell>
               )}
+              {visibleColumns.responseRate && <TableCell>10%</TableCell>}
+              {visibleColumns.meetingRate && <TableCell>10%</TableCell>}
               {visibleColumns.status && (
                 <TableCell>
                   <span
@@ -351,19 +247,23 @@ const ScenarioList = () => {
                 </TableCell>
               )}
               {visibleColumns.createdBy && (
-                <TableCell className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={scenario.avatar} />
-                    <AvatarFallback>M</AvatarFallback>
-                  </Avatar>
-                  {scenario.createdBy}
+                <TableCell>
+                  {scenario.user.firstName + " " + scenario.user.lastName}
                 </TableCell>
               )}
               {visibleColumns.createdAt && (
                 <TableCell>{scenario.createdAt}</TableCell>
               )}
               <TableCell className="text-right space-x-2">
-                <Button size="icon" variant="ghost">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() =>
+                    router.push(
+                      `/dashboard/create-message-scenario/${scenario.id}`
+                    )
+                  }
+                >
                   <Eye className="w-4 h-4" />
                 </Button>
                 <Button
@@ -379,9 +279,9 @@ const ScenarioList = () => {
         </TableBody>
       </Table>
 
-      <div className="flex items-center justify-between pt-4">
-        <div className="text-sm flex items-center gap-2">
-          Rows per page:
+      <div className="flex items-center justify-between pt-4 flex-1">
+        <div className="text-sm flex gap-2 flex-grow items-center">
+          <p className="min-w-28">Rows per page:</p>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
@@ -395,9 +295,12 @@ const ScenarioList = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className="text-sm text-muted-foreground">
-          Pagination (add later)
-        </div>
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          rowsPerPage={rowsPerPage}
+          totalCount={totalCount}
+        />
       </div>
 
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

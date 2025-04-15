@@ -1,86 +1,88 @@
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-interface APIRequestErrorPayload {
-  error: string;
-  message: string;
-  statusCode: number;
+interface User {
+  firstName: string;
+  lastName: string;
 }
 
-export interface MessageScenario {
+interface Scenario {
   id: string;
-  title: string;
-  leads: number;
-  sent: number;
-  responseRate: number;
-  meetingRate: number;
-  status: "not_started" | "in_progress" | "done";
-  createdBy: string;
+  name: string;
+  status: string;
+  user: User;
+  leadsInCadence: number;
+  messagesSent: number;
   createdAt: string;
-  avatar?: string;
+  updatedAt: string;
 }
 
-export const useMessageScenarios = ({
-  enableFetch = true,
-}: {
-  enableFetch: boolean;
-}) => {
-  const queryClient = useQueryClient();
+interface GetScenariosParams {
+  name?: string;
+  limit?: number;
+  offset?: number;
+}
 
-  const { data: messageScenarios, isLoading } = useQuery<
-    MessageScenario[],
-    AxiosError<APIRequestErrorPayload>
-  >({
-    queryKey: ["message-scenarios"],
+export const useMessageScenarios = (params: GetScenariosParams = {}) => {
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ([_, value]) => value !== undefined && value !== ""
+    )
+  );
+
+  return useQuery({
+    queryKey: ["message-scenarios", cleanParams],
     queryFn: async () => {
-      const res = await protectedAxiosInstance.get("/auth/message-scenarios");
-      return res.data;
+      const response = await protectedAxiosInstance.get<Scenario[]>(
+        "/auth/message-scenarios",
+        {
+          params: cleanParams,
+        }
+      );
+      return response.data;
     },
-    enabled: enableFetch,
-    staleTime: 1000 * 60 * 5,
-    retry: false,
   });
+};
 
-  const createMessageScenario = useMutation<
-    MessageScenario,
-    AxiosError<APIRequestErrorPayload>,
-    Partial<MessageScenario>
-  >({
-    mutationFn: async (newScenario) => {
+interface CreateScenarioPayload {
+  name: string;
+}
+
+export const useCreateMessageScenario = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: async (data: CreateScenarioPayload) => {
       const res = await protectedAxiosInstance.post(
         "/auth/message-scenarios",
-        newScenario
+        data
       );
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["message-scenarios"] });
-      toast.success("Message scenario created successfully");
+      router.push(`/dashboard/create-message-scenario/${data.id}`);
+      toast("Message scenario was sucessfully created");
     },
-    onError: (error) => {
-      toast.error(
-        error.response?.data.message || "Failed to create message scenario"
-      );
+    onError: () => {
+      toast("Failed to create a message scenario");
     },
   });
+};
 
-  // const fetchMessageScenarioById = (id: string) =>
-  //   useQuery<MessageScenario, AxiosError<APIRequestErrorPayload>>({
-  //     queryKey: ["message-scenario", id],
-  //     queryFn: async () => {
-  //       const res = await protectedAxiosInstance.get(`/auth/message-scenarios/${id}`);
-  //       return res.data;
-  //     },
-  //     enabled: !!id,
-  //     retry: false,
-  //   });
-
-  return {
-    messageScenarios,
-    isLoading,
-    createMessageScenario: createMessageScenario.mutate,
-    // fetchMessageScenarioById,
-  };
+export const useMessageScenarioById = (id?: string) => {
+  return useQuery({
+    queryKey: ["message-scenario", id],
+    queryFn: async () => {
+      const response = await protectedAxiosInstance.get<Scenario>(
+        `/auth/message-scenarios/${id}`
+      );
+      return response.data;
+    },
+    enabled: !!id,
+  });
 };
