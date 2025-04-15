@@ -910,7 +910,10 @@
     "Settings": "Paramètres",
     "Company settings": "Paramètres de l'entreprise",
     "Users": "Utilisateurs",
-    "My account": "Mon compte"
+    "My account": "Mon compte",
+    "Scenario list": "Liste des scénarios",
+    "Create message scenario": "Créer un scénario de message",
+    "Create message structures": "Créer des structures de message"
   },
   "MessageStructures": {
     "title": "Structures de Messages",

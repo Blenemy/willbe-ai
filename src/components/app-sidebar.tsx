@@ -37,17 +37,21 @@ import { Skeleton } from "./ui/skeleton";
 import { SidebarTranslations } from "@/hooks/translations/useSidebarTranslations";
 
 const getIcon = (
-  IconComponent: React.ForwardRefExoticComponent<
+  IconComponent?: React.ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
   >,
-  size: number,
-  isActive: boolean
-) => (
-  <IconComponent
-    style={{ width: size, height: size }}
-    className={isActive ? "text-black" : "text-gray-500"}
-  />
-);
+  size: number = 20,
+  isActive: boolean = false
+): React.JSX.Element | null => {
+  if (!IconComponent) return null;
+
+  return (
+    <IconComponent
+      style={{ width: size, height: size }}
+      className={isActive ? "text-black" : "text-gray-500"}
+    />
+  );
+};
 
 export function AppSidebar({
   translations,
@@ -112,9 +116,25 @@ export function AppSidebar({
         url: "#",
         items: [
           {
+            title: translations.scenarioList,
+            url: "/dashboard/scenario-list",
+            icon: List,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.createMessageScenario,
+            url: "/dashboard/create-message-scenario",
+            allowedRoles: ALL_ROLES,
+          },
+          {
             title: translations.messageStructures,
             url: "/dashboard/messages/message-structures",
             icon: Mail,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.createMessageStructures,
+            url: "/dashboard/messages/create-message-structures",
             allowedRoles: ALL_ROLES,
           },
         ],

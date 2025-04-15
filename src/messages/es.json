@@ -909,7 +909,10 @@
     "Settings": "Configuración",
     "Company settings": "Configuración de la empresa",
     "Users": "Usuarios",
-    "My account": "Mi cuenta"
+    "My account": "Mi cuenta",
+    "Scenario list": "Lista de escenarios",
+    "Create message scenario": "Crear escenario de mensaje",
+    "Create message structures": "Crear estructuras de mensaje"
   },
   "MessageStructures": {
     "title": "Estructuras de Mensajes",
