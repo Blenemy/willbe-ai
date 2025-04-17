@@ -2,7 +2,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import ProfileTab from "./tabs/ProfileTab";
 import SecurityTab from "./tabs/SecurityTab";
-import BillingTab from "./tabs/BillingTab";
 import ConnectionsTab from "./tabs/ConnectionsTab";
 import SignatureTab from "./tabs/SignatureTab";
 import { getProfileTranslations } from "@/hooks/translations/getProfileTranslations";
@@ -21,11 +20,11 @@ const ProfilePage = async () => {
       label: translations.tab_security,
       component: <SecurityTab />,
     },
-    {
-      value: "billing",
-      label: translations.tab_billing,
-      component: <BillingTab />,
-    },
+    // {
+    //   value: "billing",
+    //   label: translations.tab_billing,
+    //   component: <BillingTab />,
+    // },
     {
       value: "connections",
       label: translations.tab_connections,
@@ -36,16 +35,16 @@ const ProfilePage = async () => {
       label: translations.tab_signature,
       component: <SignatureTab />,
     },
-    {
-      value: "notifications",
-      label: "Notifications",
-      component: <div>Notifications Content</div>,
-    },
-    {
-      value: "data export",
-      label: "Data export",
-      component: <div>Data Export Content</div>,
-    },
+    // {
+    //   value: "notifications",
+    //   label: "Notifications",
+    //   component: <div>Notifications Content</div>,
+    // },
+    // {
+    //   value: "data export",
+    //   label: "Data export",
+    //   component: <div>Data Export Content</div>,
+    // },
   ];
 
   return (

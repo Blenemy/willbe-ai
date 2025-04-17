@@ -912,7 +912,8 @@
     "My account": "Mi cuenta",
     "Scenario list": "Lista de escenarios",
     "Create message scenario": "Crear escenario de mensaje",
-    "Create message structures": "Crear estructuras de mensaje"
+    "Create message structures": "Crear estructuras de mensaje",
+    "Log out": "Cerrar sesión"
   },
   "MessageStructures": {
     "title": "Estructuras de Mensajes",
@@ -1087,7 +1088,12 @@
       "description": "Filtra empresas según sus ingresos anuales estimados o declarados.",
       "from": "Desde (en %)",
       "to": "Hasta (en %)",
-      "currency": "Seleccionar moneda"
+      "currency": "Seleccionar moneda",
+      "errors": {
+        "annual_revenue_from_required": "Por favor selecciona los ingresos mínimos",
+        "annual_revenue_to_required": "Por favor selecciona los ingresos máximos",
+        "annual_revenue_currency_required": "Por favor selecciona la moneda"
+      }
     },
     "buttons": {
       "save": "Guardar escenario",
@@ -1289,7 +1295,7 @@
     },
     "actions": {
       "saveScenario": "Guardar/seleccionar filtros del escenario",
-      "search": "Buscar leads"
+      "search": "Buscar pistas"
     }
   },
   "leadTable": {
@@ -1327,5 +1333,12 @@
       "delete": "Eliminar"
     },
     "generate": "Generar escenario de mensajes"
+  },
+  "multiSelectWithSearch": {
+    "search": "Buscar",
+    "searching": "Buscando...",
+    "selectTechnologies": "Seleccionar tecnologías",
+    "selectInclude": "Seleccionar valores a incluir",
+    "selectExclude": "Seleccionar valores a excluir"
   }
 }

@@ -11,14 +11,6 @@ import {
   TableCaption,
   TableHeader,
 } from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Trash, Pencil } from "lucide-react";
 import { useLeadScenarios } from "@/hooks/useLeadScenarious";
@@ -32,13 +24,14 @@ import {
 import { LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 
 const ITEMS_PER_PAGE = 5;
 
 const LeadScenariosPage = () => {
   const t = useTranslations("leadScenarios");
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
   const { leadScenariousTableData = [], deleteLeadScenarious } =
     useLeadScenarios({ enableFetch: true });
@@ -135,37 +128,12 @@ const LeadScenariosPage = () => {
           ))}
         </TableBody>
       </Table>
-      <div className="mt-4 flex justify-center">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              />
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink
-                  href="#"
-                  onClick={() => setCurrentPage(index + 1)}
-                  isActive={index + 1 === currentPage}
-                >
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
+      <CustomPagination
+        page={currentPage}
+        setPage={setCurrentPage}
+        totalCount={totalPages}
+        rowsPerPage={5}
+      />
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>

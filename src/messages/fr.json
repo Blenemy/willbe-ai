@@ -913,7 +913,8 @@
     "My account": "Mon compte",
     "Scenario list": "Liste des scénarios",
     "Create message scenario": "Créer un scénario de message",
-    "Create message structures": "Créer des structures de message"
+    "Create message structures": "Créer des structures de message",
+    "Log out": "Se déconnecter"
   },
   "MessageStructures": {
     "title": "Structures de Messages",
@@ -1088,7 +1089,12 @@
       "description": "Filtrer les entreprises selon leurs revenus annuels estimés ou déclarés.",
       "from": "De (en %)",
       "to": "À (en %)",
-      "currency": "Sélectionner une devise"
+      "currency": "Sélectionner une devise",
+      "errors": {
+        "annual_revenue_from_required": "Veuillez sélectionner le chiffre d'affaires minimum",
+        "annual_revenue_to_required": "Veuillez sélectionner le chiffre d'affaires maximum",
+        "annual_revenue_currency_required": "Veuillez sélectionner la devise"
+      }
     },
     "buttons": {
       "save": "Sauvegarder le scénario",
@@ -1332,5 +1338,12 @@
       "delete": "Supprimer"
     },
     "generate": "Générer un scénario de messages"
+  },
+  "multiSelectWithSearch": {
+    "search": "Rechercher",
+    "searching": "Recherche en cours...",
+    "selectTechnologies": "Sélectionner des technologies",
+    "selectInclude": "Sélectionner les valeurs à inclure",
+    "selectExclude": "Sélectionner les valeurs à exclure"
   }
 }

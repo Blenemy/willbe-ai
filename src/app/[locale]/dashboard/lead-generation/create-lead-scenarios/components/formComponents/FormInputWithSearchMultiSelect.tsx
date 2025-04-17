@@ -10,6 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useSearchParamsQuery } from "@/hooks/useSearchParamsQuery";
 import { LeadScenariosFormType } from "../../page";
+import { useTranslations } from "next-intl";
 
 interface SearchOption {
   id: string;
@@ -35,6 +36,7 @@ const FormInputWithSearchMultiSelect = ({
   label,
   searchType,
 }: FormInputWithSearchMultiSelectProps) => {
+  const t = useTranslations("multiSelectWithSearch");
   const keywords = form.watch(searchName) as string | undefined;
   const includeOptions = form.watch(includeName) as SearchOption[] | [];
   const excludeOptions = form.watch(excludeName) as SearchOption[] | [];
@@ -84,7 +86,7 @@ const FormInputWithSearchMultiSelect = ({
         />
 
         <Button type="button" onClick={handleSearch} disabled={isLoading}>
-          {isLoading ? "Searching..." : "Search"}
+          {isLoading ? t("searching") : t("search")}
         </Button>
       </div>
 
@@ -109,7 +111,7 @@ const FormInputWithSearchMultiSelect = ({
                       form.setValue(includeName, selectedObjects);
                     }}
                     defaultValue={includeOptions.map((item) => item.id)}
-                    placeholder="Select values to include"
+                    placeholder={t("selectInclude")}
                     variant="secondary"
                     className="bg-white hover:bg-white"
                     animation={2}
@@ -140,7 +142,7 @@ const FormInputWithSearchMultiSelect = ({
                       form.setValue(excludeName, selectedObjects);
                     }}
                     defaultValue={excludeOptions.map((item) => item.id)}
-                    placeholder="Select values to exclude"
+                    placeholder={t("selectExclude")}
                     variant="secondary"
                     className="bg-white hover:bg-white"
                     animation={2}

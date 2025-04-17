@@ -122,7 +122,7 @@ export const usePostMessageScenarioLeads = () => {
     mutationFn: async (data: PostLeadsToMessageScenarios) => {
       const payload = { leadsIds: data.leadsIds };
       const res = await protectedAxiosInstance.post(
-        `/auth/message-scenarios/${data.id}/leads`,
+        `/auth/message-scenarios/${data.id}/add-leads`,
         payload
       );
       return res.data;

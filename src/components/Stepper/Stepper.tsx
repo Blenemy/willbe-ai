@@ -46,11 +46,11 @@ const CustomStepper = ({
           onClick={handleBack}
           sx={{ mr: 1 }}
         >
-          {t("next")}
+          {t("back")}
         </Button>
         <Box sx={{ flex: "1 1 auto" }} />
         <Button onClick={handleNext} disabled={disabled}>
-          {activeStep === steps.length - 1 ? t("finish") : t("back")}
+          {activeStep === steps.length - 1 ? t("finish") : t("next")}
         </Button>
       </Box>
     </Box>
