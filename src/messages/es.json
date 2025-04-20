@@ -1393,5 +1393,58 @@
     "validation": {
       "titleRequired": "El título es obligatorio"
     }
+  },
+  "messageScenarioData": {
+    "includeData": "Incluir datos",
+    "tabs": {
+      "scenarios": "📝 Escenario de generación de leads",
+      "accounts": "🗂 Cuentas",
+      "leads": "👥 Leads"
+    },
+    "search": {
+      "account": "Buscar por título de la cuenta",
+      "lead": "Buscar por nombre, apellido, email o cargo del lead",
+      "scenario": "Buscar por título del escenario"
+    },
+    "table": {
+      "accountTitle": "Título de la cuenta",
+      "industry": "Industria",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "account": "Cuenta",
+      "role": "Cargo",
+      "messageStructure": "Estructura del mensaje",
+      "language": "Idioma",
+      "product": "Producto/Servicio",
+      "message": "Mensaje",
+      "lastResponse": "Última respuesta",
+      "actions": "Acciones",
+      "scenarioTitle": "Nombre del escenario",
+      "createdBy": "Creado por",
+      "createdAt": "Fecha de creación"
+    },
+    "dropdown": {
+      "all": "Todos",
+      "selected": "Seleccionados",
+      "unselected": "No seleccionados",
+      "rowsPerPage": "Filas por página:"
+    },
+    "buttons": {
+      "generate": "Generar mensaje(s)",
+      "send": "Enviar {count} mensaje(s)",
+      "import": "Importar leads"
+    },
+    "placeholders": {
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "selectAccount": "Seleccionar cuenta",
+      "selectStructure": "Seleccionar estructura",
+      "selectLanguage": "Seleccionar idioma",
+      "selectProduct": "Seleccionar producto",
+      "message": "Mensaje",
+      "role": "Cargo"
+    }
   }
 }

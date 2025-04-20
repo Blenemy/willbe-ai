@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableHeader,
@@ -39,6 +40,7 @@ export const CreateScenarioTable = ({
   onGenerate,
   onSend,
 }: Props) => {
+  const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
 
   const toggleSelection = (id: string) => {
@@ -47,9 +49,7 @@ export const CreateScenarioTable = ({
     );
   };
 
-  if (!leads || leads.length === 0) {
-    return null;
-  }
+  if (!leads || leads.length === 0) return null;
 
   return (
     <div className="space-y-4">
@@ -57,16 +57,16 @@ export const CreateScenarioTable = ({
         <TableHeader>
           <TableRow>
             <TableHead />
-            <TableHead>First name</TableHead>
-            <TableHead>Last name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Message structure</TableHead>
-            <TableHead>Language</TableHead>
-            <TableHead>Product/Service</TableHead>
-            <TableHead>Message</TableHead>
+            <TableHead>{t("table.firstName")}</TableHead>
+            <TableHead>{t("table.lastName")}</TableHead>
+            <TableHead>{t("table.email")}</TableHead>
+            <TableHead>{t("table.phone")}</TableHead>
+            <TableHead>{t("table.account")}</TableHead>
+            <TableHead>{t("table.role")}</TableHead>
+            <TableHead>{t("table.messageStructure")}</TableHead>
+            <TableHead>{t("table.language")}</TableHead>
+            <TableHead>{t("table.product")}</TableHead>
+            <TableHead>{t("table.message")}</TableHead>
             <TableHead />
             <TableHead />
           </TableRow>
@@ -83,7 +83,10 @@ export const CreateScenarioTable = ({
               <TableCell>{lead.firstName}</TableCell>
               <TableCell>{lead.lastname}</TableCell>
               <TableCell className="flex items-center gap-2">
-                <Input value={lead.email || ""} placeholder="Email" />
+                <Input
+                  value={lead.email || ""}
+                  placeholder={t("placeholders.email")}
+                />
                 {!lead.email && (
                   <Button size="icon" variant="ghost">
                     <Search className="w-4 h-4" />
@@ -91,12 +94,17 @@ export const CreateScenarioTable = ({
                 )}
               </TableCell>
               <TableCell>
-                <Input value={lead.phone || ""} placeholder="Phone" />
+                <Input
+                  value={lead.phone || ""}
+                  placeholder={t("placeholders.phone")}
+                />
               </TableCell>
               <TableCell>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select account" />
+                    <SelectValue
+                      placeholder={t("placeholders.selectAccount")}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {accounts.map((acc) => (
@@ -108,12 +116,17 @@ export const CreateScenarioTable = ({
                 </Select>
               </TableCell>
               <TableCell>
-                <Input value={lead.role || ""} placeholder="Role" />
+                <Input
+                  value={lead.role || ""}
+                  placeholder={t("placeholders.role")}
+                />
               </TableCell>
               <TableCell>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select structure" />
+                    <SelectValue
+                      placeholder={t("placeholders.selectStructure")}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {messageStructures.map((ms) => (
@@ -127,7 +140,9 @@ export const CreateScenarioTable = ({
               <TableCell>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select language" />
+                    <SelectValue
+                      placeholder={t("placeholders.selectLanguage")}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">English</SelectItem>
@@ -139,7 +154,9 @@ export const CreateScenarioTable = ({
               <TableCell>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select product" />
+                    <SelectValue
+                      placeholder={t("placeholders.selectProduct")}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     {products.map((p) => (
@@ -151,7 +168,10 @@ export const CreateScenarioTable = ({
                 </Select>
               </TableCell>
               <TableCell>
-                <Input value={lead.message || ""} placeholder="Message" />
+                <Input
+                  value={lead.message || ""}
+                  placeholder={t("placeholders.message")}
+                />
               </TableCell>
               <TableCell>
                 <Button variant="ghost" size="icon">
@@ -170,10 +190,10 @@ export const CreateScenarioTable = ({
 
       <div className="flex justify-between pt-4">
         <Button onClick={onGenerate} disabled={selected.length === 0}>
-          Generate message(s)
+          {t("buttons.generate")}
         </Button>
         <Button onClick={onSend} disabled={selected.length === 0}>
-          Send {selected.length} message(s)
+          {t("buttons.send", { count: selected.length })}
         </Button>
       </div>
     </div>

@@ -1389,5 +1389,58 @@
     "validation": {
       "titleRequired": "Title is required"
     }
+  },
+  "messageScenarioData": {
+    "includeData": "Include data",
+    "tabs": {
+      "scenarios": "📝 Lead generation scenario",
+      "accounts": "🗂 Accounts",
+      "leads": "👥 Leads"
+    },
+    "search": {
+      "account": "Search by account title",
+      "lead": "Search by lead first name, last name, email, or role",
+      "scenario": "Search by scenario title"
+    },
+    "table": {
+      "accountTitle": "Account title",
+      "industry": "Industry",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "account": "Account",
+      "role": "Role",
+      "messageStructure": "Message structure",
+      "language": "Language",
+      "product": "Product/Service",
+      "message": "Message",
+      "lastResponse": "Last response",
+      "actions": "Actions",
+      "scenarioTitle": "Scenario name",
+      "createdBy": "Created by",
+      "createdAt": "Created date"
+    },
+    "dropdown": {
+      "all": "All",
+      "selected": "Selected",
+      "unselected": "Unselected",
+      "rowsPerPage": "Rows per page:"
+    },
+    "buttons": {
+      "generate": "Generate message(s)",
+      "send": "Send {count} message(s)",
+      "import": "Import leads"
+    },
+    "placeholders": {
+      "email": "Email",
+      "phone": "Phone",
+      "selectAccount": "Select account",
+      "selectStructure": "Select structure",
+      "selectLanguage": "Select language",
+      "selectProduct": "Select product",
+      "message": "Message",
+      "role": "Role"
+    }
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableBody,
@@ -45,6 +46,7 @@ export const LeadsTable = ({
   setSelected,
   onImport,
 }: Props) => {
+  const t = useTranslations("messageScenarioData");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
@@ -143,15 +145,13 @@ export const LeadsTable = ({
     </TableHead>
   );
 
-  const handleClick = () => {
-    onImport(selected);
-  };
+  const handleClick = () => onImport(selected);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <Input
-          placeholder="Search by lead first name, last name, email, or role"
+          placeholder={t("search.lead")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -160,12 +160,14 @@ export const LeadsTable = ({
           value={selectionFilter}
         >
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Selected" />
+            <SelectValue placeholder={t("dropdown.selected")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="selected">Selected</SelectItem>
-            <SelectItem value="unselected">Unselected</SelectItem>
+            <SelectItem value="all">{t("dropdown.all")}</SelectItem>
+            <SelectItem value="selected">{t("dropdown.selected")}</SelectItem>
+            <SelectItem value="unselected">
+              {t("dropdown.unselected")}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -174,12 +176,12 @@ export const LeadsTable = ({
         <TableHeader>
           <TableRow>
             <TableHead className="w-[40px]" />
-            {renderHeader("First Name", "first_name")}
-            {renderHeader("Last Name", "last_name")}
-            {renderHeader("Email", "email")}
-            {renderHeader("Role", "headline")}
-            {renderHeader("Account", "account")}
-            {renderHeader("Last response", "last_response")}
+            {renderHeader(t("table.firstName"), "first_name")}
+            {renderHeader(t("table.lastName"), "last_name")}
+            {renderHeader(t("table.email"), "email")}
+            {renderHeader(t("table.role"), "headline")}
+            {renderHeader(t("table.account"), "account")}
+            {renderHeader(t("table.lastResponse"), "last_response")}
             <TableHead className="w-[40px]" />
           </TableRow>
         </TableHeader>
@@ -227,7 +229,7 @@ export const LeadsTable = ({
 
       <div className="flex justify-between items-center">
         <div className="text-sm flex gap-2 flex-grow items-center">
-          <p className="min-w-28">Rows per page:</p>
+          <p className="min-w-28">{t("dropdown.rowsPerPage")}</p>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
@@ -252,7 +254,7 @@ export const LeadsTable = ({
 
       <div className="flex justify-end">
         <Button onClick={handleClick} disabled={selected.length === 0}>
-          Import leads
+          {t("buttons.import")}
         </Button>
       </div>
     </div>

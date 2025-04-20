@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableHeader,
@@ -30,6 +31,7 @@ interface Props {
 type SortKey = "name" | "createdBy" | "createdAt" | "";
 
 export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
+  const t = useTranslations("messageScenarioData");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
@@ -90,7 +92,7 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <Input
-          placeholder="Search by scenario title"
+          placeholder={t("search.scenario")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-sm"
@@ -102,21 +104,21 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
           <TableRow>
             <TableHead className="w-[40px]" />
             {renderHeader(
-              "Scenario name",
+              t("table.scenarioTitle"),
               "name",
               sortKey,
               sortAsc,
               handleSort
             )}
             {renderHeader(
-              "Created by",
+              t("table.createdBy"),
               "createdBy",
               sortKey,
               sortAsc,
               handleSort
             )}
             {renderHeader(
-              "Created date",
+              t("table.createdAt"),
               "createdAt",
               sortKey,
               sortAsc,
@@ -150,7 +152,7 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          <span className="min-w-28">Rows per page:</span>
+          <span className="min-w-28">{t("dropdown.rowsPerPage")}</span>
           <Select
             value={String(rowsPerPage)}
             onValueChange={(val) => {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const EditScenarioTables = ({ onImport }: Props) => {
+  const t = useTranslations("messageScenarioData");
   const [activeTab, setActiveTab] = useState("scenarios");
   const [selectedAccounts, setSelectedAccounts] = useState<string[]>([]);
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
@@ -41,15 +43,13 @@ export const EditScenarioTables = ({ onImport }: Props) => {
 
   return (
     <div className="space-y-4 mt-6">
-      <h3 className="text-lg font-medium">Include data</h3>
+      <h3 className="text-lg font-medium">{t("includeData")}</h3>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="scenarios">
-            📝 Lead generation scenario
-          </TabsTrigger>
-          <TabsTrigger value="accounts">🗂 Accounts</TabsTrigger>
-          <TabsTrigger value="leads">👥 Leads</TabsTrigger>
+          <TabsTrigger value="scenarios">{t("tabs.scenarios")}</TabsTrigger>
+          <TabsTrigger value="accounts">{t("tabs.accounts")}</TabsTrigger>
+          <TabsTrigger value="leads">{t("tabs.leads")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="accounts">
