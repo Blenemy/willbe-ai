@@ -1442,5 +1442,26 @@
       "message": "Message",
       "role": "Role"
     }
+  },
+  "messageChain": {
+    "title": "Scenario title",
+    "exportCsv": "Export CSV",
+    "exportCsvWithEmails": "Export CSV (only leads with emails)",
+    "modal": {
+      "addTitle": "Add message",
+      "editTitle": "Edit message",
+      "typeLabel": "Type",
+      "typePlaceholder": "Select a message type",
+      "dateLabel": "Date",
+      "timeLabel": "Time",
+      "cancel": "Cancel",
+      "add": "Add",
+      "save": "Save"
+    },
+    "validation": {
+      "typeRequired": "Type is required",
+      "dateRequired": "Date is required",
+      "timeRequired": "Time is required"
+    }
   }
 }

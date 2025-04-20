@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -42,9 +45,9 @@ interface Props {
 }
 
 const formSchema = z.object({
-  type: z.string().min(1, "Type is required"),
-  date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Time is required"),
+  type: z.string().min(1, "messageChain.validation.typeRequired"),
+  date: z.string().min(1, "messageChain.validation.dateRequired"),
+  time: z.string().min(1, "messageChain.validation.timeRequired"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -57,6 +60,7 @@ export const CreateMessageModal = ({
   mode = "create",
   initialData,
 }: Props) => {
+  const t = useTranslations("messageChain");
   const store = useMessageChainStore();
 
   const availableTypes = useMemo(() => {
@@ -118,7 +122,7 @@ export const CreateMessageModal = ({
       <DialogContent className="min-w-[451px] p-6">
         <DialogHeader>
           <DialogTitle>
-            {mode === "edit" ? "Edit message" : "Add message"}
+            {mode === "edit" ? t("modal.editTitle") : t("modal.addTitle")}
           </DialogTitle>
         </DialogHeader>
 
@@ -132,11 +136,11 @@ export const CreateMessageModal = ({
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel>{t("modal.typeLabel")}</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a message type" />
+                        <SelectValue placeholder={t("modal.typePlaceholder")} />
                       </SelectTrigger>
                       <SelectContent>
                         {availableTypes.map((value) => (
@@ -160,7 +164,7 @@ export const CreateMessageModal = ({
                 name="date"
                 render={({ field }) => (
                   <FormItem className="w-1/2">
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>{t("modal.dateLabel")}</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -174,7 +178,7 @@ export const CreateMessageModal = ({
                 name="time"
                 render={({ field }) => (
                   <FormItem className="w-1/2">
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>{t("modal.timeLabel")}</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -186,9 +190,11 @@ export const CreateMessageModal = ({
 
             <DialogFooter className="pt-4">
               <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
+                {t("modal.cancel")}
               </Button>
-              <Button type="submit">{mode === "edit" ? "Save" : "Add"}</Button>
+              <Button type="submit">
+                {mode === "edit" ? t("modal.save") : t("modal.add")}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

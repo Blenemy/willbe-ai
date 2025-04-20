@@ -1451,5 +1451,26 @@
       "message": "Message",
       "role": "Poste"
     }
+  },
+  "messageChain": {
+    "title": "Titre du scénario",
+    "exportCsv": "Exporter CSV",
+    "exportCsvWithEmails": "Exporter CSV (seulement les leads avec email)",
+    "modal": {
+      "addTitle": "Ajouter un message",
+      "editTitle": "Modifier le message",
+      "typeLabel": "Type",
+      "typePlaceholder": "Sélectionner un type de message",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "cancel": "Annuler",
+      "add": "Ajouter",
+      "save": "Enregistrer"
+    },
+    "validation": {
+      "typeRequired": "Le type est requis",
+      "dateRequired": "La date est requise",
+      "timeRequired": "L'heure est requise"
+    }
   }
 }

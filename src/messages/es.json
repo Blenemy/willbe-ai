@@ -1446,5 +1446,26 @@
       "message": "Mensaje",
       "role": "Cargo"
     }
+  },
+  "messageChain": {
+    "title": "Título del escenario",
+    "exportCsv": "Exportar CSV",
+    "exportCsvWithEmails": "Exportar CSV (solo leads con correos)",
+    "modal": {
+      "addTitle": "Agregar mensaje",
+      "editTitle": "Editar mensaje",
+      "typeLabel": "Tipo",
+      "typePlaceholder": "Selecciona un tipo de mensaje",
+      "dateLabel": "Fecha",
+      "timeLabel": "Hora",
+      "cancel": "Cancelar",
+      "add": "Agregar",
+      "save": "Guardar"
+    },
+    "validation": {
+      "typeRequired": "El tipo es obligatorio",
+      "dateRequired": "La fecha es obligatoria",
+      "timeRequired": "La hora es obligatoria"
+    }
   }
 }

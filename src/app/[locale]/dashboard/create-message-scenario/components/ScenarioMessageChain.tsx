@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   MessageEntry,
   useMessageCampaignEntries,
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export const ScenarioMessageChain = ({ scenarioId }: Props) => {
+  const t = useTranslations("messageChain");
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
@@ -71,12 +73,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
   };
 
   const handleEditEntry = (entryId: string, type: string, sendDate: string) => {
-    updateEntry({
-      id: entryId,
-      type,
-      sendDate,
-      messageScenarioId: scenarioId,
-    });
+    updateEntry({ id: entryId, type, sendDate, messageScenarioId: scenarioId });
     setCreateModalOpen(false);
   };
 
@@ -87,11 +84,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
   };
 
   const handleDeleteEntry = (entry: MessageEntry) => {
-    deleteEntry({
-      id: entry.id,
-      messageScenarioId: scenarioId,
-    });
-
+    deleteEntry({ id: entry.id, messageScenarioId: scenarioId });
     if (selectedEntryId === entry.id) {
       setSelectedEntryId(null);
     }
@@ -99,7 +92,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h3 className="text-lg font-medium">Scenario title</h3>
+      <h3 className="text-lg font-medium">{t("title")}</h3>
 
       <MessageEntryCards
         entries={messageEntries || []}
@@ -116,8 +109,8 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
       <div className="flex justify-between items-center">
         <div className="flex gap-2">
-          <Button variant="outline">Export CSV</Button>
-          <Button variant="outline">Export CSV (only leads with emails)</Button>
+          <Button variant="outline">{t("exportCsv")}</Button>
+          <Button variant="outline">{t("exportCsvWithEmails")}</Button>
         </div>
       </div>
 
