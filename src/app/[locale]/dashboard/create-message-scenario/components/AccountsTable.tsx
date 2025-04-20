@@ -164,7 +164,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          Rows per page:
+          <span className="min-w-28">Rows per page:</span>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />

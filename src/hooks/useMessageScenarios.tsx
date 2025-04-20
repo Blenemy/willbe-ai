@@ -135,3 +135,24 @@ export const usePostMessageScenarioLeads = () => {
     },
   });
 };
+
+export const useDeleteMessageScenarios = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      await protectedAxiosInstance.delete("/auth/message-scenarios", {
+        data: {
+          messageScenariosIds: ids,
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["message-scenarios"] });
+      toast("Message scenario(s) deleted successfully");
+    },
+    onError: () => {
+      toast("Failed to delete message scenario(s)");
+    },
+  });
+};

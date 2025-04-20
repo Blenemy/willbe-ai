@@ -44,7 +44,7 @@ export const EditScenarioTables = ({ onImport }: Props) => {
       <h3 className="text-lg font-medium">Include data</h3>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList>
+        <TabsList className="mb-4">
           <TabsTrigger value="scenarios">
             📝 Lead generation scenario
           </TabsTrigger>

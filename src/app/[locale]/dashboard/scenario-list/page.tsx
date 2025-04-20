@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, Trash, Plus } from "lucide-react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -34,7 +35,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useMessageScenarios } from "@/hooks/useMessageScenarios";
+import {
+  useDeleteMessageScenarios,
+  useMessageScenarios,
+} from "@/hooks/useMessageScenarios";
 import { useRouter } from "next/navigation";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { useClientPagination } from "@/hooks/useClientPagination";
@@ -69,12 +73,14 @@ const ScenarioList = () => {
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState("all");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [scenarioToDelete, setScenarioToDelete] = useState<string | null>(null);
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
     columns.map((col) => [col.key, true])
   );
 
   const { data = [] } = useMessageScenarios({ name: search });
+  const deleteMutation = useDeleteMessageScenarios();
   const {
     paginated,
     page,
@@ -118,6 +124,7 @@ const ScenarioList = () => {
 
   const confirmDelete = () => {
     if (scenarioToDelete) {
+      deleteMutation.mutate([scenarioToDelete]);
       setIsDeleteDialogOpen(false);
       setScenarioToDelete(null);
     }
@@ -128,6 +135,22 @@ const ScenarioList = () => {
     else {
       setSortKey(key);
       setSortAsc(true);
+    }
+  };
+
+  useEffect(() => {
+    setSortKey("createdAt");
+    setSortAsc(false);
+  }, [setSortAsc, setSortKey]);
+
+  const isAllSelected =
+    paginated.length > 0 && selectedIds.length === paginated.length;
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(paginated.map((scenario) => scenario.id));
     }
   };
 
@@ -185,19 +208,41 @@ const ScenarioList = () => {
             ))}
           </SelectContent>
         </Select>
+        <Button
+          variant="destructive"
+          disabled={selectedIds.length === 0}
+          onClick={() => {
+            deleteMutation.mutate(selectedIds);
+            setSelectedIds([]);
+          }}
+        >
+          Delete selected ({selectedIds.length})
+        </Button>
       </div>
 
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow key={"header"}>
             <TableHead className="w-[40px]">
-              <Checkbox />
+              <Checkbox
+                checked={isAllSelected}
+                onCheckedChange={handleToggleSelectAll}
+              />
             </TableHead>
-            {columns.map(
-              (col) =>
-                visibleColumns[col.key] &&
-                renderHeader(col.label, col.key, sortKey, sortAsc, handleSort)
-            )}
+            {columns
+              .filter((col) => visibleColumns[col.key])
+              .map((col) =>
+                React.cloneElement(
+                  renderHeader(
+                    col.label,
+                    col.key,
+                    sortKey,
+                    sortAsc,
+                    handleSort
+                  ),
+                  { key: col.key }
+                )
+              )}
             <TableHead className="text-right w-[80px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -205,7 +250,16 @@ const ScenarioList = () => {
           {paginated.map((scenario) => (
             <TableRow key={scenario.id}>
               <TableCell className="w-[40px]">
-                <Checkbox />
+                <Checkbox
+                  checked={selectedIds.includes(scenario.id)}
+                  onCheckedChange={(checked) => {
+                    setSelectedIds((prev) =>
+                      checked
+                        ? [...prev, scenario.id]
+                        : prev.filter((id) => id !== scenario.id)
+                    );
+                  }}
+                />
               </TableCell>
               {visibleColumns.title && (
                 <TableCell className="max-w-[200px] break-words">
@@ -251,7 +305,7 @@ const ScenarioList = () => {
               )}
               {visibleColumns.createdAt && (
                 <TableCell className="max-w-[180px] break-words">
-                  {scenario.createdAt}
+                  {format(new Date(scenario.createdAt), "dd/MM/yyyy HH:mm")}
                 </TableCell>
               )}
               <TableCell className="text-right w-[80px] space-x-2">

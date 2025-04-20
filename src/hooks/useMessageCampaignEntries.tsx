@@ -11,6 +11,9 @@ export interface MessageEntryData {
   messageStructureId: string;
   productServiceId: string;
   message: string;
+  firstName: string;
+  lastname: string;
+  role: string;
 }
 
 export interface MessageEntry {
@@ -19,7 +22,7 @@ export interface MessageEntry {
   type: string;
   sendDate: string;
   sendNow: boolean;
-  messageEntryData: MessageEntryData[];
+  messageEntryLeadData: MessageEntryData[];
 }
 
 export const useMessageCampaignEntries = (messageScenarioId?: string) => {

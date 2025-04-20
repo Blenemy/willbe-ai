@@ -20,23 +20,10 @@ import { Button } from "@/components/ui/button";
 import { Trash2, Eye, Search } from "lucide-react";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface Lead {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email?: string;
-  phone?: string;
-  accountId?: string;
-  role?: string;
-  messageStructureId?: string;
-  language?: string;
-  productOrServiceId?: string;
-  message?: string;
-}
+import { MessageEntryData } from "@/hooks/useMessageCampaignEntries";
 
 interface Props {
-  leads: Lead[];
+  leads: MessageEntryData[];
   accounts: { id: string; name: string }[];
   messageStructures: { id: string; name: string; languages: string[] }[];
   products: { id: string; name: string }[];
@@ -60,21 +47,12 @@ export const CreateScenarioTable = ({
     );
   };
 
+  if (!leads || leads.length === 0) {
+    return null;
+  }
+
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Scenario title</h3>
-
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2">
-          <Button variant="outline">Export CSV</Button>
-          <Button variant="outline">Export CSV (only leads with emails)</Button>
-        </div>
-        <div className="flex gap-2 text-muted-foreground items-center">
-          <span>🔒</span>
-          <span>?</span>
-        </div>
-      </div>
-
       <Table>
         <TableHeader>
           <TableRow>
@@ -103,7 +81,7 @@ export const CreateScenarioTable = ({
                 />
               </TableCell>
               <TableCell>{lead.firstName}</TableCell>
-              <TableCell>{lead.lastName}</TableCell>
+              <TableCell>{lead.lastname}</TableCell>
               <TableCell className="flex items-center gap-2">
                 <Input value={lead.email || ""} placeholder="Email" />
                 {!lead.email && (
