@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import CustomStepper from "@/components/Stepper/Stepper";
 import CreateMessageForm from "../components/CreateMessageForm";
-import { EditScenarioTables } from "../components/EditScenariosTables";
+import { EditScenarioTables } from "../components/ImportLeads/EditScenariosTables";
 import {
   useMessageScenarioById,
   usePostMessageScenarioLeads,
 } from "@/hooks/useMessageScenarios";
 import { useMessageCampaignEntries } from "@/hooks/useMessageCampaignEntries";
-import { ScenarioMessageChain } from "../components/ScenarioMessageChain";
+import { ScenarioMessageChain } from "../components/MessageCampaign/ScenarioMessageChain";
 import { useTranslations } from "next-intl";
+import { StatisticPage } from "../components/Statistics/StatisticPage";
 
 const EditMessageScenarioPage = () => {
   const t = useTranslations("messageScenario");
@@ -52,6 +53,8 @@ const EditMessageScenarioPage = () => {
       {activeStep === 1 && scenario?.id && (
         <ScenarioMessageChain scenarioId={scenario.id} />
       )}
+
+      {activeStep === 2 && <StatisticPage />}
     </div>
   );
 };

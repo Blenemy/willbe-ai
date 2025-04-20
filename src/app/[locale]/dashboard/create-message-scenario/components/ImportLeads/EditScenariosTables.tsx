@@ -9,9 +9,9 @@ import {
   useLeadsByAccountsAndScenarios,
   Lead,
 } from "@/hooks/useEditScenarioData";
-import { LeadScenariosTable } from "./LeadScenarioTable";
-import { AccountsTable } from "./AccountsTable";
-import { LeadsTable } from "./LeadsTable";
+import { LeadScenariosTable } from "./tabs/LeadScenarioTable";
+import { AccountsTable } from "./tabs/AccountsTable";
+import { LeadsTable } from "./tabs/LeadsTable";
 
 interface Props {
   onImport: (selectedIds: string[]) => Promise<void>;
