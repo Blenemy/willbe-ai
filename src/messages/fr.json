@@ -1380,5 +1380,23 @@
       "cancel": "Annuler",
       "delete": "Supprimer"
     }
+  },
+  "messageScenario": {
+    "createTitle": "Créer des scénarios de messages",
+    "editTitle": "Modifier les scénarios de messages",
+    "steps": {
+      "import": "Importer des leads",
+      "campaign": "Campagne de messages",
+      "stats": "Statistiques"
+    },
+    "form": {
+      "titleLabel": "Titre du scénario",
+      "titlePlaceholder": "Entrez le titre du scénario",
+      "createBtn": "Créer un scénario",
+      "updateBtn": "Mettre à jour un scénario"
+    },
+    "validation": {
+      "titleRequired": "Le titre est requis"
+    }
   }
 }

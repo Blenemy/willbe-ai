@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import CustomStepper from "@/components/Stepper/Stepper";
@@ -10,10 +9,11 @@ import {
   usePostMessageScenarioLeads,
 } from "@/hooks/useMessageScenarios";
 import { useMessageCampaignEntries } from "@/hooks/useMessageCampaignEntries";
-
 import { ScenarioMessageChain } from "../components/ScenarioMessageChain";
+import { useTranslations } from "next-intl";
 
 const EditMessageScenarioPage = () => {
+  const t = useTranslations("messageScenario");
   const [activeStep, setActiveStep] = useState(0);
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const params = useParams();
@@ -36,22 +36,19 @@ const EditMessageScenarioPage = () => {
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">Edit message scenarios</h2>
-
+      <h2 className="mb-5 font-semibold text-2xl">{t("editTitle")}</h2>
       <CustomStepper
         activeStep={activeStep}
         setActiveStep={setActiveStep}
-        steps={["Import leads", "Message campaign", "Statistics"]}
+        steps={[t("steps.import"), t("steps.campaign"), t("steps.stats")]}
         disabled={!id}
       />
-
       {activeStep === 0 && (
         <>
           <CreateMessageForm defaultTitle={scenario?.name} id={id} />
           <EditScenarioTables onImport={handleOnImport} />
         </>
       )}
-
       {activeStep === 1 && scenario?.id && (
         <ScenarioMessageChain scenarioId={scenario.id} />
       )}

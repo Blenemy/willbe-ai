@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,22 +17,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useTranslations } from "next-intl";
 
-const createMessageScenarioForm = z.object({
-  scenario_title: z.string().min(1, "Title is required"),
-});
-
-interface Props {
+const CreateMessageForm = ({
+  defaultTitle,
+  id,
+}: {
   defaultTitle?: string;
   id?: string;
-}
+}) => {
+  const t = useTranslations("messageScenario");
+  const schema = z.object({
+    scenario_title: z.string().min(1, t("validation.titleRequired")),
+  });
 
-const CreateMessageForm = ({ defaultTitle, id }: Props) => {
   const form = useForm({
-    resolver: zodResolver(createMessageScenarioForm),
-    defaultValues: {
-      scenario_title: "",
-    },
+    resolver: zodResolver(schema),
+    defaultValues: { scenario_title: "" },
   });
 
   const { mutate: createMutation } = useCreateMessageScenario();
@@ -60,18 +62,18 @@ const CreateMessageForm = ({ defaultTitle, id }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-semibold text-foreground">
-                Scenario title
+                {t("form.titleLabel")}
               </FormLabel>
               <div className="flex gap-2">
                 <FormControl>
                   <Input
-                    placeholder="Enter scenario title"
+                    placeholder={t("form.titlePlaceholder")}
                     className="flex-1"
                     {...field}
                   />
                 </FormControl>
                 <Button type="submit" className="whitespace-nowrap">
-                  {id ? "Update a scneario" : "Create a scneario"}
+                  {id ? t("form.updateBtn") : t("form.createBtn")}
                 </Button>
               </div>
               <FormMessage />

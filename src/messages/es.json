@@ -1375,5 +1375,23 @@
       "cancel": "Cancelar",
       "delete": "Eliminar"
     }
+  },
+  "messageScenario": {
+    "createTitle": "Crear escenarios de mensajes",
+    "editTitle": "Editar escenarios de mensajes",
+    "steps": {
+      "import": "Importar leads",
+      "campaign": "Campaña de mensajes",
+      "stats": "Estadísticas"
+    },
+    "form": {
+      "titleLabel": "Título del escenario",
+      "titlePlaceholder": "Ingresa el título del escenario",
+      "createBtn": "Crear un escenario",
+      "updateBtn": "Actualizar un escenario"
+    },
+    "validation": {
+      "titleRequired": "El título es obligatorio"
+    }
   }
 }

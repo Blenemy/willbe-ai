@@ -1371,5 +1371,23 @@
       "cancel": "Cancel",
       "delete": "Delete"
     }
+  },
+  "messageScenario": {
+    "createTitle": "Create message scenarios",
+    "editTitle": "Edit message scenarios",
+    "steps": {
+      "import": "Import leads",
+      "campaign": "Message campaign",
+      "stats": "Statistics"
+    },
+    "form": {
+      "titleLabel": "Scenario title",
+      "titlePlaceholder": "Enter scenario title",
+      "createBtn": "Create a scenario",
+      "updateBtn": "Update a scenario"
+    },
+    "validation": {
+      "titleRequired": "Title is required"
+    }
   }
 }
