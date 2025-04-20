@@ -1336,5 +1336,40 @@
     "selectTechnologies": "Select technologies",
     "selectInclude": "Select values to include",
     "selectExclude": "Select values to exclude"
+  },
+  "scenarioList": {
+    "title": "Scenario list",
+    "create": "Create scenario",
+    "view": "View",
+    "searchPlaceholder": "Search by Scenario title",
+    "sortByStatus": "Sort by status",
+    "deleteSelected": "Delete selected ({count})",
+    "rowsPerPage": "Rows per page:",
+    "actions": "Actions",
+    "status": {
+      "all": "All statuses",
+      "not_started": "Not started",
+      "in_progress": "In progress",
+      "done": "Done"
+    },
+    "table": {
+      "title": "Scenario title",
+      "leads": "Leads in cadence",
+      "sent": "Message sent",
+      "responseRate": "Response rate",
+      "meetingRate": "Meeting rate",
+      "status": "Scenario status",
+      "createdBy": "Created by",
+      "createdAt": "Created date",
+      "actions": "Actions",
+      "open": "Open",
+      "delete": "Delete"
+    },
+    "dialog": {
+      "confirmDeleteTitle": "Are you sure you want to delete this scenario?",
+      "confirmDeleteText": "This action cannot be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
   }
 }

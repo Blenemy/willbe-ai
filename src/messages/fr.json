@@ -1345,5 +1345,40 @@
     "selectTechnologies": "Sélectionner des technologies",
     "selectInclude": "Sélectionner les valeurs à inclure",
     "selectExclude": "Sélectionner les valeurs à exclure"
+  },
+  "scenarioList": {
+    "title": "Liste des scénarios",
+    "create": "Créer un scénario",
+    "view": "Vue",
+    "searchPlaceholder": "Rechercher par titre du scénario",
+    "sortByStatus": "Trier par statut",
+    "deleteSelected": "Supprimer la sélection ({count})",
+    "rowsPerPage": "Lignes par page :",
+    "actions": "Actions",
+    "status": {
+      "all": "Tous les statuts",
+      "not_started": "Non commencé",
+      "in_progress": "En cours",
+      "done": "Terminé"
+    },
+    "table": {
+      "title": "Titre du scénario",
+      "leads": "Leads dans la séquence",
+      "sent": "Messages envoyés",
+      "responseRate": "Taux de réponse",
+      "meetingRate": "Taux de réunion",
+      "status": "Statut du scénario",
+      "createdBy": "Créé par",
+      "createdAt": "Date de création",
+      "actions": "Actions",
+      "open": "Ouvrir",
+      "delete": "Supprimer"
+    },
+    "dialog": {
+      "confirmDeleteTitle": "Êtes-vous sûr de vouloir supprimer ce scénario ?",
+      "confirmDeleteText": "Cette action ne peut pas être annulée.",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    }
   }
 }
