@@ -21,6 +21,7 @@ import {
   useMessageChainStore,
 } from "@/store/useMessageChainStore";
 import { toast } from "sonner";
+import { useDownloadMessageEntryCsv } from "@/hooks/useDownloadMessageEntryCsv";
 
 interface Props {
   scenarioId: string;
@@ -90,6 +91,17 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     }
   };
 
+  const { refetch: downloadCsv } = useDownloadMessageEntryCsv(
+    selectedEntryId,
+    false
+  );
+  const { refetch: downloadCsvWithEmails } = useDownloadMessageEntryCsv(
+    selectedEntryId,
+    true
+  );
+
+  console.log(selectedEntry?.messageEntryLeadData);
+
   return (
     <div className="flex flex-col gap-5">
       <h3 className="text-lg font-medium">{t("title")}</h3>
@@ -109,8 +121,36 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
       <div className="flex justify-between items-center">
         <div className="flex gap-2">
-          <Button variant="outline">{t("exportCsv")}</Button>
-          <Button variant="outline">{t("exportCsvWithEmails")}</Button>
+          <Button
+            variant="outline"
+            disabled={!selectedEntryId}
+            onClick={async () => {
+              const res = await downloadCsv();
+              if (res.data) {
+                const link = document.createElement("a");
+                link.href = res.data;
+                link.download = "message_entry.csv";
+                link.click();
+              }
+            }}
+          >
+            {t("exportCsv")}
+          </Button>
+          <Button
+            variant="outline"
+            disabled={!selectedEntryId}
+            onClick={async () => {
+              const res = await downloadCsvWithEmails();
+              if (res.data) {
+                const link = document.createElement("a");
+                link.href = res.data;
+                link.download = "message_entry_with_emails.csv";
+                link.click();
+              }
+            }}
+          >
+            {t("exportCsvWithEmails")}
+          </Button>
         </div>
       </div>
 
@@ -135,8 +175,6 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
         <CreateScenarioTable
           leads={selectedEntry.messageEntryLeadData}
           accounts={[]}
-          messageStructures={[]}
-          products={[]}
           onGenerate={() => console.log("Generate messages")}
           onSend={() => console.log("Send messages")}
         />
