@@ -23,33 +23,37 @@ import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   MessageEntryData,
+  useDeleteMessageCampaignEntry,
   useUpdateMessageEntryLead,
 } from "@/hooks/useMessageCampaignEntries";
+import { useGenerateMessages } from "@/hooks/useGenerateMessages";
+import { useParams } from "next/navigation";
 
 interface Props {
   leads: MessageEntryData[];
-  accounts: { id: string; name: string }[];
-  onGenerate: () => void;
   onSend: () => void;
 }
 
-export const CreateScenarioTable = ({
-  leads,
-  accounts,
-  onGenerate,
-  onSend,
-}: Props) => {
+export const CreateScenarioTable = ({ leads, onSend }: Props) => {
   const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
   const [editedLeads, setEditedLeads] = useState<
     Record<string, Partial<MessageEntryData>>
   >({});
   const { mutate: updateLead } = useUpdateMessageEntryLead();
+  const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
+  const { mutate: generateMessages } = useGenerateMessages();
+  const params = useParams();
+  const id = params?.id as string;
 
   const toggleSelection = (id: string) => {
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
+  };
+
+  const handleDeleteLeads = (leadId: string) => {
+    deleteLeads({ leadsIds: [leadId], id });
   };
 
   const handleChange = (
@@ -148,27 +152,10 @@ export const CreateScenarioTable = ({
                   />
                 </TableCell>
                 <TableCell>
-                  <Select disabled>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("placeholders.selectAccount")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {accounts.map((acc) => (
-                        <SelectItem key={acc.id} value={acc.id}>
-                          {acc.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <span>{lead.company}</span>
                 </TableCell>
                 <TableCell>
-                  <Input
-                    value={lead.role ?? ""}
-                    disabled
-                    placeholder={t("placeholders.role")}
-                  />
+                  <span>{lead.role}</span>
                 </TableCell>
                 <TableCell>
                   <Select
@@ -258,7 +245,11 @@ export const CreateScenarioTable = ({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="icon">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDeleteLeads(lead.leadId)}
+                  >
                     <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
                 </TableCell>
@@ -269,10 +260,22 @@ export const CreateScenarioTable = ({
       </Table>
 
       <div className="flex justify-between pt-4">
-        <Button onClick={onGenerate} disabled={selected.length === 0}>
+        <Button
+          onClick={() => generateMessages({ messageEntryDataIds: selected })}
+          disabled={selected.length === 0}
+        >
           {t("buttons.generate")}
         </Button>
-        <Button onClick={onSend} disabled={selected.length === 0}>
+        <Button
+          onClick={onSend}
+          disabled={
+            selected.length === 0 ||
+            selected.some((id) => {
+              const lead = leads.find((l) => l.id === id);
+              return !lead?.message?.trim();
+            })
+          }
+        >
           {t("buttons.send", { count: selected.length })}
         </Button>
       </div>

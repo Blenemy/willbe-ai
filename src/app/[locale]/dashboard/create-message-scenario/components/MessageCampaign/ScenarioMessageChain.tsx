@@ -100,7 +100,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     true
   );
 
-  console.log(selectedEntry?.messageEntryLeadData);
+  // console.log(selectedEntry?.messageEntryLeadData);
 
   return (
     <div className="flex flex-col gap-5">
@@ -174,8 +174,6 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
       {selectedEntry && (
         <CreateScenarioTable
           leads={selectedEntry.messageEntryLeadData}
-          accounts={[]}
-          onGenerate={() => console.log("Generate messages")}
           onSend={() => console.log("Send messages")}
         />
       )}

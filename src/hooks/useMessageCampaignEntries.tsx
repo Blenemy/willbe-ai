@@ -75,6 +75,41 @@ export const useMessageCampaignEntry = (id?: string) => {
   });
 };
 
+export const useDeleteMessageCampaignEntry = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      leadsIds,
+      id,
+    }: {
+      leadsIds: string[];
+      id: string;
+    }) => {
+      const response = await protectedAxiosInstance.delete(
+        `/auth/message-scenarios/${id}/remove-leads`,
+        {
+          data: {
+            leadsIds,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entry"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entries"],
+      });
+    },
+    onError: (err) => {
+      toast(`Error updating the lead data ${err.message}`);
+    },
+  });
+};
+
 interface UpdateMessageEntryLeadDto {
   leadId: string;
   email?: string | null;
@@ -97,6 +132,7 @@ export const useUpdateMessageEntryLead = () => {
       return response.data;
     },
     onSuccess: () => {
+      toast(`Lead data updated sucessfully`);
       queryClient.invalidateQueries({
         queryKey: ["message-campaign-entry"],
       });

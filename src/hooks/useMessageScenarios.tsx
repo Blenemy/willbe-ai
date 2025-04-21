@@ -118,6 +118,8 @@ interface PostLeadsToMessageScenarios {
 }
 
 export const usePostMessageScenarioLeads = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: PostLeadsToMessageScenarios) => {
       const payload = { leadsIds: data.leadsIds };
@@ -129,6 +131,7 @@ export const usePostMessageScenarioLeads = () => {
     },
     onSuccess: () => {
       toast("Leads was sucessfully added to a message scenario");
+      queryClient.invalidateQueries({ queryKey: ["message-campaign-entry"] });
     },
     onError: () => {
       toast("Failed to add leads to a message scenario");
