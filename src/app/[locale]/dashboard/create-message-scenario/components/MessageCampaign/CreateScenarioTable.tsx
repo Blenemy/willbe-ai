@@ -26,15 +26,17 @@ import {
   useDeleteMessageCampaignEntry,
   useUpdateMessageEntryLead,
 } from "@/hooks/useMessageCampaignEntries";
-import { useGenerateMessages } from "@/hooks/useGenerateMessages";
+import {
+  useGenerateMessages,
+  useSendMessages,
+} from "@/hooks/useGenerateMessages";
 import { useParams } from "next/navigation";
 
 interface Props {
   leads: MessageEntryData[];
-  onSend: () => void;
 }
 
-export const CreateScenarioTable = ({ leads, onSend }: Props) => {
+export const CreateScenarioTable = ({ leads }: Props) => {
   const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
   const [editedLeads, setEditedLeads] = useState<
@@ -43,6 +45,7 @@ export const CreateScenarioTable = ({ leads, onSend }: Props) => {
   const { mutate: updateLead } = useUpdateMessageEntryLead();
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
   const { mutate: generateMessages } = useGenerateMessages();
+  const { mutate: sendMessages } = useSendMessages();
   const params = useParams();
   const id = params?.id as string;
 
@@ -50,6 +53,12 @@ export const CreateScenarioTable = ({ leads, onSend }: Props) => {
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
+  };
+
+  const handleSendMessages = () => {
+    sendMessages({ messageEntryDataIds: selected });
+
+    setSelected([]);
   };
 
   const handleDeleteLeads = (leadId: string) => {
@@ -267,7 +276,7 @@ export const CreateScenarioTable = ({ leads, onSend }: Props) => {
           {t("buttons.generate")}
         </Button>
         <Button
-          onClick={onSend}
+          onClick={handleSendMessages}
           disabled={
             selected.length === 0 ||
             selected.some((id) => {

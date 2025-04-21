@@ -172,10 +172,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
       />
 
       {selectedEntry && (
-        <CreateScenarioTable
-          leads={selectedEntry.messageEntryLeadData}
-          onSend={() => console.log("Send messages")}
-        />
+        <CreateScenarioTable leads={selectedEntry.messageEntryLeadData} />
       )}
     </div>
   );

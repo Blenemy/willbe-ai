@@ -31,3 +31,29 @@ export const useGenerateMessages = () => {
     },
   });
 };
+
+export const useSendMessages = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: GenerateMessagesDto) => {
+      const res = await protectedAxiosInstance.post(
+        "/auth/message-campaign-entries/send-messages",
+        data
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Messages were successfully sent.");
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entry"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entries"],
+      });
+    },
+    onError: () => {
+      toast.error("Failed to generate messages.");
+    },
+  });
+};
