@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Trash2, Eye, Search } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   MessageEntryData,
@@ -31,10 +31,13 @@ import {
   useSendMessages,
 } from "@/hooks/useGenerateMessages";
 import { useParams } from "next/navigation";
+import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 
 interface Props {
   leads: MessageEntryData[];
 }
+
+const ITEMS_PER_PAGE = 5;
 
 export const CreateScenarioTable = ({ leads }: Props) => {
   const t = useTranslations("messageScenarioData");
@@ -42,6 +45,10 @@ export const CreateScenarioTable = ({ leads }: Props) => {
   const [editedLeads, setEditedLeads] = useState<
     Record<string, Partial<MessageEntryData>>
   >({});
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(ITEMS_PER_PAGE);
+
   const { mutate: updateLead } = useUpdateMessageEntryLead();
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
   const { mutate: generateMessages } = useGenerateMessages();
@@ -57,7 +64,6 @@ export const CreateScenarioTable = ({ leads }: Props) => {
 
   const handleSendMessages = () => {
     sendMessages({ messageEntryDataIds: selected });
-
     setSelected([]);
   };
 
@@ -100,10 +106,38 @@ export const CreateScenarioTable = ({ leads }: Props) => {
     });
   };
 
+  const filteredLeads = useMemo(() => {
+    return leads.filter(
+      (lead) =>
+        lead.firstName?.toLowerCase().includes(search.toLowerCase()) ||
+        lead.lastname?.toLowerCase().includes(search.toLowerCase()) ||
+        lead.email?.toLowerCase().includes(search.toLowerCase()) ||
+        lead.role?.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [leads, search]);
+
+  const indexOfFirstItem = currentPage * rowsPerPage;
+  const indexOfLastItem = indexOfFirstItem + rowsPerPage;
+  const paginatedLeads = filteredLeads.slice(indexOfFirstItem, indexOfLastItem);
+
   if (!leads || leads.length === 0) return null;
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <Input
+          placeholder="Search by lead first name, last name, email, or role"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="max-w-md"
+        />
+
+        <div className="flex gap-2">
+          <Button variant="outline">Export CSV</Button>
+          <Button variant="outline">Export CSV (only leads with emails)</Button>
+        </div>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -123,7 +157,7 @@ export const CreateScenarioTable = ({ leads }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {leads.map((lead) => {
+          {paginatedLeads.map((lead) => {
             const changes = editedLeads[lead.id] || {};
             return (
               <TableRow key={lead.id}>
@@ -267,6 +301,30 @@ export const CreateScenarioTable = ({ leads }: Props) => {
           })}
         </TableBody>
       </Table>
+
+      <div className="flex items-center justify-between pt-4">
+        <div className="text-sm flex gap-2 items-center">
+          <span className="min-w-28">{t("dropdown.rowsPerPage")}</span>
+          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+            <SelectTrigger className="w-16">
+              <SelectValue placeholder={String(rowsPerPage)} />
+            </SelectTrigger>
+            <SelectContent>
+              {[5, 10, 20].map((v) => (
+                <SelectItem key={v} value={String(v)}>
+                  {v}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <CustomPagination
+          page={currentPage}
+          setPage={setCurrentPage}
+          totalCount={filteredLeads.length}
+          rowsPerPage={rowsPerPage}
+        />
+      </div>
 
       <div className="flex justify-between pt-4">
         <Button

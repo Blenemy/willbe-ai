@@ -6,7 +6,7 @@ export type MessageType =
   | "linkedin_connection"
   | "follow_up_email"
   | "linkedin_message"
-  | "follow_up_linkedin";
+  | "linkedin_follow_up";
 
 interface MessageChainStore {
   entries: MessageEntry[];
@@ -61,7 +61,7 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
       };
     }
 
-    if (type === "follow_up_linkedin" && !hasLinkedinMessage) {
+    if (type === "linkedin_follow_up" && !hasLinkedinMessage) {
       return {
         valid: false,
         reason: "Follow-up LinkedIn requires a LinkedIn Message first.",
@@ -88,7 +88,7 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
       "linkedin_connection",
       "follow_up_email",
       "linkedin_message",
-      "follow_up_linkedin",
+      "linkedin_follow_up",
     ];
 
     return types.filter((type) => get().canCreateEntry(type, ignoreId).valid);
