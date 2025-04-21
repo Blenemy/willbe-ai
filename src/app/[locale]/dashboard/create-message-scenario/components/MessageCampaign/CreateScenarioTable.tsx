@@ -22,6 +22,7 @@ import { Trash2, Eye, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  MessageEntry,
   MessageEntryData,
   useDeleteMessageCampaignEntry,
   useUpdateMessageEntryLead,
@@ -32,14 +33,16 @@ import {
 } from "@/hooks/useGenerateMessages";
 import { useParams } from "next/navigation";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { ExportCsvButtons } from "./ExportCsvButtons";
 
 interface Props {
   leads: MessageEntryData[];
+  selectedEntry: MessageEntry;
 }
 
 const ITEMS_PER_PAGE = 5;
 
-export const CreateScenarioTable = ({ leads }: Props) => {
+export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
   const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
   const [editedLeads, setEditedLeads] = useState<
@@ -132,10 +135,7 @@ export const CreateScenarioTable = ({ leads }: Props) => {
           className="max-w-md"
         />
 
-        <div className="flex gap-2">
-          <Button variant="outline">Export CSV</Button>
-          <Button variant="outline">Export CSV (only leads with emails)</Button>
-        </div>
+        <ExportCsvButtons selectedEntryId={selectedEntry.id} />
       </div>
 
       <Table>

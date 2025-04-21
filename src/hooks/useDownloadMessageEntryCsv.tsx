@@ -7,8 +7,10 @@ export const useDownloadMessageEntryCsv = (
 ) => {
   return useQuery({
     queryKey: ["message-entry-csv", id, withEmails],
-    enabled: !!id,
+    enabled: false,
     queryFn: async () => {
+      if (!id) throw new Error("No ID provided");
+
       const response = await protectedAxiosInstance.get(
         `/auth/message-campaign-entries/${id}/csv`,
         {
