@@ -29,12 +29,14 @@ const ITEMS_PER_PAGE = 5;
 
 const AccountScenariosPage = () => {
   const t = useTranslations("AccountScenarios");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { accountScenariosDataTable = [], deleteAccountScenario } =
     useAccountScenarios({
       enableFetch: true,
     });
+
+  console.log(accountScenariosDataTable);
 
   const locale = useLocale();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -83,6 +85,8 @@ const AccountScenariosPage = () => {
     router.replace(newUrl.toString());
   };
 
+  console.log(currentItems);
+
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
@@ -122,7 +126,7 @@ const AccountScenariosPage = () => {
         </TableBody>
       </Table>
       <CustomPagination
-        page={currentPage}
+        page={currentPage - 1}
         setPage={setCurrentPage}
         totalCount={totalPages}
         rowsPerPage={ITEMS_PER_PAGE}
