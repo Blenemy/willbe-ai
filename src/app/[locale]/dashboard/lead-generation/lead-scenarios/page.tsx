@@ -31,7 +31,7 @@ const ITEMS_PER_PAGE = 5;
 const LeadScenariosPage = () => {
   const t = useTranslations("leadScenarios");
 
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
   const { leadScenariousTableData = [], deleteLeadScenarious } =
     useLeadScenarios({ enableFetch: true });
@@ -129,7 +129,7 @@ const LeadScenariosPage = () => {
         </TableBody>
       </Table>
       <CustomPagination
-        page={currentPage}
+        page={currentPage - 1}
         setPage={setCurrentPage}
         totalCount={totalPages}
         rowsPerPage={5}
