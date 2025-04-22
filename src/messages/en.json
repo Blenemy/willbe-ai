@@ -1397,6 +1397,10 @@
       "accounts": "🗂 Accounts",
       "leads": "👥 Leads"
     },
+    "modals": {
+      "deleteTitle": "Remove lead",
+      "deleteConfirm": "Are you sure you want to remove this lead? This action cannot be undone."
+    },
     "search": {
       "account": "Search by account title",
       "lead": "Search by lead first name, last name, email, or role",
@@ -1430,7 +1434,11 @@
     "buttons": {
       "generate": "Generate message(s)",
       "send": "Send {count} message(s)",
-      "import": "Import leads"
+      "import": "Import leads",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "searchEmails": "Search for emails",
+      "searching": "Searching..."
     },
     "placeholders": {
       "email": "Email",

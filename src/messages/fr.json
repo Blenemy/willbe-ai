@@ -1406,9 +1406,13 @@
       "accounts": "🗂 Comptes",
       "leads": "👥 Leads"
     },
+    "modals": {
+      "deleteTitle": "Supprimer le lead",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce lead ? Cette action est irréversible."
+    },
     "search": {
-      "account": "Rechercher par titre du compte",
-      "lead": "Rechercher par prénom, nom, email ou poste du lead",
+      "account": "Rechercher par titre de compte",
+      "lead": "Rechercher par prénom, nom, e-mail ou rôle du lead",
       "scenario": "Rechercher par titre du scénario"
     },
     "table": {
@@ -1416,10 +1420,10 @@
       "industry": "Secteur",
       "firstName": "Prénom",
       "lastName": "Nom",
-      "email": "Email",
+      "email": "E-mail",
       "phone": "Téléphone",
       "account": "Compte",
-      "role": "Poste",
+      "role": "Rôle",
       "messageStructure": "Structure du message",
       "language": "Langue",
       "product": "Produit/Service",
@@ -1437,19 +1441,23 @@
       "rowsPerPage": "Lignes par page :"
     },
     "buttons": {
-      "generate": "Générer le(s) message(s)",
+      "generate": "Générer message(s)",
       "send": "Envoyer {count} message(s)",
-      "import": "Importer des leads"
+      "import": "Importer des leads",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "searchEmails": "Rechercher des e-mails",
+      "searching": "Recherche en cours..."
     },
     "placeholders": {
-      "email": "Email",
+      "email": "E-mail",
       "phone": "Téléphone",
       "selectAccount": "Sélectionner un compte",
       "selectStructure": "Sélectionner une structure",
       "selectLanguage": "Sélectionner une langue",
       "selectProduct": "Sélectionner un produit",
       "message": "Message",
-      "role": "Poste"
+      "role": "Rôle"
     }
   },
   "messageChain": {

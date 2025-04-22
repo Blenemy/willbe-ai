@@ -1401,20 +1401,24 @@
       "accounts": "🗂 Cuentas",
       "leads": "👥 Leads"
     },
+    "modals": {
+      "deleteTitle": "Eliminar lead",
+      "deleteConfirm": "¿Estás seguro de que deseas eliminar este lead? Esta acción no se puede deshacer."
+    },
     "search": {
-      "account": "Buscar por título de la cuenta",
-      "lead": "Buscar por nombre, apellido, email o cargo del lead",
+      "account": "Buscar por título de cuenta",
+      "lead": "Buscar por nombre, apellido, correo o rol del lead",
       "scenario": "Buscar por título del escenario"
     },
     "table": {
-      "accountTitle": "Título de la cuenta",
+      "accountTitle": "Título de cuenta",
       "industry": "Industria",
       "firstName": "Nombre",
       "lastName": "Apellido",
       "email": "Correo electrónico",
       "phone": "Teléfono",
       "account": "Cuenta",
-      "role": "Cargo",
+      "role": "Rol",
       "messageStructure": "Estructura del mensaje",
       "language": "Idioma",
       "product": "Producto/Servicio",
@@ -1434,7 +1438,11 @@
     "buttons": {
       "generate": "Generar mensaje(s)",
       "send": "Enviar {count} mensaje(s)",
-      "import": "Importar leads"
+      "import": "Importar leads",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "searchEmails": "Buscar correos",
+      "searching": "Buscando..."
     },
     "placeholders": {
       "email": "Correo electrónico",
@@ -1444,7 +1452,7 @@
       "selectLanguage": "Seleccionar idioma",
       "selectProduct": "Seleccionar producto",
       "message": "Mensaje",
-      "role": "Cargo"
+      "role": "Rol"
     }
   },
   "messageChain": {

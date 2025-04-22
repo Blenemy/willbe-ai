@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Trash2, Eye, Search } from "lucide-react";
+import { Trash2, Eye, Sparkles, Pencil, Loader2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -34,6 +34,9 @@ import {
 import { useParams } from "next/navigation";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { ExportCsvButtons } from "./ExportCsvButtons";
+import { EditMessageModal } from "./EditMessageModal";
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
+import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 
 interface Props {
   leads: MessageEntryData[];
@@ -43,6 +46,12 @@ interface Props {
 const ITEMS_PER_PAGE = 5;
 
 export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalLeadId, setModalLeadId] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<MessageEntryData | null>(
+    null
+  );
   const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
   const [editedLeads, setEditedLeads] = useState<
@@ -56,6 +65,7 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
   const { mutate: generateMessages } = useGenerateMessages();
   const { mutate: sendMessages } = useSendMessages();
+  const { mutate: searchField, isPending } = useSearchLeadField();
   const params = useParams();
   const id = params?.id as string;
 
@@ -169,30 +179,57 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                 </TableCell>
                 <TableCell>{lead.firstName}</TableCell>
                 <TableCell>{lead.lastname}</TableCell>
-                <TableCell className="flex items-center gap-2">
-                  <Input
-                    value={changes.email ?? lead.email ?? ""}
-                    onChange={(e) =>
-                      handleChange(lead.id, "email", e.target.value)
-                    }
-                    onBlur={() => handleBlur(lead.id)}
-                    placeholder={t("placeholders.email")}
-                  />
-                  {!lead.email && (
-                    <Button size="icon" variant="ghost">
-                      <Search className="w-4 h-4" />
+                <TableCell className="align-middle">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={changes.email ?? lead.email ?? ""}
+                      onChange={(e) =>
+                        handleChange(lead.id, "email", e.target.value)
+                      }
+                      onBlur={() => handleBlur(lead.id)}
+                      placeholder={t("placeholders.email")}
+                      className="h-9"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() =>
+                        searchField({ entryIds: [lead.id], field: "email" })
+                      }
+                    >
+                      {isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 text-muted-foreground" />
+                      )}
                     </Button>
-                  )}
+                  </div>
                 </TableCell>
-                <TableCell>
-                  <Input
-                    value={changes.phone ?? lead.phone ?? ""}
-                    onChange={(e) =>
-                      handleChange(lead.id, "phone", e.target.value)
-                    }
-                    onBlur={() => handleBlur(lead.id)}
-                    placeholder={t("placeholders.phone")}
-                  />
+                <TableCell className="align-middle">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={changes.phone ?? lead.phone ?? ""}
+                      onChange={(e) =>
+                        handleChange(lead.id, "phone", e.target.value)
+                      }
+                      onBlur={() => handleBlur(lead.id)}
+                      placeholder={t("placeholders.phone")}
+                      className="h-9"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() =>
+                        searchField({ entryIds: [lead.id], field: "phone" })
+                      }
+                    >
+                      {isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <span>{lead.company}</span>
@@ -273,14 +310,33 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                   </Select>
                 </TableCell>
                 <TableCell>
-                  <Input
-                    value={changes.message ?? lead.message ?? ""}
-                    onChange={(e) =>
-                      handleChange(lead.id, "message", e.target.value)
-                    }
-                    onBlur={() => handleBlur(lead.id)}
-                    placeholder={t("placeholders.message")}
-                  />
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate max-w-[180px] text-sm text-muted-foreground">
+                      {lead.message?.slice(0, 60) || t("placeholders.message")}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        setModalLeadId(lead.id);
+                        setModalOpen(true);
+                      }}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  {modalLeadId === lead.id && (
+                    <EditMessageModal
+                      open={modalOpen}
+                      onClose={() => setModalOpen(false)}
+                      initialMessage={lead.message ?? ""}
+                      leadName={`${lead.firstName} ${lead.lastname}`}
+                      onSave={(newMessage) => {
+                        updateLead({ leadId: lead.id, message: newMessage });
+                      }}
+                    />
+                  )}
                 </TableCell>
                 <TableCell>
                   <Button variant="ghost" size="icon">
@@ -291,10 +347,26 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleDeleteLeads(lead.leadId)}
+                    onClick={() => {
+                      setLeadToDelete(lead);
+                      setDeleteModalOpen(true);
+                    }}
                   >
                     <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
+
+                  {leadToDelete?.id === lead.id && (
+                    <ConfirmDeleteModal
+                      open={deleteModalOpen}
+                      onClose={() => setDeleteModalOpen(false)}
+                      leadName={`${lead.firstName} ${lead.lastname}`}
+                      onConfirm={() => {
+                        handleDeleteLeads(lead.leadId);
+                        setDeleteModalOpen(false);
+                        setLeadToDelete(null);
+                      }}
+                    />
+                  )}
                 </TableCell>
               </TableRow>
             );
@@ -326,13 +398,31 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
         />
       </div>
 
-      <div className="flex justify-between pt-4">
+      <div className="flex justify-end pt-4 gap-3">
+        <Button
+          disabled={selected.length === 0 || isPending}
+          onClick={() => {
+            searchField({ entryIds: selected, field: "email" });
+          }}
+        >
+          {isPending ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              {t("buttons.searching")}
+            </>
+          ) : (
+            t("buttons.searchEmails")
+          )}
+        </Button>
         <Button
           onClick={() => generateMessages({ messageEntryDataIds: selected })}
           disabled={selected.length === 0}
         >
           {t("buttons.generate")}
         </Button>
+      </div>
+
+      <div className="flex justify-center">
         <Button
           onClick={handleSendMessages}
           disabled={
