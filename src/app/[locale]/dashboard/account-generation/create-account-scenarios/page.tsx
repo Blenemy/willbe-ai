@@ -33,7 +33,10 @@ import {
 import { useAccountScenariosDropdowns } from "@/hooks/useDropdownOptionsQuery";
 import FormAccordion from "../../lead-generation/create-lead-scenarios/components/formComponents/FormAccordion";
 import AccountNameForm from "./components/AccountNameForm";
-import { accountScenarioFormSchema } from "@/schemas/accountScenarioFormSchema";
+import {
+  accountScenarioFormSchema,
+  getAccountScenarioFormSchema,
+} from "@/schemas/accountScenarioFormSchema";
 import MultiSelectWithSearchButton from "./components/formComponents/MultiSelectWithSearchButton";
 import { Button } from "@/components/ui/button";
 import { prepareAccountPayload } from "@/utils/prepareAccountPayload";
@@ -52,6 +55,7 @@ const CreateAccountScenarios = () => {
   const accountId = searchParams.get("accountId");
   const accountName = searchParams.get("accountName");
   const t = useTranslations("scenariosFilter");
+  const tErrors = useTranslations("scenariosFilter.annual_revenue.errors");
   const { updateAccountScenario, accountScenarioById } = useAccountScenarios({
     enableFetch: false,
     accountId,
@@ -61,7 +65,7 @@ const CreateAccountScenarios = () => {
 
   const form: UseFormReturn<AccountScenariosType> =
     useForm<AccountScenariosType>({
-      resolver: zodResolver(accountScenarioFormSchema),
+      resolver: zodResolver(getAccountScenarioFormSchema(tErrors)),
       defaultValues: {
         industry: "",
         industry_include: [],

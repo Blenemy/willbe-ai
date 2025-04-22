@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableHeader,
@@ -11,10 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ExternalLink } from "lucide-react";
-import {
-  AccountScenario,
-  AccountScenarioData,
-} from "@/hooks/useEditScenarioData";
 import { useState } from "react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import {
@@ -25,6 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { renderHeader } from "@/components/ui/renderHeader";
+import {
+  AccountScenario,
+  AccountScenarioData,
+} from "@/hooks/useEditScenarioData";
 
 interface Props {
   data: AccountScenario[];
@@ -35,6 +36,7 @@ interface Props {
 type SortKey = "name" | "industry" | "";
 
 export const AccountsTable = ({ data, selected, setSelected }: Props) => {
+  const t = useTranslations("messageScenarioData");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -100,7 +102,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   return (
     <>
       <Input
-        placeholder="Search by account title"
+        placeholder={t("search.account")}
         className="mb-4"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -111,13 +113,19 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
           <TableRow>
             <TableHead className="w-[40px]" />
             {renderHeader(
-              "Account title",
+              t("table.accountTitle"),
               "name",
               sortKey,
               sortAsc,
               handleSort
             )}
-            {renderHeader("Industry", "industry", sortKey, sortAsc, handleSort)}
+            {renderHeader(
+              t("table.industry"),
+              "industry",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead className="w-[40px]" />
           </TableRow>
         </TableHeader>
@@ -164,7 +172,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          Rows per page:
+          <span className="min-w-28">{t("dropdown.rowsPerPage")}</span>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />

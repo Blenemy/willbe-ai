@@ -139,7 +139,7 @@ const LeadsSaved = () => {
       </Table>
 
       {selectedIds.length > 0 && (
-        <Button className="self-start mt-4">Generate message scenario</Button>
+        <Button className="self-start mt-4">{t("generate")}</Button>
       )}
     </div>
   );

@@ -10,6 +10,7 @@ import { UseFormReturn } from "react-hook-form";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useSearchParamsQuery } from "@/hooks/useSearchParamsQuery";
 import { AccountScenariosType } from "../../page";
+import { useTranslations } from "next-intl";
 
 interface SearchOption {
   id: string;
@@ -40,6 +41,7 @@ const MultiSelectWithSearchButton = ({
   valueName,
 }: FormInputWithSearchMultiSelectProps) => {
   const keywords = form.watch(searchName) as string | undefined;
+  const t = useTranslations("multiSelectWithSearch");
 
   const includeOptions = includeName
     ? (form.watch(includeName) as SearchOption[] | [])
@@ -100,7 +102,7 @@ const MultiSelectWithSearchButton = ({
         />
 
         <Button type="button" onClick={handleSearch} disabled={isLoading}>
-          {isLoading ? "Searching..." : "Search"}
+          {isLoading ? t("searching") : t("search")}
         </Button>
       </div>
 
@@ -132,7 +134,7 @@ const MultiSelectWithSearchButton = ({
                         }
                       }}
                       defaultValue={selectedItems.map((item) => item.id)}
-                      placeholder="Select technologies"
+                      placeholder={t("selectTechnologies")}
                       variant="secondary"
                       className="bg-white hover:bg-white"
                       animation={2}
@@ -164,7 +166,7 @@ const MultiSelectWithSearchButton = ({
                         form.setValue(includeName, selectedObjects);
                       }}
                       defaultValue={includeOptions.map((item) => item.id)}
-                      placeholder="Select values to include"
+                      placeholder={t("selectInclude")}
                       variant="secondary"
                       className="bg-white hover:bg-white"
                       animation={2}
@@ -197,7 +199,7 @@ const MultiSelectWithSearchButton = ({
                         form.setValue(excludeName, selectedObjects);
                       }}
                       defaultValue={excludeOptions.map((item) => item.id)}
-                      placeholder="Select values to exclude"
+                      placeholder={t("selectExclude")}
                       variant="secondary"
                       className="bg-white hover:bg-white"
                       animation={2}

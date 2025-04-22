@@ -13,7 +13,6 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import { Card } from "@/components/ui/card";
 import {
   Home,
   List,
@@ -293,7 +292,7 @@ export function AppSidebar({
             </div>
           ) : (
             <>
-              {open && (
+              {/* {open && (
                 <div className="p-4 mt-auto">
                   <Card className="p-4 text-sm flex flex-col gap-3">
                     <p className="font-semibold">Available credits</p>
@@ -303,12 +302,12 @@ export function AppSidebar({
                     <p className="text-xs text-gray-500">(Renews to: al mes)</p>
                   </Card>
                 </div>
-              )}
+              )} */}
 
               <div className="flex flex-col items-center gap-2 mt-3">
                 {open && (
                   <Button onClick={() => logout()} variant={"link"}>
-                    Log out
+                    {translations.logout}
                   </Button>
                 )}
               </div>

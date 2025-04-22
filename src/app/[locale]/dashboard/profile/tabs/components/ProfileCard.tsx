@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ProfileCardProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard = ({ title, children, onEdit }: ProfileCardProps) => {
+  const t = useTranslations("Users");
   return (
     <Card>
       <CardContent className="py-6 flex flex-col gap-4">
@@ -16,7 +18,7 @@ const ProfileCard = ({ title, children, onEdit }: ProfileCardProps) => {
           {title && <h3 className="font-semibold text-lg">{title}</h3>}
           {onEdit && (
             <Button type="button" variant="outline" onClick={onEdit}>
-              Edit <Edit />
+              {t("edit")} <Edit />
             </Button>
           )}
         </div>

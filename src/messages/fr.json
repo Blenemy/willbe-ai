@@ -913,7 +913,8 @@
     "My account": "Mon compte",
     "Scenario list": "Liste des scénarios",
     "Create message scenario": "Créer un scénario de message",
-    "Create message structures": "Créer des structures de message"
+    "Create message structures": "Créer des structures de message",
+    "Log out": "Se déconnecter"
   },
   "MessageStructures": {
     "title": "Structures de Messages",
@@ -1088,7 +1089,12 @@
       "description": "Filtrer les entreprises selon leurs revenus annuels estimés ou déclarés.",
       "from": "De (en %)",
       "to": "À (en %)",
-      "currency": "Sélectionner une devise"
+      "currency": "Sélectionner une devise",
+      "errors": {
+        "annual_revenue_from_required": "Veuillez sélectionner le chiffre d'affaires minimum",
+        "annual_revenue_to_required": "Veuillez sélectionner le chiffre d'affaires maximum",
+        "annual_revenue_currency_required": "Veuillez sélectionner la devise"
+      }
     },
     "buttons": {
       "save": "Sauvegarder le scénario",
@@ -1332,5 +1338,147 @@
       "delete": "Supprimer"
     },
     "generate": "Générer un scénario de messages"
+  },
+  "multiSelectWithSearch": {
+    "search": "Rechercher",
+    "searching": "Recherche en cours...",
+    "selectTechnologies": "Sélectionner des technologies",
+    "selectInclude": "Sélectionner les valeurs à inclure",
+    "selectExclude": "Sélectionner les valeurs à exclure"
+  },
+  "scenarioList": {
+    "title": "Liste des scénarios",
+    "create": "Créer un scénario",
+    "view": "Vue",
+    "searchPlaceholder": "Rechercher par titre du scénario",
+    "sortByStatus": "Trier par statut",
+    "deleteSelected": "Supprimer la sélection ({count})",
+    "rowsPerPage": "Lignes par page :",
+    "actions": "Actions",
+    "status": {
+      "all": "Tous les statuts",
+      "not_started": "Non commencé",
+      "in_progress": "En cours",
+      "done": "Terminé"
+    },
+    "table": {
+      "title": "Titre du scénario",
+      "leads": "Leads dans la séquence",
+      "sent": "Messages envoyés",
+      "responseRate": "Taux de réponse",
+      "meetingRate": "Taux de réunion",
+      "status": "Statut du scénario",
+      "createdBy": "Créé par",
+      "createdAt": "Date de création",
+      "actions": "Actions",
+      "open": "Ouvrir",
+      "delete": "Supprimer"
+    },
+    "dialog": {
+      "confirmDeleteTitle": "Êtes-vous sûr de vouloir supprimer ce scénario ?",
+      "confirmDeleteText": "Cette action ne peut pas être annulée.",
+      "cancel": "Annuler",
+      "delete": "Supprimer"
+    }
+  },
+  "messageScenario": {
+    "createTitle": "Créer des scénarios de messages",
+    "editTitle": "Modifier les scénarios de messages",
+    "steps": {
+      "import": "Importer des leads",
+      "campaign": "Campagne de messages",
+      "stats": "Statistiques"
+    },
+    "form": {
+      "titleLabel": "Titre du scénario",
+      "titlePlaceholder": "Entrez le titre du scénario",
+      "createBtn": "Créer un scénario",
+      "updateBtn": "Mettre à jour un scénario"
+    },
+    "validation": {
+      "titleRequired": "Le titre est requis"
+    }
+  },
+  "messageScenarioData": {
+    "includeData": "Inclure les données",
+    "tabs": {
+      "scenarios": "📝 Scénario de génération de leads",
+      "accounts": "🗂 Comptes",
+      "leads": "👥 Leads"
+    },
+    "modals": {
+      "deleteTitle": "Supprimer le lead",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce lead ? Cette action est irréversible."
+    },
+    "search": {
+      "account": "Rechercher par titre de compte",
+      "lead": "Rechercher par prénom, nom, e-mail ou rôle du lead",
+      "scenario": "Rechercher par titre du scénario"
+    },
+    "table": {
+      "accountTitle": "Titre du compte",
+      "industry": "Secteur",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "account": "Compte",
+      "role": "Rôle",
+      "messageStructure": "Structure du message",
+      "language": "Langue",
+      "product": "Produit/Service",
+      "message": "Message",
+      "lastResponse": "Dernière réponse",
+      "actions": "Actions",
+      "scenarioTitle": "Nom du scénario",
+      "createdBy": "Créé par",
+      "createdAt": "Date de création"
+    },
+    "dropdown": {
+      "all": "Tous",
+      "selected": "Sélectionnés",
+      "unselected": "Non sélectionnés",
+      "rowsPerPage": "Lignes par page :"
+    },
+    "buttons": {
+      "generate": "Générer message(s)",
+      "send": "Envoyer {count} message(s)",
+      "import": "Importer des leads",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "searchEmails": "Rechercher des e-mails",
+      "searching": "Recherche en cours..."
+    },
+    "placeholders": {
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "selectAccount": "Sélectionner un compte",
+      "selectStructure": "Sélectionner une structure",
+      "selectLanguage": "Sélectionner une langue",
+      "selectProduct": "Sélectionner un produit",
+      "message": "Message",
+      "role": "Rôle"
+    }
+  },
+  "messageChain": {
+    "title": "Titre du scénario",
+    "exportCsv": "Exporter CSV",
+    "exportCsvWithEmails": "Exporter CSV (seulement les leads avec email)",
+    "modal": {
+      "addTitle": "Ajouter un message",
+      "editTitle": "Modifier le message",
+      "typeLabel": "Type",
+      "typePlaceholder": "Sélectionner un type de message",
+      "dateLabel": "Date",
+      "timeLabel": "Heure",
+      "cancel": "Annuler",
+      "add": "Ajouter",
+      "save": "Enregistrer"
+    },
+    "validation": {
+      "typeRequired": "Le type est requis",
+      "dateRequired": "La date est requise",
+      "timeRequired": "L'heure est requise"
+    }
   }
 }

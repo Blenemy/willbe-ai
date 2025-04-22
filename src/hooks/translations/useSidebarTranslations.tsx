@@ -24,6 +24,7 @@ export async function getSidebarTranslations() {
     companySettings: t("Company settings"),
     users: t("Users"),
     myAccount: t("My account"),
+    logout: t("Log out"),
   };
 }
 
