@@ -36,8 +36,6 @@ const AccountScenariosPage = () => {
       enableFetch: true,
     });
 
-  console.log(accountScenariosDataTable);
-
   const locale = useLocale();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedScenario, setSelectedScenario] =
@@ -84,8 +82,6 @@ const AccountScenariosPage = () => {
 
     router.replace(newUrl.toString());
   };
-
-  console.log(currentItems);
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">

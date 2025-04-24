@@ -8,21 +8,21 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { CodeNode } from "@lexical/code";
+import { LinkNode } from "@lexical/link";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getRoot, TextNode } from "lexical";
-import { ToolbarPlugin } from "@/components/ToolbarPlugin/ToolbarPlugin";
 import { useEffectOnce } from "react-use";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { EditorThemeClasses } from "lexical";
+import { FloatingMenuPlugin } from "@/components/FloatingMenuPlugin/FloatingMenuPlugin";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -95,7 +95,19 @@ export const EditMessageModal = ({
     onError(error: Error) {
       console.error("Lexical error:", error);
     },
-    nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, TextNode],
+    nodes: [
+      HeadingNode,
+      QuoteNode,
+      ListNode,
+      ListItemNode,
+      TextNode,
+      HeadingNode,
+      LinkNode,
+      ListNode,
+      ListItemNode,
+      QuoteNode,
+      CodeNode,
+    ],
   };
 
   return (
@@ -107,20 +119,21 @@ export const EditMessageModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <LexicalComposer initialConfig={editorConfig}>
-          <InitialContentPlugin content={initialMessage} />
-          <ToolbarPlugin />
-          <ListPlugin />
-          <RichTextPlugin
-            contentEditable={
-              <ContentEditable className="min-h-96 border p-4 rounded-md outline-none" />
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <HistoryPlugin />
-          <AutoFocusPlugin />
-          <OnChangeHtmlPlugin onChange={setMessage} />
-        </LexicalComposer>
+        <div className="relative">
+          <LexicalComposer initialConfig={editorConfig}>
+            <InitialContentPlugin content={initialMessage} />
+            <ListPlugin />
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable className="min-h-96 border p-4 rounded-md outline-none" />
+              }
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <FloatingMenuPlugin />
+
+            <OnChangeHtmlPlugin onChange={setMessage} />
+          </LexicalComposer>
+        </div>
 
         <div className="flex justify-end gap-2 pt-4">
           <Button variant="outline" onClick={onClose}>
