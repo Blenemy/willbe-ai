@@ -259,8 +259,6 @@ const CreateLeadScenarios = () => {
         });
       }
 
-      console.log(form.getValues());
-
       form.trigger();
     }
   }, [leadScenarioById, leadFilterById, applyWithReset, form]);
