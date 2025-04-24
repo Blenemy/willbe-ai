@@ -1473,7 +1473,8 @@
     "validation": {
       "typeRequired": "El tipo es obligatorio",
       "dateRequired": "La fecha es obligatoria",
-      "timeRequired": "La hora es obligatoria"
+      "timeRequired": "La hora es obligatoria",
+      "dateInPast": "No puedes seleccionar una fecha pasada."
     }
   }
 }

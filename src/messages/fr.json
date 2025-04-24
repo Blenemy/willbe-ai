@@ -1478,7 +1478,8 @@
     "validation": {
       "typeRequired": "Le type est requis",
       "dateRequired": "La date est requise",
-      "timeRequired": "L'heure est requise"
+      "timeRequired": "L'heure est requise",
+      "dateInPast": "Vous ne pouvez pas sélectionner une date passée."
     }
   }
 }

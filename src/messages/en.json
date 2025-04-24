@@ -1469,7 +1469,8 @@
     "validation": {
       "typeRequired": "Type is required",
       "dateRequired": "Date is required",
-      "timeRequired": "Time is required"
+      "timeRequired": "Time is required",
+      "dateInPast": "You cannot select a date in the past."
     }
   }
 }
