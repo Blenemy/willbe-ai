@@ -77,11 +77,11 @@ const MessageStructures = () => {
   };
 
   const handleOpen = (structureId: string) => {
-    router.push(`/dashboard/messages/message-structures/${structureId}`);
+    router.push(`/dashboard/create-message-structures/${structureId}`);
   };
 
   const handleAddNew = () => {
-    router.push(`/dashboard/messages/message-structures/create`);
+    router.push(`/dashboard/create-message-structures`);
   };
 
   if (isLoading) {

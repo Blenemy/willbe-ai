@@ -133,7 +133,7 @@ export function AppSidebar({
           },
           {
             title: translations.createMessageStructures,
-            url: "/dashboard/messages/create-message-structures",
+            url: "/dashboard/create-message-structures",
             allowedRoles: ALL_ROLES,
           },
         ],

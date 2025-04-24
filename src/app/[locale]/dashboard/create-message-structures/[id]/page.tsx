@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { useMessageStructureForm } from "@/hooks/useMessageStructureForm";
-import { LanguageForm } from "../components/LanguageForm";
+import { LanguageForm } from "../../messages/message-structures/components/LanguageForm";
 import {
   Select,
   SelectContent,
@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LanguageTranslateUI } from "../components/LanguageTranslateUI";
+import { LanguageTranslateUI } from "../../messages/message-structures/components/LanguageTranslateUI";
 import { LANGUAGES } from "@/constants/languagesMessageStructure";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
