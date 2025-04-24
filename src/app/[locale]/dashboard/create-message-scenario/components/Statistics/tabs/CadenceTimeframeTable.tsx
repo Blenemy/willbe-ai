@@ -18,54 +18,21 @@ import {
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
-
-interface CadenceItem {
-  id: string;
-  type: string;
-  structure: string;
-  mailsSent: number;
-  meetingRate: string;
-  responseRate: string;
-  outOfOfficeRate: string;
-  bounceRate: string;
-  sendDate: string;
-  sent: boolean;
-}
-
-const mockCadences: CadenceItem[] = [
-  {
-    id: "1",
-    type: "LinkedIn Connection",
-    structure: "FuP [Objective]",
-    mailsSent: 85,
-    meetingRate: "12%",
-    responseRate: "48%",
-    outOfOfficeRate: "19%",
-    bounceRate: "31%",
-    sendDate: "07/4/25, 11:52 am",
-    sent: true,
-  },
-  ...Array(4)
-    .fill(0)
-    .map((_, i) => ({
-      id: `${i + 2}`,
-      type: "Follow up email",
-      structure: "FuP [Objective]",
-      mailsSent: 85,
-      meetingRate: "12%",
-      responseRate: "48%",
-      outOfOfficeRate: "19%",
-      bounceRate: "31%",
-      sendDate: "07/4/25, 11:52 am",
-      sent: true,
-    })),
-];
+import { useCadenceTimeframe } from "@/hooks/useCadenceTimeframe";
+import { useParams } from "next/navigation";
+import { format } from "date-fns";
 
 export const CadenceTimeframeTable = () => {
+  const { id: scenarioId } = useParams();
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useCadenceTimeframe(scenarioId as string);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const paginated = mockCadences.slice(
+  const paginated = data.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -87,23 +54,33 @@ export const CadenceTimeframeTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.type}</TableCell>
-              <TableCell>{item.structure}</TableCell>
-              <TableCell>{item.mailsSent}</TableCell>
-              <TableCell>{item.meetingRate}</TableCell>
-              <TableCell>{item.responseRate}</TableCell>
-              <TableCell>{item.outOfOfficeRate}</TableCell>
-              <TableCell>{item.bounceRate}</TableCell>
-              <TableCell>{item.sendDate}</TableCell>
-              <TableCell>
-                {item.sent && (
-                  <CheckCircle className="text-green-600 w-4 h-4 mx-auto" />
-                )}
+          {isLoading || error ? (
+            <TableRow>
+              <TableCell colSpan={9} className="text-center">
+                {isLoading ? "Loading..." : "Failed to load cadence data"}
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            paginated.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.cadenceType}</TableCell>
+                <TableCell>{item.structure}</TableCell>
+                <TableCell>{item.mailsSent}</TableCell>
+                <TableCell>{item.meetingRate}%</TableCell>
+                <TableCell>{item.responseRate}%</TableCell>
+                <TableCell>{item.outOfOfficeRate}%</TableCell>
+                <TableCell>{item.bounceRate}%</TableCell>
+                <TableCell>
+                  {format(new Date(item.dateToBeSent), "dd/MM/yy, hh:mm a")}
+                </TableCell>
+                <TableCell>
+                  {item.isSent && (
+                    <CheckCircle className="text-green-600 w-4 h-4 mx-auto" />
+                  )}
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
 
@@ -127,7 +104,7 @@ export const CadenceTimeframeTable = () => {
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
-          totalCount={mockCadences.length}
+          totalCount={data.length}
         />
       </div>
     </div>

@@ -2,7 +2,7 @@ import { Mail, TrendingUp, Reply, Calendar, Info } from "lucide-react";
 import { useScenarioStatistics } from "@/hooks/useScenarioStatistics";
 import { useParams } from "next/navigation";
 
-const COMMON_SIZE = 24;
+const COMMON_SIZE = 20;
 
 export const StatsCards = () => {
   const params = useParams();
