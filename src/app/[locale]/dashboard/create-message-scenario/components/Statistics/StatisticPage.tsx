@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CadenceTimeframeTable } from "./tabs/CadenceTimeframeTable";
 import { StatisticsMessagesTable } from "./tabs/StatisticsMessagesTable";
-import { StatsCards } from "./StatsCarads";
+import { StatsCards } from "./StatsCards";
 
 export const StatisticPage = () => {
   const [activeTab, setActiveTab] = useState("cadence");
