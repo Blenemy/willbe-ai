@@ -83,6 +83,12 @@ export const CreateMessageModal = ({
   const onSubmit = (values: FormValues) => {
     const { type, date, time } = values;
     const iso = new Date(`${date}T${time}`).toISOString();
+    const now = new Date().toISOString();
+
+    if (iso < now) {
+      toast.error(t("validation.dateInPast"));
+      return;
+    }
 
     const { valid, reason } = store.canCreateEntry(
       type as MessageType,
