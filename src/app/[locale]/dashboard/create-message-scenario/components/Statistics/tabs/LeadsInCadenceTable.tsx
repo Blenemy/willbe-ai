@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input";
 import { renderHeader } from "@/components/ui/renderHeader";
 import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 import { Button } from "@/components/ui/button";
+import { useDeleteMessageCampaignEntry } from "@/hooks/useMessageCampaignEntries";
+import { ConfirmDeleteModal } from "../../MessageCampaign/ConfirmDeleteModal";
 
 type SortKey = "name" | "company" | "";
 
@@ -37,6 +39,12 @@ export const LeadsInCadenceTable = () => {
     error,
   } = useLeadsInCadence(scenarioId as string);
   const { mutate: searchField, isPending } = useSearchLeadField();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<
+    (typeof data)[number] | null
+  >(null);
+
+  const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("in_cadence");
@@ -87,6 +95,10 @@ export const LeadsInCadenceTable = () => {
     page * rowsPerPage + rowsPerPage
   );
 
+  const handleDeleteLead = (leadId: string) => {
+    deleteLeads({ leadsIds: [leadId], id: scenarioId as string });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
@@ -134,6 +146,8 @@ export const LeadsInCadenceTable = () => {
             </TableRow>
           ) : (
             paginated.map((item) => {
+              console.log(item);
+
               const lead = item.lead.leadData;
               const fullName = `${lead.first_name} ${lead.last_name}`;
               const company = lead.current_positions?.[0]?.company ?? "-";
@@ -185,9 +199,18 @@ export const LeadsInCadenceTable = () => {
                       </Button>
                     </div>
                   </TableCell>
-                  <TableCell className="flex gap-2 justify-end">
+                  <TableCell className="flex gap-2 justify-end items-center">
                     <Edit className="w-4 h-4 cursor-pointer" />
-                    <Trash className="w-4 h-4 text-red-500 cursor-pointer" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        setDeleteModalOpen(true);
+                        setLeadToDelete(item);
+                      }}
+                    >
+                      <Trash className="w-4 h-4 text-red-500" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
@@ -195,6 +218,22 @@ export const LeadsInCadenceTable = () => {
           )}
         </TableBody>
       </Table>
+
+      {leadToDelete && (
+        <ConfirmDeleteModal
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setLeadToDelete(null);
+          }}
+          leadName={`${leadToDelete.lead.leadData.first_name} ${leadToDelete.lead.leadData.last_name}`}
+          onConfirm={() => {
+            handleDeleteLead(leadToDelete.leadId);
+            setDeleteModalOpen(false);
+            setLeadToDelete(null);
+          }}
+        />
+      )}
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
