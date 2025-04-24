@@ -82,10 +82,13 @@ export const CreateMessageModal = ({
 
   const onSubmit = (values: FormValues) => {
     const { type, date, time } = values;
-    const iso = new Date(`${date}T${time}`).toISOString();
-    const now = new Date().toISOString();
 
-    if (iso < now) {
+    const combined = `${date}T${time}:00`;
+
+    const now = new Date();
+    const selected = new Date(combined);
+
+    if (selected < now) {
       toast.error(t("validation.dateInPast"));
       return;
     }
@@ -101,27 +104,36 @@ export const CreateMessageModal = ({
     }
 
     if (mode === "edit" && initialData?.id) {
-      onEdit(initialData.id, type, iso);
+      onEdit(initialData.id, type, combined);
     } else {
-      onAdd(type, iso);
+      onAdd(type, combined);
     }
 
     onClose();
   };
 
   useEffect(() => {
-    if (!open) {
-      form.reset({
-        type: initialData?.type || "",
-        date: initialData?.sendDate
-          ? new Date(initialData.sendDate).toISOString().slice(0, 10)
-          : "",
-        time: initialData?.sendDate
-          ? new Date(initialData.sendDate).toTimeString().slice(0, 5)
-          : "",
-      });
+    if (open) {
+      if (initialData?.sendDate) {
+        const d = new Date(initialData.sendDate);
+
+        form.reset({
+          type: initialData.type || "",
+          date: d.toISOString().slice(0, 10),
+          time: `${d.getUTCHours().toString().padStart(2, "0")}:${d
+            .getUTCMinutes()
+            .toString()
+            .padStart(2, "0")}`,
+        });
+      } else {
+        form.reset({
+          type: "",
+          date: "",
+          time: "",
+        });
+      }
     }
-  }, [open, form, initialData]);
+  }, [form, initialData, open]);
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
