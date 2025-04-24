@@ -20,7 +20,7 @@ import { useLeadsInCadence } from "@/hooks/useLeadsInCadence";
 import { useParams } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
-import { Edit, Loader2, Sparkles, Trash } from "lucide-react";
+import { ExternalLink, Loader2, Sparkles, Trash } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { Input } from "@/components/ui/input";
 import { renderHeader } from "@/components/ui/renderHeader";
@@ -200,7 +200,16 @@ export const LeadsInCadenceTable = () => {
                     </div>
                   </TableCell>
                   <TableCell className="flex gap-2 justify-end items-center">
-                    <Edit className="w-4 h-4 cursor-pointer" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const url = item.lead.leadData.public_profile_url;
+                        if (url) window.open(url, "_blank");
+                      }}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
