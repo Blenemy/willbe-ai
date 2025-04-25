@@ -1473,5 +1473,79 @@
       "timeRequired": "Time is required",
       "dateInPast": "You cannot select a date in the past."
     }
+  },
+  "statisticsPage": {
+    "tab": {
+      "cadence": "Cadence timeframe",
+      "leads": "Leads",
+      "messages": "Messages"
+    },
+    "exportCsv": "Export CSV",
+    "exportCsvWithEmails": "Export CSV with Emails",
+    "loading": "Loading stats...",
+    "error": "Error loading statistics.",
+    "cards": {
+      "messagesSent": "Messages sent",
+      "meetingRate": "Meeting rate",
+      "responseRate": "Response rate",
+      "outOfOfficeRate": "Out-of-office rate",
+      "bounceRate": "Bounce rate"
+    },
+    "cadenceTable": {
+      "cadenceType": "Cadence type",
+      "structure": "Structure",
+      "mailsSent": "Mails sent",
+      "meetingRate": "Meeting rate",
+      "responseRate": "Response rate",
+      "outOfOfficeRate": "Out-of-office rate",
+      "bounceRate": "Bounce rate",
+      "dateToBeSent": "Date to be sent",
+      "sent": "Sent",
+      "na": "N/A",
+      "rowsPerPage": "Rows per page"
+    },
+    "leadsTable": {
+      "searchPlaceholder": "Search by lead first name, last name",
+      "status": {
+        "in_cadence": "In cadence",
+        "response": "Response",
+        "meeting": "Meeting",
+        "bounced": "Bounced"
+      },
+      "columns": {
+        "fullName": "Full Name",
+        "phone": "Phone",
+        "account": "Account",
+        "leadStatus": "Lead status"
+      },
+      "loading": "Loading...",
+      "error": "Failed to load leads",
+      "editPhone": "Type here...",
+      "rowsPerPage": "Rows per page"
+    },
+    "messagesTable": {
+      "searchPlaceholder": "Search by full name",
+      "status": {
+        "in_cadence": "In cadence",
+        "response": "Response",
+        "meeting": "Meeting",
+        "bounced": "Bounced"
+      },
+      "columns": {
+        "fullName": "Full name",
+        "messageStatus": "Message status",
+        "account": "Account",
+        "lastMessageSent": "Last message sent",
+        "read": "Read",
+        "messageReceived": "Message received",
+        "messageType": "Message type",
+        "date": "Date"
+      },
+      "receivedTitle": "Messages received",
+      "sentTitle": "Messages sent",
+      "noReceived": "No received messages",
+      "noSent": "No sent messages",
+      "rowsPerPage": "Rows per page"
+    }
   }
 }

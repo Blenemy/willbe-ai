@@ -1477,5 +1477,79 @@
       "timeRequired": "La hora es obligatoria",
       "dateInPast": "No puedes seleccionar una fecha pasada."
     }
+  },
+  "statisticsPage": {
+    "tab": {
+      "cadence": "Intervalo de cadencia",
+      "leads": "Leads",
+      "messages": "Mensajes"
+    },
+    "exportCsv": "Exportar CSV",
+    "exportCsvWithEmails": "Exportar CSV con correos",
+    "loading": "Cargando estadísticas...",
+    "error": "Error al cargar estadísticas.",
+    "cards": {
+      "messagesSent": "Mensajes enviados",
+      "meetingRate": "Tasa de reuniones",
+      "responseRate": "Tasa de respuestas",
+      "outOfOfficeRate": "Tasa de fuera de oficina",
+      "bounceRate": "Tasa de rebote"
+    },
+    "cadenceTable": {
+      "cadenceType": "Tipo de cadencia",
+      "structure": "Estructura",
+      "mailsSent": "Correos enviados",
+      "meetingRate": "Tasa de reuniones",
+      "responseRate": "Tasa de respuestas",
+      "outOfOfficeRate": "Tasa de fuera de oficina",
+      "bounceRate": "Tasa de rebote",
+      "dateToBeSent": "Fecha de envío",
+      "sent": "Enviado",
+      "na": "N/D",
+      "rowsPerPage": "Filas por página"
+    },
+    "leadsTable": {
+      "searchPlaceholder": "Buscar por nombre o apellido del lead",
+      "status": {
+        "in_cadence": "En cadencia",
+        "response": "Respondió",
+        "meeting": "Reunión",
+        "bounced": "Rebotado"
+      },
+      "columns": {
+        "fullName": "Nombre completo",
+        "phone": "Teléfono",
+        "account": "Empresa",
+        "leadStatus": "Estado del lead"
+      },
+      "loading": "Cargando...",
+      "error": "Error al cargar leads",
+      "editPhone": "Escribe aquí...",
+      "rowsPerPage": "Filas por página"
+    },
+    "messagesTable": {
+      "searchPlaceholder": "Buscar por nombre completo",
+      "status": {
+        "in_cadence": "En cadencia",
+        "response": "Respondió",
+        "meeting": "Reunión",
+        "bounced": "Rebotado"
+      },
+      "columns": {
+        "fullName": "Nombre completo",
+        "messageStatus": "Estado del mensaje",
+        "account": "Empresa",
+        "lastMessageSent": "Último mensaje enviado",
+        "read": "Leído",
+        "messageReceived": "Mensaje recibido",
+        "messageType": "Tipo de mensaje",
+        "date": "Fecha"
+      },
+      "receivedTitle": "Mensajes recibidos",
+      "sentTitle": "Mensajes enviados",
+      "noReceived": "Sin mensajes recibidos",
+      "noSent": "Sin mensajes enviados",
+      "rowsPerPage": "Filas por página"
+    }
   }
 }

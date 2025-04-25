@@ -54,7 +54,7 @@ const EditMessageScenarioPage = () => {
         <ScenarioMessageChain scenarioId={scenario.id} />
       )}
 
-      {activeStep === 2 && <StatisticPage />}
+      {activeStep === 2 && <StatisticPage scenario={scenario} />}
     </div>
   );
 };

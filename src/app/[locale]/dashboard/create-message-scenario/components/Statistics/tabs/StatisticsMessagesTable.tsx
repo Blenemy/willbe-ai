@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment, useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Trash2, Pencil } from "lucide-react";
+import { Info, ExternalLink, ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,77 +21,116 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { useStatisticMessages } from "@/hooks/useStatisticMessages";
+import { useParams } from "next/navigation";
+import { renderHeader } from "@/components/ui/renderHeader";
+import { useTranslations } from "next-intl";
 
-const mockData = [
-  {
-    id: "1",
-    firstName: "David",
-    lastName: "Reezy",
-    account: {
-      name: "CPL/Paragen Activities",
-      logo: "/logo1.png",
-    },
-    status: "Responded",
-    lastMessageDate: "03/14/25, 12:54 pm",
-  },
-  {
-    id: "2",
-    firstName: "Jules",
-    lastName: "Taylor",
-    account: {
-      name: "Bionic",
-      logo: "/logo2.png",
-    },
-    status: "Responded",
-    lastMessageDate: "03/14/25, 12:54 pm",
-  },
-  {
-    id: "3",
-    firstName: "Sandra",
-    lastName: "Klinski",
-    account: {
-      name: "Learning Edge, LLC",
-      logo: "/logo3.png",
-    },
-    status: "Responded",
-    lastMessageDate: "03/14/25, 12:54 pm",
-  },
-];
+function formatMessageType(status: string): string {
+  switch (status.toLowerCase()) {
+    case "follow_up":
+    case "follow up":
+    case "follow_up_email":
+    case "follow up email":
+      return "Follow up email";
+    case "connection":
+    case "linkedin":
+    case "linkedin_connection":
+      return "LinkedIn Connection";
+    case "email":
+      return "Email";
+    default:
+      return status.charAt(0).toUpperCase() + status.slice(1);
+  }
+}
+
+type SortKey = "name" | "account" | "date" | "";
+
+function htmlToPlainText(html: string): string {
+  if (typeof window === "undefined") return html;
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+  return doc.body.textContent?.trim() ?? html;
+}
 
 export const StatisticsMessagesTable = () => {
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [statusFilter, setStatusFilter] = useState("in_cadence");
+  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const t = useTranslations("statisticsPage.messagesTable");
 
-  const filtered = mockData.filter((item) => {
-    const fullName = `${item.firstName} ${item.lastName}`.toLowerCase();
-    return fullName.includes(search.trim().toLowerCase());
-  });
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
 
-  const paginated = filtered.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  const params = useParams();
+  const scenarioId = params?.id as string;
+
+  const { data = [] } = useStatisticMessages(scenarioId);
+
+  const sorted = useMemo(() => {
+    if (!sortKey) return data;
+    return [...data].sort((a, b) => {
+      const nameA = `${a.leadData.first_name} ${a.leadData.last_name}`;
+      const nameB = `${b.leadData.first_name} ${b.leadData.last_name}`;
+      const accountA = a.leadData.headline || "";
+      const accountB = b.leadData.headline || "";
+      const dateA = a.sentMessages?.[0]?.sentAt || "";
+      const dateB = b.sentMessages?.[0]?.sentAt || "";
+
+      let valA = "",
+        valB = "";
+      if (sortKey === "name") [valA, valB] = [nameA, nameB];
+      if (sortKey === "account") [valA, valB] = [accountA, accountB];
+      if (sortKey === "date") [valA, valB] = [dateA, dateB];
+
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    });
+  }, [data, sortKey, sortAsc]);
+
+  const filtered = useMemo(() => {
+    return sorted.filter((item) => {
+      const fullName =
+        `${item.leadData.first_name} ${item.leadData.last_name}`.toLowerCase();
+      return fullName.includes(search.trim().toLowerCase());
+    });
+  }, [sorted, search]);
+
+  const paginated = useMemo(() => {
+    return filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }, [filtered, page, rowsPerPage]);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <Input
-          placeholder="Search by first name, last name"
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
+          className="w-full"
         />
-        <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
-          <SelectTrigger className="w-28">
-            <SelectValue placeholder={String(rowsPerPage)} />
+        <Select
+          value={statusFilter}
+          onValueChange={(val) => setStatusFilter(val)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {[5, 10, 20].map((v) => (
-              <SelectItem key={v} value={String(v)}>
-                {v} rows
-              </SelectItem>
-            ))}
+            <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
+            <SelectItem value="response">{t("status.response")}</SelectItem>
+            <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
+            <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -99,47 +138,185 @@ export const StatisticsMessagesTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>First name</TableHead>
-            <TableHead>Last name</TableHead>
-            <TableHead>Message status</TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead>Last message received date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {renderHeader(
+              t("columns.fullName"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            <TableHead>{t("columns.messageStatus")}</TableHead>
+            {renderHeader(
+              t("columns.account"),
+              "account",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("columns.lastMessageSent"),
+              "date",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            <TableHead className="text-right">{t("columns.read")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {paginated.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.firstName}</TableCell>
-              <TableCell>{item.lastName}</TableCell>
-              <TableCell>{item.status}</TableCell>
-              <TableCell className="flex items-center gap-2">
-                <Avatar className="w-6 h-6">
-                  <AvatarImage src={item.account.logo} />
-                  <AvatarFallback>{item.account.name[0]}</AvatarFallback>
-                </Avatar>
-                {item.account.name}
-              </TableCell>
-              <TableCell>{item.lastMessageDate}</TableCell>
-              <TableCell className="flex justify-end gap-2">
-                <Button variant="ghost" size="icon">
-                  <Pencil className="w-4 h-4" />
-                </Button>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {paginated.map((item) => {
+            const sent = item.sentMessages?.[0];
+            const leadData = item.leadData;
+            return (
+              <Fragment key={item.id}>
+                <TableRow
+                  className="cursor-pointer hover:bg-accent"
+                  onClick={() =>
+                    setExpandedRowId((prev) =>
+                      prev === item.id ? null : item.id
+                    )
+                  }
+                >
+                  <TableCell className="flex items-center gap-2">
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${
+                        expandedRowId === item.id ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                    {`${leadData.first_name} ${leadData.last_name}`}
+                  </TableCell>
+                  <TableCell>{sent?.status || "-"}</TableCell>
+                  <TableCell className="flex items-center gap-2">
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage src={leadData.profile_picture_url} />
+                      <AvatarFallback>{leadData.first_name[0]}</AvatarFallback>
+                    </Avatar>
+                    {leadData.headline}
+                  </TableCell>
+                  <TableCell>
+                    {sent?.sentAt
+                      ? new Date(sent.sentAt).toLocaleString()
+                      : "-"}
+                  </TableCell>
+                  <TableCell className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const url = leadData.public_profile_url;
+                        if (url) window.open(url, "_blank");
+                      }}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
+
+                    <Button variant="ghost" size="icon" aria-label="Info">
+                      <Info className="w-4 h-4 text-red-600" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+
+                {expandedRowId === item.id && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="bg-muted p-4 text-sm text-muted-foreground"
+                    >
+                      <div className="space-y-6">
+                        <div>
+                          <div className="font-semibold mb-3">
+                            {t("receivedTitle")}
+                          </div>
+
+                          <div className="grid grid-cols-3 mb-2 gap-4">
+                            <div>{t("columns.messageReceived")}</div>
+                            <div>{t("columns.messageType")}</div>
+                            <div>{t("columns.date")}</div>
+                          </div>
+
+                          {item.receivedMessages.length > 0 ? (
+                            item.receivedMessages.map((msg) => (
+                              <div
+                                key={msg.id}
+                                className="grid grid-cols-3 border-t border-border py-2 text-muted-foreground gap-4"
+                              >
+                                <div>LinkedIn Connection Sent without text</div>
+                                <div>LinkedIn Connection</div>
+                                <div>—</div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-xs italic text-gray-500">
+                              {t("noReceived")}
+                            </div>
+                          )}
+                        </div>
+
+                        <div>
+                          <div className="font-semibold mb-3">
+                            {t("sentTitle")}
+                          </div>
+
+                          <div className="grid grid-cols-3 mb-2 gap-4">
+                            <div>{t("columns.messageReceived")}</div>
+                            <div>{t("columns.messageType")}</div>
+                            <div>{t("columns.date")}</div>
+                          </div>
+
+                          {item.sentMessages.length > 0 ? (
+                            item.sentMessages.map((msg) => (
+                              <div
+                                key={msg.id}
+                                className="grid grid-cols-3 border-t border-border py-2 text-muted-foreground gap-4"
+                              >
+                                <div className="whitespace-pre-wrap">
+                                  {htmlToPlainText(msg.message || "—")}
+                                </div>
+                                <div>{formatMessageType(msg.status)}</div>
+                                <div>
+                                  {msg.sentAt
+                                    ? new Date(msg.sentAt).toLocaleString()
+                                    : "—"}
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-xs italic text-gray-500">
+                              {t("noSent")}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
+            );
+          })}
         </TableBody>
       </Table>
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between pt-4">
+        <div className="text-sm flex gap-2 items-center">
+          <span className="min-w-28">{t("rowsPerPage")}</span>
+          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+            <SelectTrigger className="w-16">
+              <SelectValue placeholder={String(rowsPerPage)} />
+            </SelectTrigger>
+            <SelectContent>
+              {[5, 10, 20].map((v) => (
+                <SelectItem key={v} value={String(v)}>
+                  {v}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <CustomPagination
           page={page}
           setPage={setPage}
-          rowsPerPage={rowsPerPage}
           totalCount={filtered.length}
+          rowsPerPage={rowsPerPage}
         />
       </div>
     </div>

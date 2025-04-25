@@ -37,6 +37,10 @@ export const useSearchLeadField = () => {
       queryClient.invalidateQueries({
         queryKey: ["message-campaign-entries"],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["leads-in-cadence"],
+      });
     },
     onError: (err: Error) => {
       toast.error(`Search failed: ${err.message}`);

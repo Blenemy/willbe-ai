@@ -103,6 +103,11 @@ export const useDeleteMessageCampaignEntry = () => {
       queryClient.invalidateQueries({
         queryKey: ["message-campaign-entries"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["leads-in-cadence"],
+      });
+
+      toast("Lead was deleted succesfully");
     },
     onError: (err) => {
       toast(`Error updating the lead data ${err.message}`);
