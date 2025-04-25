@@ -8,15 +8,23 @@ import { StatsCards } from "./StatsCards";
 import { LeadsInCadenceTable } from "./tabs/LeadsInCadenceTable";
 import { ExportStatisticsCsvButtons } from "./ExportCsvButtons";
 import { useParams } from "next/navigation";
+import { Scenario } from "@/hooks/useMessageScenarios";
 
-export const StatisticPage = () => {
+interface StatisticsPageProps {
+  scenario: Scenario | undefined;
+}
+
+export const StatisticPage = ({ scenario }: StatisticsPageProps) => {
   const [activeTab, setActiveTab] = useState("cadence");
   const params = useParams();
   const scenarioId = params.id as string;
 
   return (
     <div className="mt-6 space-y-4">
-      <ExportStatisticsCsvButtons scenarioId={scenarioId} />
+      <div className="flex justify-between items-center">
+        <p>{scenario?.name}</p>
+        <ExportStatisticsCsvButtons scenarioId={scenarioId} />
+      </div>
 
       <StatsCards />
 

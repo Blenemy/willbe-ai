@@ -18,39 +18,17 @@ import {
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
-// import { useCadenceTimeframe } from "@/hooks/useCadenceTimeframe";
-// import { useParams } from "next/navigation";
+import { useCadenceTimeframe } from "@/hooks/useCadenceTimeframe";
+import { useParams } from "next/navigation";
 import { format } from "date-fns";
 
-const mockData = Array.from({ length: 11 }, (_, i) => ({
-  id: `item-${i + 1}`,
-  cadenceType:
-    i === 0
-      ? "LinkedIn Connection"
-      : i === 10
-      ? "First email"
-      : "Follow up email",
-  structure: "FuP [Objective]",
-  mailsSent: 85,
-  meetingRate: 12,
-  responseRate: 48,
-  outOfOfficeRate: 19,
-  bounceRate: 31,
-  dateToBeSent: new Date(2025, 6, 4, 11, 52), // 07/04/25 11:52am
-  isSent: true,
-}));
-
 export const CadenceTimeframeTable = () => {
-  // const { id: scenarioId } = useParams();
-  // const {
-  //   data = [],
-  //   isLoading,
-  //   error,
-  // } = useCadenceTimeframe(scenarioId as string);
+  const { id: scenarioId } = useParams();
+  const { data = [] } = useCadenceTimeframe(scenarioId as string);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const paginated = mockData.slice(
+  const paginated = data.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -75,7 +53,7 @@ export const CadenceTimeframeTable = () => {
           {paginated.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.cadenceType}</TableCell>
-              <TableCell>{item.structure}</TableCell>
+              <TableCell>{item.structure || "N/A"}</TableCell>
               <TableCell>{item.mailsSent}</TableCell>
               <TableCell>{item.meetingRate}%</TableCell>
               <TableCell>{item.responseRate}%</TableCell>
@@ -114,7 +92,7 @@ export const CadenceTimeframeTable = () => {
           page={page}
           setPage={setPage}
           rowsPerPage={rowsPerPage}
-          totalCount={mockData.length}
+          totalCount={data.length}
         />
       </div>
     </div>

@@ -8,7 +8,7 @@ interface User {
   lastName: string;
 }
 
-interface Scenario {
+export interface Scenario {
   id: string;
   name: string;
   status: string;
