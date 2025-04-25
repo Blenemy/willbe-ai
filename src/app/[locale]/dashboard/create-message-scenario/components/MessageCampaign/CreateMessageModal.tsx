@@ -38,17 +38,29 @@ import { toast } from "sonner";
 interface Props {
   open: boolean;
   onClose: () => void;
-  onAdd: (type: string, sendDate: string) => void;
+  onAdd: (type: string, sendDate: string, sendNow: boolean) => void;
   onEdit: (id: string, type: string, sendDate: string) => void;
   mode?: "create" | "edit";
   initialData?: { id: string; type: string; sendDate: string };
 }
 
-const formSchema = z.object({
-  type: z.string().min(1, "messageChain.validation.typeRequired"),
-  date: z.string().min(1, "messageChain.validation.dateRequired"),
-  time: z.string().min(1, "messageChain.validation.timeRequired"),
-});
+const formSchema = z
+  .object({
+    type: z.string().min(1, "messageChain.validation.typeRequired"),
+    date: z.string().optional(),
+    time: z.string().optional(),
+    sendNow: z.boolean().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.sendNow) return true;
+      return !!data.date && !!data.time;
+    },
+    {
+      message: "messageChain.validation.dateRequired",
+      path: ["date"],
+    }
+  );
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -80,17 +92,30 @@ export const CreateMessageModal = ({
     },
   });
 
+  const type = form.watch("type");
+  const allowSendNow = store.shouldAllowSendNowCheckbox(type as MessageType);
+
   const onSubmit = (values: FormValues) => {
-    const { type, date, time } = values;
+    const { type, date, time, sendNow } = values;
 
-    const combined = `${date}T${time}:00`;
+    const isSendNow = !!sendNow;
 
-    const now = new Date();
-    const selected = new Date(combined);
+    let combined: string | null = null;
 
-    if (selected < now) {
-      toast.error(t("validation.dateInPast"));
-      return;
+    if (!isSendNow) {
+      if (!date || !time) {
+        toast.error(t("validation.dateInPast"));
+        return;
+      }
+
+      combined = `${date}T${time}:00`;
+      const now = new Date();
+      const selected = new Date(combined);
+
+      if (selected < now) {
+        toast.error(t("validation.dateInPast"));
+        return;
+      }
     }
 
     const { valid, reason } = store.canCreateEntry(
@@ -104,9 +129,9 @@ export const CreateMessageModal = ({
     }
 
     if (mode === "edit" && initialData?.id) {
-      onEdit(initialData.id, type, combined);
+      onEdit(initialData.id, type, combined ?? "");
     } else {
-      onAdd(type, combined);
+      onAdd(type, combined ?? "", isSendNow);
     }
 
     onClose();
@@ -114,27 +139,37 @@ export const CreateMessageModal = ({
 
   useEffect(() => {
     if (open) {
-      if (initialData?.sendDate) {
-        const d = new Date(initialData.sendDate);
+      if (initialData) {
+        if (initialData.sendDate) {
+          const d = new Date(initialData.sendDate);
 
-        form.reset({
-          type: initialData.type || "",
-          date: d.toISOString().slice(0, 10),
-          time: `${d.getUTCHours().toString().padStart(2, "0")}:${d
-            .getUTCMinutes()
-            .toString()
-            .padStart(2, "0")}`,
-        });
+          form.reset({
+            type: initialData.type || "",
+            date: d.toISOString().slice(0, 10),
+            time: `${d.getUTCHours().toString().padStart(2, "0")}:${d
+              .getUTCMinutes()
+              .toString()
+              .padStart(2, "0")}`,
+            sendNow: false,
+          });
+        } else {
+          form.reset({
+            type: initialData.type || "",
+            date: "",
+            time: "",
+            sendNow: true,
+          });
+        }
       } else {
         form.reset({
           type: "",
           date: "",
           time: "",
+          sendNow: false,
         });
       }
     }
   }, [form, initialData, open]);
-
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="min-w-[451px] p-6">
@@ -176,35 +211,56 @@ export const CreateMessageModal = ({
               )}
             />
 
-            <div className="flex gap-2 w-full">
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>{t("modal.dateLabel")}</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {!form.watch("sendNow") && (
+              <div className="flex gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <FormLabel>{t("modal.dateLabel")}</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
+                <FormField
+                  control={form.control}
+                  name="time"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <FormLabel>{t("modal.timeLabel")}</FormLabel>
+                      <FormControl>
+                        <Input type="time" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+            {allowSendNow && (
               <FormField
                 control={form.control}
-                name="time"
+                name="sendNow"
                 render={({ field }) => (
-                  <FormItem className="w-1/2">
-                    <FormLabel>{t("modal.timeLabel")}</FormLabel>
+                  <FormItem className="flex items-center gap-2">
                     <FormControl>
-                      <Input type="time" {...field} />
+                      <input
+                        type="checkbox"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormLabel>{t("modal.sendNow")}</FormLabel>
                   </FormItem>
                 )}
               />
-            </div>
+            )}
 
             <DialogFooter className="pt-4">
               <Button type="button" variant="outline" onClick={onClose}>

@@ -1473,7 +1473,8 @@
       "timeLabel": "Heure",
       "cancel": "Annuler",
       "add": "Ajouter",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "sendNow": "Envoyer maintenant"
     },
     "validation": {
       "typeRequired": "Le type est requis",
