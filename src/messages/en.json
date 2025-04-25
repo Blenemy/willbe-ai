@@ -1502,6 +1502,25 @@
       "sent": "Sent",
       "na": "N/A",
       "rowsPerPage": "Rows per page"
+    },
+    "leadsTable": {
+      "searchPlaceholder": "Search by lead first name, last name",
+      "status": {
+        "in_cadence": "In cadence",
+        "response": "Response",
+        "meeting": "Meeting",
+        "bounced": "Bounced"
+      },
+      "columns": {
+        "fullName": "Full Name",
+        "phone": "Phone",
+        "account": "Account",
+        "leadStatus": "Lead status"
+      },
+      "loading": "Loading...",
+      "error": "Failed to load leads",
+      "editPhone": "Type here...",
+      "rowsPerPage": "Rows per page"
     }
   }
 }

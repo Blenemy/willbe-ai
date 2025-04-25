@@ -28,10 +28,12 @@ import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 import { Button } from "@/components/ui/button";
 import { useDeleteMessageCampaignEntry } from "@/hooks/useMessageCampaignEntries";
 import { ConfirmDeleteModal } from "../../MessageCampaign/ConfirmDeleteModal";
+import { useTranslations } from "next-intl";
 
 type SortKey = "name" | "company" | "";
 
 export const LeadsInCadenceTable = () => {
+  const t = useTranslations("statisticsPage.leadsTable");
   const { id: scenarioId } = useParams();
   const {
     data = [],
@@ -104,7 +106,7 @@ export const LeadsInCadenceTable = () => {
       <div className="flex items-center justify-between gap-2">
         <Input
           type="text"
-          placeholder="Search by lead first name, last name"
+          placeholder={t("searchPlaceholder")}
           className="w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -117,10 +119,10 @@ export const LeadsInCadenceTable = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="in_cadence">In cadence</SelectItem>
-            <SelectItem value="response">Response</SelectItem>
-            <SelectItem value="meeting">Meeting</SelectItem>
-            <SelectItem value="bounced">Bounced</SelectItem>
+            <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
+            <SelectItem value="response">{t("status.response")}</SelectItem>
+            <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
+            <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -129,11 +131,23 @@ export const LeadsInCadenceTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[40px]" />
-            {renderHeader("Full Name", "name", sortKey, sortAsc, handleSort)}
-            <TableHead>Phone</TableHead>
-            {renderHeader("Account", "company", sortKey, sortAsc, handleSort)}
-            <TableHead>Lead status</TableHead>
-            <TableHead>Phone</TableHead>
+            {renderHeader(
+              t("columns.fullName"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            <TableHead>{t("columns.phone")}</TableHead>
+            {renderHeader(
+              t("columns.account"),
+              "company",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            <TableHead>{t("columns.leadStatus")}</TableHead>
+            <TableHead>{t("columns.phone")}</TableHead>
             <TableHead />
           </TableRow>
         </TableHeader>
@@ -141,13 +155,11 @@ export const LeadsInCadenceTable = () => {
           {isLoading || error ? (
             <TableRow>
               <TableCell colSpan={6} className="text-center">
-                {isLoading ? "Loading..." : "Failed to load leads"}
+                {isLoading ? t("loading") : t("error")}
               </TableCell>
             </TableRow>
           ) : (
             paginated.map((item) => {
-              console.log(item);
-
               const lead = item.lead.leadData;
               const fullName = `${lead.first_name} ${lead.last_name}`;
               const company = lead.current_positions?.[0]?.company ?? "-";
@@ -167,7 +179,7 @@ export const LeadsInCadenceTable = () => {
                     />
                     <span>{fullName}</span>
                   </TableCell>
-                  <TableCell>{item.phone ?? "Type here..."}</TableCell>
+                  <TableCell>{item.phone ?? t("editPhone")}</TableCell>
                   <TableCell>{company}</TableCell>
                   <TableCell>
                     <Select defaultValue={item.status}>
@@ -175,10 +187,18 @@ export const LeadsInCadenceTable = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="in_cadence">In cadence</SelectItem>
-                        <SelectItem value="response">Response</SelectItem>
-                        <SelectItem value="meeting">Meeting</SelectItem>
-                        <SelectItem value="bounced">Bounced</SelectItem>
+                        <SelectItem value="in_cadence">
+                          {t("status.in_cadence")}
+                        </SelectItem>
+                        <SelectItem value="response">
+                          {t("status.response")}
+                        </SelectItem>
+                        <SelectItem value="meeting">
+                          {t("status.meeting")}
+                        </SelectItem>
+                        <SelectItem value="bounced">
+                          {t("status.bounced")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
@@ -246,7 +266,7 @@ export const LeadsInCadenceTable = () => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          <span className="min-w-28">Rows per page</span>
+          <span className="min-w-28">{t("rowsPerPage")}</span>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
