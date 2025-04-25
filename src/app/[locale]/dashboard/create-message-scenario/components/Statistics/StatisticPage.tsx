@@ -6,12 +6,18 @@ import { CadenceTimeframeTable } from "./tabs/CadenceTimeframeTable";
 import { StatisticsMessagesTable } from "./tabs/StatisticsMessagesTable";
 import { StatsCards } from "./StatsCards";
 import { LeadsInCadenceTable } from "./tabs/LeadsInCadenceTable";
+import { ExportStatisticsCsvButtons } from "./ExportCsvButtons";
+import { useParams } from "next/navigation";
 
 export const StatisticPage = () => {
   const [activeTab, setActiveTab] = useState("cadence");
+  const params = useParams();
+  const scenarioId = params.id as string;
 
   return (
     <div className="mt-6 space-y-4">
+      <ExportStatisticsCsvButtons scenarioId={scenarioId} />
+
       <StatsCards />
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
