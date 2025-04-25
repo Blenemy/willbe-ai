@@ -16,6 +16,7 @@ interface MessageChainStore {
     ignoreId?: string
   ) => { valid: boolean; reason?: string };
   getAvailableMessageTypes: (ignoreId: string) => MessageType[];
+  shouldAllowSendNowCheckbox: (type: MessageType) => boolean;
 }
 
 export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
@@ -92,5 +93,9 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
     ];
 
     return types.filter((type) => get().canCreateEntry(type, ignoreId).valid);
+  },
+
+  shouldAllowSendNowCheckbox: (type: MessageType): boolean => {
+    return type === "first_email" || type === "linkedin_connection";
   },
 }));

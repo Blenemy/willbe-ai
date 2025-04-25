@@ -1468,7 +1468,8 @@
       "timeLabel": "Hora",
       "cancel": "Cancelar",
       "add": "Agregar",
-      "save": "Guardar"
+      "save": "Guardar",
+      "sendNow": "Enviar ahora"
     },
     "validation": {
       "typeRequired": "El tipo es obligatorio",

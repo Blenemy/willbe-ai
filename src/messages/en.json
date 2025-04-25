@@ -1464,7 +1464,8 @@
       "timeLabel": "Time",
       "cancel": "Cancel",
       "add": "Add",
-      "save": "Save"
+      "save": "Save",
+      "sendNow": "Send message now"
     },
     "validation": {
       "typeRequired": "Type is required",
