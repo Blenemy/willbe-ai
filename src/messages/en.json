@@ -1521,6 +1521,30 @@
       "error": "Failed to load leads",
       "editPhone": "Type here...",
       "rowsPerPage": "Rows per page"
+    },
+    "messagesTable": {
+      "searchPlaceholder": "Search by full name",
+      "status": {
+        "in_cadence": "In cadence",
+        "response": "Response",
+        "meeting": "Meeting",
+        "bounced": "Bounced"
+      },
+      "columns": {
+        "fullName": "Full name",
+        "messageStatus": "Message status",
+        "account": "Account",
+        "lastMessageSent": "Last message sent",
+        "read": "Read",
+        "messageReceived": "Message received",
+        "messageType": "Message type",
+        "date": "Date"
+      },
+      "receivedTitle": "Messages received",
+      "sentTitle": "Messages sent",
+      "noReceived": "No received messages",
+      "noSent": "No sent messages",
+      "rowsPerPage": "Rows per page"
     }
   }
 }

@@ -24,6 +24,7 @@ import { CustomPagination } from "@/components/CustomPagination/CustomPagination
 import { useStatisticMessages } from "@/hooks/useStatisticMessages";
 import { useParams } from "next/navigation";
 import { renderHeader } from "@/components/ui/renderHeader";
+import { useTranslations } from "next-intl";
 
 function formatMessageType(status: string): string {
   switch (status.toLowerCase()) {
@@ -61,6 +62,7 @@ export const StatisticsMessagesTable = () => {
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
+  const t = useTranslations("statisticsPage.messagesTable");
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -112,7 +114,7 @@ export const StatisticsMessagesTable = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
         <Input
-          placeholder="Search by full name"
+          placeholder={t("searchPlaceholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full"
@@ -125,10 +127,10 @@ export const StatisticsMessagesTable = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="in_cadence">In cadence</SelectItem>
-            <SelectItem value="response">Response</SelectItem>
-            <SelectItem value="meeting">Meeting</SelectItem>
-            <SelectItem value="bounced">Bounced</SelectItem>
+            <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
+            <SelectItem value="response">{t("status.response")}</SelectItem>
+            <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
+            <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -136,17 +138,29 @@ export const StatisticsMessagesTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            {renderHeader("Full name", "name", sortKey, sortAsc, handleSort)}
-            <TableHead>Message status</TableHead>
-            {renderHeader("Account", "account", sortKey, sortAsc, handleSort)}
             {renderHeader(
-              "Last message sent",
+              t("columns.fullName"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            <TableHead>{t("columns.messageStatus")}</TableHead>
+            {renderHeader(
+              t("columns.account"),
+              "account",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("columns.lastMessageSent"),
               "date",
               sortKey,
               sortAsc,
               handleSort
             )}
-            <TableHead className="text-right">Read</TableHead>
+            <TableHead className="text-right">{t("columns.read")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -211,13 +225,13 @@ export const StatisticsMessagesTable = () => {
                       <div className="space-y-6">
                         <div>
                           <div className="font-semibold mb-3">
-                            Messages received
+                            {t("receivedTitle")}
                           </div>
 
                           <div className="grid grid-cols-3 mb-2 gap-4">
-                            <div>Message received</div>
-                            <div>Message type</div>
-                            <div>Date</div>
+                            <div>{t("columns.messageReceived")}</div>
+                            <div>{t("columns.messageType")}</div>
+                            <div>{t("columns.date")}</div>
                           </div>
 
                           {item.receivedMessages.length > 0 ? (
@@ -233,20 +247,20 @@ export const StatisticsMessagesTable = () => {
                             ))
                           ) : (
                             <div className="text-xs italic text-gray-500">
-                              No received messages
+                              {t("noReceived")}
                             </div>
                           )}
                         </div>
 
                         <div>
                           <div className="font-semibold mb-3">
-                            Messages sent
+                            {t("sentTitle")}
                           </div>
 
                           <div className="grid grid-cols-3 mb-2 gap-4">
-                            <div>Message sent</div>
-                            <div>Message type</div>
-                            <div>Date</div>
+                            <div>{t("columns.messageReceived")}</div>
+                            <div>{t("columns.messageType")}</div>
+                            <div>{t("columns.date")}</div>
                           </div>
 
                           {item.sentMessages.length > 0 ? (
@@ -268,7 +282,7 @@ export const StatisticsMessagesTable = () => {
                             ))
                           ) : (
                             <div className="text-xs italic text-gray-500">
-                              No sent messages
+                              {t("noSent")}
                             </div>
                           )}
                         </div>
@@ -284,7 +298,7 @@ export const StatisticsMessagesTable = () => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          <span className="min-w-28">Rows per page</span>
+          <span className="min-w-28">{t("rowsPerPage")}</span>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
