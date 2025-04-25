@@ -105,7 +105,7 @@ export const LeadsInCadenceTable = () => {
         <Input
           type="text"
           placeholder="Search by lead first name, last name"
-          className="w-full max-w-md"
+          className="w-full"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

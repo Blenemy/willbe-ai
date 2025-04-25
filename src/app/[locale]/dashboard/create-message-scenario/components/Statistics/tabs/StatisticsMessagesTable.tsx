@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, Fragment, useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Trash2, Pencil } from "lucide-react";
+import { Info, ExternalLink, ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -23,6 +23,7 @@ import {
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { useStatisticMessages } from "@/hooks/useStatisticMessages";
 import { useParams } from "next/navigation";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 function formatMessageType(status: string): string {
   switch (status.toLowerCase()) {
@@ -42,6 +43,8 @@ function formatMessageType(status: string): string {
   }
 }
 
+type SortKey = "name" | "account" | "date" | "";
+
 function htmlToPlainText(html: string): string {
   if (typeof window === "undefined") return html;
 
@@ -54,43 +57,78 @@ export const StatisticsMessagesTable = () => {
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [statusFilter, setStatusFilter] = useState("in_cadence");
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("");
+  const [sortAsc, setSortAsc] = useState(true);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
 
   const params = useParams();
   const scenarioId = params?.id as string;
 
   const { data = [] } = useStatisticMessages(scenarioId);
 
-  const filtered = data.filter((item) => {
-    const fullName =
-      `${item.leadData.first_name} ${item.leadData.last_name}`.toLowerCase();
-    return fullName.includes(search.trim().toLowerCase());
-  });
+  const sorted = useMemo(() => {
+    if (!sortKey) return data;
+    return [...data].sort((a, b) => {
+      const nameA = `${a.leadData.first_name} ${a.leadData.last_name}`;
+      const nameB = `${b.leadData.first_name} ${b.leadData.last_name}`;
+      const accountA = a.leadData.headline || "";
+      const accountB = b.leadData.headline || "";
+      const dateA = a.sentMessages?.[0]?.sentAt || "";
+      const dateB = b.sentMessages?.[0]?.sentAt || "";
 
-  const paginated = filtered.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+      let valA = "",
+        valB = "";
+      if (sortKey === "name") [valA, valB] = [nameA, nameB];
+      if (sortKey === "account") [valA, valB] = [accountA, accountB];
+      if (sortKey === "date") [valA, valB] = [dateA, dateB];
+
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    });
+  }, [data, sortKey, sortAsc]);
+
+  const filtered = useMemo(() => {
+    return sorted.filter((item) => {
+      const fullName =
+        `${item.leadData.first_name} ${item.leadData.last_name}`.toLowerCase();
+      return fullName.includes(search.trim().toLowerCase());
+    });
+  }, [sorted, search]);
+
+  const paginated = useMemo(() => {
+    return filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }, [filtered, page, rowsPerPage]);
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <Input
           placeholder="Search by full name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
+          className="w-full"
         />
-        <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
-          <SelectTrigger className="w-28">
-            <SelectValue placeholder={String(rowsPerPage)} />
+        <Select
+          value={statusFilter}
+          onValueChange={(val) => setStatusFilter(val)}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {[5, 10, 20].map((v) => (
-              <SelectItem key={v} value={String(v)}>
-                {v} rows
-              </SelectItem>
-            ))}
+            <SelectItem value="in_cadence">In cadence</SelectItem>
+            <SelectItem value="response">Response</SelectItem>
+            <SelectItem value="meeting">Meeting</SelectItem>
+            <SelectItem value="bounced">Bounced</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -98,10 +136,16 @@ export const StatisticsMessagesTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Full name</TableHead>
+            {renderHeader("Full name", "name", sortKey, sortAsc, handleSort)}
             <TableHead>Message status</TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead>Last message sent</TableHead>
+            {renderHeader("Account", "account", sortKey, sortAsc, handleSort)}
+            {renderHeader(
+              "Last message sent",
+              "date",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead className="text-right">Read</TableHead>
           </TableRow>
         </TableHeader>
@@ -119,7 +163,14 @@ export const StatisticsMessagesTable = () => {
                     )
                   }
                 >
-                  <TableCell>{`${leadData.first_name} ${leadData.last_name}`}</TableCell>
+                  <TableCell className="flex items-center gap-2">
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${
+                        expandedRowId === item.id ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                    {`${leadData.first_name} ${leadData.last_name}`}
+                  </TableCell>
                   <TableCell>{sent?.status || "-"}</TableCell>
                   <TableCell className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
@@ -134,11 +185,19 @@ export const StatisticsMessagesTable = () => {
                       : "-"}
                   </TableCell>
                   <TableCell className="flex justify-end gap-2">
-                    <Button variant="ghost" size="icon">
-                      <Pencil className="w-4 h-4" />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        const url = leadData.public_profile_url;
+                        if (url) window.open(url, "_blank");
+                      }}
+                    >
+                      <ExternalLink className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="w-4 h-4" />
+
+                    <Button variant="ghost" size="icon" aria-label="Info">
+                      <Info className="w-4 h-4 text-red-600" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -223,12 +282,27 @@ export const StatisticsMessagesTable = () => {
         </TableBody>
       </Table>
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between pt-4">
+        <div className="text-sm flex gap-2 items-center">
+          <span className="min-w-28">Rows per page</span>
+          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+            <SelectTrigger className="w-16">
+              <SelectValue placeholder={String(rowsPerPage)} />
+            </SelectTrigger>
+            <SelectContent>
+              {[5, 10, 20].map((v) => (
+                <SelectItem key={v} value={String(v)}>
+                  {v}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <CustomPagination
           page={page}
           setPage={setPage}
-          rowsPerPage={rowsPerPage}
           totalCount={filtered.length}
+          rowsPerPage={rowsPerPage}
         />
       </div>
     </div>
