@@ -1472,5 +1472,23 @@
       "timeRequired": "Time is required",
       "dateInPast": "You cannot select a date in the past."
     }
+  },
+  "statisticsPage": {
+    "tab": {
+      "cadence": "Cadence timeframe",
+      "leads": "Leads",
+      "messages": "Messages"
+    },
+    "exportCsv": "Export CSV",
+    "exportCsvWithEmails": "Export CSV with Emails",
+    "loading": "Loading stats...",
+    "error": "Error loading statistics.",
+    "cards": {
+      "messagesSent": "Messages sent",
+      "meetingRate": "Meeting rate",
+      "responseRate": "Response rate",
+      "outOfOfficeRate": "Out-of-office rate",
+      "bounceRate": "Bounce rate"
+    }
   }
 }

@@ -1,44 +1,46 @@
 import { Mail, TrendingUp, Reply, Calendar, Info } from "lucide-react";
 import { useScenarioStatistics } from "@/hooks/useScenarioStatistics";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const COMMON_SIZE = 20;
 
 export const StatsCards = () => {
+  const t = useTranslations("statisticsPage");
   const params = useParams();
   const scenarioId = params?.id as string;
   const { data, isLoading, error } = useScenarioStatistics(scenarioId);
 
-  if (isLoading) return <div>Loading stats...</div>;
-  if (error || !data) return <div>Error loading statistics.</div>;
+  if (isLoading) return <div>{t("loading")}</div>;
+  if (error || !data) return <div>{t("error")}</div>;
 
   const stats = [
     {
-      label: "Messages sent",
+      label: t("cards.messagesSent"),
       value: data.totalSent,
       icon: <Mail size={COMMON_SIZE} className="text-blue-600" />,
       valueClass: "text-blue-600",
     },
     {
-      label: "Meeting rate",
+      label: t("cards.meetingRate"),
       value: `${data.meetingRate}%`,
       icon: <TrendingUp size={COMMON_SIZE} className="text-green-600" />,
       valueClass: "text-green-600",
     },
     {
-      label: "Response rate",
+      label: t("cards.responseRate"),
       value: `${data.responseRate}%`,
       icon: <Reply size={COMMON_SIZE} className="text-yellow-500" />,
       valueClass: "text-yellow-500",
     },
     {
-      label: "Out-of-office rate",
+      label: t("cards.outOfOfficeRate"),
       value: `${data.outOfOfficeRate}%`,
       icon: <Calendar size={COMMON_SIZE} className="text-orange-500" />,
       valueClass: "text-orange-500",
     },
     {
-      label: "Bounce rate",
+      label: t("cards.bounceRate"),
       value: `${data.bounceRate}%`,
       icon: <Info size={COMMON_SIZE} className="text-red-600" />,
       valueClass: "text-red-600",

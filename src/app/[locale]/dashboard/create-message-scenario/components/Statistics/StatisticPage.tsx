@@ -9,6 +9,7 @@ import { LeadsInCadenceTable } from "./tabs/LeadsInCadenceTable";
 import { ExportStatisticsCsvButtons } from "./ExportCsvButtons";
 import { useParams } from "next/navigation";
 import { Scenario } from "@/hooks/useMessageScenarios";
+import { useTranslations } from "next-intl";
 
 interface StatisticsPageProps {
   scenario: Scenario | undefined;
@@ -18,6 +19,8 @@ export const StatisticPage = ({ scenario }: StatisticsPageProps) => {
   const [activeTab, setActiveTab] = useState("cadence");
   const params = useParams();
   const scenarioId = params.id as string;
+
+  const t = useTranslations("statisticsPage");
 
   return (
     <div className="mt-6 space-y-4">
@@ -30,9 +33,9 @@ export const StatisticPage = ({ scenario }: StatisticsPageProps) => {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="mb-4">
-          <TabsTrigger value="cadence">Cadence timeframe</TabsTrigger>
-          <TabsTrigger value="leads">Leads</TabsTrigger>
-          <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="cadence">{t("tab.cadence")}</TabsTrigger>
+          <TabsTrigger value="leads">{t("tab.leads")}</TabsTrigger>
+          <TabsTrigger value="messages">{t("tab.messages")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="cadence">

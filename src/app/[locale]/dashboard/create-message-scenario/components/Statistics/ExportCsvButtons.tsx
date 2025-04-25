@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const ExportStatisticsCsvButtons = ({ scenarioId }: Props) => {
-  const t = useTranslations("messageScenarioData");
+  const t = useTranslations("messageChain");
 
   const { refetch: downloadCsv, isFetching: isCsvLoading } = useStatisticsCsv(
     scenarioId,
