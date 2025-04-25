@@ -1489,6 +1489,19 @@
       "responseRate": "Response rate",
       "outOfOfficeRate": "Out-of-office rate",
       "bounceRate": "Bounce rate"
+    },
+    "cadenceTable": {
+      "cadenceType": "Cadence type",
+      "structure": "Structure",
+      "mailsSent": "Mails sent",
+      "meetingRate": "Meeting rate",
+      "responseRate": "Response rate",
+      "outOfOfficeRate": "Out-of-office rate",
+      "bounceRate": "Bounce rate",
+      "dateToBeSent": "Date to be sent",
+      "sent": "Sent",
+      "na": "N/A",
+      "rowsPerPage": "Rows per page"
     }
   }
 }

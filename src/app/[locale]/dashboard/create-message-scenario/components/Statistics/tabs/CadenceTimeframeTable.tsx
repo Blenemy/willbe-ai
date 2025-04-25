@@ -21,8 +21,10 @@ import { CustomPagination } from "@/components/CustomPagination/CustomPagination
 import { useCadenceTimeframe } from "@/hooks/useCadenceTimeframe";
 import { useParams } from "next/navigation";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 export const CadenceTimeframeTable = () => {
+  const t = useTranslations("statisticsPage.cadenceTable");
   const { id: scenarioId } = useParams();
   const { data = [] } = useCadenceTimeframe(scenarioId as string);
   const [page, setPage] = useState(0);
@@ -38,22 +40,22 @@ export const CadenceTimeframeTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Cadence type</TableHead>
-            <TableHead>Structure</TableHead>
-            <TableHead>Mails sent</TableHead>
-            <TableHead>Meeting rate</TableHead>
-            <TableHead>Response rate</TableHead>
-            <TableHead>Out-of-office rate</TableHead>
-            <TableHead>Bounce rate</TableHead>
-            <TableHead>Date to be sent</TableHead>
-            <TableHead>Sent</TableHead>
+            <TableHead>{t("cadenceType")}</TableHead>
+            <TableHead>{t("structure")}</TableHead>
+            <TableHead>{t("mailsSent")}</TableHead>
+            <TableHead>{t("meetingRate")}</TableHead>
+            <TableHead>{t("responseRate")}</TableHead>
+            <TableHead>{t("outOfOfficeRate")}</TableHead>
+            <TableHead>{t("bounceRate")}</TableHead>
+            <TableHead>{t("dateToBeSent")}</TableHead>
+            <TableHead>{t("sent")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginated.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.cadenceType}</TableCell>
-              <TableCell>{item.structure || "N/A"}</TableCell>
+              <TableCell>{item.structure || t("na")}</TableCell>
               <TableCell>{item.mailsSent}</TableCell>
               <TableCell>{item.meetingRate}%</TableCell>
               <TableCell>{item.responseRate}%</TableCell>
@@ -74,7 +76,7 @@ export const CadenceTimeframeTable = () => {
 
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
-          <span className="min-w-28">Rows per page</span>
+          <span className="min-w-28">{t("rowsPerPage")}</span>
           <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
