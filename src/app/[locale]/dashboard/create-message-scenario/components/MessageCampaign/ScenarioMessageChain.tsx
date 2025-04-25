@@ -15,11 +15,7 @@ import {
 import { MessageEntryCards } from "./MessageEntryCards";
 import { CreateMessageModal } from "./CreateMessageModal";
 import { CreateScenarioTable } from "./CreateScenarioTable";
-import {
-  MessageType,
-  useMessageChainStore,
-} from "@/store/useMessageChainStore";
-import { toast } from "sonner";
+import { useMessageChainStore } from "@/store/useMessageChainStore";
 
 interface Props {
   scenarioId: string;
@@ -52,22 +48,27 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     }
   }, [messageEntries]);
 
-  const handleCreateEntry = (type: string, sendDate: string) => {
-    const { valid, reason } = useMessageChainStore
-      .getState()
-      .canCreateEntry(type as MessageType);
-
-    if (!valid) {
-      toast.error(reason);
-      return;
-    }
-
-    createEntry({
+  const handleCreateEntry = (
+    type: string,
+    sendDate: string,
+    sendNow: boolean
+  ) => {
+    const payload: {
+      messageScenarioId: string;
+      type: string;
+      sendNow: boolean;
+      sendDate?: string;
+    } = {
       messageScenarioId: scenarioId,
       type,
-      sendDate,
-      sendNow: true,
-    });
+      sendNow,
+    };
+
+    if (!sendNow) {
+      payload.sendDate = sendDate;
+    }
+
+    createEntry(payload);
     setCreateModalOpen(false);
   };
 

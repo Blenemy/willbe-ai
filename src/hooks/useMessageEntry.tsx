@@ -6,7 +6,7 @@ import { toast } from "sonner";
 interface CreateMessageEntryDto {
   messageScenarioId: string;
   type: string;
-  sendDate: string;
+  sendDate?: string;
   sendNow?: boolean;
 }
 
