@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useCreateMessageScenarioWithLeads } from "@/hooks/useCreateMessageScenarioWithLeads";
 
 const LeadsSaved = () => {
   const t = useTranslations("leadsSaved");
@@ -28,6 +29,17 @@ const LeadsSaved = () => {
   });
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const { createMessageScenario } = useCreateMessageScenarioWithLeads();
+
+  const handleGenerate = () => {
+    if (!scenarioId) return;
+
+    createMessageScenario({
+      leadScenarioId: scenarioId,
+      leadsIds: selectedIds,
+    });
+  };
 
   const toggleSelection = (id: string) => {
     setSelectedIds((prev) =>
@@ -139,7 +151,9 @@ const LeadsSaved = () => {
       </Table>
 
       {selectedIds.length > 0 && (
-        <Button className="self-start mt-4">{t("generate")}</Button>
+        <Button className="self-start mt-4" onClick={handleGenerate}>
+          {t("generate")}
+        </Button>
       )}
     </div>
   );
