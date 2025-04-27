@@ -16,8 +16,13 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot, TextNode } from "lexical";
-import { useEffectOnce } from "react-use";
+import {
+  $getRoot,
+  TextNode,
+  $isElementNode,
+  $isDecoratorNode,
+  $createParagraphNode,
+} from "lexical";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -64,18 +69,29 @@ export function OnChangeHtmlPlugin({
 function InitialContentPlugin({ content }: { content: string }) {
   const [editor] = useLexicalComposerContext();
 
-  useEffectOnce(() => {
+  useEffect(() => {
+    if (!content) return;
+
     editor.update(() => {
       const parser = new DOMParser();
-      const dom = parser.parseFromString(content, "text/html");
-
+      const safeContent = content.trim() || "<p></p>";
+      const dom = parser.parseFromString(safeContent, "text/html");
       const nodes = $generateNodesFromDOM(editor, dom);
 
       const root = $getRoot();
       root.clear();
-      root.append(...nodes);
+
+      for (const node of nodes) {
+        if ($isElementNode(node) || $isDecoratorNode(node)) {
+          root.append(node);
+        } else {
+          const paragraph = $createParagraphNode();
+          paragraph.append(node);
+          root.append(paragraph);
+        }
+      }
     });
-  });
+  }, [content, editor]);
 
   return null;
 }
