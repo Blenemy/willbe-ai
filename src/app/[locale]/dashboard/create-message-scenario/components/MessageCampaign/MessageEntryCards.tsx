@@ -28,6 +28,7 @@ const getIcon = (type: string) => {
     />
   );
 };
+
 export const MessageEntryCards = ({
   entries,
   selectedId,

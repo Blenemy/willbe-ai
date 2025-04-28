@@ -16,6 +16,7 @@ import { MessageEntryCards } from "./MessageEntryCards";
 import { CreateMessageModal } from "./CreateMessageModal";
 import { CreateScenarioTable } from "./CreateScenarioTable";
 import { useMessageChainStore } from "@/store/useMessageChainStore";
+import { ScenarioCalendar } from "./ScenarioCalendar";
 
 interface Props {
   scenarioId: string;
@@ -92,7 +93,9 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h3 className="text-lg font-medium">{t("title")}</h3>
+      {/* <h3 className="text-lg font-medium">{t("title")}</h3> */}
+
+      <ScenarioCalendar />
 
       <MessageEntryCards
         entries={messageEntries || []}
