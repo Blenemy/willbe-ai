@@ -78,8 +78,6 @@ export const StatisticsMessagesTable = () => {
 
   const { data = [] } = useStatisticMessages(scenarioId);
 
-  console.log(data);
-
   const sorted = useMemo(() => {
     if (!sortKey) return data;
     return [...data].sort((a, b) => {

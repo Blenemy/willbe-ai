@@ -26,7 +26,10 @@ import { Input } from "@/components/ui/input";
 import { renderHeader } from "@/components/ui/renderHeader";
 import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 import { Button } from "@/components/ui/button";
-import { useDeleteMessageCampaignEntry } from "@/hooks/useMessageCampaignEntries";
+import {
+  useDeleteMessageCampaignEntry,
+  useUpdateMessageEntryLead,
+} from "@/hooks/useMessageCampaignEntries";
 import { ConfirmDeleteModal } from "../../MessageCampaign/ConfirmDeleteModal";
 import { useTranslations } from "next-intl";
 
@@ -47,6 +50,7 @@ export const LeadsInCadenceTable = () => {
   >(null);
 
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
+  const { mutate: updateLeadStatus } = useUpdateMessageEntryLead();
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("in_cadence");
@@ -182,7 +186,15 @@ export const LeadsInCadenceTable = () => {
                   <TableCell>{item.phone ?? t("editPhone")}</TableCell>
                   <TableCell>{company}</TableCell>
                   <TableCell>
-                    <Select defaultValue={item.status}>
+                    <Select
+                      defaultValue={item.status}
+                      onValueChange={(newStatus) => {
+                        updateLeadStatus({
+                          leadId: item.id,
+                          status: newStatus,
+                        });
+                      }}
+                    >
                       <SelectTrigger className="w-[150px] border-none">
                         <SelectValue />
                       </SelectTrigger>
