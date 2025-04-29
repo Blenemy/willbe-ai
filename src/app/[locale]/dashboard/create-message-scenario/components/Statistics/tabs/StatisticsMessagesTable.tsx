@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Info, ExternalLink, ChevronDown } from "lucide-react";
+import { Info, ExternalLink, ChevronDown, CheckCircle } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -185,7 +185,7 @@ export const StatisticsMessagesTable = () => {
                     />
                     {`${leadData.first_name} ${leadData.last_name}`}
                   </TableCell>
-                  <TableCell>{sent?.status || "-"}</TableCell>
+                  <TableCell>{item?.status || "-"}</TableCell>
                   <TableCell className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
                       <AvatarImage src={leadData.profile_picture_url} />
@@ -210,9 +210,15 @@ export const StatisticsMessagesTable = () => {
                       <ExternalLink className="w-4 h-4" />
                     </Button>
 
-                    <Button variant="ghost" size="icon" aria-label="Info">
-                      <Info className="w-4 h-4 text-red-600" />
-                    </Button>
+                    {item.isSent ? (
+                      <Button variant="ghost" size="icon" aria-label="Info">
+                        <CheckCircle className="text-green-600 w-4 h-4 mx-auto" />
+                      </Button>
+                    ) : (
+                      <Button variant="ghost" size="icon" aria-label="Info">
+                        <Info className="text-red-600 w-4 h-4 mx-auto" />
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
 

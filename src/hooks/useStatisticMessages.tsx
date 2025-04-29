@@ -4,6 +4,8 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 export interface ScenarioMessage {
   id: string;
   leadScenarioId: string;
+  isSent: boolean;
+  status: string;
   leadData: {
     first_name: string;
     last_name: string;
