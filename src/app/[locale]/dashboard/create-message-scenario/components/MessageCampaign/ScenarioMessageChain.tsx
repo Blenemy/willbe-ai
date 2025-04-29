@@ -72,8 +72,31 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     setCreateModalOpen(false);
   };
 
-  const handleEditEntry = (entryId: string, type: string, sendDate: string) => {
-    updateEntry({ id: entryId, type, sendDate, messageScenarioId: scenarioId });
+  const handleEditEntry = (
+    entryId: string,
+    type: string,
+    sendDate: string,
+    sendNow: boolean
+  ) => {
+    const payload: {
+      id: string;
+      type: string;
+      messageScenarioId: string;
+      sendNow?: boolean;
+      sendDate?: string;
+    } = {
+      id: entryId,
+      type,
+      messageScenarioId: scenarioId,
+    };
+
+    if (sendNow) {
+      payload.sendNow = true;
+    } else {
+      payload.sendDate = sendDate;
+    }
+
+    updateEntry(payload);
     setCreateModalOpen(false);
   };
 
