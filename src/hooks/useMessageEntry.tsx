@@ -41,7 +41,8 @@ export const useCreateMessageEntry = () => {
 interface UpdateMessageEntryDto {
   id: string;
   type: string;
-  sendDate: string;
+  sendDate?: string;
+  sendNow?: boolean;
   messageScenarioId: string;
 }
 
@@ -49,10 +50,20 @@ export const useUpdateMessageEntry = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, type, sendDate }: UpdateMessageEntryDto) => {
+    mutationFn: async ({
+      id,
+      type,
+      sendDate,
+      sendNow,
+    }: UpdateMessageEntryDto) => {
       const res = await protectedAxiosInstance.patch<MessageEntry>(
         `/auth/message-campaign-entries/${id}`,
-        { type, sendDate }
+        {
+          type,
+          ...(sendNow
+            ? { sendNow: true, sendDate: null }
+            : { sendDate, sendNow: false }),
+        }
       );
       return res.data;
     },
@@ -60,7 +71,7 @@ export const useUpdateMessageEntry = () => {
       queryClient.invalidateQueries({
         queryKey: ["message-campaign-entries", variables.messageScenarioId],
       });
-      toast("Message entry was sucessfully updated");
+      toast("Message entry was successfully updated");
     },
     onError: () => {
       toast("Failed to update a message entry");
