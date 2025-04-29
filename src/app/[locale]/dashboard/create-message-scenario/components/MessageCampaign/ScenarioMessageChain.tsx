@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
 import {
   MessageEntry,
   useMessageCampaignEntries,
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const ScenarioMessageChain = ({ scenarioId }: Props) => {
-  const t = useTranslations("messageChain");
+  // const t = useTranslations("messageChain");
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
@@ -95,7 +95,22 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     <div className="flex flex-col gap-5">
       {/* <h3 className="text-lg font-medium">{t("title")}</h3> */}
 
-      <ScenarioCalendar />
+      <ScenarioCalendar
+        entries={messageEntries || []}
+        onAddStep={() => {
+          setEditMode("create");
+          setEditingEntry(null);
+          setCreateModalOpen(true);
+        }}
+        onEditStep={(entry) => {
+          setEditMode("edit");
+          setEditingEntry(entry);
+          setCreateModalOpen(true);
+        }}
+        onDeleteStep={handleDeleteEntry}
+        onSelectStep={(id) => setSelectedEntryId(id)}
+        selectedEntryId={selectedEntryId}
+      />
 
       <MessageEntryCards
         entries={messageEntries || []}

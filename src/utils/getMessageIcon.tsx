@@ -2,7 +2,8 @@ import Image from "next/image";
 import MailIcon from "@/assets/calendar/yellow_mail.svg";
 import LinkedinIcon from "@/assets/linkedin.svg";
 import MessageIcon from "@/assets/calendar/blue_message.svg";
-import FollowUpIcon from "@/assets/calendar/yellow_follow_up.svg";
+import FollowUpIconYellow from "@/assets/calendar/yellow_follow_up.svg";
+import FollowUpIconBlue from "@/assets/calendar/blue_follow_up.svg";
 
 export const getMessageIcon = (type: string, size = 16) => {
   let src: string;
@@ -10,8 +11,11 @@ export const getMessageIcon = (type: string, size = 16) => {
 
   switch (type) {
     case "first_email":
-    case "follow_up_email":
       src = MailIcon;
+      break;
+
+    case "follow_up_email":
+      src = FollowUpIconYellow;
       break;
 
     case "linkedin_connection":
@@ -23,7 +27,7 @@ export const getMessageIcon = (type: string, size = 16) => {
       break;
 
     case "linkedin_follow_up":
-      src = FollowUpIcon;
+      src = FollowUpIconBlue;
       break;
 
     default:
