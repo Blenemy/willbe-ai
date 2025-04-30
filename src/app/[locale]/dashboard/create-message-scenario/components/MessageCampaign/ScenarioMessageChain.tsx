@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
 import {
   MessageEntry,
   useMessageCampaignEntries,
@@ -12,17 +11,18 @@ import {
   useDeleteMessageEntry,
   useUpdateMessageEntry,
 } from "@/hooks/useMessageEntry";
-import { MessageEntryCards } from "./MessageEntryCards";
 import { CreateMessageModal } from "./CreateMessageModal";
 import { CreateScenarioTable } from "./CreateScenarioTable";
 import { useMessageChainStore } from "@/store/useMessageChainStore";
+import { ScenarioCalendar } from "./ScenarioCalendar";
+import { ScenarioCalendarStats } from "./ScenarioCalendarStats";
 
 interface Props {
   scenarioId: string;
+  scenarioTitle: string;
 }
 
-export const ScenarioMessageChain = ({ scenarioId }: Props) => {
-  const t = useTranslations("messageChain");
+export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
@@ -72,15 +72,32 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     setCreateModalOpen(false);
   };
 
-  const handleEditEntry = (entryId: string, type: string, sendDate: string) => {
-    updateEntry({ id: entryId, type, sendDate, messageScenarioId: scenarioId });
-    setCreateModalOpen(false);
-  };
+  const handleEditEntry = (
+    entryId: string,
+    type: string,
+    sendDate: string,
+    sendNow: boolean
+  ) => {
+    const payload: {
+      id: string;
+      type: string;
+      messageScenarioId: string;
+      sendNow?: boolean;
+      sendDate?: string;
+    } = {
+      id: entryId,
+      type,
+      messageScenarioId: scenarioId,
+    };
 
-  const handleOpenEditModal = (entry: MessageEntry) => {
-    setEditingEntry(entry);
-    setEditMode("edit");
-    setCreateModalOpen(true);
+    if (sendNow) {
+      payload.sendNow = true;
+    } else {
+      payload.sendDate = sendDate;
+    }
+
+    updateEntry(payload);
+    setCreateModalOpen(false);
   };
 
   const handleDeleteEntry = (entry: MessageEntry) => {
@@ -92,20 +109,25 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <h3 className="text-lg font-medium">{t("title")}</h3>
-
-      <MessageEntryCards
+      <ScenarioCalendar
+        scenarioTitle={scenarioTitle}
         entries={messageEntries || []}
-        selectedId={selectedEntryId}
-        onSelect={(id) => setSelectedEntryId(id)}
-        onOpenCreateModal={() => {
+        onAddStep={() => {
           setEditMode("create");
           setEditingEntry(null);
           setCreateModalOpen(true);
         }}
-        onOpenEditModal={handleOpenEditModal}
-        onDelete={handleDeleteEntry}
+        onEditStep={(entry) => {
+          setEditMode("edit");
+          setEditingEntry(entry);
+          setCreateModalOpen(true);
+        }}
+        onDeleteStep={handleDeleteEntry}
+        onSelectStep={(id) => setSelectedEntryId(id)}
+        selectedEntryId={selectedEntryId}
       />
+
+      <ScenarioCalendarStats entries={messageEntries || []} />
 
       <CreateMessageModal
         open={isCreateModalOpen}

@@ -123,6 +123,7 @@ interface UpdateMessageEntryLeadDto {
   language?: string | null;
   messageStructureId?: string | null;
   productServiceId?: string | null;
+  status?: string;
 }
 
 export const useUpdateMessageEntryLead = () => {
@@ -143,6 +144,9 @@ export const useUpdateMessageEntryLead = () => {
       });
       queryClient.invalidateQueries({
         queryKey: ["message-campaign-entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads-in-cadence"],
       });
     },
     onError: (err) => {

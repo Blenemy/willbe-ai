@@ -51,7 +51,10 @@ const EditMessageScenarioPage = () => {
         </>
       )}
       {activeStep === 1 && scenario?.id && (
-        <ScenarioMessageChain scenarioId={scenario.id} />
+        <ScenarioMessageChain
+          scenarioId={scenario.id}
+          scenarioTitle={scenario.name}
+        />
       )}
 
       {activeStep === 2 && <StatisticPage scenario={scenario} />}
