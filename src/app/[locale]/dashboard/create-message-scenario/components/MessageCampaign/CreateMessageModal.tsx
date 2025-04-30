@@ -46,7 +46,7 @@ interface Props {
 
 const formSchema = z
   .object({
-    type: z.string().min(1, "messageChain.validation.typeRequired"),
+    type: z.string().min(1, "validation.typeRequired"),
     date: z.string().optional(),
     time: z.string().optional(),
     sendNow: z.boolean().optional(),
@@ -57,7 +57,7 @@ const formSchema = z
       return !!data.date && !!data.time;
     },
     {
-      message: "messageChain.validation.dateRequired",
+      message: "validation.dateRequired",
       path: ["date"],
     }
   );
