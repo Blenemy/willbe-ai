@@ -43,15 +43,6 @@ export const ScenarioCalendar = ({
   const goToday = () => setStartDate(startOfToday());
   const goForward = () => setStartDate((prev) => addDays(prev, 7));
   const goBack = () => setStartDate((prev) => addDays(prev, -7));
-  const canGoBack = (() => {
-    const prevWeekStart = addDays(startDate, -7);
-    const prevWeekEnd = addDays(startDate, -1);
-
-    return entries.some((entry) => {
-      const entryDate = new Date(entry.sendDate);
-      return entryDate >= prevWeekStart && entryDate <= prevWeekEnd;
-    });
-  })();
 
   return (
     <div className="flex flex-col rounded-md bg-white">
@@ -68,7 +59,7 @@ export const ScenarioCalendar = ({
           >
             Today
           </Button>
-          <Button variant="ghost" onClick={goBack} disabled={!canGoBack}>
+          <Button variant="ghost" onClick={goBack}>
             {"<"}
           </Button>
           <Button variant="ghost" onClick={goForward}>
