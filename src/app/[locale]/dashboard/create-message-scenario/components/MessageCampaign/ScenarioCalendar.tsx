@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  addDays,
-  format,
-  isToday,
-  isWeekend,
-  startOfToday,
-  isBefore,
-} from "date-fns";
+import { addDays, format, isToday, isWeekend, startOfToday } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getMessageIcon } from "@/utils/getMessageIcon";
@@ -22,6 +15,7 @@ interface Props {
   onDeleteStep: (entry: MessageEntry) => void;
   onSelectStep: (id: string) => void;
   selectedEntryId: string | null;
+  scenarioTitle: string;
 }
 
 const getDayKey = (date: Date) => format(date, "yyyy-MM-dd");
@@ -33,6 +27,7 @@ export const ScenarioCalendar = ({
   onDeleteStep,
   onSelectStep,
   selectedEntryId,
+  scenarioTitle,
 }: Props) => {
   const [startDate, setStartDate] = useState(startOfToday());
 
@@ -48,21 +43,37 @@ export const ScenarioCalendar = ({
   const goToday = () => setStartDate(startOfToday());
   const goForward = () => setStartDate((prev) => addDays(prev, 7));
   const goBack = () => setStartDate((prev) => addDays(prev, -7));
-  const canGoBack = !isBefore(addDays(startDate, -7), startOfToday());
+  const canGoBack = (() => {
+    const prevWeekStart = addDays(startDate, -7);
+    const prevWeekEnd = addDays(startDate, -1);
+
+    return entries.some((entry) => {
+      const entryDate = new Date(entry.sendDate);
+      return entryDate >= prevWeekStart && entryDate <= prevWeekEnd;
+    });
+  })();
 
   return (
-    <div className="flex flex-col rounded-md p-4 bg-white">
+    <div className="flex flex-col rounded-md bg-white">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Scenario Title</h3>
+        <h3 className="text-lg font-semibold">{scenarioTitle}</h3>
         <div className="flex gap-2">
-          <Button onClick={onAddStep}>+ Add step</Button>
-          <Button variant="outline" onClick={goToday}>
+          <Button onClick={onAddStep} className="bg-[#084960]">
+            + Add step
+          </Button>
+          <Button
+            variant="outline"
+            onClick={goToday}
+            className="border-[#084960] text-[#084960]"
+          >
             Today
           </Button>
-          <Button variant="outline" onClick={goBack} disabled={!canGoBack}>
+          <Button variant="ghost" onClick={goBack} disabled={!canGoBack}>
             {"<"}
           </Button>
-          <Button onClick={goForward}>{">"}</Button>
+          <Button variant="ghost" onClick={goForward}>
+            {">"}
+          </Button>
         </div>
       </div>
 
@@ -117,9 +128,7 @@ export const ScenarioCalendar = ({
 
       <div className="grid grid-cols-8 text-sm text-center border-l">
         <div className="py-3 px-2 flex items-center justify-start gap-2 border-r border-b bg-white">
-          <span className="text-lg">
-            {getMessageIcon("linkedin_connection", 20)}
-          </span>{" "}
+          <span className="text-lg">{getMessageIcon("linkedin_icon", 20)}</span>{" "}
           LinkedIn
         </div>
         {days.map((day) => {

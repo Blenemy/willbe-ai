@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { useTranslations } from "next-intl";
 import {
   MessageEntry,
   useMessageCampaignEntries,
@@ -12,18 +11,18 @@ import {
   useDeleteMessageEntry,
   useUpdateMessageEntry,
 } from "@/hooks/useMessageEntry";
-import { MessageEntryCards } from "./MessageEntryCards";
 import { CreateMessageModal } from "./CreateMessageModal";
 import { CreateScenarioTable } from "./CreateScenarioTable";
 import { useMessageChainStore } from "@/store/useMessageChainStore";
 import { ScenarioCalendar } from "./ScenarioCalendar";
+import { ScenarioCalendarStats } from "./ScenarioCalendarStats";
 
 interface Props {
   scenarioId: string;
+  scenarioTitle: string;
 }
 
-export const ScenarioMessageChain = ({ scenarioId }: Props) => {
-  // const t = useTranslations("messageChain");
+export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
@@ -78,12 +77,6 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
     setCreateModalOpen(false);
   };
 
-  const handleOpenEditModal = (entry: MessageEntry) => {
-    setEditingEntry(entry);
-    setEditMode("edit");
-    setCreateModalOpen(true);
-  };
-
   const handleDeleteEntry = (entry: MessageEntry) => {
     deleteEntry({ id: entry.id, messageScenarioId: scenarioId });
     if (selectedEntryId === entry.id) {
@@ -93,9 +86,8 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* <h3 className="text-lg font-medium">{t("title")}</h3> */}
-
       <ScenarioCalendar
+        scenarioTitle={scenarioTitle}
         entries={messageEntries || []}
         onAddStep={() => {
           setEditMode("create");
@@ -112,18 +104,7 @@ export const ScenarioMessageChain = ({ scenarioId }: Props) => {
         selectedEntryId={selectedEntryId}
       />
 
-      <MessageEntryCards
-        entries={messageEntries || []}
-        selectedId={selectedEntryId}
-        onSelect={(id) => setSelectedEntryId(id)}
-        onOpenCreateModal={() => {
-          setEditMode("create");
-          setEditingEntry(null);
-          setCreateModalOpen(true);
-        }}
-        onOpenEditModal={handleOpenEditModal}
-        onDelete={handleDeleteEntry}
-      />
+      <ScenarioCalendarStats entries={messageEntries || []} />
 
       <CreateMessageModal
         open={isCreateModalOpen}
