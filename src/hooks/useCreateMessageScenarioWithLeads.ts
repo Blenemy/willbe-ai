@@ -16,7 +16,7 @@ export const useCreateMessageScenarioWithLeads = () => {
   const mutation = useMutation({
     mutationFn: async (data: CreateMessageScenarioInput) => {
       const response = await protectedAxiosInstance.post(
-        "/message-scenarios/create-with-leads",
+        "/auth/message-scenarios/create-with-leads",
         data
       );
       return response.data;
