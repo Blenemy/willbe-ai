@@ -49,8 +49,6 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
 
-  console.log(data);
-
   const toggleSelection = (id: string) => {
     //@ts-expect-error type string[] is not assignable to type string[]
     setSelected((prev: string[]): string[] => {
