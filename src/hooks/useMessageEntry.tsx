@@ -56,13 +56,14 @@ export const useUpdateMessageEntry = () => {
       sendDate,
       sendNow,
     }: UpdateMessageEntryDto) => {
+      const nowISO = new Date().toISOString();
+
       const res = await protectedAxiosInstance.patch<MessageEntry>(
         `/auth/message-campaign-entries/${id}`,
         {
           type,
-          ...(sendNow
-            ? { sendNow: true, sendDate: null }
-            : { sendDate, sendNow: false }),
+          sendNow: !!sendNow,
+          sendDate: sendNow ? nowISO : sendDate,
         }
       );
       return res.data;

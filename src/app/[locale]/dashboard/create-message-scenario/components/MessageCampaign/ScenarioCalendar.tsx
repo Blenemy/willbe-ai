@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { addDays, format, isToday, isWeekend, startOfToday } from "date-fns";
+import {
+  addDays,
+  format,
+  isBefore,
+  isToday,
+  isWeekend,
+  parseISO,
+  startOfToday,
+} from "date-fns";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getMessageIcon } from "@/utils/getMessageIcon";
@@ -43,15 +51,11 @@ export const ScenarioCalendar = ({
   const goToday = () => setStartDate(startOfToday());
   const goForward = () => setStartDate((prev) => addDays(prev, 7));
   const goBack = () => setStartDate((prev) => addDays(prev, -7));
-  const canGoBack = (() => {
-    const prevWeekStart = addDays(startDate, -7);
-    const prevWeekEnd = addDays(startDate, -1);
-
-    return entries.some((entry) => {
-      const entryDate = new Date(entry.sendDate);
-      return entryDate >= prevWeekStart && entryDate <= prevWeekEnd;
-    });
-  })();
+  const canGoBack = entries.some((entry) => {
+    if (!entry.sendDate) return false;
+    const entryDate = parseISO(entry.sendDate);
+    return isBefore(entryDate, startOfToday());
+  });
 
   return (
     <div className="flex flex-col rounded-md bg-white">
@@ -109,7 +113,10 @@ export const ScenarioCalendar = ({
           return (
             <div
               key={key}
-              className="py-3 border-r border-b bg-white text-center relative group flex items-center justify-center gap-2"
+              className={cn(
+                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2",
+                isWeekend(day) ? "bg-gray-100" : "bg-white"
+              )}
             >
               {emails.map((entry) => (
                 <MessageEntryPopover
@@ -117,8 +124,8 @@ export const ScenarioCalendar = ({
                   entry={entry}
                   onEdit={onEditStep}
                   onDelete={onDeleteStep}
-                  onSelect={() => onSelectStep(entry.id)} // ✅
-                  isSelected={selectedEntryId === entry.id} // ✅
+                  onSelect={() => onSelectStep(entry.id)}
+                  isSelected={selectedEntryId === entry.id}
                 />
               ))}
             </div>
@@ -144,7 +151,10 @@ export const ScenarioCalendar = ({
           return (
             <div
               key={key}
-              className="py-3 border-r border-b bg-white text-center relative group flex items-center justify-center gap-2"
+              className={cn(
+                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2",
+                isWeekend(day) ? "bg-gray-100" : "bg-white"
+              )}
             >
               {linkedins.map((entry) => (
                 <MessageEntryPopover
@@ -152,8 +162,8 @@ export const ScenarioCalendar = ({
                   entry={entry}
                   onEdit={onEditStep}
                   onDelete={onDeleteStep}
-                  onSelect={() => onSelectStep(entry.id)} // ✅
-                  isSelected={selectedEntryId === entry.id} // ✅
+                  onSelect={() => onSelectStep(entry.id)}
+                  isSelected={selectedEntryId === entry.id}
                 />
               ))}
             </div>

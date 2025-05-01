@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Trash2, Eye, Sparkles, Pencil, Loader2 } from "lucide-react";
+import { Trash2, Sparkles, Pencil, Loader2, ExternalLink } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -340,7 +340,7 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                 </TableCell>
                 <TableCell>
                   <Button variant="ghost" size="icon">
-                    <Eye className="w-4 h-4" />
+                    <ExternalLink className="w-4 h-4" />
                   </Button>
                 </TableCell>
                 <TableCell>
