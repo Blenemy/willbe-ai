@@ -47,7 +47,10 @@ const getIcon = (
   return (
     <IconComponent
       style={{ width: size, height: size }}
-      className={isActive ? "text-black" : "text-gray-500"}
+      className={cn("rounded p-1", {
+        "text-white": isActive,
+        "text-gray-500": !isActive,
+      })}
     />
   );
 };
@@ -205,11 +208,14 @@ export function AppSidebar({
         "max-w-20": !open,
       })}
     >
-      <Sidebar className="min-w-20" collapsible="icon">
+      <Sidebar className="min-w-20 border-none" collapsible="icon">
         <SidebarContent
-          className={cn("flex flex-col h-full gap-0 py-5", {
-            "items-center": !open,
-          })}
+          className={cn(
+            "flex flex-col h-full gap-0 py-5 overflow-y-auto hide-scrollbar bg-slate-100 ",
+            {
+              "items-center": !open,
+            }
+          )}
         >
           <div
             className={cn("flex items-center justify-center mb-5", {
@@ -258,15 +264,19 @@ export function AppSidebar({
                           const isActive = pathname.includes(subItem.url);
                           return (
                             <SidebarMenuItem key={subItem.title}>
-                              <SidebarMenuButton asChild isActive={isActive}>
+                              <SidebarMenuButton asChild>
                                 <Link
                                   href={subItem.url}
                                   className={cn(
-                                    "p-0 justify-center flex items-center gap-2",
+                                    "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
                                     {
                                       "p-2": open,
                                       "justify-start": open,
-                                      "bg-gray-200 rounded-md": isActive,
+                                      "bg-[#084960] text-white": isActive,
+                                      "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10":
+                                        !isActive,
+                                      "hover:text-white hover:bg-[#084960]":
+                                        isActive,
                                     }
                                   )}
                                 >

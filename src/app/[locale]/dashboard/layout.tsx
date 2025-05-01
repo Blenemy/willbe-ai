@@ -9,9 +9,11 @@ export default async function DashboardLayout({
   const sidebarTranslations = await getSidebarTranslations();
 
   return (
-    <main className="font-[family-name:var(--font-geist-sans)] flex">
+    <main className="flex min-h-screen font-[family-name:var(--font-geist-sans)] bg-slate-100">
       <AppSidebar translations={sidebarTranslations} />
-      <div className="flex flex-1">{children}</div>
+      <div className="flex-1 p-6">
+        <div className="bg-white rounded-xl shadow-sm p-6">{children}</div>
+      </div>
     </main>
   );
 }
