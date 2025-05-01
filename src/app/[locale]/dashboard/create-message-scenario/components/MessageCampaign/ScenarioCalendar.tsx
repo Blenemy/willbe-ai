@@ -51,11 +51,17 @@ export const ScenarioCalendar = ({
   const goToday = () => setStartDate(startOfToday());
   const goForward = () => setStartDate((prev) => addDays(prev, 7));
   const goBack = () => setStartDate((prev) => addDays(prev, -7));
-  const canGoBack = entries.some((entry) => {
+  const today = startOfToday();
+
+  const hasPastEntries = entries.some((entry) => {
     if (!entry.sendDate) return false;
     const entryDate = parseISO(entry.sendDate);
-    return isBefore(entryDate, startOfToday());
+    return isBefore(entryDate, today);
   });
+
+  const hasMovedForward = isBefore(today, startDate);
+
+  const canGoBack = hasPastEntries || hasMovedForward;
 
   return (
     <div className="flex flex-col rounded-md bg-white">
