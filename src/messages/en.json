@@ -1423,7 +1423,10 @@
       "actions": "Actions",
       "scenarioTitle": "Scenario name",
       "createdBy": "Created by",
-      "createdAt": "Created date"
+      "createdAt": "Created date",
+      "employees": "Number of employees",
+      "location": "Location",
+      "description": "Description"
     },
     "dropdown": {
       "all": "All",
