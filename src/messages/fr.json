@@ -1416,8 +1416,8 @@
       "scenario": "Rechercher par titre du scénario"
     },
     "table": {
-      "accountTitle": "Titre du compte",
-      "industry": "Secteur",
+      "accountTitle": "Nom du compte",
+      "industry": "Secteur d'activité",
       "firstName": "Prénom",
       "lastName": "Nom",
       "email": "E-mail",
@@ -1432,7 +1432,10 @@
       "actions": "Actions",
       "scenarioTitle": "Nom du scénario",
       "createdBy": "Créé par",
-      "createdAt": "Date de création"
+      "createdAt": "Date de création",
+      "employees": "Nombre d'employés",
+      "location": "Localisation",
+      "description": "Description"
     },
     "dropdown": {
       "all": "Tous",

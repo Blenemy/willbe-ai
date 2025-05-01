@@ -26,6 +26,12 @@ import {
   AccountScenario,
   AccountScenarioData,
 } from "@/hooks/useEditScenarioData";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Props {
   data: AccountScenario[];
@@ -33,7 +39,7 @@ interface Props {
   setSelected: (val: string[]) => void;
 }
 
-type SortKey = "name" | "industry" | "";
+type SortKey = "name" | "industry" | "headcount" | "location" | "summary" | "";
 
 export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   const t = useTranslations("messageScenarioData");
@@ -42,6 +48,8 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
+
+  console.log(data);
 
   const toggleSelection = (id: string) => {
     //@ts-expect-error type string[] is not assignable to type string[]
@@ -85,7 +93,9 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
     const valA = aInfo[sortKey] || "";
     const valB = bInfo[sortKey] || "";
 
-    return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    return sortAsc
+      ? String(valA).localeCompare(String(valB))
+      : String(valB).localeCompare(String(valA));
   });
 
   const selectedFirstSorted = [...sorted].sort((a, b) => {
@@ -126,6 +136,27 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
               sortAsc,
               handleSort
             )}
+            {renderHeader(
+              t("table.employees"),
+              "headcount",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.location"),
+              "location",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.description"),
+              "summary",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead className="w-[40px]" />
           </TableRow>
         </TableHeader>
@@ -145,15 +176,36 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
                     onChange={() => toggleSelection(item.id)}
                   />
                 </TableCell>
-                <TableCell className="flex items-center gap-2 max-w-[240px] break-words">
-                  <Avatar className="w-6 h-6">
-                    <AvatarImage src={accInfo.logo} />
-                    <AvatarFallback>{accInfo.name?.[0]}</AvatarFallback>
-                  </Avatar>
-                  {accInfo.name}
+                <TableCell className="max-w-[240px] break-words">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage src={accInfo.logo} />
+                      <AvatarFallback>{accInfo.name?.[0]}</AvatarFallback>
+                    </Avatar>
+                    {accInfo.name}
+                  </div>
                 </TableCell>
                 <TableCell className="max-w-[260px] break-words">
                   {accInfo.industry || "—"}
+                </TableCell>
+                <TableCell>{accInfo.headcount || "—"}</TableCell>
+                <TableCell>{accInfo.location || "N/A"}</TableCell>
+                <TableCell className="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span>
+                          {accInfo.summary
+                            ? accInfo.summary.slice(0, 100) +
+                              (accInfo.summary.length > 100 ? "..." : "")
+                            : "—"}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[400px] whitespace-pre-wrap">
+                        {accInfo.summary}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </TableCell>
                 <TableCell className="text-right w-[40px]">
                   <a
