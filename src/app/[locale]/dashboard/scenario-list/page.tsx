@@ -77,12 +77,27 @@ const ScenarioList = () => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [scenarioToDelete, setScenarioToDelete] = useState<string | null>(null);
+  const [ownerFilter, setOwnerFilter] = useState<string>("all");
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
     columns.map((col) => [col.key, true])
   );
 
   const { data = [] } = useMessageScenarios({ name: search });
+
+  const uniqueOwners = React.useMemo(() => {
+    const names = data.map((s) =>
+      `${s.user.firstName} ${s.user.lastName}`.trim()
+    );
+    return Array.from(new Set(names)).sort((a, b) => a.localeCompare(b));
+  }, [data]);
+
+  const filteredData = data.filter((item) => {
+    const owner = `${item.user.firstName} ${item.user.lastName}`;
+    return ownerFilter === "all" || owner === ownerFilter;
+  });
+
   const deleteMutation = useDeleteMessageScenarios();
+
   const {
     paginated,
     page,
@@ -95,7 +110,7 @@ const ScenarioList = () => {
     setSortAsc,
     totalCount,
   } = useClientPagination({
-    data,
+    data: filteredData,
     search,
     searchField: "name",
     statusFilter,
@@ -157,16 +172,62 @@ const ScenarioList = () => {
   };
 
   return (
-    <div className="px-6 py-10 space-y-6 w-full">
+    <div className="px-6 py-7 space-y-6 w-full">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">{t("title")}</h2>
+        <Button
+          className="bg-[#084960]"
+          onClick={() => router.push("/dashboard/create-message-scenario")}
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          {t("create")}
+        </Button>
+      </div>
+
+      <div className="flex justify-between gap-4">
+        <Input
+          placeholder={t("searchPlaceholder")}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Select onValueChange={setStatusFilter} value={statusFilter}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder={t("sortByStatus")} />
+          </SelectTrigger>
+          <SelectContent>
+            {STATUS_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select onValueChange={setOwnerFilter} value={ownerFilter}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Sort by owner" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t("sortByOwner.all")}</SelectItem>
+            {uniqueOwners.map((owner) => (
+              <SelectItem key={owner} value={owner}>
+                {owner}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Button
+          variant="destructive"
+          disabled={selectedIds.length === 0}
+          onClick={() => {
+            deleteMutation.mutate(selectedIds);
+            setSelectedIds([]);
+          }}
+        >
+          {t("deleteSelected", { count: selectedIds.length })}
+        </Button>
         <div className="flex gap-2">
-          <Button
-            onClick={() => router.push("/dashboard/create-message-scenario")}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("create")}
-          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -190,36 +251,6 @@ const ScenarioList = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
-
-      <div className="flex justify-between gap-4">
-        <Input
-          placeholder={t("searchPlaceholder")}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Select onValueChange={setStatusFilter} value={statusFilter}>
-          <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder={t("sortByStatus")} />
-          </SelectTrigger>
-          <SelectContent>
-            {STATUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button
-          variant="destructive"
-          disabled={selectedIds.length === 0}
-          onClick={() => {
-            deleteMutation.mutate(selectedIds);
-            setSelectedIds([]);
-          }}
-        >
-          {t("deleteSelected", { count: selectedIds.length })}
-        </Button>
       </div>
 
       <Table>

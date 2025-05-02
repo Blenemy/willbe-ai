@@ -10,8 +10,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
   SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   Home,
@@ -21,12 +22,10 @@ import {
   Users,
   User,
   Settings,
-  ChevronLeft,
   LucideProps,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo/Logo";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
@@ -47,7 +46,10 @@ const getIcon = (
   return (
     <IconComponent
       style={{ width: size, height: size }}
-      className={isActive ? "text-black" : "text-gray-500"}
+      className={cn("rounded p-1", {
+        "text-white": isActive,
+        "text-gray-500": !isActive,
+      })}
     />
   );
 };
@@ -57,10 +59,23 @@ export function AppSidebar({
 }: {
   translations: SidebarTranslations;
 }) {
-  const [open, setOpen] = useState(true);
+  return (
+    <Sidebar className="border-none" collapsible="icon">
+      <SidebarContentWithLogic translations={translations} />
+    </Sidebar>
+  );
+}
+
+const ICON_SIZE = 24;
+
+export function SidebarContentWithLogic({
+  translations,
+}: {
+  translations: SidebarTranslations;
+}) {
   const { logout, user, isLoading } = useAuth({ enableFetch: true });
+  const { open } = useSidebar();
   const pathname = usePathname();
-  const ICON_SIZE = open ? 24 : 20;
 
   const data = {
     navMain: [
@@ -123,6 +138,7 @@ export function AppSidebar({
           {
             title: translations.createMessageScenario,
             url: "/dashboard/create-message-scenario",
+            icon: List,
             allowedRoles: ALL_ROLES,
           },
           {
@@ -134,6 +150,7 @@ export function AppSidebar({
           {
             title: translations.createMessageStructures,
             url: "/dashboard/create-message-structures",
+            icon: Mail,
             allowedRoles: ALL_ROLES,
           },
         ],
@@ -198,101 +215,99 @@ export function AppSidebar({
   };
 
   return (
-    <SidebarProvider
-      open={open}
-      className={cn("", {
-        "max-w-64": open,
-        "max-w-20": !open,
-      })}
+    <SidebarContent
+      className={cn(
+        "flex flex-col h-full gap-0 py-5 overflow-y-auto hide-scrollbar bg-slate-100",
+        {
+          "items-center": !open,
+        }
+      )}
     >
-      <Sidebar className="min-w-20" collapsible="icon">
-        <SidebarContent
-          className={cn("flex flex-col h-full gap-0 py-5", {
-            "items-center": !open,
-          })}
-        >
-          <div
-            className={cn("flex items-center justify-center mb-5", {
-              "flex-col": !open,
-              "gap-4": !open,
-            })}
-          >
-            {open ? (
-              <Logo width={100} height={40} />
-            ) : (
-              <Logo width={40} height={40} isCircleLogo />
-            )}
-            <button onClick={() => setOpen((prev) => !prev)}>
-              <ChevronLeft size={30} className={!open ? "rotate-180" : ""} />
-            </button>
-          </div>
+      <div
+        className={cn("flex items-center justify-between mb-5 px-5", {
+          "flex-col": !open,
+          "gap-4": !open,
+          "px-0": !open,
+        })}
+      >
+        {open ? (
+          <Logo width={100} height={40} />
+        ) : (
+          <Logo width={40} height={40} isCircleLogo />
+        )}
+        <SidebarTrigger />
+      </div>
 
-          {isLoading ? (
-            <SidebarMenu className="gap-4 flex flex-col mb-5">
-              {Array.from({ length: 10 }).map((_, index) => (
-                <SidebarMenuItem key={index}>
-                  <Skeleton className="w-full h-8 bg-gray-200" />
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          ) : (
-            data.navMain.map((item, index) => (
-              <React.Fragment key={item.title}>
-                <SidebarGroup className="py-3 flex flex-col">
-                  {open && index !== 0 && (
-                    <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-                  )}
-                  <SidebarGroupContent>
-                    <SidebarMenu
-                      className={cn("gap-3 flex flex-col", {
-                        "items-center": !open,
-                      })}
-                    >
-                      {(item.items || [item])
-                        .filter(
-                          (subItem) =>
-                            !subItem.allowedRoles ||
-                            subItem.allowedRoles.includes(user?.role)
-                        )
-                        .map((subItem) => {
-                          const isActive = pathname.includes(subItem.url);
-                          return (
-                            <SidebarMenuItem key={subItem.title}>
-                              <SidebarMenuButton asChild isActive={isActive}>
-                                <Link
-                                  href={subItem.url}
-                                  className={cn(
-                                    "p-0 justify-center flex items-center gap-2",
-                                    {
-                                      "p-2": open,
-                                      "justify-start": open,
-                                      "bg-gray-200 rounded-md": isActive,
-                                    }
-                                  )}
-                                >
-                                  {getIcon(subItem.icon, ICON_SIZE, isActive)}
-                                  {open && subItem.title}
-                                </Link>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          );
-                        })}
-                    </SidebarMenu>
-                  </SidebarGroupContent>
-                </SidebarGroup>
-                {index !== data.navMain.length - 1 && <SidebarSeparator />}
-              </React.Fragment>
-            ))
-          )}
+      {isLoading ? (
+        <SidebarMenu className="gap-4 flex flex-col mb-5">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <SidebarMenuItem key={index}>
+              <Skeleton className="w-full h-8 bg-gray-200" />
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      ) : (
+        data.navMain.map((item, index) => (
+          <React.Fragment key={item.title}>
+            <SidebarGroup className="py-3 flex flex-col">
+              {index !== 0 && (
+                <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+              )}
+              <SidebarGroupContent>
+                <SidebarMenu
+                  className={cn("gap-3 flex flex-col", {
+                    "items-center": !open,
+                  })}
+                >
+                  {(item.items || [item])
+                    .filter(
+                      (subItem) =>
+                        !subItem.allowedRoles ||
+                        subItem.allowedRoles.includes(user?.role)
+                    )
+                    .map((subItem) => {
+                      const isActive = pathname.includes(subItem.url);
+                      return (
+                        <SidebarMenuItem key={subItem.title}>
+                          <SidebarMenuButton asChild>
+                            <Link
+                              href={subItem.url}
+                              className={cn(
+                                "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
+                                {
+                                  "p-2": open,
+                                  "justify-start": open,
+                                  "bg-[#084960] text-white": isActive,
+                                  "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10":
+                                    !isActive,
+                                  "hover:text-white hover:bg-[#084960]":
+                                    isActive,
+                                }
+                              )}
+                            >
+                              {getIcon(subItem.icon, ICON_SIZE, isActive)}
+                              {open && subItem.title}
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      );
+                    })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            {index !== data.navMain.length - 1 && <SidebarSeparator />}
+          </React.Fragment>
+        ))
+      )}
 
-          {isLoading ? (
-            <div className="flex flex-col gap-2 items-center">
-              <Skeleton className="w-full h-52 bg-gray-200" />
-              <Skeleton className="w-1/2 h-12 bg-gray-200 rounded-md" />
-            </div>
-          ) : (
-            <>
-              {/* {open && (
+      {isLoading ? (
+        <div className="flex flex-col gap-2 items-center">
+          <Skeleton className="w-full h-52 bg-gray-200" />
+          <Skeleton className="w-1/2 h-12 bg-gray-200 rounded-md" />
+        </div>
+      ) : (
+        <>
+          {/* {open && (
                 <div className="p-4 mt-auto">
                   <Card className="p-4 text-sm flex flex-col gap-3">
                     <p className="font-semibold">Available credits</p>
@@ -304,17 +319,15 @@ export function AppSidebar({
                 </div>
               )} */}
 
-              <div className="flex flex-col items-center gap-2 mt-3">
-                {open && (
-                  <Button onClick={() => logout()} variant={"link"}>
-                    {translations.logout}
-                  </Button>
-                )}
-              </div>
-            </>
-          )}
-        </SidebarContent>
-      </Sidebar>
-    </SidebarProvider>
+          <div className="flex flex-col items-center gap-2 mt-3">
+            {open && (
+              <Button onClick={() => logout()} variant={"link"}>
+                {translations.logout}
+              </Button>
+            )}
+          </div>
+        </>
+      )}
+    </SidebarContent>
   );
 }

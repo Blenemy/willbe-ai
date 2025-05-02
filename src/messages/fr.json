@@ -1361,6 +1361,9 @@
       "in_progress": "En cours",
       "done": "Terminé"
     },
+    "sortByOwner": {
+      "all": "Tous les propriétaires"
+    },
     "table": {
       "title": "Titre du scénario",
       "leads": "Leads dans la séquence",

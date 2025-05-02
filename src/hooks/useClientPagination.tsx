@@ -19,7 +19,7 @@ export const useClientPagination = <T,>({
   statusFilter = "all",
   statusField,
   sortFieldMap = {},
-  initialRowsPerPage = 10,
+  initialRowsPerPage = 5,
 }: UseClientPaginationProps<T>) => {
   const [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage);
   const [page, setPage] = useState(0);

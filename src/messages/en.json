@@ -1352,6 +1352,9 @@
       "in_progress": "In progress",
       "done": "Done"
     },
+    "sortByOwner": {
+      "all": "All owners"
+    },
     "table": {
       "title": "Scenario title",
       "leads": "Leads in cadence",
