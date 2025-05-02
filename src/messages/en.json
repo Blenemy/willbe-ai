@@ -1076,7 +1076,7 @@
     "saved_accounts_title": "📋 Account lists saved on LinkedIn",
     "saved_accounts": {
       "label": "📋 Accounts",
-      "description": "Find companies operating in specific sectors or fields",
+      "description": "Filter by companies saved on your LinkedIn lists",
       "placeholder": "Search by list name"
     },
     "annual_revenue": {

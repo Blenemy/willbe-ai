@@ -1081,7 +1081,7 @@
     "saved_accounts_title": "📋 Listes de comptes sauvegardées sur LinkedIn",
     "saved_accounts": {
       "label": "📋 Comptes",
-      "description": "Trouvez des entreprises dans des secteurs spécifiques",
+      "description": "Filtrer par entreprises enregistrées dans vos listes LinkedIn",
       "placeholder": "Rechercher par nom de liste"
     },
     "annual_revenue": {
