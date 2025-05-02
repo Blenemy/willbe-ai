@@ -53,6 +53,7 @@
     "validation_email": "Please enter a valid email",
     "validation_password_min": "Password must be at least 8 characters",
     "validation_password_max": "Password must be no more than 64 characters",
+    "validation_password_no_spaces": "Password must not contain spaces",
     "validation_password_regex": "Password contains forbidden characters",
     "validation_password_match": "Passwords must match",
     "validation_first_name_min": "First name must be at least 2 characters",

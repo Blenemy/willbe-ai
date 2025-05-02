@@ -23,20 +23,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslations } from "next-intl";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 
-const schema = z
-  .object({
-    oldPassword: z.string().min(8, "validation_password_min"),
-    newPassword: z
-      .string()
-      .min(8, "validation_password_min")
-      .regex(PASSWORD_REGEX, "validation_password_regex"),
-    confirmPassword: z.string().min(8, "validation_password_min"),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "validation_password_match",
-    path: ["confirmPassword"],
-  });
-
 const EditPasswordDialog = ({
   open,
   setOpen,
@@ -46,6 +32,23 @@ const EditPasswordDialog = ({
 }) => {
   const t = useTranslations("Authentication");
   const { updateUserPassword } = useAuth({ enableFetch: false });
+
+  const schema = z
+    .object({
+      oldPassword: z.string().min(8, { message: t("validation_password_min") }),
+      newPassword: z
+        .string()
+        .min(8, { message: t("validation_password_min") })
+        .regex(/^\S+$/, { message: t("validation_password_no_spaces") })
+        .regex(PASSWORD_REGEX, { message: t("validation_password_regex") }),
+      confirmPassword: z
+        .string()
+        .min(8, { message: t("validation_password_min") }),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("validation_password_match"),
+      path: ["confirmPassword"],
+    });
 
   const form = useForm({
     resolver: zodResolver(schema),
