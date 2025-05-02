@@ -269,20 +269,18 @@ export function SidebarContentWithLogic({
                       const isActive = pathname.includes(subItem.url);
                       return (
                         <SidebarMenuItem key={subItem.title}>
-                          <SidebarMenuButton asChild>
+                          <SidebarMenuButton
+                            asChild
+                            className="hover:bg-[#084960]"
+                          >
                             <Link
                               href={subItem.url}
                               className={cn(
                                 "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
-                                {
-                                  "p-2": open,
-                                  "justify-start": open,
-                                  "bg-[#084960] text-white": isActive,
-                                  "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10":
-                                    !isActive,
-                                  "hover:text-white hover:bg-[#084960]":
-                                    isActive,
-                                }
+                                open && "p-2 justify-start",
+                                isActive
+                                  ? "bg-[#084960] text-white hover:text-white"
+                                  : "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10"
                               )}
                             >
                               {getIcon(subItem.icon, ICON_SIZE, isActive)}

@@ -114,10 +114,6 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
-      extend: {
-        backgroundColor: ["data-state-checked"],
-        textColor: ["data-state-checked"],
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
