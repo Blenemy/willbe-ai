@@ -1554,5 +1554,18 @@
       "noSent": "No sent messages",
       "rowsPerPage": "Rows per page"
     }
+  },
+  "accountList": {
+    "title": "Account List",
+    "create": "Create new account",
+    "searchPlaceholder": "Search by account title",
+    "actions": "Actions",
+    "rowsPerPage": "Rows per page",
+    "table": {
+      "accountTitle": "Account title",
+      "createdBy": "Created by",
+      "createdAt": "Created date",
+      "crm": "CRM"
+    }
   }
 }

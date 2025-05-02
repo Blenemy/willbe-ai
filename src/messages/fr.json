@@ -1563,5 +1563,18 @@
       "noSent": "Aucun message envoyé",
       "rowsPerPage": "Lignes par page"
     }
+  },
+  "accountList": {
+    "title": "Liste des comptes",
+    "create": "Créer un nouveau compte",
+    "searchPlaceholder": "Rechercher par nom de compte",
+    "actions": "Actions",
+    "rowsPerPage": "Lignes par page",
+    "table": {
+      "accountTitle": "Nom du compte",
+      "createdBy": "Créé par",
+      "createdAt": "Date de création",
+      "crm": "CRM"
+    }
   }
 }

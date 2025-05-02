@@ -27,6 +27,7 @@ export interface AccountScenarioData {
   location: string | null;
   headcount: string;
   profile_url: string;
+  createBy: string;
 }
 
 export interface AccountScenario {
