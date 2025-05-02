@@ -1356,6 +1356,9 @@
       "in_progress": "En progreso",
       "done": "Completado"
     },
+    "sortByOwner": {
+      "all": "Todos los propietarios"
+    },
     "table": {
       "title": "Título del escenario",
       "leads": "Leads en secuencia",

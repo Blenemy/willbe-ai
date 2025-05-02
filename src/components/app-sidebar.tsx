@@ -66,6 +66,8 @@ export function AppSidebar({
   );
 }
 
+const ICON_SIZE = 24;
+
 export function SidebarContentWithLogic({
   translations,
 }: {
@@ -74,7 +76,6 @@ export function SidebarContentWithLogic({
   const { logout, user, isLoading } = useAuth({ enableFetch: true });
   const { open } = useSidebar();
   const pathname = usePathname();
-  const ICON_SIZE = 20;
 
   const data = {
     navMain: [
@@ -223,9 +224,10 @@ export function SidebarContentWithLogic({
       )}
     >
       <div
-        className={cn("flex items-center justify-center mb-5", {
+        className={cn("flex items-center justify-between mb-5 px-5", {
           "flex-col": !open,
           "gap-4": !open,
+          "px-0": !open,
         })}
       >
         {open ? (
