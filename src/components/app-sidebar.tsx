@@ -163,7 +163,7 @@ export function SidebarContentWithLogic({
         items: [
           {
             title: translations.accountList,
-            url: "/dashboard/data/account-list",
+            url: "/dashboard/account-list",
             icon: List,
             allowedRoles: ALL_ROLES,
           },

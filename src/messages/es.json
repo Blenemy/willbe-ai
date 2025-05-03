@@ -1558,5 +1558,18 @@
       "noSent": "Sin mensajes enviados",
       "rowsPerPage": "Filas por página"
     }
+  },
+  "accountList": {
+    "title": "Lista de cuentas",
+    "create": "Crear nueva cuenta",
+    "searchPlaceholder": "Buscar por título de cuenta",
+    "actions": "Acciones",
+    "rowsPerPage": "Filas por página",
+    "table": {
+      "accountTitle": "Título de la cuenta",
+      "createdBy": "Creado por",
+      "createdAt": "Fecha de creación",
+      "crm": "CRM"
+    }
   }
 }
