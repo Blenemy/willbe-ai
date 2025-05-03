@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 
 export interface User {
@@ -95,14 +95,49 @@ export const useLeadScenarios = () => {
   });
 };
 
+type AccountData = {
+  id: string;
+  logo: string;
+  name: string;
+  type: "COMPANY" | string;
+  summary: string;
+  industry: string;
+  location: string | null;
+  headcount: string;
+  profile_url: string;
+};
+
+type AccountRecord = {
+  id: string;
+  accountData: AccountData;
+  createdAt: string;
+  isSyncedWithCrm: boolean;
+  createdBy: string;
+};
+
 export const useSavedAccounts = () => {
-  return useQuery<AccountScenario[]>({
+  return useQuery<AccountRecord[]>({
     queryKey: ["saved-accounts"],
     queryFn: async () => {
       const res = await protectedAxiosInstance.get(
         "/auth/account-scenarios/saved-accounts"
       );
       return res.data;
+    },
+  });
+};
+
+export const useDeleteSavedAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (accountId: string) => {
+      await protectedAxiosInstance.delete(
+        `/auth/account-scenarios/saved-accounts/${accountId}`
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-accounts"] });
     },
   });
 };
