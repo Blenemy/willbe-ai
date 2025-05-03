@@ -48,7 +48,7 @@ const ProfilePage = async () => {
   ];
 
   return (
-    <div className="bg-gray-100 w-full px-6 py-10 flex flex-col">
+    <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">
         {translations.account_settings}
       </h2>

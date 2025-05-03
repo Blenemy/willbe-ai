@@ -2,6 +2,7 @@
 
 import ProfileCard from "./components/ProfileCard";
 import { Button } from "@/components/ui/button";
+import { useConnectHubspot } from "@/hooks/useConnectHubspot";
 import { useConnections } from "@/hooks/useConnections";
 import { useTranslations } from "next-intl";
 
@@ -19,6 +20,8 @@ const ConnectionsTab = () => {
     enableFetch: true,
   });
 
+  const { mutate: connectHubspot } = useConnectHubspot();
+
   const linkedInConnected = userStatus?.linkedin ?? false;
   const emailConnected = (userStatus?.email ?? "none") as
     | "none"
@@ -28,6 +31,8 @@ const ConnectionsTab = () => {
   return (
     <div className="px-6 flex flex-col gap-5">
       <h2 className="font-bold text-xl">{t("connections_title")}</h2>
+
+      <p className="text-[#5F5F5F]">{t("connections_desription")}: </p>
 
       <ProfileCard title={t("connections_linkedin")}>
         <div className="flex justify-between items-center">
@@ -42,11 +47,15 @@ const ConnectionsTab = () => {
               <Button
                 variant="destructive"
                 onClick={() => disconnectLinkedIn.mutate()}
+                className="bg-[#EF476F]"
               >
                 {t("connections_remove")}
               </Button>
             ) : (
-              <Button onClick={() => connectLinkedIn.mutate()}>
+              <Button
+                onClick={() => connectLinkedIn.mutate()}
+                className="bg-[#084960] rounded-md"
+              >
                 {t("connections_connect_linkedin")}
               </Button>
             )}
@@ -78,10 +87,27 @@ const ConnectionsTab = () => {
               <Button
                 variant="destructive"
                 onClick={() => disconnectEmail.mutate()}
+                className="bg-[#EF476F]"
               >
                 {t("connections_remove")}
               </Button>
             )}
+          </div>
+        </div>
+      </ProfileCard>
+
+      <ProfileCard title={t("connections_hubspot")}>
+        <div className="flex justify-between items-center">
+          <p className="text-gray-500">
+            {t("connections_status")}: {t("connections_not_connected")}
+          </p>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => connectHubspot()}
+              className="bg-[#084960] rounded-md"
+            >
+              {t("connections_connect_hubspot")}
+            </Button>
           </div>
         </div>
       </ProfileCard>
