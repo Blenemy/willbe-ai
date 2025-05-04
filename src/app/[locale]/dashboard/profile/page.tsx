@@ -20,11 +20,6 @@ const ProfilePage = async () => {
       label: translations.tab_security,
       component: <SecurityTab />,
     },
-    // {
-    //   value: "billing",
-    //   label: translations.tab_billing,
-    //   component: <BillingTab />,
-    // },
     {
       value: "connections",
       label: translations.tab_connections,
@@ -35,16 +30,6 @@ const ProfilePage = async () => {
       label: translations.tab_signature,
       component: <SignatureTab />,
     },
-    // {
-    //   value: "notifications",
-    //   label: "Notifications",
-    //   component: <div>Notifications Content</div>,
-    // },
-    // {
-    //   value: "data export",
-    //   label: "Data export",
-    //   component: <div>Data Export Content</div>,
-    // },
   ];
 
   return (
