@@ -135,10 +135,6 @@ const HubspotSettings = () => {
     defaultValues: {},
   });
 
-  console.log("bindings:", bindings);
-  console.log("contactsFields:", contactsFields);
-  console.log("companiesFields:", companiesFields);
-
   const onSubmit = async (data: Record<string, string | null>) => {
     if (!bindings?.companyId) return;
 
