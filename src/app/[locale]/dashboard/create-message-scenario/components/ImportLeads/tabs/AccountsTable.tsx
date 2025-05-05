@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { renderHeader } from "@/components/ui/renderHeader";
 import {
+  AccountRecord,
   AccountScenario,
   AccountScenarioData,
 } from "@/hooks/useEditScenarioData";
@@ -34,7 +35,7 @@ import {
 } from "@/components/ui/tooltip";
 
 interface Props {
-  data: AccountScenario[];
+  data: AccountScenario[] | AccountRecord[];
   selected: string[];
   setSelected: (val: string[]) => void;
 }
@@ -148,6 +149,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
               sortAsc,
               handleSort
             )}
+            ``
             {renderHeader(
               t("table.description"),
               "summary",
@@ -160,6 +162,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
         </TableHeader>
         <TableBody>
           {paginated.map((item) => {
+            // @ts-expect-error createBy is missing
             const accInfo: AccountScenarioData =
               "accountData" in item.accountData
                 ? item.accountData.accountData
