@@ -7,6 +7,7 @@ import { useAuth } from "./useAuth";
 export interface StatusResponse {
   linkedin: boolean;
   email: string;
+  hubspot: boolean;
 }
 
 interface APIRequestErrorPayload {

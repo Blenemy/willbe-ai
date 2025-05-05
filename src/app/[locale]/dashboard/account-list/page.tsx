@@ -89,7 +89,7 @@ const AccountListPage = () => {
 
   const filteredData = data
     .filter((item) =>
-      item.accountData.name.toLowerCase().includes(search.toLowerCase())
+      item.accountData.name?.toLowerCase().includes(search.toLowerCase())
     )
     .filter((item) => {
       if (crmFilter === "synced") return item.isSyncedWithCrm;
@@ -285,7 +285,7 @@ const AccountListPage = () => {
         </div>
         <CustomPagination
           page={page - 1}
-          setPage={setPage}
+          setPage={(p) => setPage(p + 1)}
           rowsPerPage={rowsPerPage}
           totalCount={filteredData.length}
         />
