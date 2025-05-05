@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   MessageEntry,
   useMessageCampaignEntries,
@@ -20,9 +20,14 @@ import { ScenarioCalendarStats } from "./ScenarioCalendarStats";
 interface Props {
   scenarioId: string;
   scenarioTitle: string;
+  setActiveStep: Dispatch<SetStateAction<number>>;
 }
 
-export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
+export const ScenarioMessageChain = ({
+  scenarioId,
+  scenarioTitle,
+  setActiveStep,
+}: Props) => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
@@ -150,6 +155,7 @@ export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
         <CreateScenarioTable
           leads={selectedEntry.messageEntryLeadData}
           selectedEntry={selectedEntry}
+          setActiveStep={setActiveStep}
         />
       )}
     </div>

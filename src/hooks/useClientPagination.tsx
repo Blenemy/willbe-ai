@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useMemo, useState } from "react";
@@ -56,6 +57,36 @@ export const useClientPagination = <T,>({
         }
 
         return sortAsc ? (valA > valB ? 1 : -1) : valA < valB ? 1 : -1;
+      });
+    }
+
+    if (sortKey) {
+      result.sort((a, b) => {
+        let valA, valB;
+
+        if (sortKey === "createdBy") {
+          valA = `${(a as any).user?.firstName ?? ""} ${
+            (a as any).user?.lastName ?? ""
+          }`.toLowerCase();
+          valB = `${(b as any).user?.firstName ?? ""} ${
+            (b as any).user?.lastName ?? ""
+          }`.toLowerCase();
+        } else if (sortFieldMap[sortKey]) {
+          const field = sortFieldMap[sortKey];
+          valA = a[field];
+          valB = b[field];
+
+          if (typeof valA === "object" && typeof valB === "object") {
+            valA = String(valA);
+            valB = String(valB);
+          }
+        }
+
+        if (valA == null || valB == null) return 0;
+
+        return sortAsc
+          ? String(valA).localeCompare(String(valB))
+          : String(valB).localeCompare(String(valA));
       });
     }
 

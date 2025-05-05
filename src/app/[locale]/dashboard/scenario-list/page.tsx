@@ -121,7 +121,6 @@ const ScenarioList = () => {
       sent: "messagesSent",
       status: "status",
       createdAt: "createdAt",
-      createdBy: "user",
     },
   });
 
