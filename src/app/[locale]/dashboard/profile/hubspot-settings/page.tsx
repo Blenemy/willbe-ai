@@ -51,7 +51,7 @@ const leadSyncFields = {
     { label: "Unresponsive", key: "crmLeadUnresponsiveField" },
   ],
   account: [
-    { label: "Company title", key: "crmAccountCompanyTitleField" },
+    { label: "Company title", key: "crmAccountNameField" },
     { label: "Founded in", key: "crmAccountFoundedInField" },
     { label: "Headquarters", key: "crmAccountHeadquartersField" },
     { label: "Employees", key: "crmAccountEmployeesField" },
@@ -134,6 +134,10 @@ const HubspotSettings = () => {
   const form = useForm<Record<string, string | null>>({
     defaultValues: {},
   });
+
+  console.log("bindings:", bindings);
+  console.log("contactsFields:", contactsFields);
+  console.log("companiesFields:", companiesFields);
 
   const onSubmit = async (data: Record<string, string | null>) => {
     if (!bindings?.companyId) return;

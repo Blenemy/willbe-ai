@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useStartHubspotIntegration } from "@/hooks/useConnectHubspot";
+import { Progress } from "@/components/ui/progress";
 
 type Props = {
   open: boolean;
@@ -18,7 +19,8 @@ type Props = {
 };
 
 export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
-  const { mutateAsync: startIntegration } = useStartHubspotIntegration();
+  const { mutateAsync: startIntegration, isPending } =
+    useStartHubspotIntegration();
 
   const handleStart = async (enrich: boolean) => {
     if (!companyId) return;
@@ -56,6 +58,12 @@ export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
           <Button variant="outline" className="w-full" onClick={onClose}>
             Cancel
           </Button>
+
+          {isPending && (
+            <div className="mb-4">
+              <Progress value={100} className="animate-pulse h-2 bg-muted" />
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

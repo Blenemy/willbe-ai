@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "media.licdn.com",
       },
+      {
+        protocol: "https",
+        hostname: "thecompaniesapi.s3.fr-par.scw.cloud",
+      },
     ],
   },
 };
