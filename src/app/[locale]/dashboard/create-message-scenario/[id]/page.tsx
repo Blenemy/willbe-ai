@@ -54,6 +54,7 @@ const EditMessageScenarioPage = () => {
         <ScenarioMessageChain
           scenarioId={scenario.id}
           scenarioTitle={scenario.name}
+          setActiveStep={setActiveStep}
         />
       )}
 

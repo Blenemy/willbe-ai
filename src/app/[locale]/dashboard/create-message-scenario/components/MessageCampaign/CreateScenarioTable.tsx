@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Trash2, Sparkles, Pencil, Loader2, ExternalLink } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   MessageEntry,
@@ -41,11 +41,16 @@ import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 interface Props {
   leads: MessageEntryData[];
   selectedEntry: MessageEntry;
+  setActiveStep: Dispatch<SetStateAction<number>>;
 }
 
 const ITEMS_PER_PAGE = 5;
 
-export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
+export const CreateScenarioTable = ({
+  leads,
+  selectedEntry,
+  setActiveStep,
+}: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalLeadId, setModalLeadId] = useState<string | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -75,9 +80,14 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
     );
   };
 
-  const handleSendMessages = () => {
-    sendMessages({ messageEntryDataIds: selected });
-    setSelected([]);
+  const handleSendMessages = async () => {
+    try {
+      sendMessages({ messageEntryDataIds: selected });
+      setSelected([]);
+      setActiveStep((prev) => prev + 1);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDeleteLeads = (leadId: string) => {
