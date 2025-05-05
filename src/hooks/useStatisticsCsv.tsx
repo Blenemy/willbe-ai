@@ -14,7 +14,7 @@ export const useStatisticsCsv = (
       const response = await protectedAxiosInstance.get(
         `/auth/message-scenarios/${scenarioId}/csv`,
         {
-          params: onlyEmails ? { only_emails: true } : undefined,
+          params: { withEmails: onlyEmails },
           responseType: "blob",
           headers: {
             Accept: "text/csv",
