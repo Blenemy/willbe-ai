@@ -12,6 +12,7 @@ interface CreateMessageEntryDto {
 
 export const useCreateMessageEntry = () => {
   const queryClient = useQueryClient();
+  const nowISO = new Date().toISOString();
 
   return useMutation({
     mutationFn: async (data: CreateMessageEntryDto) => {
@@ -20,8 +21,8 @@ export const useCreateMessageEntry = () => {
         {
           messageScenarioId: data.messageScenarioId,
           type: data.type,
-          sendDate: data.sendDate,
-          sendNow: data.sendNow ?? true,
+          sendNow: !!data.sendNow,
+          sendDate: data.sendNow ? nowISO : data.sendDate,
         }
       );
       return res.data;
