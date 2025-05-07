@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -11,16 +12,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: UseFormReturn<any>;
+  onSubmit: (values: any) => void;
 }
 
-export const InformationTab = ({ form }: Props) => {
+export const InformationTab = ({ form, onSubmit }: Props) => {
   return (
     <Form {...form}>
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      <form
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="col-span-2 flex items-center gap-4">
           <Image
             src="/placeholder.svg"
@@ -141,6 +146,10 @@ export const InformationTab = ({ form }: Props) => {
             </FormItem>
           )}
         />
+
+        <Button type="submit" className="max-w-fit min-w-24">
+          Save
+        </Button>
       </form>
     </Form>
   );

@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { InformationTab } from "./tabs/InformationTab";
 import { LeadsTab } from "./tabs/LeadsTab";
@@ -48,13 +47,88 @@ const leads = [
     phone: "9876543210",
     role: "CEO",
   },
+  {
+    id: 3,
+    firstName: "Alice",
+    lastName: "Johnson",
+    email: "alice@example.com",
+    phone: "1111111111",
+    role: "CFO",
+  },
+  {
+    id: 4,
+    firstName: "Bob",
+    lastName: "Brown",
+    email: "bob@example.com",
+    phone: "2222222222",
+    role: "COO",
+  },
+  {
+    id: 5,
+    firstName: "Charlie",
+    lastName: "Davis",
+    email: "charlie@example.com",
+    phone: "3333333333",
+    role: "CMO",
+  },
+  {
+    id: 6,
+    firstName: "Diana",
+    lastName: "Evans",
+    email: "diana@example.com",
+    phone: "4444444444",
+    role: "CIO",
+  },
+  {
+    id: 7,
+    firstName: "Frank",
+    lastName: "Green",
+    email: "frank@example.com",
+    phone: "5555555555",
+    role: "Engineer",
+  },
+  {
+    id: 8,
+    firstName: "Grace",
+    lastName: "Hill",
+    email: "grace@example.com",
+    phone: "6666666666",
+    role: "Designer",
+  },
+  {
+    id: 9,
+    firstName: "Hank",
+    lastName: "Iverson",
+    email: "hank@example.com",
+    phone: "7777777777",
+    role: "Product Manager",
+  },
+  {
+    id: 10,
+    firstName: "Ivy",
+    lastName: "Jones",
+    email: "ivy@example.com",
+    phone: "8888888888",
+    role: "HR",
+  },
+  {
+    id: 11,
+    firstName: "Jack",
+    lastName: "King",
+    email: "jack@example.com",
+    phone: "9999999999",
+    role: "Sales",
+  },
 ];
-
 export default function AccountPage() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log("Submitted data:", data);
+  };
 
   return (
     <div className="p-6">
@@ -70,7 +144,7 @@ export default function AccountPage() {
         </TabsList>
 
         <TabsContent value="information">
-          <InformationTab form={form} />
+          <InformationTab form={form} onSubmit={onSubmit} />
         </TabsContent>
 
         <TabsContent value="leads">
