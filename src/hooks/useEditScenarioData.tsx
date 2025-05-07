@@ -107,7 +107,7 @@ type AccountData = {
   profile_url: string;
 };
 
-type AccountRecord = {
+export type AccountRecord = {
   id: string;
   accountData: AccountData;
   createdAt: string;

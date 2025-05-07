@@ -176,7 +176,10 @@
     "signature_title": "Email Signature",
     "signature_label": "Your signature",
     "signature_placeholder": "Enter your email signature in html format",
-    "signature_submit": "Submit your signature"
+    "signature_submit": "Submit your signature",
+    "connections_hubspot": "HubSpot",
+    "connections_connect_hubspot": "Connect HubSpot",
+    "connections_desription": "Integrate your accounts for a smoother workflow"
   },
   "Account": {
     "account": "Account",
