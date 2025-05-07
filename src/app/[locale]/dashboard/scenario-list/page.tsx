@@ -111,8 +111,6 @@ const ScenarioList = () => {
     totalCount,
   } = useClientPagination({
     data: filteredData,
-    search,
-    searchField: "name",
     statusFilter,
     statusField: "status",
     sortFieldMap: {

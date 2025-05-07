@@ -15,8 +15,6 @@ interface UseClientPaginationProps<T> {
 
 export const useClientPagination = <T,>({
   data,
-  search = "",
-  searchField,
   statusFilter = "all",
   statusField,
   sortFieldMap = {},
@@ -29,16 +27,6 @@ export const useClientPagination = <T,>({
 
   const filtered = useMemo(() => {
     let result = [...data];
-
-    if (search && searchField) {
-      result = result.filter((item) => {
-        const value = item[searchField];
-        if (typeof value === "string") {
-          return value.toLowerCase().includes(search.toLowerCase());
-        }
-        return true;
-      });
-    }
 
     if (statusFilter !== "all" && statusField) {
       result = result.filter((item) => item[statusField] === statusFilter);
@@ -91,16 +79,7 @@ export const useClientPagination = <T,>({
     }
 
     return result;
-  }, [
-    data,
-    search,
-    searchField,
-    statusFilter,
-    statusField,
-    sortKey,
-    sortFieldMap,
-    sortAsc,
-  ]);
+  }, [data, statusFilter, statusField, sortKey, sortFieldMap, sortAsc]);
 
   const paginated = useMemo(() => {
     return filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
