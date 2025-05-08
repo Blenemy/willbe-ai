@@ -178,7 +178,7 @@ const HubspotSettings = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <Tabs defaultValue="lead" className="w-full">
             <TabsList className="mb-6">
-              <TabsTrigger value="lead">Lead</TabsTrigger>
+              <TabsTrigger value="lead ">Lead</TabsTrigger>
               <TabsTrigger value="account">Account</TabsTrigger>
             </TabsList>
 

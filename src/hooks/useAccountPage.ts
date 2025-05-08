@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
+import { toast } from "sonner";
 
 interface AccountPageInterface {
   companyTitle: string;
@@ -15,11 +16,11 @@ interface AccountPageInterface {
   website: string;
 }
 
-export const useAccount = (id: string) => {
+export const useAccount = (id?: string) => {
   const queryClient = useQueryClient();
 
   const { data: account, isLoading } = useQuery<AccountPageInterface>({
-    queryKey: ["account", id],
+    queryKey: ["account-page", id],
     queryFn: async () => {
       const res = await protectedAxiosInstance.get(`/auth/accounts/${id}`);
       return res.data;
@@ -36,7 +37,12 @@ export const useAccount = (id: string) => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["account", id] });
+      queryClient.invalidateQueries({ queryKey: ["account-page", id] });
+
+      toast("Account was succesfully updated");
+    },
+    onError: (error) => {
+      toast(`Account was failed to updated: ${error.message}`);
     },
   });
 

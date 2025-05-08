@@ -15,22 +15,23 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, Trash2, Plus } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { useClientPagination } from "../hooks/useClientPagination";
+import { AccountPageTableData, useAccountLeads } from "@/hooks/useAccountLeads";
+import { useParams } from "next/navigation";
 
-interface Lead {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  role: string;
-}
-
-export const LeadsTab = ({ leads }: { leads: Lead[] }) => {
+export const LeadsTab = () => {
+  const { id } = useParams();
   const [search, setSearch] = useState("");
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const { data: leads = [] } = useAccountLeads({
+    accountId: id as string,
+    search,
+    limit: 100,
+    offset: 0,
+  });
 
   const { paginated, page, setPage, rowsPerPage, setRowsPerPage, totalCount } =
-    useClientPagination({
+    useClientPagination<AccountPageTableData>({
       data: leads,
       search,
       searchField: "firstName",
@@ -47,7 +48,7 @@ export const LeadsTab = ({ leads }: { leads: Lead[] }) => {
     }
   };
 
-  const toggleSelectRow = (id: number, checked: boolean) => {
+  const toggleSelectRow = (id: string, checked: boolean) => {
     setSelectedIds((prev) =>
       checked ? [...prev, id] : prev.filter((item) => item !== id)
     );

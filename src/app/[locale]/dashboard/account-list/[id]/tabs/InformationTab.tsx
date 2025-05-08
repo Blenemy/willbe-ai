@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   form: UseFormReturn<any>;
@@ -138,9 +139,9 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
             <FormItem className="col-span-2">
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <textarea
+                <Textarea
                   {...field}
-                  className="w-full h-40 border rounded-md p-2"
+                  className="w-full border rounded-md p-2 min-h-[460px]"
                 />
               </FormControl>
               <FormMessage />
@@ -148,7 +149,7 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
           )}
         />
 
-        <Button type="submit" className="max-w-fit min-w-24">
+        <Button type="submit" className="max-w-fit min-w-24 bg-[#030A27]">
           Save
         </Button>
       </form>

@@ -8,11 +8,14 @@ import { InformationTab } from "./tabs/InformationTab";
 import { LeadsTab } from "./tabs/LeadsTab";
 import { useParams } from "next/navigation";
 import { useAccount } from "@/hooks/useAccountPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import isConnectedHubspot from "@/assets/hubspot_orange.svg";
 import isNotConnectedHubspot from "@/assets/hubspot_grey.svg";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/useAuthStore";
+import { ConfirmationModal } from "../../profile/hubspot-settings/components/ConfirmationModal";
 
 const formSchema = z.object({
   companyTitle: z.string(),
@@ -25,100 +28,11 @@ const formSchema = z.object({
   linkedin: z.string().url(),
 });
 
-const leads = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    phone: "1234567890",
-    role: "CTO",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    phone: "9876543210",
-    role: "CEO",
-  },
-  {
-    id: 3,
-    firstName: "Alice",
-    lastName: "Johnson",
-    email: "alice@example.com",
-    phone: "1111111111",
-    role: "CFO",
-  },
-  {
-    id: 4,
-    firstName: "Bob",
-    lastName: "Brown",
-    email: "bob@example.com",
-    phone: "2222222222",
-    role: "COO",
-  },
-  {
-    id: 5,
-    firstName: "Charlie",
-    lastName: "Davis",
-    email: "charlie@example.com",
-    phone: "3333333333",
-    role: "CMO",
-  },
-  {
-    id: 6,
-    firstName: "Diana",
-    lastName: "Evans",
-    email: "diana@example.com",
-    phone: "4444444444",
-    role: "CIO",
-  },
-  {
-    id: 7,
-    firstName: "Frank",
-    lastName: "Green",
-    email: "frank@example.com",
-    phone: "5555555555",
-    role: "Engineer",
-  },
-  {
-    id: 8,
-    firstName: "Grace",
-    lastName: "Hill",
-    email: "grace@example.com",
-    phone: "6666666666",
-    role: "Designer",
-  },
-  {
-    id: 9,
-    firstName: "Hank",
-    lastName: "Iverson",
-    email: "hank@example.com",
-    phone: "7777777777",
-    role: "Product Manager",
-  },
-  {
-    id: 10,
-    firstName: "Ivy",
-    lastName: "Jones",
-    email: "ivy@example.com",
-    phone: "8888888888",
-    role: "HR",
-  },
-  {
-    id: 11,
-    firstName: "Jack",
-    lastName: "King",
-    email: "jack@example.com",
-    phone: "9999999999",
-    role: "Sales",
-  },
-];
-
 export default function AccountPage() {
   const { id } = useParams();
   const { account, updateAccount } = useAccount(id as string);
+  const { user } = useAuthStore();
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -155,7 +69,7 @@ export default function AccountPage() {
 
   const isAccountConnectedToHubspot = account?.isConnectedToHubspot;
 
-  if (!account) {
+  if (!account || !user) {
     return <div>No account was found</div>;
   }
 
@@ -165,27 +79,38 @@ export default function AccountPage() {
         <h3>Account page</h3>
 
         <div className="flex gap-2">
-          <Image
-            width={20}
-            height={20}
-            alt="hubspot_icon"
-            src={
-              isAccountConnectedToHubspot
-                ? isConnectedHubspot
-                : isNotConnectedHubspot
-            }
-          />
+          <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
+            <Image
+              width={20}
+              height={20}
+              alt="hubspot_icon"
+              src={
+                isAccountConnectedToHubspot
+                  ? isConnectedHubspot
+                  : isNotConnectedHubspot
+              }
+            />
 
-          <p>
-            This account is {isAccountConnectedToHubspot ? "" : "not"} connected
-            to HubSpot
-          </p>
+            <p>
+              This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
+              connected to HubSpot
+            </p>
+          </div>
+
+          <Button
+            type="submit"
+            className="max-w-fit min-w-24 h-8 bg-[#030A27]"
+            onClick={() => setShowConfirm(true)}
+          >
+            Sync
+          </Button>
         </div>
       </div>
+
       <Tabs defaultValue="information">
         <TabsList>
-          <TabsTrigger value="information">Information</TabsTrigger>
-          <TabsTrigger value="leads">Leads</TabsTrigger>
+          <TabsTrigger value="information">📋 Information</TabsTrigger>
+          <TabsTrigger value="leads">🙋‍♀️ Leads</TabsTrigger>
         </TabsList>
 
         <TabsContent value="information">
@@ -197,9 +122,15 @@ export default function AccountPage() {
         </TabsContent>
 
         <TabsContent value="leads">
-          <LeadsTab leads={leads} />
+          <LeadsTab />
         </TabsContent>
       </Tabs>
+
+      <ConfirmationModal
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        companyId={user.companyId}
+      />
     </div>
   );
 }

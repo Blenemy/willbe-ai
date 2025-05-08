@@ -14,7 +14,9 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import { AlertCircle } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useLeadsPage } from "@/hooks/useLeadsPage";
 
 const leadSchema = z.object({
   firstName: z.string(),
@@ -33,31 +35,56 @@ const leadSchema = z.object({
   linkedin: z.string().url(),
 });
 
-const defaultLead = {
-  firstName: "Denys",
-  lastName: "Zavialov",
-  position: "CEO/Co-Founder",
-  positionDescription:
-    "Consultation and assistance in the implementation of Devops methodology",
-  email: "",
-  phone: "",
-  company: "",
-  industry: "IT Services and IT Consulting",
-  language: "English",
-  locationCountry: "Poland",
-  locationCity: "Warsaw, Mazowieckie, Poland",
-  subtitle: "",
-  summary:
-    "DevOps engineer with 10 years of experience building and implementing business solutions for private sector clients. I have knowledge of cloud computing and application development, proven experience in designing, implementing and realizing agile projects. Able to effectively translate business requirements into technical solutions. Passionate about helping organizations get the most out of IT investments, testing, researching, developing and implementing technology. Self-motivated, creative, quick learner.",
-  linkedin:
-    "https://www.linkedin.com/sales/lead/ACwAAB4i-HABiawIucdn-DB-lB4sl3rehPUBXcw,NAME_SEARCH,nKsY",
-};
+type LeadFormFields = keyof z.infer<typeof leadSchema>;
+
+const fields: { name: LeadFormFields; label: string }[] = [
+  { name: "firstName", label: "First name" },
+  { name: "lastName", label: "Last name" },
+  { name: "position", label: "Position" },
+  { name: "positionDescription", label: "Position description" },
+  { name: "email", label: "Email" },
+  { name: "phone", label: "Phone" },
+  { name: "company", label: "Company" },
+  { name: "industry", label: "Industry" },
+  { name: "language", label: "Language" },
+  { name: "locationCountry", label: "Location country" },
+  { name: "locationCity", label: "Location city" },
+  { name: "subtitle", label: "Subtitle" },
+];
 
 export default function LeadDetailsPage() {
+  const { id } = useParams();
+  const { data: lead, updateLead } = useLeadsPage(id as string);
+
   const form = useForm({
     resolver: zodResolver(leadSchema),
-    defaultValues: defaultLead,
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      position: "",
+      positionDescription: "",
+      email: "",
+      phone: "",
+      company: "",
+      industry: "",
+      language: "",
+      locationCountry: "",
+      locationCity: "",
+      subtitle: "",
+      summary: "",
+      linkedin: "",
+    },
   });
+
+  useEffect(() => {
+    if (lead) {
+      form.reset(lead);
+    }
+  }, [lead, form]);
+
+  const onSubmit = (values: z.infer<typeof leadSchema>) => {
+    updateLead(values);
+  };
 
   return (
     <div className="p-6 space-y-4 bg-white rounded-md">
@@ -70,25 +97,15 @@ export default function LeadDetailsPage() {
       </div>
 
       <Form {...form}>
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            ["firstName", "First name"],
-            ["lastName", "Last name"],
-            ["position", "Position"],
-            ["positionDescription", "Position description"],
-            ["email", "Email"],
-            ["phone", "Phone"],
-            ["company", "Company"],
-            ["industry", "Industry"],
-            ["language", "Language"],
-            ["locationCountry", "Location country"],
-            ["locationCity", "Location city"],
-            ["subtitle", "Subtitle"],
-          ].map(([name, label]) => (
+        <form
+          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          {fields.map(({ name, label }) => (
             <FormField
               key={name}
               control={form.control}
-              name={name as keyof typeof defaultLead}
+              name={name}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
