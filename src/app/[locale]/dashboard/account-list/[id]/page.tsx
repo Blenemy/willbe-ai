@@ -6,6 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { InformationTab } from "./tabs/InformationTab";
 import { LeadsTab } from "./tabs/LeadsTab";
+import { useParams } from "next/navigation";
+import { useAccount } from "@/hooks/useAccountPage";
+import { useEffect } from "react";
+
+import isConnectedHubspot from "@/assets/hubspot_orange.svg";
+import isNotConnectedHubspot from "@/assets/hubspot_grey.svg";
+import Image from "next/image";
 
 const formSchema = z.object({
   companyTitle: z.string(),
@@ -17,18 +24,6 @@ const formSchema = z.object({
   website: z.string().url(),
   linkedin: z.string().url(),
 });
-
-const defaultValues = {
-  companyTitle: "Telivust",
-  description:
-    "Telivust is a DevOps consulting company dedicated to empowering businesses to accelerate their software development and IT operations...",
-  foundedIn: "2004",
-  headquarters: "PL",
-  employees: "2",
-  industry: "IT Services and IT Consulting",
-  website: "https://telivust.com",
-  linkedin: "https://www.linkedin.com/company/telivust/",
-};
 
 const leads = [
   {
@@ -120,22 +115,72 @@ const leads = [
     role: "Sales",
   },
 ];
+
 export default function AccountPage() {
+  const { id } = useParams();
+  const { account, updateAccount } = useAccount(id as string);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues,
+    defaultValues: {
+      companyTitle: "",
+      description: "",
+      foundedIn: "",
+      headquarters: "",
+      employees: "",
+      industry: "",
+      website: "",
+      linkedin: "",
+    },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log("Submitted data:", data);
+    updateAccount(data);
   };
+
+  useEffect(() => {
+    if (account) {
+      form.reset({
+        companyTitle: account.companyTitle || "",
+        description: account.description || "",
+        foundedIn: account.foundedIn || "",
+        headquarters: account.headquarters || "",
+        employees: account.employees || "",
+        industry: account.industry || "",
+        website: account.website || "",
+        linkedin: account.linkedin || "",
+      });
+    }
+  }, [account, form]);
+
+  const isAccountConnectedToHubspot = account?.isConnectedToHubspot;
+
+  if (!account) {
+    return <div>No account was found</div>;
+  }
 
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between">
         <h3>Account page</h3>
 
-        <p>This account is connected to HubSpot</p>
+        <div className="flex gap-2">
+          <Image
+            width={20}
+            height={20}
+            alt="hubspot_icon"
+            src={
+              isAccountConnectedToHubspot
+                ? isConnectedHubspot
+                : isNotConnectedHubspot
+            }
+          />
+
+          <p>
+            This account is {isAccountConnectedToHubspot ? "" : "not"} connected
+            to HubSpot
+          </p>
+        </div>
       </div>
       <Tabs defaultValue="information">
         <TabsList>
@@ -144,7 +189,11 @@ export default function AccountPage() {
         </TabsList>
 
         <TabsContent value="information">
-          <InformationTab form={form} onSubmit={onSubmit} />
+          <InformationTab
+            form={form}
+            onSubmit={onSubmit}
+            logo={account?.logo}
+          />
         </TabsContent>
 
         <TabsContent value="leads">

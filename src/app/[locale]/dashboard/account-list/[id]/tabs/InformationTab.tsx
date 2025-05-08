@@ -17,9 +17,10 @@ import { Button } from "@/components/ui/button";
 interface Props {
   form: UseFormReturn<any>;
   onSubmit: (values: any) => void;
+  logo: string;
 }
 
-export const InformationTab = ({ form, onSubmit }: Props) => {
+export const InformationTab = ({ form, onSubmit, logo }: Props) => {
   return (
     <Form {...form}>
       <form
@@ -28,7 +29,7 @@ export const InformationTab = ({ form, onSubmit }: Props) => {
       >
         <div className="col-span-2 flex items-center gap-4">
           <Image
-            src="/placeholder.svg"
+            src={logo}
             alt="Company logo"
             width={60}
             height={60}
