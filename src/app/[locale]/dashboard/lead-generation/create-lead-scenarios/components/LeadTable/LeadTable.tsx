@@ -25,6 +25,7 @@ import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
+import { Spinner } from "@/components/Spinner/Spinner";
 
 const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
@@ -53,7 +54,7 @@ const LeadTable = ({
 
   const currentCursor = cursorStack[currentCursorIndex];
 
-  const { searchLeads, paging, cursor } = useSearchLeads({
+  const { searchLeads, paging, cursor, isFetching } = useSearchLeads({
     enableFetch: true,
     scenarioId,
     limit: itemsPerPage,
@@ -132,132 +133,143 @@ const LeadTable = ({
     <div className="w-full px-6 py-10 flex flex-col gap-4">
       <h2 className="font-semibold text-2xl">{t("title")}</h2>
 
-      <div className="flex items-center gap-4">
-        <Select
-          value={itemsPerPage.toString()}
-          onValueChange={(value) => handleLimitChange(value)}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder={t("itemsPerPage")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="10">10</SelectItem>
-            <SelectItem value="25">25</SelectItem>
-            <SelectItem value="50">50</SelectItem>
-          </SelectContent>
-        </Select>
+      {isFetching ? (
+        <Spinner className="mr-2" />
+      ) : (
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-4">
+            <Select
+              value={itemsPerPage.toString()}
+              onValueChange={(value) => handleLimitChange(value)}
+            >
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder={t("itemsPerPage")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="25">25</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
 
-        <Input
-          placeholder={t("searchPlaceholder")}
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentCursorIndex(0);
-            setCursorStack([null]);
-          }}
-          className="max-w-md"
-        />
-      </div>
+            <Input
+              placeholder={t("searchPlaceholder")}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentCursorIndex(0);
+                setCursorStack([null]);
+              }}
+              className="max-w-md"
+            />
+          </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>
-              <Checkbox
-                checked={
-                  filteredLeads.length > 0 &&
-                  filteredLeads.every((l) => selectedLeads.includes(l.id))
-                }
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedLeads((prev) => [
-                      ...new Set([...prev, ...filteredLeads.map((l) => l.id)]),
-                    ]);
-                  } else {
-                    setSelectedLeads((prev) =>
-                      prev.filter(
-                        (id) => !filteredLeads.some((l) => l.id === id)
-                      )
-                    );
-                  }
-                }}
-              />
-            </TableHead>
-            <TableHead>{t("table.avatar")}</TableHead>
-            <TableHead>{t("table.firstName")}</TableHead>
-            <TableHead>{t("table.lastName")}</TableHead>
-            <TableHead>{t("table.jobTitle")}</TableHead>
-            <TableHead>{t("table.location")}</TableHead>
-            <TableHead>{t("table.company")}</TableHead>
-            <TableHead>{t("table.linkedin")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredLeads.map((lead) => (
-            <TableRow key={lead.id}>
-              <TableCell>
-                <Checkbox
-                  checked={selectedLeads.includes(lead.id)}
-                  onCheckedChange={() => toggleLeadSelection(lead.id)}
-                />
-              </TableCell>
-              <TableCell>
-                {lead.profile_picture_url && (
-                  <Image
-                    src={lead.profile_picture_url}
-                    alt={lead.name}
-                    width={40}
-                    height={40}
-                    className="rounded-full"
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  <Checkbox
+                    checked={
+                      filteredLeads.length > 0 &&
+                      filteredLeads.every((l) => selectedLeads.includes(l.id))
+                    }
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setSelectedLeads((prev) => [
+                          ...new Set([
+                            ...prev,
+                            ...filteredLeads.map((l) => l.id),
+                          ]),
+                        ]);
+                      } else {
+                        setSelectedLeads((prev) =>
+                          prev.filter(
+                            (id) => !filteredLeads.some((l) => l.id === id)
+                          )
+                        );
+                      }
+                    }}
                   />
-                )}
-              </TableCell>
-              <TableCell>{lead.first_name}</TableCell>
-              <TableCell>{lead.last_name}</TableCell>
-              <TableCell>{lead.current_positions?.[0]?.role || "-"}</TableCell>
-              <TableCell>{lead.location}</TableCell>
-              <TableCell>
-                {lead.current_positions?.[0]?.company || "-"}
-              </TableCell>
-              <TableCell>
-                {lead.public_profile_url && (
-                  <a
-                    href={lead.public_profile_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline flex items-center gap-1"
-                  >
-                    LinkedIn <ExternalLink size={16} />
-                  </a>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                </TableHead>
+                <TableHead>{t("table.avatar")}</TableHead>
+                <TableHead>{t("table.firstName")}</TableHead>
+                <TableHead>{t("table.lastName")}</TableHead>
+                <TableHead>{t("table.jobTitle")}</TableHead>
+                <TableHead>{t("table.location")}</TableHead>
+                <TableHead>{t("table.company")}</TableHead>
+                <TableHead>{t("table.linkedin")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredLeads.map((lead) => (
+                <TableRow key={lead.id}>
+                  <TableCell>
+                    <Checkbox
+                      checked={selectedLeads.includes(lead.id)}
+                      onCheckedChange={() => toggleLeadSelection(lead.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {lead.profile_picture_url && (
+                      <Image
+                        src={lead.profile_picture_url}
+                        alt={lead.name}
+                        width={40}
+                        height={40}
+                        className="rounded-full"
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell>{lead.first_name}</TableCell>
+                  <TableCell>{lead.last_name}</TableCell>
+                  <TableCell>
+                    {lead.current_positions?.[0]?.role || "-"}
+                  </TableCell>
+                  <TableCell>{lead.location}</TableCell>
+                  <TableCell>
+                    {lead.current_positions?.[0]?.company || "-"}
+                  </TableCell>
+                  <TableCell>
+                    {lead.public_profile_url && (
+                      <a
+                        href={lead.public_profile_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline flex items-center gap-1"
+                      >
+                        LinkedIn <ExternalLink size={16} />
+                      </a>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
-      <div className="flex items-center gap-4 mt-6">
-        <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
-          {t("pagination.previous")}
-        </Button>
-        <span>
-          {t("pagination.pageInfo", {
-            current: currentPage,
-            total: totalPages,
-          })}
-        </span>
-        <Button onClick={handleNext} disabled={!cursor}>
-          {t("pagination.next")}
-        </Button>
-      </div>
+          <div className="flex items-center gap-4 mt-6">
+            <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
+              {t("pagination.previous")}
+            </Button>
+            <span>
+              {t("pagination.pageInfo", {
+                current: currentPage,
+                total: totalPages,
+              })}
+            </span>
+            <Button onClick={handleNext} disabled={!cursor}>
+              {t("pagination.next")}
+            </Button>
+          </div>
 
-      <Button
-        className="self-start mt-4"
-        onClick={handleSubmit}
-        disabled={selectedLeads.length === 0}
-      >
-        {t("submit")}
-      </Button>
+          <Button
+            className="self-start mt-4"
+            onClick={handleSubmit}
+            disabled={selectedLeads.length === 0}
+          >
+            {t("submit")}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
