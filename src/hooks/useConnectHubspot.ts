@@ -235,6 +235,7 @@ export const useStartHubspotIntegration = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["account-page"] });
+      queryClient.invalidateQueries({ queryKey: ["lead"] });
 
       toast("Account was succesfully updated");
     },

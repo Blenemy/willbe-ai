@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
+import { toast } from "sonner";
 
 export interface AccountPageTableData {
   id: string;
@@ -41,5 +42,26 @@ export const useAccountLeads = ({
       return res.data;
     },
     enabled: enabled && !!accountId,
+  });
+};
+
+interface DeleteLeadsPayload {
+  leadIds: string[];
+}
+
+export const useDeleteLeads = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ leadIds }: DeleteLeadsPayload) => {
+      await protectedAxiosInstance.delete("/auth/leads", {
+        data: { leadIds },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["account-leads"] });
+
+      toast("Leads were deleted succesfully");
+    },
   });
 };

@@ -15,13 +15,23 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, Trash2, Plus } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { useClientPagination } from "../hooks/useClientPagination";
-import { AccountPageTableData, useAccountLeads } from "@/hooks/useAccountLeads";
-import { useParams } from "next/navigation";
+import {
+  AccountPageTableData,
+  useAccountLeads,
+  useDeleteLeads,
+} from "@/hooks/useAccountLeads";
+import { useParams, useRouter } from "next/navigation";
+import { renderHeader } from "@/components/ui/renderHeader";
+
+type SortKey = "firstName" | "lastName" | "email" | "phone" | "role" | "";
 
 export const LeadsTab = () => {
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [sortKey, setSortKey] = useState<SortKey>("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const router = useRouter();
 
   const { data: leads = [] } = useAccountLeads({
     accountId: id as string,
@@ -29,12 +39,14 @@ export const LeadsTab = () => {
     limit: 100,
     offset: 0,
   });
+  const { mutate: deleteLeads } = useDeleteLeads();
 
   const { paginated, page, setPage, rowsPerPage, setRowsPerPage, totalCount } =
     useClientPagination<AccountPageTableData>({
       data: leads,
       search,
-      searchField: "firstName",
+      sortKey,
+      sortAsc,
     });
 
   const isAllSelected =
@@ -54,6 +66,15 @@ export const LeadsTab = () => {
     );
   };
 
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
   return (
     <div className="space-y-4 mt-4">
       <div className="flex justify-between items-center">
@@ -67,7 +88,7 @@ export const LeadsTab = () => {
           <Button
             variant="destructive"
             disabled={selectedIds.length === 0}
-            onClick={() => alert(`Delete leads: ${selectedIds.join(", ")}`)}
+            onClick={() => deleteLeads({ leadIds: selectedIds })}
           >
             Delete selected
           </Button>
@@ -87,11 +108,23 @@ export const LeadsTab = () => {
                 onCheckedChange={toggleSelectAll}
               />
             </TableHead>
-            <TableHead>First name</TableHead>
-            <TableHead>Last name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Role</TableHead>
+            {renderHeader(
+              "First name",
+              "firstName",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Last name",
+              "lastName",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader("Email", "email", sortKey, sortAsc, handleSort)}
+            {renderHeader("Phone", "phone", sortKey, sortAsc, handleSort)}
+            {renderHeader("Role", "role", sortKey, sortAsc, handleSort)}
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -112,8 +145,16 @@ export const LeadsTab = () => {
               <TableCell>{lead.phone}</TableCell>
               <TableCell>{lead.role}</TableCell>
               <TableCell className="flex gap-2 justify-end">
-                <Eye className="w-4 h-4 cursor-pointer" />
-                <Trash2 className="w-4 h-4 cursor-pointer text-red-500" />
+                <Eye
+                  className="w-4 h-4 cursor-pointer"
+                  onClick={() => router.push(`/dashboard/lead-page/${lead.id}`)}
+                />
+                <Trash2
+                  className="w-4 h-4 cursor-pointer text-red-500"
+                  onClick={() => {
+                    deleteLeads({ leadIds: [lead.id] });
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}

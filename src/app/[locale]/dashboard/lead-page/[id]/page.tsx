@@ -13,10 +13,14 @@ import {
   FormLabel,
   FormControl,
 } from "@/components/ui/form";
-import { AlertCircle } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useLeadsPage } from "@/hooks/useLeadsPage";
+import { useAuthStore } from "@/store/useAuthStore";
+import Image from "next/image";
+import isConnectedHubspot from "@/assets/hubspot_orange.svg";
+import isNotConnectedHubspot from "@/assets/hubspot_grey.svg";
+import { ConfirmationModal } from "../../profile/hubspot-settings/components/ConfirmationModal";
 
 const leadSchema = z.object({
   firstName: z.string(),
@@ -55,6 +59,10 @@ const fields: { name: LeadFormFields; label: string }[] = [
 export default function LeadDetailsPage() {
   const { id } = useParams();
   const { data: lead, updateLead } = useLeadsPage(id as string);
+  const { user } = useAuthStore();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const isAccountConnectedToHubspot = lead?.isConnectedToHubspot;
 
   const form = useForm({
     resolver: zodResolver(leadSchema),
@@ -86,13 +94,41 @@ export default function LeadDetailsPage() {
     updateLead(values);
   };
 
+  if (!lead || !user) {
+    return <div>No lead was found</div>;
+  }
+
   return (
     <div className="p-6 space-y-4 bg-white rounded-md">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">Lead page</h2>
-        <div className="text-sm text-muted-foreground flex items-center gap-2">
-          <AlertCircle className="w-4 h-4" />
-          This lead is not connected to HubSpot
+
+        <div className="flex gap-2">
+          <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
+            <Image
+              width={20}
+              height={20}
+              alt="hubspot_icon"
+              src={
+                isAccountConnectedToHubspot
+                  ? isConnectedHubspot
+                  : isNotConnectedHubspot
+              }
+            />
+
+            <p>
+              This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
+              connected to HubSpot
+            </p>
+          </div>
+
+          <Button
+            type="submit"
+            className="max-w-fit min-w-24 h-8 bg-[#030A27]"
+            onClick={() => setShowConfirm(true)}
+          >
+            Sync
+          </Button>
         </div>
       </div>
 
@@ -110,7 +146,7 @@ export default function LeadDetailsPage() {
                 <FormItem>
                   <FormLabel>{label}</FormLabel>
                   <FormControl>
-                    <Input {...field} readOnly />
+                    <Input {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -124,7 +160,7 @@ export default function LeadDetailsPage() {
               <FormItem className="col-span-2">
                 <FormLabel>Summary</FormLabel>
                 <FormControl>
-                  <Textarea {...field} readOnly rows={5} />
+                  <Textarea {...field} rows={5} />
                 </FormControl>
               </FormItem>
             )}
@@ -137,19 +173,23 @@ export default function LeadDetailsPage() {
               <FormItem className="col-span-2">
                 <FormLabel>LinkedIn</FormLabel>
                 <FormControl>
-                  <Input {...field} readOnly />
+                  <Input {...field} />
                 </FormControl>
               </FormItem>
             )}
           />
 
           <div className="col-span-2 flex justify-start">
-            <Button disabled className="max-w-fit min-w-24">
-              Save
-            </Button>
+            <Button className="max-w-fit min-w-24">Save</Button>
           </div>
         </form>
       </Form>
+
+      <ConfirmationModal
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        companyId={user.companyId}
+      />
     </div>
   );
 }

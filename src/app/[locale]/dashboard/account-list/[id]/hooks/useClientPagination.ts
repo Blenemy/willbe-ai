@@ -1,31 +1,38 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
-interface Props<T> {
-  data: T[];
-  search?: string;
-  searchField?: keyof T;
-  initialRowsPerPage?: number;
-}
-
-export const useClientPagination = <T>({
+export function useClientPagination<T>({
   data,
   search = "",
-  searchField,
-  initialRowsPerPage = 5,
-}: Props<T>) => {
-  const [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage);
+  sortKey = "",
+  sortAsc = true,
+}: {
+  data: T[];
+  search?: string;
+  sortKey?: string;
+  sortAsc?: boolean;
+}) {
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const filtered = useMemo(() => {
-    if (!search || !searchField) return data;
-    return data.filter((item) =>
-      String(item[searchField]).toLowerCase().includes(search.toLowerCase())
-    );
-  }, [data, search, searchField]);
+  const filtered = data.filter((item) =>
+    JSON.stringify(item).toLowerCase().includes(search.toLowerCase())
+  );
 
-  const totalCount = filtered.length;
-  const start = page * rowsPerPage;
-  const paginated = filtered.slice(start, start + rowsPerPage);
+  const sorted = sortKey
+    ? [...filtered].sort((a, b) => {
+        const valA = a[sortKey as keyof T];
+        const valB = b[sortKey as keyof T];
+
+        return sortAsc
+          ? String(valA).localeCompare(String(valB))
+          : String(valB).localeCompare(String(valA));
+      })
+    : filtered;
+
+  const paginated = sorted.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return {
     paginated,
@@ -33,6 +40,6 @@ export const useClientPagination = <T>({
     setPage,
     rowsPerPage,
     setRowsPerPage,
-    totalCount,
+    totalCount: filtered.length,
   };
-};
+}
