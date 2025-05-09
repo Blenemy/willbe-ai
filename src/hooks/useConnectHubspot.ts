@@ -216,6 +216,8 @@ export const useUpdateHubspotBindings = () => {
 };
 
 export const useStartHubspotIntegration = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({
       companyId,
@@ -230,6 +232,12 @@ export const useStartHubspotIntegration = () => {
 
       const res = await protectedAxiosInstance.post(url);
       return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["account-page"] });
+      queryClient.invalidateQueries({ queryKey: ["lead"] });
+
+      toast("Account was succesfully updated");
     },
   });
 };

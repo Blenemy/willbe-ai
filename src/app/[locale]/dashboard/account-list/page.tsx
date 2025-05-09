@@ -127,6 +127,10 @@ const AccountListPage = () => {
     page * rowsPerPage
   );
 
+  const handleAccountClick = (id: string) => {
+    router.push(`/dashboard/account-list/${id}`);
+  };
+
   return (
     <div className="px-6 py-7 space-y-6 w-full">
       <div className="flex justify-between items-center">
@@ -251,7 +255,11 @@ const AccountListPage = () => {
                 </Tooltip>
               </TableCell>
               <TableCell className="text-right space-x-2">
-                <Button size="icon" variant="ghost">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => handleAccountClick(acc.id)}
+                >
                   <Eye className="w-4 h-4" />
                 </Button>
                 <Button
