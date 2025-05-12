@@ -47,8 +47,14 @@ export default function ForgotPasswordModal({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    forgotPassword(values.email);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await forgotPassword(values.email);
+      form.reset();
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   useEffect(() => {
@@ -78,7 +84,7 @@ export default function ForgotPasswordModal({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {translations.Email}
                   </FormLabel>
                   <FormControl>

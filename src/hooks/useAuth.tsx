@@ -264,7 +264,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     logout: logoutHandler,
     register: registerMutation.mutate,
     refreshTokens: refreshTokensMutation.mutate,
-    forgotPassword: forgotPasswordMutation.mutate,
+    forgotPassword: forgotPasswordMutation.mutateAsync,
     resetPassword: resetPasswordMutation.mutate,
     validateResetToken: validateResetTokenQuery.mutate,
     updateUser: updateUserMutation.mutate,
