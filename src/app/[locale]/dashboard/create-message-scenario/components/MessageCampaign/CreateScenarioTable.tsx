@@ -71,6 +71,10 @@ export const CreateScenarioTable = ({
   const { mutate: generateMessages } = useGenerateMessages();
   const { mutate: sendMessages } = useSendMessages();
   const { mutate: searchField, isPending } = useSearchLeadField();
+  const [loadingField, setLoadingField] = useState<{
+    leadId: string;
+    field: "email" | "phone";
+  } | null>(null);
   const params = useParams();
   const id = params?.id as string;
 
@@ -203,11 +207,19 @@ export const CreateScenarioTable = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() =>
-                        searchField({ entryIds: [lead.id], field: "email" })
-                      }
+                      disabled={isPending}
+                      onClick={() => {
+                        setLoadingField({ leadId: lead.id, field: "email" });
+                        searchField(
+                          { entryIds: [lead.id], field: "email" },
+                          {
+                            onSettled: () => setLoadingField(null),
+                          }
+                        );
+                      }}
                     >
-                      {isPending ? (
+                      {loadingField?.leadId === lead.id &&
+                      loadingField?.field === "email" ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
                         <Sparkles className="w-4 h-4 text-muted-foreground" />
@@ -229,11 +241,19 @@ export const CreateScenarioTable = ({
                     <Button
                       size="icon"
                       variant="ghost"
-                      onClick={() =>
-                        searchField({ entryIds: [lead.id], field: "phone" })
-                      }
+                      disabled={isPending}
+                      onClick={() => {
+                        setLoadingField({ leadId: lead.id, field: "phone" });
+                        searchField(
+                          { entryIds: [lead.id], field: "phone" },
+                          {
+                            onSettled: () => setLoadingField(null),
+                          }
+                        );
+                      }}
                     >
-                      {isPending ? (
+                      {loadingField?.leadId === lead.id &&
+                      loadingField?.field === "phone" ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
                         <Sparkles className="w-4 h-4 text-muted-foreground" />
