@@ -22,6 +22,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslations } from "next-intl";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
+import { useEffect } from "react";
 
 const EditPasswordDialog = ({
   open,
@@ -60,12 +61,24 @@ const EditPasswordDialog = ({
   });
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
-    updateUserPassword({
-      oldPassword: values.oldPassword,
-      newPassword: values.newPassword,
-    });
-    setOpen(false);
+    try {
+      await updateUserPassword({
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+      });
+
+      form.reset();
+      setOpen(false);
+    } catch (err) {
+      console.error("Password update failed", err);
+    }
   };
+
+  useEffect(() => {
+    if (open) {
+      form.reset();
+    }
+  }, [open, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -81,7 +94,7 @@ const EditPasswordDialog = ({
               name="oldPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {t("old_password")}
                   </FormLabel>
                   <FormControl>
@@ -101,7 +114,7 @@ const EditPasswordDialog = ({
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {t("new_password_title")}
                   </FormLabel>
                   <FormControl>
@@ -121,7 +134,7 @@ const EditPasswordDialog = ({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {t("confirm_password")}
                   </FormLabel>
                   <FormControl>
