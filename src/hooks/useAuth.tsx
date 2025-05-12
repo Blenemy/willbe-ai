@@ -269,6 +269,6 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     validateResetToken: validateResetTokenQuery.mutate,
     updateUser: updateUserMutation.mutate,
     updateUserLanguage: updateUserLanguageMutation.mutate,
-    updateUserPassword: updateUserPassword.mutate,
+    updateUserPassword: updateUserPassword.mutateAsync,
   };
 };
