@@ -134,7 +134,7 @@ export const CreateScenarioTable = ({
   };
 
   const filteredLeads = useMemo(() => {
-    return leads.filter(
+    return leads?.filter(
       (lead) =>
         lead.firstName?.toLowerCase().includes(search.toLowerCase()) ||
         lead.lastname?.toLowerCase().includes(search.toLowerCase()) ||
@@ -145,7 +145,10 @@ export const CreateScenarioTable = ({
 
   const indexOfFirstItem = currentPage * rowsPerPage;
   const indexOfLastItem = indexOfFirstItem + rowsPerPage;
-  const paginatedLeads = filteredLeads.slice(indexOfFirstItem, indexOfLastItem);
+  const paginatedLeads = filteredLeads?.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   if (!leads || leads.length === 0) return null;
 
