@@ -32,6 +32,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { PasswordInput } from "../ui/password-input";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
+import {
+  OrDivider,
+  SocialAuthButtons,
+} from "../SocialMediaButtons/SocialMediaButtons";
 
 export function AuthForm({
   translations,
@@ -126,6 +130,16 @@ export function AuthForm({
               : translations.new_password}
           </CardDescription>
         </CardHeader>
+
+        <div className="px-10">
+          {!isSignIn && (
+            <>
+              <SocialAuthButtons />
+              <OrDivider />
+            </>
+          )}
+        </div>
+
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -266,22 +280,31 @@ export function AuthForm({
                   {isSignIn ? translations.login : translations.signup}
                 </Button>
               </div>
-
-              <div className="mt-4 text-center text-sm">
-                {isSignIn
-                  ? `${translations.dont_have_account} `
-                  : `${translations.already_have_account} `}
-                <Button
-                  type="button"
-                  variant={"link"}
-                  className="no-underline"
-                  onClick={() => setMode(isSignIn ? "sign-up" : "sign-in")}
-                >
-                  {isSignIn ? translations.signup : translations.login}
-                </Button>
-              </div>
             </form>
           </Form>
+
+          <div className="mb-8">
+            {isSignIn && (
+              <>
+                <OrDivider />
+                <SocialAuthButtons />
+              </>
+            )}
+          </div>
+
+          <div className="mt-4 text-center text-sm">
+            {isSignIn
+              ? `${translations.dont_have_account} `
+              : `${translations.already_have_account} `}
+            <Button
+              type="button"
+              variant={"link"}
+              className="no-underline"
+              onClick={() => setMode(isSignIn ? "sign-up" : "sign-in")}
+            >
+              {isSignIn ? translations.signup : translations.login}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
