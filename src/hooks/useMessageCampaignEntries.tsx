@@ -48,6 +48,31 @@ export interface MessageEntry {
   messageEntryLeadData: MessageEntryData[];
 }
 
+export interface MessageEntryStructure {
+  messageStructure: {
+    id: string;
+    name: string;
+    templates: [
+      {
+        language: string;
+      }
+    ];
+  } | null;
+  messageStructures:
+    | [
+        {
+          id: string;
+          name: string;
+          templates: [
+            {
+              language: string;
+            }
+          ];
+        }
+      ]
+    | null;
+}
+
 export const useMessageCampaignEntries = (messageScenarioId?: string) => {
   return useQuery<MessageEntry[]>({
     queryKey: ["message-campaign-entries", messageScenarioId],
@@ -63,7 +88,7 @@ export const useMessageCampaignEntries = (messageScenarioId?: string) => {
 };
 
 export const useMessageCampaignEntry = (id?: string) => {
-  return useQuery<MessageEntry>({
+  return useQuery<MessageEntry | MessageEntryStructure>({
     queryKey: ["message-campaign-entry", id],
     enabled: !!id,
     queryFn: async () => {

@@ -1482,6 +1482,13 @@
       "dateRequired": "Date is required",
       "timeRequired": "Time is required",
       "dateInPast": "You cannot select a date in the past."
+    },
+    "structureForm": {
+      "label": "Message structure",
+      "placeholder": "Choose message structure",
+      "button": "Send messages",
+      "success": "Message structure was updated",
+      "error": "Failed to update message structure"
     }
   },
   "statisticsPage": {

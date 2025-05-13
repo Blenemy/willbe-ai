@@ -3,6 +3,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   MessageEntry,
+  MessageEntryStructure,
   useMessageCampaignEntries,
   useMessageCampaignEntry,
 } from "@/hooks/useMessageCampaignEntries";
@@ -16,12 +17,23 @@ import { CreateScenarioTable } from "./CreateScenarioTable";
 import { useMessageChainStore } from "@/store/useMessageChainStore";
 import { ScenarioCalendar } from "./ScenarioCalendar";
 import { ScenarioCalendarStats } from "./ScenarioCalendarStats";
+import { SelectMessageStructureForm } from "./SelectedMessageStructureForm";
 
 interface Props {
   scenarioId: string;
   scenarioTitle: string;
   setActiveStep: Dispatch<SetStateAction<number>>;
 }
+
+const isStructureFormResponse = (
+  selectedEntry: MessageEntry | MessageEntryStructure | undefined
+): selectedEntry is MessageEntryStructure => {
+  return (
+    !!selectedEntry &&
+    "messageStructures" in selectedEntry &&
+    Array.isArray(selectedEntry.messageStructures)
+  );
+};
 
 export const ScenarioMessageChain = ({
   scenarioId,
@@ -105,6 +117,10 @@ export const ScenarioMessageChain = ({
     setCreateModalOpen(false);
   };
 
+  const isFormData = isStructureFormResponse(selectedEntry);
+
+  console.log(selectedEntry);
+
   const handleDeleteEntry = (entry: MessageEntry) => {
     deleteEntry({ id: entry.id, messageScenarioId: scenarioId });
     if (selectedEntryId === entry.id) {
@@ -151,13 +167,20 @@ export const ScenarioMessageChain = ({
         }
       />
 
-      {selectedEntry && (
-        <CreateScenarioTable
-          leads={selectedEntry.messageEntryLeadData}
-          selectedEntry={selectedEntry}
-          setActiveStep={setActiveStep}
-        />
-      )}
+      {selectedEntry &&
+        (isFormData ? (
+          <SelectMessageStructureForm
+            entryId={selectedEntryId}
+            selectedStructureId={selectedEntry.messageStructure?.id ?? null}
+            structures={selectedEntry.messageStructures}
+          />
+        ) : (
+          <CreateScenarioTable
+            leads={selectedEntry.messageEntryLeadData}
+            selectedEntry={selectedEntry}
+            setActiveStep={setActiveStep}
+          />
+        ))}
     </div>
   );
 };
