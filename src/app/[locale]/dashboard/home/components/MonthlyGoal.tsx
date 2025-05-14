@@ -25,14 +25,13 @@ export default function MonthlyGoal({
   const totalPercent = Math.min(100, achievedPercent + pipelinePercent);
   const showPipeline = pipeline > 0;
 
-  // Правильная позиция Goal label
   const goalLabelPosition = showPipeline
     ? Math.min(100, (goal / total) * 100)
     : 100;
 
   return (
     <Card className="w-full">
-      <CardHeader className="flex flex-row justify-between items-start">
+      <CardHeader className="flex justify-between items-start">
         <CardTitle>Monthly Goal</CardTitle>
         <Button
           variant="ghost"
@@ -45,59 +44,66 @@ export default function MonthlyGoal({
       </CardHeader>
 
       <CardContent>
-        <div className="flex items-center gap-4 mb-2">
+        {/* Верхняя метка Goal и Pipeline */}
+        <div className="relative h-5 mb-1">
+          {/* Goal label */}
           <div
-            className={cn(
-              "text-sm px-2 py-1 rounded-full text-white font-medium",
-              achievedPercent >= 100 ? "bg-green-600" : "bg-primary"
-            )}
+            className="absolute -translate-x-1/2 text-sm text-muted-foreground text-nowrap"
+            style={{ left: `${goalLabelPosition}%` }}
           >
-            {achievedPercent}%
+            ⭐ Goal
           </div>
-          <span className="text-lg font-semibold">
-            ${achieved.toLocaleString()}
-          </span>
+
+          {/* Pipeline label */}
+          {showPipeline && (
+            <div className="absolute right-0 text-sm text-muted-foreground pr-1">
+              Pipeline
+            </div>
+          )}
         </div>
 
         {/* Прогрессбар */}
-        <div className="relative h-3 rounded-md bg-muted overflow-hidden mb-2">
+        <div className="relative h-10 bg-muted rounded-full overflow-hidden border border-border">
           {/* Achieved */}
           <div
-            className="absolute left-0 top-0 h-full bg-primary"
+            className="absolute top-0 left-0 h-full bg-primary rounded-l-full flex items-center pl-3 text-white text-sm font-semibold z-10"
             style={{ width: `${achievedPercent}%` }}
-          />
+          >
+            <span>{achievedPercent}%</span>
+            <span className="ml-2">${achieved.toLocaleString()}</span>
+          </div>
 
-          {/* Pipeline (если есть) */}
+          {/* Pipeline overlay */}
           {showPipeline && (
             <div
-              className="absolute left-0 top-0 h-full bg-muted-foreground/30"
+              className="absolute top-0 left-0 h-full bg-muted-foreground/20 z-0"
               style={{ width: `${totalPercent}%` }}
             />
           )}
 
-          {/* Goal marker */}
+          {/* Pipeline value on right */}
+          {showPipeline && (
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium z-10">
+              ${pipeline.toLocaleString()}
+            </div>
+          )}
+
+          {/* Goal marker line */}
           <div
-            className="absolute top-0 bottom-0 w-[1px] bg-border"
+            className="absolute top-0 bottom-0 w-[1px] bg-border z-20"
             style={{ left: `${goalLabelPosition}%` }}
           />
         </div>
 
-        {/* Goal label (⭐ Goal) */}
-        <div className="relative mt-1 h-5">
+        {/* Goal value below bar */}
+        <div className="relative mt-2 h-5">
           <div
-            className="absolute -translate-x-1/2 text-xs text-muted-foreground text-center"
+            className="absolute -translate-x-1/2 text-xs text-muted-foreground font-medium"
             style={{ left: `${goalLabelPosition}%` }}
           >
-            <span>⭐ ${goal.toLocaleString()} Goal</span>
+            ${goal.toLocaleString()}
           </div>
         </div>
-
-        {/* Нижняя подпись pipeline, если есть */}
-        {showPipeline && (
-          <div className="text-xs text-muted-foreground text-right mt-1">
-            ${pipeline.toLocaleString()} Pipeline
-          </div>
-        )}
       </CardContent>
     </Card>
   );
