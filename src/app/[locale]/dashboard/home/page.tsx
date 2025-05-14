@@ -1,3 +1,33 @@
-export default function DashboardHomePage() {
-  return <h1 className="text-2xl font-bold">Dashboard Overview</h1>;
+"use client";
+
+// import MeetingsList from "@/components/MeetingsList";
+// import UserFilterDropdown from "@/components/UserFilterDropdown";
+import HeaderClock from "./components/HeaderClock";
+import MonthlyGoal from "./components/MonthlyGoal";
+import MeetingsResponsesCard from "./components/MeetingsResponsesCard";
+import ScenarioPerformanceChart from "./components/ScenarioPerfomanceChart";
+
+export default function HomePage() {
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex gap-4">
+        <HeaderClock />
+        <MonthlyGoal
+          goal={25000}
+          achieved={18000}
+          pipeline={60000}
+          isAdmin={true}
+        />
+
+        {/* <UserFilterDropdown /> */}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <MeetingsResponsesCard />
+        <ScenarioPerformanceChart />
+      </div>
+
+      {/* <MeetingsList /> */}
+    </div>
+  );
 }
