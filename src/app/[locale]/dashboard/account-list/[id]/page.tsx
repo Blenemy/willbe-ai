@@ -29,8 +29,10 @@ const formSchema = z.object({
 });
 
 export default function AccountPage() {
-  const { id } = useParams();
-  const { account, updateAccount } = useAccount(id as string);
+  const params = useParams();
+  const id = params?.id as string | undefined;
+  const isNew = id === "new-account";
+  const { account, updateAccount } = useAccount(!isNew ? id! : undefined);
   const { user } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -53,7 +55,7 @@ export default function AccountPage() {
   };
 
   useEffect(() => {
-    if (account) {
+    if (!isNew && account) {
       form.reset({
         companyTitle: account.companyTitle || "",
         description: account.description || "",
@@ -65,12 +67,12 @@ export default function AccountPage() {
         linkedin: account.linkedin || "",
       });
     }
-  }, [account, form]);
+  }, [account, form, isNew]);
 
   const isAccountConnectedToHubspot = account?.isConnectedToHubspot;
 
-  if (!account || !user) {
-    return <div>No account was found</div>;
+  if (!user) {
+    return <div>No user was found</div>;
   }
 
   return (

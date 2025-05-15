@@ -14,11 +14,12 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { User } from "lucide-react";
 
 interface Props {
   form: UseFormReturn<any>;
   onSubmit: (values: any) => void;
-  logo: string;
+  logo: string | undefined;
 }
 
 export const InformationTab = ({ form, onSubmit, logo }: Props) => {
@@ -29,13 +30,19 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <div className="col-span-2 flex items-center gap-4">
-          <Image
-            src={logo}
-            alt="Company logo"
-            width={60}
-            height={60}
-            className="rounded-full border"
-          />
+          {logo ? (
+            <Image
+              src={logo}
+              alt="Company logo"
+              width={60}
+              height={60}
+              className="rounded-full border"
+            />
+          ) : (
+            <div className="w-[60px] h-[60px] flex items-center justify-center rounded-full border bg-muted">
+              <User className="w-6 h-6 text-muted-foreground" />
+            </div>
+          )}
           <FormField
             control={form.control}
             name="companyTitle"
