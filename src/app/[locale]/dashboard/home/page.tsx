@@ -10,8 +10,8 @@ export default function HomePage() {
         <HeaderClock />
         <MonthlyGoal
           goal={25000}
-          achieved={50000}
-          pipeline={0}
+          achieved={10000}
+          pipeline={75000}
           isAdmin={true}
         />
 
