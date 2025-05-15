@@ -2,6 +2,7 @@ import HeaderClock from "./components/HeaderClock";
 import MonthlyGoal from "./components/MonthlyGoal";
 import MeetingsResponsesCard from "./components/MeetingsResponsesCard";
 import ScenarioPerformanceChart from "./components/ScenarioPerfomanceChart";
+import MeetingsList from "./components/MeetingsList";
 
 export default function HomePage() {
   return (
@@ -9,8 +10,8 @@ export default function HomePage() {
       <div className="flex gap-4">
         <HeaderClock />
         <MonthlyGoal
-          goal={25000}
-          achieved={5000}
+          goal={35000}
+          achieved={50000}
           pipeline={70000}
           isAdmin={true}
         />
@@ -18,12 +19,16 @@ export default function HomePage() {
         {/* <UserFilterDropdown /> */}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MeetingsResponsesCard />
-        <ScenarioPerformanceChart />
-      </div>
+      <div className="grid md:grid-cols-[2fr_3fr] gap-4">
+        <div className="grid grid-rows-[auto_1fr] gap-4">
+          <MeetingsResponsesCard />
+          <ScenarioPerformanceChart />
+        </div>
 
-      {/* <MeetingsList /> */}
+        <div className="h-full">
+          <MeetingsList />
+        </div>
+      </div>
     </div>
   );
 }
