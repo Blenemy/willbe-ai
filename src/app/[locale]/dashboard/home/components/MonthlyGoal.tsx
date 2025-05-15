@@ -3,7 +3,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 interface MonthlyGoalProps {
   goal: number;
@@ -16,18 +15,16 @@ export default function MonthlyGoal({
   goal,
   achieved,
   pipeline,
-  isAdmin = true,
 }: MonthlyGoalProps) {
   const achievedPercent = Math.min(100, Math.round((achieved / goal) * 100));
   const pipelinePercent =
     pipeline > 0 ? Math.round((pipeline / goal) * 100) : 0;
   const total = achieved + pipeline;
-  const totalPercent = Math.min(100, achievedPercent + pipelinePercent);
+  const visualWidthPercent = Math.min(100, Math.round((goal / total) * 100));
   const showPipeline = pipeline > 0;
 
-  const goalLabelPosition = showPipeline
-    ? Math.min(100, (goal / total) * 100)
-    : 100;
+  const goalLabelPosition =
+    total > 0 ? Math.min(100, (goal / total) * 100) : 100;
 
   return (
     <Card className="w-full">
@@ -44,9 +41,7 @@ export default function MonthlyGoal({
       </CardHeader>
 
       <CardContent>
-        {/* Верхняя метка Goal и Pipeline */}
         <div className="relative h-5 mb-1">
-          {/* Goal label */}
           <div
             className="absolute -translate-x-1/2 text-sm text-muted-foreground text-nowrap"
             style={{ left: `${goalLabelPosition}%` }}
@@ -54,7 +49,6 @@ export default function MonthlyGoal({
             ⭐ Goal
           </div>
 
-          {/* Pipeline label */}
           {showPipeline && (
             <div className="absolute right-0 text-sm text-muted-foreground pr-1">
               Pipeline
@@ -62,40 +56,41 @@ export default function MonthlyGoal({
           )}
         </div>
 
-        {/* Прогрессбар */}
-        <div className="relative h-10 bg-muted rounded-full overflow-hidden border border-border">
-          {/* Achieved */}
+        <div className="relative h-10 w-full bg-muted rounded-full overflow-hidden border border-border">
           <div
-            className="absolute top-0 left-0 h-full bg-primary rounded-l-full flex items-center pl-3 text-white text-sm font-semibold z-10"
-            style={{ width: `${achievedPercent}%` }}
+            className="absolute left-0 top-0 h-full bg-muted rounded-full overflow-hidden z-0"
+            style={{ width: `${visualWidthPercent}%` }}
           >
-            <span>{achievedPercent}%</span>
-            <span className="ml-2">${achieved.toLocaleString()}</span>
+            <div
+              className="h-full bg-primary flex items-center pl-3 pr-3 text-white text-sm font-semibold"
+              style={{ width: `${achievedPercent}%` }}
+            >
+              <div className="bg-[#8A8E9E] rounded-full w-16 text-center py-1 text-white">
+                {achievedPercent}%
+              </div>
+              <span className="ml-2">${achieved.toLocaleString()}</span>
+            </div>
+
+            {showPipeline && (
+              <div
+                className="absolute top-0 left-0 h-full  z-[-1]"
+                style={{ width: `${achievedPercent + pipelinePercent}%` }}
+              />
+            )}
           </div>
 
-          {/* Pipeline overlay */}
-          {showPipeline && (
-            <div
-              className="absolute top-0 left-0 h-full bg-muted-foreground/20 z-0"
-              style={{ width: `${totalPercent}%` }}
-            />
-          )}
-
-          {/* Pipeline value on right */}
           {showPipeline && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium z-10">
               ${pipeline.toLocaleString()}
             </div>
           )}
 
-          {/* Goal marker line */}
           <div
-            className="absolute top-0 bottom-0 w-[1px] bg-border z-20"
+            className="absolute top-0 bottom-0 w-[1px] bg-border z-30"
             style={{ left: `${goalLabelPosition}%` }}
           />
         </div>
 
-        {/* Goal value below bar */}
         <div className="relative mt-2 h-5">
           <div
             className="absolute -translate-x-1/2 text-xs text-muted-foreground font-medium"

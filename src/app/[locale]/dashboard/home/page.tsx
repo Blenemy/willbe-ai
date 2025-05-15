@@ -1,7 +1,3 @@
-"use client";
-
-// import MeetingsList from "@/components/MeetingsList";
-// import UserFilterDropdown from "@/components/UserFilterDropdown";
 import HeaderClock from "./components/HeaderClock";
 import MonthlyGoal from "./components/MonthlyGoal";
 import MeetingsResponsesCard from "./components/MeetingsResponsesCard";
@@ -14,7 +10,7 @@ export default function HomePage() {
         <HeaderClock />
         <MonthlyGoal
           goal={25000}
-          achieved={18000}
+          achieved={50000}
           pipeline={0}
           isAdmin={true}
         />
