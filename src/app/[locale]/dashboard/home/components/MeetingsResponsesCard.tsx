@@ -7,7 +7,7 @@ export default function MeetingsResponsesCard() {
   const responseRate = 29;
 
   return (
-    <Card>
+    <Card className="rounded-2xl">
       <CardHeader className="flex justify-between items-start">
         <div>
           <CardTitle>Meetings & responses</CardTitle>

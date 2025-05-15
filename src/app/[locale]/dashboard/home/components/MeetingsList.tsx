@@ -60,7 +60,7 @@ const meetings = [
 
 export default function MeetingsList() {
   return (
-    <div className="border rounded-xl overflow-hidden bg-white h-full flex flex-col">
+    <div className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
       <div className="px-6 py-6">
         <div className="text-lg font-semibold">Meetings (15)</div>
         <p className="text-sm text-muted-foreground">In the last month</p>

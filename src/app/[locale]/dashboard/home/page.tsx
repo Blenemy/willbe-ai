@@ -12,7 +12,7 @@ export default function HomePage() {
         <MonthlyGoal
           goal={35000}
           achieved={50000}
-          pipeline={70000}
+          pipeline={75000}
           isAdmin={true}
         />
 

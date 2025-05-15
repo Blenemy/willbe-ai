@@ -30,7 +30,7 @@ export default function MonthlyGoal({
   const hideGoalLine = achieved >= goal && pipeline === 0;
 
   return (
-    <Card className="w-full">
+    <Card className="w-full rounded-2xl">
       <CardHeader className="flex justify-between items-start">
         <CardTitle>Monthly Goal</CardTitle>
         <Button

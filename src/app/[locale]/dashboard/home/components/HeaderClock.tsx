@@ -36,7 +36,7 @@ export default function HeaderClock() {
   }, []);
 
   return (
-    <Card className="bg-[#030A27] text-white w-full relative">
+    <Card className="bg-[#030A27] text-white w-full relative rounded-2xl">
       <Image
         src={clockBackground}
         alt="wave"
