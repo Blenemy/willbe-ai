@@ -27,6 +27,7 @@ export default function MonthlyGoal({
     pipeline === 0 ? 100 : Math.min(100, (goal / pipeline) * 100);
 
   const showPipeline = pipeline > 0;
+  const hideGoalLine = achieved >= goal && pipeline === 0;
 
   return (
     <Card className="w-full">
@@ -43,61 +44,75 @@ export default function MonthlyGoal({
       </CardHeader>
 
       <CardContent>
-        {/* Верхняя метка Goal и Pipeline */}
-        <div className="relative h-5 mb-1">
+        {/* Legend above pipiline + goal */}
+        <div className="relative h-6 mb-2">
           <div
-            className="absolute -translate-x-1/2 text-sm text-muted-foreground text-nowrap"
+            className="absolute -translate-x-1/2 text-sm  text-foreground text-nowrap"
             style={{ left: `${goalLabelPosition}%` }}
           >
             ⭐ Goal
           </div>
           {showPipeline && (
-            <div className="absolute right-0 text-sm text-muted-foreground pr-1">
+            <div className="absolute right-0 text-sm text-muted-foreground pr-1 font-medium">
               Pipeline
             </div>
           )}
         </div>
 
-        {/* Прогрессбар на 100% ширины */}
-        <div className="relative h-10 w-full bg-muted rounded-full overflow-hidden border border-border">
-          {/* Pipeline слой (всегда под achieved) */}
-          <div
-            className="absolute top-0 left-0 h-full bg-muted-foreground/30 z-0"
-            style={{ width: `${achievedPercent + pipelinePercent}%` }}
-          />
-
-          {/* Achieved */}
-          <div
-            className="absolute top-0 left-0 h-full bg-primary z-10 flex items-center pl-3 pr-3 text-white text-sm font-semibold"
-            style={{
-              width: `${achievedPercent}%`,
-              borderRadius: "9999px",
-            }}
-          >
-            <div className="bg-[#8A8E9E] rounded-full w-16 text-center py-1 text-white">
-              {Math.min(100, Math.round((achieved / goal) * 100))}%
-            </div>
-            <span className="ml-2">${achieved.toLocaleString()}</span>
-          </div>
-
-          {/* Pipeline текст */}
-          {showPipeline && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium z-20">
-              ${pipeline.toLocaleString()}
-            </div>
+        <div className="relative">
+          {/*Goal line */}
+          {!hideGoalLine && (
+            <div
+              className={`absolute z-30 w-[2px] bg-slate-400`}
+              style={{
+                left: `${goalLabelPosition}%`,
+                top: "-10px",
+                height: "70px",
+              }}
+            />
           )}
 
-          {/* Целевая черта */}
-          <div
-            className="absolute top-0 bottom-0 w-[1px] bg-border z-30"
-            style={{ left: `${goalLabelPosition}%` }}
-          />
+          <div className="relative h-[52px] w-full rounded-full overflow-hidden border border-border">
+            {/* Pipeline */}
+            <div
+              className="absolute top-0 left-0 h-full z-0"
+              style={{ width: `${achievedPercent + pipelinePercent}%` }}
+            />
+
+            {/* Achieved */}
+            <div
+              className="absolute top-0 left-0 h-full z-10 flex justify-between items-center text-white text-sm font-semibold p-1"
+              style={{
+                width: `${achievedPercent}%`,
+                minWidth: "5.5rem",
+                backgroundColor: "#0B0E1B",
+                borderTopLeftRadius: "9999px",
+                borderBottomLeftRadius: "9999px",
+                borderTopRightRadius: "9999px",
+                borderBottomRightRadius: "9999px",
+              }}
+            >
+              <div className="bg-[#8A8E9E] rounded-full text-white text-xs flex items-center justify-center w-32 h-full">
+                {Math.min(100, Math.round((achieved / goal) * 100))}%
+              </div>
+              <span className="ml-2 whitespace-nowrap">
+                ${achieved.toLocaleString()}
+              </span>
+            </div>
+
+            {/* Pipeline text */}
+            {showPipeline && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium z-20">
+                ${pipeline.toLocaleString()}
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Подпись цели снизу */}
-        <div className="relative mt-2 h-5">
+        {/* Legend below */}
+        <div className="relative mt-3 h-5">
           <div
-            className="absolute -translate-x-1/2 text-xs text-muted-foreground font-medium"
+            className="absolute -translate-x-1/2 text-sm text-foreground font-semibold"
             style={{ left: `${goalLabelPosition}%` }}
           >
             ${goal.toLocaleString()}
