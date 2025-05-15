@@ -141,7 +141,7 @@ export const useMessageStructureForm = (editingId?: string) => {
       queryClient.invalidateQueries({
         queryKey: ["message-structures"],
       });
-      router.push(`/dashboard/messages/message-structures/${data.id}`);
+      router.push(`/dashboard/create-message-structures/${data.id}`);
     },
     onError: () => {
       toast.error("Failed to create structure");
