@@ -44,7 +44,7 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>{children}</QueryProvider>
-          <Toaster />
+          <Toaster position="top-right" />
         </NextIntlClientProvider>
       </body>
     </html>
