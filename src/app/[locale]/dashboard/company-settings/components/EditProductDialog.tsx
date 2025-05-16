@@ -25,17 +25,6 @@ import { ProductsAndServices } from "@/types/Company";
 import { useCompany } from "@/hooks/useCompany";
 import { useTranslations } from "next-intl";
 
-const schema = z.object({
-  name: z
-    .string()
-    .min(1, "Company.validation_required")
-    .max(15, "Company.validation_name_max"),
-  description: z
-    .string()
-    .min(1, "Company.validation_required")
-    .max(3000, "Company.validation_description_max"),
-});
-
 const EditProductDialog = ({
   open,
   setOpen,
@@ -46,6 +35,17 @@ const EditProductDialog = ({
   product: ProductsAndServices | null;
 }) => {
   const t = useTranslations("Company");
+
+  const schema = z.object({
+    name: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(15, t("validation_name_max")),
+    description: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(3000, t("validation_description_max")),
+  });
 
   const form = useForm({
     resolver: zodResolver(schema),

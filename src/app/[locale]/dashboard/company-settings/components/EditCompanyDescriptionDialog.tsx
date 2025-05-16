@@ -24,13 +24,6 @@ import { useCompany } from "@/hooks/useCompany";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
-const schema = z.object({
-  companyDescription: z
-    .string()
-    .min(1, "Company.validation_required")
-    .max(3000, "Company.validation_description_max"),
-});
-
 const EditCompanyDescriptionDialog = ({
   open,
   setOpen,
@@ -41,6 +34,13 @@ const EditCompanyDescriptionDialog = ({
   company: Company;
 }) => {
   const t = useTranslations("Company");
+
+  const schema = z.object({
+    companyDescription: z
+      .string()
+      .min(1, t("validation_required"))
+      .max(3000, t("validation_description_max")),
+  });
 
   const form = useForm({
     resolver: zodResolver(schema),

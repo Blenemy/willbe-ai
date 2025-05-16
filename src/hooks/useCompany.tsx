@@ -2,6 +2,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";
 import { Company, ProductsAndServices } from "@/types/Company";
+import { toast } from "sonner";
 
 interface UseAuthProps {
   enableFetch: boolean;
@@ -50,6 +51,11 @@ export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["company", user?.companyId] });
+
+      toast("Company was updated succesfully");
+    },
+    onError: (err) => {
+      toast(`Failed to update a company: ${err.message}`);
     },
   });
 
