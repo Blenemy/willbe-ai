@@ -147,7 +147,7 @@ export default function LeadDetailsPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {fields.map(({ name, label }) => (
+          {fields.slice(0, 8).map(({ name, label }) => (
             <FormField
               key={name}
               control={form.control}
@@ -162,6 +162,48 @@ export default function LeadDetailsPage() {
               )}
             />
           ))}
+
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Language</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {fields.slice(8).map(({ name, label }) => (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{label}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          ))}
+
+          <FormField
+            control={form.control}
+            name="subtitle"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Subtitle</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
