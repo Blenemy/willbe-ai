@@ -20,7 +20,7 @@
   "Authentication": {
     "confirm_password": "Confirmez votre nouveau mot de passe",
     "enter_password": "Entrez votre mot de passe",
-    "forgot_password": "J'ai oublié mon mot de passe",
+    "forgot_password": "Mot de passe oublié ?",
     "login": "Connexion",
     "modify_password": "Modifier le mot de passe",
     "new_password": "Commencez à créer des connexions qui comptent.",

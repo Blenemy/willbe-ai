@@ -20,7 +20,7 @@
   "Authentication": {
     "confirm_password": "Confirma tu nueva contraseña",
     "enter_password": "Ingresa tu contraseña",
-    "forgot_password": "He olvidado mi contraseña",
+    "forgot_password": "¿Has olvidado tu contraseña?",
     "login": "Iniciar sesión",
     "modify_password": "Modificar contraseña",
     "new_password": "Empieza a crear conexiones que importan.",
