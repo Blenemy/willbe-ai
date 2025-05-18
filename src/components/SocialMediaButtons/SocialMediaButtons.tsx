@@ -5,14 +5,19 @@ import GoogleLogo from "../../assets/GoogleLogo.svg";
 import MicrosoftLogo from "../../assets/MicrosoftLogo.svg";
 import LinkedinLogo from "../../assets/LinkedinLogo.svg";
 import Image from "next/image";
+import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
 
-export const SocialAuthButtons = () => {
+interface Props {
+  translations: AuthTranslations;
+}
+
+export const SocialAuthButtons = ({ translations }: Props) => {
   const { redirectTo } = useSocialAuth();
 
   const baseStyle =
-    "relative w-full h-11 border border-input rounded-md text-sm font-medium transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring shadow-sm flex items-center justify-center";
+    "relative w-full h-11 border border-input rounded-md text-sm font-medium transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring shadow-sm flex items-center justify-center gap-2";
 
-  const iconStyle = "absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5";
+  const iconStyle = "w-5 h-5";
 
   return (
     <div className="flex flex-col gap-2 mt-6">
@@ -28,7 +33,7 @@ export const SocialAuthButtons = () => {
           width={20}
           height={20}
         />
-        Continue with Google
+        {translations.continue_with_google}
       </button>
 
       <button
@@ -43,7 +48,7 @@ export const SocialAuthButtons = () => {
           width={20}
           height={20}
         />
-        Continue with Microsoft
+        {translations.continue_with_microsoft}
       </button>
 
       <button
@@ -58,7 +63,7 @@ export const SocialAuthButtons = () => {
           width={20}
           height={20}
         />
-        Continue with LinkedIn
+        {translations.continue_with_linkedin}
       </button>
     </div>
   );

@@ -23,10 +23,10 @@
     "forgot_password": "He olvidado mi contraseña",
     "login": "Iniciar sesión",
     "modify_password": "Modificar contraseña",
-    "new_password": "Crea tu nueva contraseña.",
+    "new_password": "Empieza a crear conexiones que importan.",
     "new_password_title": "Nueva contraseña",
     "password": "Contraseña",
-    "please_include_login": "Por favor, incluye tus datos de inicio de sesión",
+    "please_include_login": "Continuemos donde lo dejaste.",
     "reset_password": "Restablecer contraseña",
     "NO_PASSWORD": "Por favor, ingresa una contraseña",
     "WRONG_PASSWORD": "Lo sentimos, esa no es la contraseña correcta",
@@ -72,7 +72,14 @@
     "personal_info": "Información personal",
     "validation_required": "Este campo es obligatorio",
     "validation_max": "Máximo 50 caracteres",
-    "languages": "Idiomas"
+    "languages": "Idiomas",
+    "accept_policy_label_start": "Acepto los",
+    "accept_policy_label_and": "y la",
+    "terms_of_service": "Términos del Servicio",
+    "privacy_policy": "Política de Privacidad",
+    "continue_with_google": "Registrarse con Google",
+    "continue_with_microsoft": "Registrarse con Microsoft",
+    "continue_with_linkedin": "Registrarse con LinkedIn"
   },
   "Users": {
     "title": "Configuración de Usuarios",

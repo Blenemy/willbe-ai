@@ -53,6 +53,15 @@ export async function getAuthTranslations() {
 
     setup_profile_title: t("setup_profile_title"),
     create_profile: t("create_profile"),
+
+    accept_policy_label_start: t("accept_policy_label_start"),
+    accept_policy_label_and: t("accept_policy_label_and"),
+    terms_of_service: t("terms_of_service"),
+    privacy_policy: t("privacy_policy"),
+
+    continue_with_google: t("continue_with_google"),
+    continue_with_microsoft: t("continue_with_microsoft"),
+    continue_with_linkedin: t("continue_with_linkedin"),
   };
 }
 

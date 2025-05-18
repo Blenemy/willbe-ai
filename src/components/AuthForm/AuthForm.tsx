@@ -36,6 +36,7 @@ import {
   OrDivider,
   SocialAuthButtons,
 } from "../SocialMediaButtons/SocialMediaButtons";
+import Logo from "../Logo/Logo";
 
 export function AuthForm({
   translations,
@@ -76,6 +77,9 @@ export function AuthForm({
           .string()
           .min(8, t["validation_password_min"])
           .max(64, t["validation_password_max"]),
+        acceptPolicy: z.literal(true, {
+          errorMap: () => ({ message: t["validation_accept_policy"] }),
+        }),
       })
       .refine((data) => data.password === data.confirmPassword, {
         message: t["validation_password_match"],
@@ -101,6 +105,7 @@ export function AuthForm({
       lastName: "",
       confirmPassword: "",
       remember: false,
+      acceptPolicy: false,
     },
   });
 
@@ -120,11 +125,15 @@ export function AuthForm({
       {...props}
     >
       <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-semibold">
+        <CardHeader className="px-10 pt-10 pb-0 mb-8">
+          <div className="flex items-center justify-center mb-8">
+            <Logo width={150} height={60} />
+          </div>
+
+          <CardTitle className="text-3xl font-semibold text-center">
             {isSignIn ? translations.welcome_back : translations.welcome}
           </CardTitle>
-          <CardDescription className="text-black">
+          <CardDescription className="text-center text-[#5F5F5F]">
             {isSignIn
               ? translations.please_include_login
               : translations.new_password}
@@ -134,7 +143,7 @@ export function AuthForm({
         <div className="px-10">
           {!isSignIn && (
             <>
-              <SocialAuthButtons />
+              <SocialAuthButtons translations={translations} />
               <OrDivider />
             </>
           )}
@@ -143,7 +152,7 @@ export function AuthForm({
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-5">
                 {!isSignIn && (
                   <FormField
                     control={form.control}
@@ -231,7 +240,7 @@ export function AuthForm({
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="font-semibold text-foreground">
-                          Confirm password
+                          {translations.confirm_password}
                         </FormLabel>
                         <FormControl>
                           <PasswordInput
@@ -247,59 +256,115 @@ export function AuthForm({
                 )}
 
                 <div className="flex justify-between items-center">
-                  <div className="flex gap-1 items-center">
-                    <FormField
-                      control={form.control}
-                      name="remember"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-2">
-                          <FormControl>
-                            <Checkbox
-                              id="remember"
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <Label htmlFor="remember">{translations.remember_me}</Label>
-                  </div>
+                  {isSignIn ? (
+                    <>
+                      <div className="flex gap-1 items-center">
+                        <FormField
+                          control={form.control}
+                          name="remember"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-2">
+                              <FormControl>
+                                <Checkbox
+                                  id="remember"
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+                        <Label htmlFor="remember">
+                          {translations.remember_me}
+                        </Label>
+                      </div>
 
-                  <Button
-                    variant={"link"}
-                    className="underline"
-                    type="button"
-                    onClick={() => setIsForgotPasswordOpen(true)}
-                  >
-                    {translations.forgot_password}
-                  </Button>
+                      <Button
+                        variant={"link"}
+                        className="underline"
+                        type="button"
+                        onClick={() => setIsForgotPasswordOpen(true)}
+                      >
+                        {translations.forgot_password}
+                      </Button>
+                    </>
+                  ) : (
+                    <div className="flex gap-1 items-center">
+                      <FormField
+                        control={form.control}
+                        name="acceptPolicy"
+                        render={({ field, fieldState }) => (
+                          <FormItem className="flex flex-col gap-1">
+                            <div className="flex items-center space-x-2">
+                              <FormControl>
+                                <Checkbox
+                                  id="acceptPolicy"
+                                  checked={!!field.value}
+                                  onCheckedChange={field.onChange}
+                                  className={cn(
+                                    "border-2",
+                                    fieldState.invalid
+                                      ? "border-red-500"
+                                      : "border-border"
+                                  )}
+                                />
+                              </FormControl>
+                              <FormLabel
+                                htmlFor="acceptPolicy"
+                                className="text-sm font-normal text-foreground"
+                              >
+                                {translations.accept_policy_label_start}{" "}
+                                <a
+                                  href="/terms"
+                                  className="underline font-semibold"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {translations.terms_of_service}
+                                </a>{" "}
+                                {translations.accept_policy_label_and}{" "}
+                                <a
+                                  href="/privacy"
+                                  className="underline font-semibold"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {translations.privacy_policy}
+                                </a>
+                              </FormLabel>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
                 </div>
 
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full bg-[#030A27] rounded-lg"
+                >
                   {isSignIn ? translations.login : translations.signup}
                 </Button>
               </div>
             </form>
           </Form>
 
-          <div className="mb-8">
-            {isSignIn && (
-              <>
-                <OrDivider />
-                <SocialAuthButtons />
-              </>
-            )}
-          </div>
+          {isSignIn && (
+            <div className="mb-8">
+              <OrDivider />
+              <SocialAuthButtons translations={translations} />
+            </div>
+          )}
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-4 text-center text-sm text-[#5F5F5F]">
             {isSignIn
               ? `${translations.dont_have_account} `
               : `${translations.already_have_account} `}
             <Button
               type="button"
               variant={"link"}
-              className="no-underline"
+              className="no-underline p-0"
               onClick={() => setMode(isSignIn ? "sign-up" : "sign-in")}
             >
               {isSignIn ? translations.signup : translations.login}
