@@ -11,6 +11,10 @@ import { Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
+import IconLinkedIn from "@/assets/LinkedinLogo.svg";
+import IconGmail from "@/assets/gmail_logo.svg";
+import IconHubspot from "@/assets/hubspot_orange.svg";
+
 const ConnectionsTab = () => {
   const router = useRouter();
   const t = useTranslations("Profile");
@@ -42,7 +46,7 @@ const ConnectionsTab = () => {
 
       <p className="text-[#5F5F5F]">{t("connections_desription")}: </p>
 
-      <ProfileCard title={t("connections_linkedin")}>
+      <ProfileCard title={t("connections_linkedin")} icon={IconLinkedIn}>
         <div className="flex justify-between items-center">
           <p className="text-gray-500">
             {t("connections_status")}:{" "}
@@ -71,7 +75,7 @@ const ConnectionsTab = () => {
         </div>
       </ProfileCard>
 
-      <ProfileCard title={t("connections_email")}>
+      <ProfileCard title={t("connections_email")} icon={IconGmail}>
         <div className="flex justify-between items-center">
           <p className="text-gray-500">
             {t("connections_status")}:{" "}
@@ -104,7 +108,7 @@ const ConnectionsTab = () => {
         </div>
       </ProfileCard>
 
-      <ProfileCard title={t("connections_hubspot")}>
+      <ProfileCard title={t("connections_hubspot")} icon={IconHubspot}>
         <div className="flex justify-between items-center">
           <p className="text-gray-500">
             {t("connections_status")}:{" "}
