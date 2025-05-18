@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+
+import Image from "next/image";
 import {
   Sidebar,
   SidebarContent,
@@ -10,20 +12,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  Home,
-  List,
-  Mail,
-  BarChart,
-  Users,
-  User,
-  Settings,
-  LucideProps,
-} from "lucide-react";
+import { Mail, FileStack, BarChart4, Settings } from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo/Logo";
 import { cn } from "@/lib/utils";
@@ -34,26 +26,33 @@ import { ADMINS_ONLY, ALL_ROLES } from "@/types/Roles";
 import { Skeleton } from "./ui/skeleton";
 import { SidebarTranslations } from "@/hooks/translations/useSidebarTranslations";
 
-const getIcon = (
-  IconComponent?: React.ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-  >,
-  size: number = 20,
-  isActive: boolean = false
-): React.JSX.Element | null => {
-  if (!IconComponent) return null;
+import IconAdd from "../assets/sidebar-icons/add_16dp_E3E3E3 2.svg";
+import IconBusiness from "../assets/sidebar-icons/business_16dp_E3E3E3 1.svg";
+import IconSettings from "../assets/sidebar-icons/settings_16dp_E3E3E3 1.svg";
+import IconAnalytics from "../assets/sidebar-icons/analytics_16dp_E3E3E3 1.svg";
+import IconDescription from "../assets/sidebar-icons/description_16dp_E3E3E3 1.svg";
+import IconDomainAdd from "../assets/sidebar-icons/domain_add_16dp_E3E3E3 1.svg";
+import IconEmail from "../assets/sidebar-icons/email_16dp_E3E3E3 1.svg";
+import IconGroupAdd from "../assets/sidebar-icons/group_add_16dp_E3E3E3 1.svg";
+import IconGroups from "../assets/sidebar-icons/groups_16dp_E3E3E3 1.svg";
+import IconHome from "../assets/sidebar-icons/home_16dp_E3E3E3 1.svg";
+import IconList from "../assets/sidebar-icons/list_16dp_E3E3E3 1.svg";
+import IconLogout from "../assets/sidebar-icons/logout_16dp_E3E3E3 1.svg";
+import IconPeople from "../assets/sidebar-icons/people_16dp_E3E3E3 2.svg";
+import IconPerson from "../assets/sidebar-icons/person_16dp_E3E3E3 1.svg";
 
+const getIcon = (src?: string, size: number = 24) => {
+  if (!src) return null;
   return (
-    <IconComponent
-      style={{ width: size, height: size }}
-      className={cn("rounded p-1", {
-        "text-white": isActive,
-        "text-gray-500": !isActive,
-      })}
+    <Image
+      src={src}
+      alt="nav_icon"
+      width={size}
+      height={size}
+      className={cn("shrink-0")}
     />
   );
 };
-
 export function AppSidebar({
   translations,
 }: {
@@ -82,7 +81,7 @@ export function SidebarContentWithLogic({
       {
         title: translations.home,
         url: "/dashboard/home",
-        icon: Home,
+        icon: IconHome,
         allowedRoles: ALL_ROLES,
       },
       {
@@ -92,17 +91,18 @@ export function SidebarContentWithLogic({
           {
             title: translations.leadScenarios,
             url: "/dashboard/lead-generation/lead-scenarios",
-            icon: List,
+            icon: IconBusiness,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createLeadScenarios,
             url: "/dashboard/lead-generation/create-lead-scenarios",
-            icon: Users,
+            icon: IconDomainAdd,
             allowedRoles: ALL_ROLES,
+            isSubItem: true,
           },
         ],
-        icon: List,
+        icon: FileStack,
         allowedRoles: ALL_ROLES,
       },
       {
@@ -112,17 +112,18 @@ export function SidebarContentWithLogic({
           {
             title: translations.accountScenarios,
             url: "/dashboard/account-generation/account-scenarios",
-            icon: List,
+            icon: IconPeople,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createAccountScenarios,
             url: "/dashboard/account-generation/create-account-scenarios",
-            icon: Users,
+            icon: IconGroupAdd,
             allowedRoles: ALL_ROLES,
+            isSubItem: true,
           },
         ],
-        icon: List,
+        icon: FileStack,
         allowedRoles: ALL_ROLES,
       },
       {
@@ -132,26 +133,28 @@ export function SidebarContentWithLogic({
           {
             title: translations.scenarioList,
             url: "/dashboard/scenario-list",
-            icon: List,
+            icon: IconList,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createMessageScenario,
             url: "/dashboard/create-message-scenario",
-            icon: List,
+            icon: IconAdd,
             allowedRoles: ALL_ROLES,
+            isSubItem: true,
           },
           {
             title: translations.messageStructures,
             url: "/dashboard/messages/message-structures",
-            icon: Mail,
+            icon: IconEmail,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createMessageStructures,
             url: "/dashboard/create-message-structures",
-            icon: Mail,
+            icon: IconDescription,
             allowedRoles: ALL_ROLES,
+            isSubItem: true,
           },
         ],
         icon: Mail,
@@ -164,11 +167,11 @@ export function SidebarContentWithLogic({
           {
             title: translations.accountList,
             url: "/dashboard/account-list",
-            icon: List,
+            icon: IconGroups,
             allowedRoles: ALL_ROLES,
           },
         ],
-        icon: List,
+        icon: FileStack,
         allowedRoles: ALL_ROLES,
       },
       {
@@ -178,11 +181,11 @@ export function SidebarContentWithLogic({
           {
             title: translations.analytics,
             url: "/dashboard/analytics",
-            icon: BarChart,
+            icon: IconAnalytics,
             allowedRoles: ALL_ROLES,
           },
         ],
-        icon: BarChart,
+        icon: BarChart4,
         allowedRoles: ALL_ROLES,
       },
       {
@@ -192,19 +195,19 @@ export function SidebarContentWithLogic({
           {
             title: translations.companySettings,
             url: "/dashboard/company-settings",
-            icon: Settings,
+            icon: IconSettings,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.users,
             url: "/dashboard/users",
-            icon: Users,
+            icon: IconGroups,
             allowedRoles: ADMINS_ONLY,
           },
           {
             title: translations.myAccount,
             url: "/dashboard/profile",
-            icon: User,
+            icon: IconPerson,
             allowedRoles: ALL_ROLES,
           },
         ],
@@ -251,7 +254,9 @@ export function SidebarContentWithLogic({
           <React.Fragment key={item.title}>
             <SidebarGroup className="py-3 flex flex-col">
               {index !== 0 && (
-                <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+                <SidebarGroupLabel className="text-[12px] font-semibold">
+                  {item.title}
+                </SidebarGroupLabel>
               )}
               <SidebarGroupContent>
                 <SidebarMenu
@@ -265,35 +270,49 @@ export function SidebarContentWithLogic({
                         !subItem.allowedRoles ||
                         subItem.allowedRoles.includes(user?.role)
                     )
-                    .map((subItem) => {
-                      const isActive = pathname.includes(subItem.url);
-                      return (
-                        <SidebarMenuItem key={subItem.title}>
-                          <SidebarMenuButton
-                            asChild
-                            className="hover:bg-[#084960]"
+                    .map(
+                      (subItem: {
+                        title: string;
+                        url: string;
+                        icon: string;
+                        allowedRoles: string[];
+                        isSubItem?: boolean;
+                      }) => {
+                        const isActive = pathname.includes(subItem.url);
+                        return (
+                          <SidebarMenuItem
+                            key={subItem.title}
+                            className={cn(
+                              subItem.isSubItem &&
+                                open &&
+                                "relative ml-4 pl-1 before:absolute before:top-0 before:bottom-0 before:left-0 before:w-px before:bg-gray-300"
+                            )}
                           >
-                            <Link
-                              href={subItem.url}
-                              className={cn(
-                                "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
-                                open && "p-2 justify-start",
-                                isActive
-                                  ? "bg-[#084960] text-white hover:text-white"
-                                  : "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10"
-                              )}
+                            <SidebarMenuButton
+                              asChild
+                              className="hover:bg-white"
                             >
-                              {getIcon(subItem.icon, ICON_SIZE, isActive)}
-                              {open && subItem.title}
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
-                    })}
+                              <Link
+                                href={subItem.url}
+                                className={cn(
+                                  "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
+                                  open && "p-0 justify-start",
+                                  isActive
+                                    ? "bg-white text-black"
+                                    : "text-gray-700 hover:text-[#084960] hover:bg-[#084960]/10"
+                                )}
+                              >
+                                {getIcon(subItem.icon, ICON_SIZE)}
+                                {open && subItem.title}
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      }
+                    )}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            {index !== data.navMain.length - 1 && <SidebarSeparator />}
           </React.Fragment>
         ))
       )}
@@ -317,12 +336,24 @@ export function SidebarContentWithLogic({
                 </div>
               )} */}
 
-          <div className="flex flex-col items-center gap-2 mt-3">
-            {open && (
-              <Button onClick={() => logout()} variant={"link"}>
-                {translations.logout}
-              </Button>
-            )}
+          <div className="flex flex-colgap-2 mt-3">
+            <Button
+              onClick={() => logout()}
+              variant="link"
+              className={cn(
+                "flex gap-2 transition-all duration-200 text-[#EF476F]",
+                !open && "p-2"
+              )}
+            >
+              <Image
+                width={24}
+                alt="logout"
+                height={24}
+                className={cn("shrink-0", !open && "opacity-80")}
+                src={IconLogout}
+              />
+              {open && translations.logout}
+            </Button>
           </div>
         </>
       )}
