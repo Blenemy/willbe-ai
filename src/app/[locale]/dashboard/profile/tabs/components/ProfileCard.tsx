@@ -9,7 +9,7 @@ interface ProfileCardProps {
   children: React.ReactNode;
   onEdit?: () => void;
   title?: string;
-  icon: string;
+  icon?: string;
 }
 
 const ProfileCard = ({ title, children, onEdit, icon }: ProfileCardProps) => {
