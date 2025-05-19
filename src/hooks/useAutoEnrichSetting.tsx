@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/api/axiosInstance";
+import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
@@ -9,18 +9,19 @@ interface APIRequestErrorPayload {
 }
 
 interface UpdateAutoEnrichPayload {
-  companyId: string;
-  auto_enrich: boolean;
+  isAutoSync: boolean;
 }
 
 export const useAutoEnrichSetting = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async ({ companyId, auto_enrich }: UpdateAutoEnrichPayload) => {
-      const response = await axiosInstance.post(
-        `/hubspot/enrich-settings/${companyId}`,
-        { auto_enrich }
+    mutationFn: async ({ isAutoSync }: UpdateAutoEnrichPayload) => {
+      const response = await protectedAxiosInstance.patch(
+        `/auth/hubspot/auto-sync`,
+        {
+          isAutoSync,
+        }
       );
       return response.data;
     },

@@ -55,7 +55,8 @@ const fields: { name: LeadFormFields; label: string }[] = [
 ];
 
 export default function LeadDetailsPage() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string | undefined;
   const isNew = id === "new-lead";
   const {
     data: lead,
@@ -226,8 +227,9 @@ export default function LeadDetailsPage() {
       <ConfirmationModal
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
-        companyId={user.companyId}
+        companyId={id}
         withEnrichOnly
+        leadPage
       />
     </div>
   );

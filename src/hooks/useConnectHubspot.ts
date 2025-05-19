@@ -76,6 +76,8 @@ export type HubspotBindings = {
   crmLeadPositionField: string | null;
   crmLeadSubtitleField: string | null;
   crmLeadSummaryField: string | null;
+
+  isAutoSync: boolean;
 };
 
 export type HubspotField = {
@@ -236,6 +238,29 @@ export const useStartHubspotIntegration = () => {
       queryClient.invalidateQueries({ queryKey: ["lead"] });
 
       toast("Account was succesfully updated");
+    },
+  });
+};
+
+export const useStartHubspotIntegrationInBulk = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (selectedIds: string[] | undefined) => {
+      const res = await protectedAxiosInstance.post(
+        "/auth/hubspot/sync-accounts",
+        { accountIds: selectedIds }
+      );
+      return res.data;
+    },
+    onSuccess: (data) => {
+      toast(`${data.result}`);
+
+      queryClient.invalidateQueries({ queryKey: ["account-page"] });
+      queryClient.invalidateQueries({ queryKey: ["lead"] });
+    },
+    onError: () => {
+      toast(`An error occured during the account update`);
     },
   });
 };

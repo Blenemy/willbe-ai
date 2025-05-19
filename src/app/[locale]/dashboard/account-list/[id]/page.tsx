@@ -139,8 +139,9 @@ export default function AccountPage() {
       <ConfirmationModal
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
-        companyId={user.companyId}
+        companyId={id}
         withEnrichOnly
+        leadPage
       />
     </div>
   );

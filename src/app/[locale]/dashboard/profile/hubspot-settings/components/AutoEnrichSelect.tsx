@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -12,17 +12,24 @@ import { useAutoEnrichSetting } from "@/hooks/useAutoEnrichSetting";
 import { ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
-export const AutoEnrichSelect = () => {
-  const [value, setValue] = useState<string | undefined>(undefined);
+interface Props {
+  defaultValue: boolean;
+}
+
+export const AutoEnrichSelect = ({ defaultValue }: Props) => {
+  const [value, setValue] = useState<string | undefined>("no");
   const { updateAutoEnrich, isPending } = useAutoEnrichSetting();
 
   const handleChange = (newValue: string) => {
     setValue(newValue);
     updateAutoEnrich({
-      companyId: "123",
-      auto_enrich: newValue === "yes",
+      isAutoSync: newValue === "yes",
     });
   };
+
+  useEffect(() => {
+    setValue(defaultValue === true ? "yes" : "no");
+  }, [defaultValue]);
 
   return (
     <div className="flex flex-col gap-2 mb-5">

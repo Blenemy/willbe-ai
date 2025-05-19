@@ -1580,6 +1580,7 @@
     "actions": "Acciones",
     "rowsPerPage": "Filas por página",
     "deleteSelected": "Eliminar seleccionados ({count})",
+    "syncSelected": "Sync ({count})",
     "table": {
       "accountTitle": "Título de la cuenta",
       "createdBy": "Creado por",

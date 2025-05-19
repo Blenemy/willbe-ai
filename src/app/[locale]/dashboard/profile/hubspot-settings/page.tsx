@@ -194,7 +194,7 @@ const HubspotSettings = () => {
         </p>
       </div>
 
-      <AutoEnrichSelect />
+      <AutoEnrichSelect defaultValue={bindings?.isAutoSync} />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
