@@ -1584,6 +1584,7 @@
     "searchPlaceholder": "Rechercher par nom de compte",
     "actions": "Actions",
     "rowsPerPage": "Lignes par page",
+    "deleteSelected": "Supprimer la sélection ({count})",
     "table": {
       "accountTitle": "Nom du compte",
       "createdBy": "Créé par",

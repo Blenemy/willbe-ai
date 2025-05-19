@@ -1579,6 +1579,7 @@
     "searchPlaceholder": "Buscar por título de cuenta",
     "actions": "Acciones",
     "rowsPerPage": "Filas por página",
+    "deleteSelected": "Eliminar seleccionados ({count})",
     "table": {
       "accountTitle": "Título de la cuenta",
       "createdBy": "Creado por",

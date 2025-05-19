@@ -1578,6 +1578,7 @@
     "searchPlaceholder": "Search by account title",
     "actions": "Actions",
     "rowsPerPage": "Rows per page",
+    "deleteSelected": "Delete selected ({count})",
     "table": {
       "accountTitle": "Account title",
       "createdBy": "Created by",

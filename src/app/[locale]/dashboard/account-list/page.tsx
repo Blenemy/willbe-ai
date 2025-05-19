@@ -26,6 +26,7 @@ import { Eye, Trash, Plus } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import {
   useDeleteSavedAccount,
+  useDeleteSavedAccountsInBulk,
   useSavedAccounts,
 } from "@/hooks/useEditScenarioData";
 import Image from "next/image";
@@ -59,6 +60,8 @@ const AccountListPage = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
     null
   );
+  const { mutate: deleteAccountsInBulk } = useDeleteSavedAccountsInBulk();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [crmFilter, setCrmFilter] = useState<"all" | "synced" | "unsynced">(
     "all"
@@ -131,6 +134,32 @@ const AccountListPage = () => {
     router.push(`/dashboard/account-list/${id}`);
   };
 
+  const isAllSelectedOnPage =
+    paginated.length > 0 &&
+    paginated.every((acc) => selectedIds.includes(acc.id));
+
+  const toggleSelectAllOnPage = () => {
+    const pageIds = paginated.map((acc) => acc.id);
+    if (isAllSelectedOnPage) {
+      setSelectedIds((prev) => prev.filter((id) => !pageIds.includes(id)));
+    } else {
+      setSelectedIds((prev) => Array.from(new Set([...prev, ...pageIds])));
+    }
+  };
+
+  const toggleSelectRow = (id: string, checked: boolean) => {
+    setSelectedIds((prev) =>
+      checked ? [...prev, id] : prev.filter((item) => item !== id)
+    );
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+
+    deleteAccountsInBulk(selectedIds);
+    setSelectedIds([]);
+  };
+
   return (
     <div className="px-6 py-7 space-y-6 w-full">
       <div className="flex justify-between items-center">
@@ -161,13 +190,25 @@ const AccountListPage = () => {
             <SelectItem value="unsynced">Unsynced</SelectItem>
           </SelectContent>
         </Select>
+
+        <Button
+          variant="destructive"
+          disabled={selectedIds.length === 0}
+          onClick={handleDeleteSelected}
+        >
+          <Trash className="mr-2 h-4 w-4" />
+          {t("deleteSelected", { count: selectedIds.length })}
+        </Button>
       </div>
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[40px]">
-              <Checkbox />
+              <Checkbox
+                checked={isAllSelectedOnPage}
+                onCheckedChange={toggleSelectAllOnPage}
+              />
             </TableHead>
             {renderHeader(
               t("table.accountTitle"),
@@ -204,7 +245,12 @@ const AccountListPage = () => {
           {paginated.map((acc) => (
             <TableRow key={acc.id}>
               <TableCell>
-                <Checkbox />
+                <Checkbox
+                  checked={selectedIds.includes(acc.id)}
+                  onCheckedChange={(checked) =>
+                    toggleSelectRow(acc.id, !!checked)
+                  }
+                />
               </TableCell>
               <TableCell>
                 <div className="flex gap-2 items-center">
