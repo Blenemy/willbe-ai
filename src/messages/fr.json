@@ -1585,6 +1585,7 @@
     "actions": "Actions",
     "rowsPerPage": "Lignes par page",
     "deleteSelected": "Supprimer la sélection ({count})",
+    "syncSelected": "Sync ({count})",
     "table": {
       "accountTitle": "Nom du compte",
       "createdBy": "Créé par",

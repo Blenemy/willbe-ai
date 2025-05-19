@@ -46,6 +46,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { renderHeader } from "@/components/ui/renderHeader";
+import { ConfirmationModal } from "../profile/hubspot-settings/components/ConfirmationModal";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type SortKey = "name" | "createdBy" | "createdAt" | "isSyncedWithCrm" | "";
 
@@ -60,6 +62,7 @@ const AccountListPage = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(
     null
   );
+  const [showConfirm, setShowConfirm] = useState(false);
   const { mutate: deleteAccountsInBulk } = useDeleteSavedAccountsInBulk();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -68,6 +71,7 @@ const AccountListPage = () => {
   );
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
+  const { user } = useAuthStore();
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -160,6 +164,10 @@ const AccountListPage = () => {
     setSelectedIds([]);
   };
 
+  const handleEnrichSelected = () => {
+    setShowConfirm(true);
+  };
+
   return (
     <div className="px-6 py-7 space-y-6 w-full">
       <div className="flex justify-between items-center">
@@ -198,6 +206,15 @@ const AccountListPage = () => {
         >
           <Trash className="mr-2 h-4 w-4" />
           {t("deleteSelected", { count: selectedIds.length })}
+        </Button>
+
+        <Button
+          variant="secondary"
+          disabled={selectedIds.length === 0}
+          onClick={handleEnrichSelected}
+        >
+          <Trash className="mr-2 h-4 w-4" />
+          {t("syncSelected", { count: selectedIds.length })}
         </Button>
       </div>
 
@@ -364,6 +381,17 @@ const AccountListPage = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {user && (
+        <ConfirmationModal
+          open={showConfirm}
+          onClose={() => setShowConfirm(false)}
+          companyId={user.companyId}
+          withEnrichOnly
+          selectedIds={selectedIds}
+          setSelectedIds={setSelectedIds}
+        />
+      )}
     </div>
   );
 };

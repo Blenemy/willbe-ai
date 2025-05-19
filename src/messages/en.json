@@ -1579,6 +1579,7 @@
     "actions": "Actions",
     "rowsPerPage": "Rows per page",
     "deleteSelected": "Delete selected ({count})",
+    "syncSelected": "Sync ({count})",
     "table": {
       "accountTitle": "Account title",
       "createdBy": "Created by",

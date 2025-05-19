@@ -8,28 +8,60 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useStartHubspotIntegration } from "@/hooks/useConnectHubspot";
+import {
+  useStartHubspotIntegration,
+  useStartHubspotIntegrationInBulk,
+} from "@/hooks/useConnectHubspot";
 import { Progress } from "@/components/ui/progress";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  companyId: string;
+  companyId: string | undefined;
   onSuccess?: () => void;
+  withEnrichOnly?: boolean;
+  selectedIds?: string[] | [];
+  setSelectedIds?: React.Dispatch<React.SetStateAction<string[]>>;
+  leadPage?: boolean;
 };
 
-export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
+export const ConfirmationModal = ({
+  open,
+  onClose,
+  companyId,
+  withEnrichOnly,
+  selectedIds,
+  setSelectedIds,
+  leadPage,
+}: Props) => {
   const { mutateAsync: startIntegration, isPending } =
     useStartHubspotIntegration();
+  const { mutateAsync: startIntegrationInBulk } =
+    useStartHubspotIntegrationInBulk();
 
   const handleStart = async (enrich: boolean) => {
     if (!companyId) return;
 
-    try {
-      await startIntegration({ companyId, enrich });
+    if (leadPage) {
+      startIntegrationInBulk([companyId]);
+
       onClose();
-    } catch (error) {
-      console.log(error);
+    } else {
+      try {
+        if (selectedIds && selectedIds.length > 0) {
+          startIntegrationInBulk(selectedIds);
+        } else {
+          await startIntegration({ companyId, enrich });
+        }
+
+        if (setSelectedIds) {
+          setSelectedIds([]);
+        }
+
+        onClose();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -74,12 +106,15 @@ export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
               >
                 Continue and Enrich
               </Button>
-              <Button
-                className="w-full bg-[#084960] text-white"
-                onClick={() => handleStart(false)}
-              >
-                Continue Without Enriching
-              </Button>
+              {!withEnrichOnly && (
+                <Button
+                  className="w-full bg-[#084960] text-white"
+                  onClick={() => handleStart(false)}
+                >
+                  Continue Without Enriching
+                </Button>
+              )}
+
               <Button variant="outline" className="w-full" onClick={onClose}>
                 Cancel
               </Button>
