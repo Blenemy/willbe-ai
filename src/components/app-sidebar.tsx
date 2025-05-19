@@ -84,27 +84,7 @@ export function SidebarContentWithLogic({
         icon: IconHome,
         allowedRoles: ALL_ROLES,
       },
-      {
-        title: translations.leadGeneration,
-        url: "#",
-        items: [
-          {
-            title: translations.leadScenarios,
-            url: "/dashboard/lead-generation/lead-scenarios",
-            icon: IconBusiness,
-            allowedRoles: ALL_ROLES,
-          },
-          {
-            title: translations.createLeadScenarios,
-            url: "/dashboard/lead-generation/create-lead-scenarios",
-            icon: IconDomainAdd,
-            allowedRoles: ALL_ROLES,
-            isSubItem: true,
-          },
-        ],
-        icon: FileStack,
-        allowedRoles: ALL_ROLES,
-      },
+
       {
         title: translations.accountGeneration,
         url: "#",
@@ -119,6 +99,27 @@ export function SidebarContentWithLogic({
             title: translations.createAccountScenarios,
             url: "/dashboard/account-generation/create-account-scenarios",
             icon: IconGroupAdd,
+            allowedRoles: ALL_ROLES,
+            isSubItem: true,
+          },
+        ],
+        icon: FileStack,
+        allowedRoles: ALL_ROLES,
+      },
+      {
+        title: translations.leadGeneration,
+        url: "#",
+        items: [
+          {
+            title: translations.leadScenarios,
+            url: "/dashboard/lead-generation/lead-scenarios",
+            icon: IconBusiness,
+            allowedRoles: ALL_ROLES,
+          },
+          {
+            title: translations.createLeadScenarios,
+            url: "/dashboard/lead-generation/create-lead-scenarios",
+            icon: IconDomainAdd,
             allowedRoles: ALL_ROLES,
             isSubItem: true,
           },
