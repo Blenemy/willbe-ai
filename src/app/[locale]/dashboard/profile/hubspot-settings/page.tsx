@@ -24,6 +24,11 @@ import {
 } from "@/hooks/useConnectHubspot";
 import { useEffect, useState } from "react";
 import { ConfirmationModal } from "./components/ConfirmationModal";
+import { toast } from "sonner";
+import Image from "next/image";
+import hubspotImage from "@/assets/hubspot_orange.svg";
+import { AutoEnrichSelect } from "./components/AutoEnrichSelect";
+import { GoBackButton } from "@/components/GoBackButton/GoBackButton";
 
 const leadSyncFields = {
   info: [
@@ -73,7 +78,7 @@ const renderFields = (
   options: Record<string, HubspotField[] | undefined>
 ) => (
   <div className="mb-6">
-    <h3 className="text-sm font-medium text-muted-foreground mb-2">{title}</h3>
+    <h3 className="text-xl font-medium mb-2">{title}</h3>
     <div className="space-y-4">
       {fields.map(({ label, key }) => {
         const fieldOptions = options[key] || [];
@@ -95,7 +100,7 @@ const renderFields = (
                       onValueChange={field.onChange}
                       value={field.value ?? ""}
                     >
-                      <SelectTrigger className="w-64">
+                      <SelectTrigger className="w-full">
                         {field.value
                           ? fieldOptions.find((f) => f.name === field.value)
                               ?.label ?? field.value
@@ -147,9 +152,12 @@ const HubspotSettings = () => {
     try {
       await mutateAsync({ companyId: bindings.companyId, data: filteredData });
       setShowConfirm(true);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_) {
-      setShowConfirm(true);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast(`Failed to update bindings: ${error.message}`);
+      } else {
+        toast("An unknown error occurred.");
+      }
     }
   };
 
@@ -167,19 +175,33 @@ const HubspotSettings = () => {
   }, [bindings, contactsFields, companiesFields, form]);
 
   return (
-    <div className="w-full px-6 py-10">
-      <h2 className="text-2xl font-semibold mb-5">HubSpot Sync Settings</h2>
-      <p className="text-muted-foreground mb-6">
-        Match Willbe fields with your HubSpot properties to ensure accurate data
-        sync.
-      </p>
+    <div className="w-full px-6 py-6">
+      <h2 className="text-2xl font-semibold mb-6">Account Settings</h2>
+
+      <div className="mb-6">
+        <GoBackButton />
+      </div>
+
+      <div className="text-2xl font-semibold mb-5 flex flex-col gap-3">
+        <div className="flex gap-2">
+          <Image alt="hubspot-icon" src={hubspotImage} width={24} height={24} />
+          <h3>HubSpot Sync Settings</h3>
+        </div>
+
+        <p className="text-[#5F5F5F] mb-6 text-sm font-normal">
+          Match Willbe fields with your HubSpot properties to ensure accurate
+          data sync.
+        </p>
+      </div>
+
+      <AutoEnrichSelect />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <Tabs defaultValue="lead" className="w-full">
             <TabsList className="mb-6">
-              <TabsTrigger value="lead ">Lead</TabsTrigger>
-              <TabsTrigger value="account">Account</TabsTrigger>
+              <TabsTrigger value="lead">🙋‍♀️ Lead</TabsTrigger>
+              <TabsTrigger value="account">🏢 Account</TabsTrigger>
             </TabsList>
 
             <TabsContent value="lead">

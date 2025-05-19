@@ -84,7 +84,7 @@ const AccountNameForm = () => {
           )}
         />
 
-        <Button type="submit">
+        <Button type="submit" className="max-w-fit">
           {accountName ? t("form_update_button") : t("form_create_button")}
         </Button>
       </form>

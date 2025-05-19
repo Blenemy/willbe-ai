@@ -20,13 +20,13 @@
   "Authentication": {
     "confirm_password": "Confirmez votre nouveau mot de passe",
     "enter_password": "Entrez votre mot de passe",
-    "forgot_password": "J'ai oublié mon mot de passe",
+    "forgot_password": "Mot de passe oublié ?",
     "login": "Connexion",
     "modify_password": "Modifier le mot de passe",
-    "new_password": "Veuillez créer votre nouveau mot de passe.",
+    "new_password": "Commencez à créer des connexions qui comptent.",
     "new_password_title": "Nouveau mot de passe",
     "password": "Mot de passe",
-    "please_include_login": "Veuillez inclure vos informations de connexion",
+    "please_include_login": "Reprenons là où vous vous étiez arrêté.",
     "reset_password": "Réinitialiser votre mot de passe",
     "NO_PASSWORD": "Veuillez entrer un mot de passe",
     "WRONG_PASSWORD": "Désolé, ce n’est pas le bon mot de passe",
@@ -72,7 +72,14 @@
     "personal_info": "Informations personnelles",
     "validation_required": "Ce champ est requis",
     "validation_max": "50 caractères maximum",
-    "languages": "Langues"
+    "languages": "Langues",
+    "accept_policy_label_start": "J'accepte les",
+    "accept_policy_label_and": "et la",
+    "terms_of_service": "Conditions d'utilisation",
+    "privacy_policy": "Politique de confidentialité",
+    "continue_with_google": "S'inscrire avec Google",
+    "continue_with_microsoft": "S'inscrire avec Microsoft",
+    "continue_with_linkedin": "S'inscrire avec LinkedIn"
   },
   "Profile": {
     "account_settings": "Paramètres du compte",
@@ -1577,6 +1584,7 @@
     "searchPlaceholder": "Rechercher par nom de compte",
     "actions": "Actions",
     "rowsPerPage": "Lignes par page",
+    "deleteSelected": "Supprimer la sélection ({count})",
     "table": {
       "accountTitle": "Nom du compte",
       "createdBy": "Créé par",

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
+import { toast } from "sonner";
 
 export interface User {
   firstName: string;
@@ -154,6 +155,26 @@ export const useLeadsByAccountsAndScenarios = () => {
         payload
       );
       return res.data;
+    },
+  });
+};
+
+export const useDeleteSavedAccountsInBulk = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (accountIds: string[]) => {
+      await protectedAxiosInstance.delete(`/auth/accounts`, {
+        data: { accountIds },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["saved-accounts"] });
+
+      toast("Selected accounts were deleted");
+    },
+    onError: () => {
+      toast("Failed to delete accounts in bulk:");
     },
   });
 };

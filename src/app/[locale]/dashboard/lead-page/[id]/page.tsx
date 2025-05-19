@@ -14,7 +14,7 @@ import {
   FormControl,
 } from "@/components/ui/form";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useLeadsPage } from "@/hooks/useLeadsPage";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
@@ -50,20 +50,22 @@ const fields: { name: LeadFormFields; label: string }[] = [
   { name: "phone", label: "Phone" },
   { name: "company", label: "Company" },
   { name: "industry", label: "Industry" },
-  { name: "language", label: "Language" },
   { name: "locationCountry", label: "Location country" },
   { name: "locationCity", label: "Location city" },
-  { name: "subtitle", label: "Subtitle" },
 ];
 
 export default function LeadDetailsPage() {
   const { id } = useParams();
   const isNew = id === "new-lead";
-  const { data: lead, updateLead } = useLeadsPage(
-    !isNew ? (id as string) : undefined
-  );
+  const {
+    data: lead,
+    updateLead,
+    createLead,
+  } = useLeadsPage(!isNew ? (id as string) : undefined);
   const { user } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
+  const searchParams = useSearchParams();
+  const accountId = searchParams.get("accountId") as string;
 
   const isAccountConnectedToHubspot = lead?.isConnectedToHubspot;
 
@@ -95,8 +97,7 @@ export default function LeadDetailsPage() {
 
   const onSubmit = (values: z.infer<typeof leadSchema>) => {
     if (isNew) {
-      // createLead(values);
-      console.log("create a new lead:", values);
+      createLead({ ...values, accountId });
     } else {
       updateLead(values);
     }
@@ -113,33 +114,34 @@ export default function LeadDetailsPage() {
           {isNew ? "Create New Lead" : "Lead page"}
         </h2>
 
-        <div className="flex gap-2">
-          <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
-            <Image
-              width={20}
-              height={20}
-              alt="hubspot_icon"
-              src={
-                isAccountConnectedToHubspot
-                  ? isConnectedHubspot
-                  : isNotConnectedHubspot
-              }
-            />
+        {!isNew && (
+          <div className="flex gap-2">
+            <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
+              <Image
+                width={20}
+                height={20}
+                alt="hubspot_icon"
+                src={
+                  isAccountConnectedToHubspot
+                    ? isConnectedHubspot
+                    : isNotConnectedHubspot
+                }
+              />
+              <p>
+                This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
+                connected to HubSpot
+              </p>
+            </div>
 
-            <p>
-              This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
-              connected to HubSpot
-            </p>
+            <Button
+              type="button"
+              className="max-w-fit min-w-24 h-8 bg-[#030A27]"
+              onClick={() => setShowConfirm(true)}
+            >
+              Sync
+            </Button>
           </div>
-
-          <Button
-            type="submit"
-            className="max-w-fit min-w-24 h-8 bg-[#030A27]"
-            onClick={() => setShowConfirm(true)}
-          >
-            Sync
-          </Button>
-        </div>
+        )}
       </div>
 
       <Form {...form}>
@@ -147,7 +149,7 @@ export default function LeadDetailsPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {fields.slice(0, 8).map(({ name, label }) => (
+          {fields.map(({ name, label }) => (
             <FormField
               key={name}
               control={form.control}
@@ -175,22 +177,6 @@ export default function LeadDetailsPage() {
               </FormItem>
             )}
           />
-
-          {fields.slice(8).map(({ name, label }) => (
-            <FormField
-              key={name}
-              control={form.control}
-              name={name}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{label}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          ))}
 
           <FormField
             control={form.control}

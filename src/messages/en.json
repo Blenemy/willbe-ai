@@ -18,15 +18,15 @@
     "SERVER_ISSUE": "Sorry, there was an issue connecting with Stripe, please try again later."
   },
   "Authentication": {
-    "confirm_password": "Confirm your new password",
+    "confirm_password": "Confirm password",
     "enter_password": "Enter your password",
-    "forgot_password": "I have forgotten my password",
-    "login": "Login",
+    "forgot_password": "Forgot password?",
+    "login": "Log in",
     "modify_password": "Modify password",
-    "new_password": "Please create your new password.",
+    "new_password": "Start building connections that matter.",
     "new_password_title": "New password",
     "password": "Password",
-    "please_include_login": "Please include your login details",
+    "please_include_login": "Let’s pick up where you left off.",
     "reset_password": "Reset your password",
     "NO_PASSWORD": "Please enter a password",
     "WRONG_PASSWORD": "Sorry, that's not the right password",
@@ -72,7 +72,14 @@
     "personal_info": "Personal Information",
     "validation_required": "This field is required",
     "validation_max": "Maximum 50 characters",
-    "languages": "Languages"
+    "languages": "Languages",
+    "accept_policy_label_start": "I agree to the",
+    "accept_policy_label_and": "and",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "continue_with_google": "Sign up with Google",
+    "continue_with_microsoft": "Sign up with Microsoft",
+    "continue_with_linkedin": "Sign up with LinkedIn"
   },
   "Users": {
     "title": "Users Settings",
@@ -1571,6 +1578,7 @@
     "searchPlaceholder": "Search by account title",
     "actions": "Actions",
     "rowsPerPage": "Rows per page",
+    "deleteSelected": "Delete selected ({count})",
     "table": {
       "accountTitle": "Account title",
       "createdBy": "Created by",

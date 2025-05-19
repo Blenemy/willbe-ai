@@ -1,6 +1,6 @@
 import Image from "next/image";
-import logo from "@/assets/logo.png";
-import circleLogo from "@/assets/circle_logo.png";
+import logo from "@/assets/new_logo.svg";
+import circleLogo from "@/assets/new_logo_circle.svg";
 
 interface LogoProps {
   width?: number;

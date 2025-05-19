@@ -39,11 +39,15 @@ const ProfilePage = async () => {
       </h2>
       <Tabs
         defaultValue="profile"
-        className="flex gap-2 bg-white p-4 rounded-xl h-full w-full"
+        className="flex gap-2 bg-white rounded-xl h-full w-full"
       >
         <TabsList className="flex flex-col items-start justify-start bg-white gap-1">
           {tabsConfig.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value}>
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              className="p-0 pr-12 mb-4 text-[#5F5F5F] text-sm font-medium"
+            >
               {tab.label}
             </TabsTrigger>
           ))}

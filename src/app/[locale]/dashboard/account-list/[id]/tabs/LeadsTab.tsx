@@ -22,6 +22,7 @@ import {
 } from "@/hooks/useAccountLeads";
 import { useParams, useRouter } from "next/navigation";
 import { renderHeader } from "@/components/ui/renderHeader";
+import { useLocale } from "next-intl";
 
 type SortKey = "firstName" | "lastName" | "email" | "phone" | "role" | "";
 
@@ -32,6 +33,7 @@ export const LeadsTab = () => {
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
   const router = useRouter();
+  const locale = useLocale();
 
   const { data: leads = [] } = useAccountLeads({
     accountId: id as string,
@@ -48,6 +50,8 @@ export const LeadsTab = () => {
       sortKey,
       sortAsc,
     });
+
+  console.log(id);
 
   const isAllSelected =
     paginated.length > 0 && selectedIds.length === paginated.length;
@@ -92,7 +96,13 @@ export const LeadsTab = () => {
           >
             Delete selected
           </Button>
-          <Button onClick={() => router.push(`/dashboard/lead-page/new-lead`)}>
+          <Button
+            onClick={() =>
+              router.push(
+                `/${locale}/dashboard/lead-page/new-lead?accountId=${id}`
+              )
+            }
+          >
             <Plus className="w-4 h-4 mr-2" />
             Add lead
           </Button>

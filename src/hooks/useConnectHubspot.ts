@@ -209,9 +209,7 @@ export const useUpdateHubspotBindings = () => {
 
       toast("Successfully updated bindings");
     },
-    onError: () => {
-      toast("Failed to update bindings");
-    },
+    onError: () => {},
   });
 };
 

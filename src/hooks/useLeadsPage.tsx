@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 export interface LeadDetails {
   id: string;
@@ -21,8 +23,14 @@ export interface LeadDetails {
   isConnectedToHubspot: boolean;
 }
 
+export interface CreateLead extends LeadDetails {
+  accountId: string;
+}
+
 export const useLeadsPage = (id?: string) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const locale = useLocale();
 
   const { data, isLoading } = useQuery<LeadDetails>({
     queryKey: ["lead", id],
@@ -50,10 +58,26 @@ export const useLeadsPage = (id?: string) => {
     },
   });
 
+  const createLead = useMutation({
+    mutationFn: async (payload: Partial<CreateLead>) => {
+      const res = await protectedAxiosInstance.post(`/auth/leads/`, payload);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      toast.success("Lead updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["lead", id] });
+      router.replace(`/${locale}/dashboard/lead-page/${data.id}`);
+    },
+    onError: (err) => {
+      toast.error("Failed to update lead: " + err.message);
+    },
+  });
+
   return {
     data,
     isLoading,
     updateLead: updateLead.mutate,
+    createLead: createLead.mutate,
     isUpdating: updateLead.isPending,
   };
 };
