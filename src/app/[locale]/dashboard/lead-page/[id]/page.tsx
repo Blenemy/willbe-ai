@@ -227,6 +227,7 @@ export default function LeadDetailsPage() {
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
         companyId={user.companyId}
+        withEnrichOnly
       />
     </div>
   );

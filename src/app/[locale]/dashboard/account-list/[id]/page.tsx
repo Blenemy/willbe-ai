@@ -140,6 +140,7 @@ export default function AccountPage() {
         open={showConfirm}
         onClose={() => setShowConfirm(false)}
         companyId={user.companyId}
+        withEnrichOnly
       />
     </div>
   );

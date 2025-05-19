@@ -16,9 +16,15 @@ type Props = {
   onClose: () => void;
   companyId: string;
   onSuccess?: () => void;
+  withEnrichOnly?: boolean;
 };
 
-export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
+export const ConfirmationModal = ({
+  open,
+  onClose,
+  companyId,
+  withEnrichOnly,
+}: Props) => {
   const { mutateAsync: startIntegration, isPending } =
     useStartHubspotIntegration();
 
@@ -74,12 +80,15 @@ export const ConfirmationModal = ({ open, onClose, companyId }: Props) => {
               >
                 Continue and Enrich
               </Button>
-              <Button
-                className="w-full bg-[#084960] text-white"
-                onClick={() => handleStart(false)}
-              >
-                Continue Without Enriching
-              </Button>
+              {!withEnrichOnly && (
+                <Button
+                  className="w-full bg-[#084960] text-white"
+                  onClick={() => handleStart(false)}
+                >
+                  Continue Without Enriching
+                </Button>
+              )}
+
               <Button variant="outline" className="w-full" onClick={onClose}>
                 Cancel
               </Button>
