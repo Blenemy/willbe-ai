@@ -58,7 +58,10 @@ const fields: { name: LeadFormFields; label: string }[] = [
 
 export default function LeadDetailsPage() {
   const { id } = useParams();
-  const { data: lead, updateLead } = useLeadsPage(id as string);
+  const isNew = id === "new-lead";
+  const { data: lead, updateLead } = useLeadsPage(
+    !isNew ? (id as string) : undefined
+  );
   const { user } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -85,23 +88,30 @@ export default function LeadDetailsPage() {
   });
 
   useEffect(() => {
-    if (lead) {
+    if (!isNew && lead) {
       form.reset(lead);
     }
-  }, [lead, form]);
+  }, [lead, form, isNew]);
 
   const onSubmit = (values: z.infer<typeof leadSchema>) => {
-    updateLead(values);
+    if (isNew) {
+      // createLead(values);
+      console.log("create a new lead:", values);
+    } else {
+      updateLead(values);
+    }
   };
 
-  if (!lead || !user) {
-    return <div>No lead was found</div>;
+  if (!user) {
+    return <div>No user was found</div>;
   }
 
   return (
     <div className="p-6 space-y-4 bg-white rounded-md">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Lead page</h2>
+        <h2 className="text-2xl font-semibold">
+          {isNew ? "Create New Lead" : "Lead page"}
+        </h2>
 
         <div className="flex gap-2">
           <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
@@ -137,7 +147,7 @@ export default function LeadDetailsPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          {fields.map(({ name, label }) => (
+          {fields.slice(0, 8).map(({ name, label }) => (
             <FormField
               key={name}
               control={form.control}
@@ -152,6 +162,48 @@ export default function LeadDetailsPage() {
               )}
             />
           ))}
+
+          <FormField
+            control={form.control}
+            name="language"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Language</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {fields.slice(8).map(({ name, label }) => (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{label}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          ))}
+
+          <FormField
+            control={form.control}
+            name="subtitle"
+            render={({ field }) => (
+              <FormItem className="col-span-2">
+                <FormLabel>Subtitle</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}

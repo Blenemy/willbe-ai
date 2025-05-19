@@ -92,7 +92,7 @@ export const LeadsTab = () => {
           >
             Delete selected
           </Button>
-          <Button onClick={() => alert("Redirect to Add Lead page")}>
+          <Button onClick={() => router.push(`/dashboard/lead-page/new-lead`)}>
             <Plus className="w-4 h-4 mr-2" />
             Add lead
           </Button>

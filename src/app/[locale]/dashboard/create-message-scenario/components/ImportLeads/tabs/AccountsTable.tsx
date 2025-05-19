@@ -149,7 +149,6 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
               sortAsc,
               handleSort
             )}
-            ``
             {renderHeader(
               t("table.description"),
               "summary",
@@ -157,7 +156,6 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
               sortAsc,
               handleSort
             )}
-            <TableHead className="w-[40px]" />
           </TableRow>
         </TableHeader>
         <TableBody>

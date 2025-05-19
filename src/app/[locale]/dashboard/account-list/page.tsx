@@ -137,7 +137,7 @@ const AccountListPage = () => {
         <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <Button
           className="bg-[#084960]"
-          onClick={() => router.push("/dashboard/create-account")}
+          onClick={() => router.push("/dashboard/account-list/new-account")}
         >
           <Plus className="mr-2 h-4 w-4" />
           {t("create")}
