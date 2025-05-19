@@ -32,7 +32,9 @@ export default function AccountPage() {
   const params = useParams();
   const id = params?.id as string | undefined;
   const isNew = id === "new-account";
-  const { account, updateAccount } = useAccount(!isNew ? id! : undefined);
+  const { account, updateAccount, createAccount } = useAccount(
+    !isNew ? id! : undefined
+  );
   const { user } = useAuthStore();
   const [showConfirm, setShowConfirm] = useState(false);
 
@@ -51,7 +53,11 @@ export default function AccountPage() {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    updateAccount(data);
+    if (isNew) {
+      createAccount(data);
+    } else {
+      updateAccount(data);
+    }
   };
 
   useEffect(() => {
@@ -78,35 +84,37 @@ export default function AccountPage() {
   return (
     <div className="p-6">
       <div className="mb-6 flex justify-between">
-        <h3>Account page</h3>
+        <h3 className="text-2xl font-semibold">Account page</h3>
 
-        <div className="flex gap-2">
-          <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
-            <Image
-              width={20}
-              height={20}
-              alt="hubspot_icon"
-              src={
-                isAccountConnectedToHubspot
-                  ? isConnectedHubspot
-                  : isNotConnectedHubspot
-              }
-            />
+        {!isNew && (
+          <div className="flex gap-2">
+            <div className="flex gap-3 items-center bg-[#F8F9FB] px-2 rounded-md">
+              <Image
+                width={20}
+                height={20}
+                alt="hubspot_icon"
+                src={
+                  isAccountConnectedToHubspot
+                    ? isConnectedHubspot
+                    : isNotConnectedHubspot
+                }
+              />
 
-            <p>
-              This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
-              connected to HubSpot
-            </p>
+              <p>
+                This account is {isAccountConnectedToHubspot ? "" : "not"}{" "}
+                connected to HubSpot
+              </p>
+            </div>
+
+            <Button
+              type="submit"
+              className="max-w-fit min-w-24 h-8 bg-[#030A27]"
+              onClick={() => setShowConfirm(true)}
+            >
+              Sync
+            </Button>
           </div>
-
-          <Button
-            type="submit"
-            className="max-w-fit min-w-24 h-8 bg-[#030A27]"
-            onClick={() => setShowConfirm(true)}
-          >
-            Sync
-          </Button>
-        </div>
+        )}
       </div>
 
       <Tabs defaultValue="information">
