@@ -41,14 +41,7 @@ const EditPersonalInfoDialog = ({
       .string()
       .min(1, t("validation_required"))
       .max(50, t("validation_max")),
-    lastName: z
-      .string()
-      .min(1, t("validation_required"))
-      .max(50, t("validation_max")),
-    email: z
-      .string()
-      .min(1, t("validation_required"))
-      .max(50, t("validation_max")),
+    lastName: z.string().min(1, t("validation_required")),
   });
 
   const form = useForm({
@@ -56,7 +49,6 @@ const EditPersonalInfoDialog = ({
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
     },
   });
 
@@ -100,20 +92,6 @@ const EditPersonalInfoDialog = ({
                   </FormLabel>
                   <FormControl>
                     <Input placeholder={t("lastname")} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">{t("Email")}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t("enter_email")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
