@@ -26,7 +26,6 @@ interface ResetPasswordPayload {
 }
 
 interface UpdateUserPayload {
-  email: string;
   firstName: string;
   lastName: string;
   language: string;

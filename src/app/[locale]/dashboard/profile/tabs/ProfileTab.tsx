@@ -58,12 +58,6 @@ const ProfileTab = () => {
             </p>
             <p className="font-semibold">{user.lastName}</p>
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-gray-400 font-semibold">
-              {t("profile_label_email")}
-            </p>
-            <p className="font-semibold">{user.email}</p>
-          </div>
         </div>
       </ProfileCard>
 
