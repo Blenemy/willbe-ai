@@ -3,6 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import YourCompanyTab from "./tabs/YourCompanyTab";
 import ProductsAndServicesTab from "./tabs/ProductsAndServicesTab";
 import { getTranslations } from "next-intl/server";
+import ConnectionsTab from "./tabs/ConnectionsTab";
 
 const CompanyPage = async () => {
   const t = await getTranslations("Company");
@@ -17,6 +18,11 @@ const CompanyPage = async () => {
       value: "products-and-services",
       label: t("products_and_services"),
       component: <ProductsAndServicesTab />,
+    },
+    {
+      value: "connections",
+      label: t("connections"),
+      component: <ConnectionsTab />,
     },
   ];
 

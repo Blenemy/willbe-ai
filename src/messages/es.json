@@ -116,7 +116,7 @@
     "company_name": "Nombre de la empresa",
     "company_description": "Descripción de la empresa",
     "company_sector": "Sector de la empresa",
-
+    "connections": "Conexiones",
     "products_and_services": "Productos y servicios",
     "add_product": "Agregar",
     "edit_product": "Editar producto",
