@@ -116,7 +116,6 @@
     "company_name": "Company Name",
     "company_description": "Company Description",
     "company_sector": "Company Sector",
-
     "products_and_services": "Products & Services",
     "add_product": "Add",
     "edit_product": "Edit Product",
@@ -128,7 +127,7 @@
     "cancel": "Cancel",
     "save": "Save",
     "go_back": "Go back",
-
+    "connections": "Connections",
     "validation_name_required": "Name is required",
     "validation_name_max": "Maximum 15 characters",
     "validation_description_required": "Description is required",

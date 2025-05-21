@@ -150,7 +150,7 @@
     "company_name": "Nom de l'entreprise",
     "company_description": "Description de l'entreprise",
     "company_sector": "Secteur de l'entreprise",
-
+    "connections": "Connexions",
     "products_and_services": "Produits et services",
     "add_product": "Ajouter",
     "edit_product": "Modifier le produit",
