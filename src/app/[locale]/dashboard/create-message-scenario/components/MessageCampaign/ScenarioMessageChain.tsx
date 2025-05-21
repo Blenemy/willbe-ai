@@ -51,7 +51,7 @@ export const ScenarioMessageChain = ({
   );
   const { mutate: createEntry } = useCreateMessageEntry();
   const { mutate: updateEntry } = useUpdateMessageEntry();
-  const { mutate: deleteEntry } = useDeleteMessageEntry();
+  const { mutateAsync: deleteEntry } = useDeleteMessageEntry();
 
   useEffect(() => {
     if (messageEntries?.length && !selectedEntryId) {
@@ -117,15 +117,24 @@ export const ScenarioMessageChain = ({
     setCreateModalOpen(false);
   };
 
-  const isFormData = isStructureFormResponse(selectedEntry);
-
-  console.log(selectedEntry);
-
-  const handleDeleteEntry = (entry: MessageEntry) => {
-    deleteEntry({ id: entry.id, messageScenarioId: scenarioId });
-    if (selectedEntryId === entry.id) {
+  useEffect(() => {
+    if (
+      selectedEntryId &&
+      messageEntries &&
+      !messageEntries.some((e) => e.id === selectedEntryId)
+    ) {
       setSelectedEntryId(null);
     }
+  }, [messageEntries, selectedEntryId]);
+
+  const isFormData = isStructureFormResponse(selectedEntry);
+
+  const handleDeleteEntry = async (entry: MessageEntry) => {
+    await deleteEntry({
+      id: entry.id,
+      messageScenarioId: scenarioId,
+    });
+    setSelectedEntryId(null);
   };
 
   return (
