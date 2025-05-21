@@ -19,6 +19,12 @@ import { CreateCompanyUsers } from "./components/CreateCompanyUsers";
 import TableSkeleton from "./skeletons/TableSkeleton";
 import { User } from "@/types/User";
 
+const userRoleMap = {
+  super_admin: "Super admin",
+  member: "Member",
+  admin: "Admin",
+} as const;
+
 const UsersPage = () => {
   const t = useTranslations("Users");
 
@@ -58,7 +64,9 @@ const UsersPage = () => {
                 <TableCell>
                   {user.firstName} {user.lastName}
                 </TableCell>
-                <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  {userRoleMap[user.role as keyof typeof userRoleMap]}
+                </TableCell>
                 <TableCell>{user.position || "N/A"}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className="flex justify-end gap-3">
