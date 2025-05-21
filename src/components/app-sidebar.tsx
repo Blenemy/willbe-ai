@@ -92,13 +92,13 @@ export function SidebarContentWithLogic({
           {
             title: translations.accountScenarios,
             url: "/dashboard/account-generation/account-scenarios",
-            icon: IconPeople,
+            icon: IconBusiness,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createAccountScenarios,
             url: "/dashboard/account-generation/create-account-scenarios",
-            icon: IconGroupAdd,
+            icon: IconDomainAdd,
             allowedRoles: ALL_ROLES,
             isSubItem: true,
           },
@@ -113,13 +113,13 @@ export function SidebarContentWithLogic({
           {
             title: translations.leadScenarios,
             url: "/dashboard/lead-generation/lead-scenarios",
-            icon: IconBusiness,
+            icon: IconPeople,
             allowedRoles: ALL_ROLES,
           },
           {
             title: translations.createLeadScenarios,
             url: "/dashboard/lead-generation/create-lead-scenarios",
-            icon: IconDomainAdd,
+            icon: IconGroupAdd,
             allowedRoles: ALL_ROLES,
             isSubItem: true,
           },
@@ -221,7 +221,7 @@ export function SidebarContentWithLogic({
   return (
     <SidebarContent
       className={cn(
-        "flex flex-col h-full gap-0 py-5 overflow-y-auto hide-scrollbar bg-slate-100",
+        "flex flex-col h-full gap-0 py-5 !overflow-y-auto hide-scrollbar bg-slate-100",
         {
           "items-center": !open,
         }
