@@ -8,13 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -27,7 +20,7 @@ import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
 
-const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
+// const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
 const LeadTable = ({
   setCurrentStep,
@@ -43,9 +36,9 @@ const LeadTable = ({
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(
-    INITIAL_NUMBER_ITEMS_PER_PAGE
-  );
+  // const [itemsPerPage, setItemsPerPage] = useState(
+  //   INITIAL_NUMBER_ITEMS_PER_PAGE
+  // );
 
   const { saveSelectedLeads } = useSavedLeads({
     enableFetch: true,
@@ -57,7 +50,7 @@ const LeadTable = ({
   const { searchLeads, paging, cursor, isFetching } = useSearchLeads({
     enableFetch: true,
     scenarioId,
-    limit: itemsPerPage,
+    limit: 30,
     cursor: currentCursor,
   });
 
@@ -75,12 +68,12 @@ const LeadTable = ({
     );
   };
 
-  const handleLimitChange = (value: string) => {
-    const newLimit = parseInt(value);
-    setItemsPerPage(newLimit);
-    setCursorStack([null]);
-    setCurrentCursorIndex(0);
-  };
+  // const handleLimitChange = (value: string) => {
+  //   const newLimit = parseInt(value);
+  //   setItemsPerPage(newLimit);
+  //   setCursorStack([null]);
+  //   setCurrentCursorIndex(0);
+  // };
 
   const handleNext = () => {
     if (cursor) {
@@ -138,7 +131,7 @@ const LeadTable = ({
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            <Select
+            {/* <Select
               value={itemsPerPage.toString()}
               onValueChange={(value) => handleLimitChange(value)}
             >
@@ -150,7 +143,7 @@ const LeadTable = ({
                 <SelectItem value="25">25</SelectItem>
                 <SelectItem value="50">50</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
 
             <Input
               placeholder={t("searchPlaceholder")}

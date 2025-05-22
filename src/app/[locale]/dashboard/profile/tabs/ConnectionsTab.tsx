@@ -2,21 +2,13 @@
 
 import ProfileCard from "./components/ProfileCard";
 import { Button } from "@/components/ui/button";
-import {
-  useConnectHubspot,
-  useDisconnectHubspot,
-} from "@/hooks/useConnectHubspot";
 import { useConnections } from "@/hooks/useConnections";
-import { Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 
 import IconLinkedIn from "@/assets/LinkedinLogo.svg";
 import IconGmail from "@/assets/gmail_logo.svg";
-import IconHubspot from "@/assets/hubspot_orange.svg";
 
 const ConnectionsTab = () => {
-  const router = useRouter();
   const t = useTranslations("Profile");
 
   const {
@@ -30,10 +22,6 @@ const ConnectionsTab = () => {
     enableFetch: true,
   });
 
-  const { mutate: connectHubspot } = useConnectHubspot();
-  const { mutate: disconnectHubspot } = useDisconnectHubspot();
-
-  const hubspotConnected = userStatus?.hubspot;
   const linkedInConnected = userStatus?.linkedin ?? false;
   const emailConnected = (userStatus?.email ?? "none") as
     | "none"
@@ -102,46 +90,6 @@ const ConnectionsTab = () => {
                 className="bg-[#EF476F]"
               >
                 {t("connections_remove")}
-              </Button>
-            )}
-          </div>
-        </div>
-      </ProfileCard>
-
-      <ProfileCard title={t("connections_hubspot")} icon={IconHubspot}>
-        <div className="flex justify-between items-center">
-          <p className="text-gray-500">
-            {t("connections_status")}:{" "}
-            {hubspotConnected
-              ? t("connections_connected")
-              : t("connections_not_connected")}
-          </p>
-          <div className="flex gap-2">
-            {hubspotConnected ? (
-              <>
-                <Button
-                  size="icon"
-                  className="bg-[#084960]"
-                  onClick={() =>
-                    router.push("/en/dashboard/profile/hubspot-settings")
-                  }
-                >
-                  <Settings className="w-4 h-4 text-white" />
-                </Button>
-                <Button
-                  variant="destructive"
-                  className="bg-[#EF476F]"
-                  onClick={() => disconnectHubspot()}
-                >
-                  {t("connections_remove")}
-                </Button>
-              </>
-            ) : (
-              <Button
-                onClick={() => connectHubspot()}
-                className="bg-[#084960] rounded-md"
-              >
-                {t("connections_connect_hubspot")}
               </Button>
             )}
           </div>
