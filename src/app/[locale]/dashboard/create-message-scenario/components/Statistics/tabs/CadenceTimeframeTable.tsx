@@ -23,6 +23,14 @@ import { useParams } from "next/navigation";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
+const cadenceMap = {
+  first_email: "First email",
+  linkedin_connection: "Linkedin connection",
+  linkedin_message: "Linkedin message",
+  follow_up_email: "Follow up email",
+  linkedin_follow_up: "Linkedin follow up",
+} as const;
+
 export const CadenceTimeframeTable = () => {
   const t = useTranslations("statisticsPage.cadenceTable");
   const { id: scenarioId } = useParams();
@@ -54,7 +62,9 @@ export const CadenceTimeframeTable = () => {
         <TableBody>
           {paginated.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>{item.cadenceType}</TableCell>
+              <TableCell>
+                {cadenceMap[item.cadenceType as keyof typeof cadenceMap]}
+              </TableCell>
               <TableCell>{item.structure || t("na")}</TableCell>
               <TableCell>{item.mailsSent}</TableCell>
               <TableCell>{item.meetingRate}%</TableCell>
