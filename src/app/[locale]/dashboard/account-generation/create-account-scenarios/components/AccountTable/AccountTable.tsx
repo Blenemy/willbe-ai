@@ -8,13 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
@@ -26,7 +20,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
 
-const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
+// const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
 
 const AccountTable = ({
   setCurrentStep,
@@ -42,9 +36,9 @@ const AccountTable = ({
   const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(
-    INITIAL_NUMBER_ITEMS_PER_PAGE
-  );
+  // const [itemsPerPage, setItemsPerPage] = useState(
+  //   INITIAL_NUMBER_ITEMS_PER_PAGE
+  // );
 
   useEffect(() => {
     setCursor(cursorStack.at(currentCursorIndex) ?? null);
@@ -53,7 +47,7 @@ const AccountTable = ({
   const { data, saveSelectedAccounts, isFetching } = usePaginatedAccountsSearch(
     {
       accountId,
-      limit: itemsPerPage,
+      limit: 30,
       cursor,
     }
   );
@@ -91,12 +85,12 @@ const AccountTable = ({
     }
   };
 
-  const handleLimitChange = (value: string) => {
-    const newLimit = parseInt(value);
-    setItemsPerPage(newLimit);
-    setCursorStack([null]);
-    setCurrentCursorIndex(0);
-  };
+  // const handleLimitChange = (value: string) => {
+  //   const newLimit = parseInt(value);
+  //   setItemsPerPage(newLimit);
+  //   setCursorStack([null]);
+  //   setCurrentCursorIndex(0);
+  // };
 
   const filteredCompanies = companies.filter((company) =>
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -133,7 +127,7 @@ const AccountTable = ({
         <Spinner className="mr-2" />
       ) : (
         <div className="flex flex-col gap-4">
-          <Select
+          {/* <Select
             value={itemsPerPage.toString()}
             onValueChange={(value) => handleLimitChange(value)}
           >
@@ -145,7 +139,7 @@ const AccountTable = ({
               <SelectItem value="25">25</SelectItem>
               <SelectItem value="50">50</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
 
           <Input
             placeholder={t("searchPlaceholder")}
