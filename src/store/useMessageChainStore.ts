@@ -55,13 +55,6 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
       };
     }
 
-    if (type === "linkedin_message" && !hasLinkedinConnection) {
-      return {
-        valid: false,
-        reason: "LinkedIn Message requires a LinkedIn Connection first.",
-      };
-    }
-
     if (type === "linkedin_follow_up" && !hasLinkedinMessage) {
       return {
         valid: false,
@@ -77,6 +70,13 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
       return {
         valid: false,
         reason: "Only one LinkedIn Connection is allowed.",
+      };
+    }
+
+    if (type === "linkedin_message" && hasLinkedinMessage) {
+      return {
+        valid: false,
+        reason: "Only one LinkedIn Message is allowed.",
       };
     }
 
@@ -96,6 +96,10 @@ export const useMessageChainStore = create<MessageChainStore>((set, get) => ({
   },
 
   shouldAllowSendNowCheckbox: (type: MessageType): boolean => {
-    return type === "first_email" || type === "linkedin_connection";
+    return (
+      type === "first_email" ||
+      type === "linkedin_connection" ||
+      type === "linkedin_message"
+    );
   },
 }));
