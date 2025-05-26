@@ -36,7 +36,7 @@ const leadSchema = z.object({
   locationCity: z.string(),
   subtitle: z.string(),
   summary: z.string(),
-  linkedin: z.string().url(),
+  linkedin: z.string(),
 });
 
 type LeadFormFields = keyof z.infer<typeof leadSchema>;
