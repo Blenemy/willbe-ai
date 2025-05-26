@@ -24,8 +24,8 @@ const formSchema = z.object({
   headquarters: z.string(),
   employees: z.string(),
   industry: z.string(),
-  website: z.string().url(),
-  linkedin: z.string().url(),
+  website: z.string(),
+  linkedin: z.string(),
 });
 
 export default function AccountPage() {
