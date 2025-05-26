@@ -91,7 +91,7 @@ const EditProductDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="min-w-[800px]">
         <DialogHeader>
           <DialogTitle>
             {product ? t("product_edit_title") : t("product_add_title")}
@@ -125,7 +125,7 @@ const EditProductDialog = ({
                     {t("product_field_description")}
                   </FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={4} />
+                    <Textarea {...field} className="min-h-[320px]" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
