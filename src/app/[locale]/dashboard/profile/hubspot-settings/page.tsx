@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { ArrowRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -23,7 +23,7 @@ import {
   useHubspotSettingsData,
   useUpdateHubspotBindings,
 } from "@/hooks/useConnectHubspot";
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ConfirmationModal } from "./components/ConfirmationModal";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -82,80 +82,109 @@ const leadSyncFields = {
   accountStatus: { label: string; key: string }[];
 };
 
-const renderFields = (
-  form: ReturnType<typeof useForm<Record<string, string | null>>>,
-  fields: { label: string; key: string }[],
-  title: string,
-  options: Record<string, HubspotField[] | undefined>,
-  isStatusField = false
-) => (
-  <div className="mb-6">
-    <h3 className="text-xl font-medium mb-2">{title}</h3>
-    <div className="space-y-4">
-      {fields.map(({ label, key }) => {
-        const fieldOptions = options[key] || [];
+const FieldsGroup = React.memo(function FieldsGroup({
+  form,
+  fields,
+  title,
+  options,
+  isStatusField,
+}: {
+  form: UseFormReturn<Record<string, string | null>>;
+  fields: { label: string; key: string }[];
+  title: string;
+  options: Record<string, HubspotField[] | undefined>;
+  isStatusField?: boolean;
+}) {
+  return (
+    <div className="mb-6">
+      <h3 className="text-xl font-medium mb-2">{title}</h3>
+      <div className="space-y-4">
+        {fields.map(({ label, key }) => {
+          const fieldOptions = options[key] || [];
 
-        return (
-          <FormField
-            key={key}
-            control={form.control}
-            name={key}
-            render={({ field }) => {
-              const selectedOption = isStatusField
-                ? fieldOptions.find((f: any) => f.value === field.value)
-                : fieldOptions.find((f: any) => f.name === field.value);
+          return (
+            <FormField
+              key={key}
+              control={form.control}
+              name={key}
+              render={({ field }) => {
+                const selectedOption = isStatusField
+                  ? fieldOptions.find((f: any) => f.value === field.value)
+                  : fieldOptions.find((f: any) => f.name === field.value);
 
-              return (
-                <FormItem className="flex items-center gap-4">
-                  <FormLabel className="w-56 text-sm text-foreground">
-                    {label}
-                  </FormLabel>
-                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value ?? ""}
-                    >
-                      <SelectTrigger className="w-full">
-                        {selectedOption?.label ||
-                          field.value ||
-                          "Choose an option"}
-                      </SelectTrigger>
-                      <SelectContent>
-                        {fieldOptions.length > 0 ? (
-                          fieldOptions.map((opt: any) => (
-                            <SelectItem
-                              key={isStatusField ? opt.value : opt.name}
-                              value={isStatusField ? opt.value : opt.name}
-                            >
-                              {opt.label}
+                return (
+                  <FormItem className="flex items-center gap-4">
+                    <FormLabel className="w-56 text-sm text-foreground">
+                      {label}
+                    </FormLabel>
+                    <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ?? ""}
+                      >
+                        <SelectTrigger className="w-full">
+                          {selectedOption?.label ||
+                            field.value ||
+                            "Choose an option"}
+                        </SelectTrigger>
+                        <SelectContent>
+                          {fieldOptions.length > 0 ? (
+                            fieldOptions.map((opt: any) => (
+                              <SelectItem
+                                key={isStatusField ? opt.value : opt.name}
+                                value={isStatusField ? opt.value : opt.name}
+                              >
+                                {opt.label}
+                              </SelectItem>
+                            ))
+                          ) : (
+                            <SelectItem value="placeholder" disabled>
+                              No options available
                             </SelectItem>
-                          ))
-                        ) : (
-                          <SelectItem value="placeholder" disabled>
-                            No options available
-                          </SelectItem>
-                        )}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </FormItem>
-              );
-            }}
-          />
-        );
-      })}
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                );
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+});
+
 const HubspotSettings = () => {
   const { contactsFields, bindings, companiesFields } =
     useHubspotSettingsData();
   const [showConfirm, setShowConfirm] = useState(false);
   const { mutateAsync } = useUpdateHubspotBindings();
+
+  const defaultValues = useMemo(() => {
+    if (!bindings) return {};
+    const result: Record<string, string | null> = {};
+    Object.entries(bindings).forEach(([key, val]) => {
+      if (typeof val === "string" || val === null) {
+        result[key] = val;
+      }
+    });
+    return result;
+  }, [bindings]);
+
+  const leadInfoFields = useMemo(() => leadSyncFields.info, []);
+  const leadStatusFields = useMemo(() => leadSyncFields.status, []);
+  const accountInfoFields = useMemo(() => leadSyncFields.account, []);
+  const accountStatusFields = useMemo(() => leadSyncFields.accountStatus, []);
+
   const form = useForm<Record<string, string | null>>({
-    defaultValues: {},
+    defaultValues,
   });
+
+  console.count("FieldsGroup rendered");
+  console.count("HubspotSettings rendered");
 
   const onSubmit = async (data: Record<string, string | null>) => {
     if (!bindings?.companyId) return;
@@ -222,35 +251,35 @@ const HubspotSettings = () => {
             </TabsList>
 
             <TabsContent value="lead">
-              {renderFields(
-                form,
-                leadSyncFields.info,
-                "Info",
-                contactsFields || {}
-              )}
-              {renderFields(
-                form,
-                leadSyncFields.status,
-                "Status",
-                contactsFields || {},
-                true
-              )}
+              <FieldsGroup
+                form={form}
+                fields={leadInfoFields}
+                title="Info"
+                options={contactsFields || {}}
+              />
+              <FieldsGroup
+                form={form}
+                fields={leadStatusFields}
+                title="Status"
+                options={contactsFields || {}}
+                isStatusField
+              />
             </TabsContent>
 
             <TabsContent value="account">
-              {renderFields(
-                form,
-                leadSyncFields.account,
-                "Info",
-                companiesFields || {}
-              )}
-              {renderFields(
-                form,
-                leadSyncFields.accountStatus,
-                "Status",
-                companiesFields || {},
-                true
-              )}
+              <FieldsGroup
+                form={form}
+                fields={accountInfoFields}
+                title="Info"
+                options={companiesFields || {}}
+              />
+              <FieldsGroup
+                form={form}
+                fields={accountStatusFields}
+                title="Status"
+                options={companiesFields || {}}
+                isStatusField
+              />
             </TabsContent>
           </Tabs>
 
