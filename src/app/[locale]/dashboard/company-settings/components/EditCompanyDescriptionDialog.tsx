@@ -19,10 +19,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useCompany } from "@/hooks/useCompany";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { Textarea } from "@/components/ui/textarea";
 
 const EditCompanyDescriptionDialog = ({
   open,
@@ -71,7 +71,7 @@ const EditCompanyDescriptionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="min-w-[800px]">
         <DialogHeader>
           <DialogTitle>{t("company_description")}</DialogTitle>
         </DialogHeader>
@@ -87,10 +87,10 @@ const EditCompanyDescriptionDialog = ({
                     {t("company_description")}
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <Textarea
                       placeholder={t("company_description_placeholder")}
                       {...field}
-                      type="text"
+                      className="min-h-[320px]"
                     />
                   </FormControl>
 
