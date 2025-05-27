@@ -26,7 +26,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useCompanyUsers } from "@/hooks/useCompanyUsers";
 import { User } from "@/types/User";
 import { useTranslations } from "next-intl";
@@ -60,6 +60,15 @@ export const EditCompanyUser = ({ open, setOpen, user }: EditUserProps) => {
     updateCompanyUsers({ userId: user.id, ...values });
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        role: user.role as Role,
+        position: user.position || "",
+      });
+    }
+  }, [open, user, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
