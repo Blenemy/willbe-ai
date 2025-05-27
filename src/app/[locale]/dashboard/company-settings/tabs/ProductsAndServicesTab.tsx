@@ -43,10 +43,12 @@ const ProductsAndServicesTab = () => {
 
   return (
     <div className="px-6 flex flex-col gap-5">
-      <h2 className="font-bold text-xl">{t("products_and_services")}</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="font-bold text-xl">{t("products_and_services")}</h2>
 
-      <div className="flex justify-end">
-        <Button onClick={handleAddProduct}>{t("add_product")}</Button>
+        <div className="flex justify-end">
+          <Button onClick={handleAddProduct}>{t("add_product")}</Button>
+        </div>
       </div>
 
       <ProductsList
