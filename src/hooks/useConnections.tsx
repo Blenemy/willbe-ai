@@ -37,8 +37,6 @@ export const useConnections = ({ enableFetch }: UseAuthProps) => {
       );
       return response.data;
     },
-    retry: false,
-    staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
   });
 

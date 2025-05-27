@@ -40,7 +40,6 @@ import IconList from "../assets/sidebar-icons/list_16dp_E3E3E3 1.svg";
 import IconLogout from "../assets/sidebar-icons/logout_16dp_E3E3E3 1.svg";
 import IconPeople from "../assets/sidebar-icons/people_16dp_E3E3E3 2.svg";
 import IconPerson from "../assets/sidebar-icons/person_16dp_E3E3E3 1.svg";
-import { useConnections } from "@/hooks/useConnections";
 import { toast } from "sonner";
 
 const getIcon = (src?: string, size: number = 24) => {
@@ -77,7 +76,6 @@ export function SidebarContentWithLogic({
   const { logout, user, isLoading } = useAuth({ enableFetch: true });
   const { open } = useSidebar();
   const pathname = usePathname();
-  const { userStatus } = useConnections({ enableFetch: true });
 
   const data = {
     navMain: [
@@ -227,9 +225,17 @@ export function SidebarContentWithLogic({
     url: string;
     requiresSalesNavigator?: boolean;
   }): boolean => {
-    if (subItem.requiresSalesNavigator && !userStatus?.salesNavigator) {
-      toast.warning("This feature requires a Sales Navigator subscription.");
-      return false;
+    if (subItem.requiresSalesNavigator) {
+      const cookies = document.cookie;
+      const cookieMatch = cookies.match(
+        /(?:^|;\s*)salesNavigator=(true|false)/
+      );
+      const isAllowed = cookieMatch?.[1] === "true";
+
+      if (!isAllowed) {
+        toast("This feature requires a Sales Navigator subscription.");
+        return false;
+      }
     }
 
     return true;
@@ -314,7 +320,7 @@ export function SidebarContentWithLogic({
                                 href={subItem.url}
                                 onClick={(e) => {
                                   const allow = handleSidebarNavClick(subItem);
-                                  console.log(allow);
+                                  // console.log(allow);
 
                                   if (!allow) e.preventDefault();
                                 }}
