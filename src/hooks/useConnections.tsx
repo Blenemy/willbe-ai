@@ -8,6 +8,7 @@ export interface StatusResponse {
   linkedin: boolean;
   email: string;
   hubspot: boolean;
+  salesNavigator: boolean;
 }
 
 interface APIRequestErrorPayload {

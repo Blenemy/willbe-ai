@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { checkUserAccess } from "./authMiddleware";
+import { checkSalesNavigatorAccess } from "./checkSalesNavigatorAccess";
 
 const locales = ["en", "es", "fr"];
 
@@ -17,6 +18,9 @@ export function middleware(req: NextRequest) {
 
   const accessCheck = checkUserAccess(req);
   if (accessCheck) return accessCheck;
+
+  const salesCheck = checkSalesNavigatorAccess(req);
+  if (salesCheck) return salesCheck;
 
   if (pathname === "/") {
     return NextResponse.redirect(new URL(`/${locale}`, req.url));

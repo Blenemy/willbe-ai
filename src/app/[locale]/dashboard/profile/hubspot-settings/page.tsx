@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -47,13 +48,22 @@ const leadSyncFields = {
     { label: "LinkedIn", key: "crmLeadLinkedInField" },
   ],
   status: [
-    { label: "Not contacted", key: "crmLeadNotContactedField" },
-    { label: "In cadence", key: "crmLeadInCadenceField" },
-    { label: "Response", key: "crmLeadResponseField" },
-    { label: "Meeting", key: "crmLeadMeetingField" },
-    { label: "Bounced", key: "crmLeadBouncedField" },
-    { label: "Out of office", key: "crmLeadOutOfOfficeField" },
-    { label: "Unresponsive", key: "crmLeadUnresponsiveField" },
+    { label: "Not contacted", key: "crmLeadNotContactedStatus" },
+    { label: "In cadence", key: "crmLeadInCadenceStatus" },
+    { label: "Response", key: "crmLeadResponseStatus" },
+    { label: "Meeting", key: "crmLeadMeetingStatus" },
+    { label: "Bounced", key: "crmLeadBouncedStatus" },
+    { label: "Out of office", key: "crmLeadOutOfOfficeStatus" },
+    { label: "Unresponsive", key: "crmLeadUnresponsiveStatus" },
+  ],
+  accountStatus: [
+    { label: "Not contacted", key: "crmAccountNotContactedStatus" },
+    { label: "In cadence", key: "crmAccountInCadenceStatus" },
+    { label: "Response", key: "crmAccountResponseStatus" },
+    { label: "Meeting", key: "crmAccountMeetingStatus" },
+    { label: "Bounced", key: "crmAccountBouncedStatus" },
+    { label: "Out of office", key: "crmAccountOutOfOfficeStatus" },
+    { label: "Unresponsive", key: "crmAccountUnresponsiveStatus" },
   ],
   account: [
     { label: "Company title", key: "crmAccountNameField" },
@@ -69,13 +79,15 @@ const leadSyncFields = {
   info: { label: string; key: string }[];
   status: { label: string; key: string }[];
   account: { label: string; key: string }[];
+  accountStatus: { label: string; key: string }[];
 };
 
 const renderFields = (
   form: ReturnType<typeof useForm<Record<string, string | null>>>,
   fields: { label: string; key: string }[],
   title: string,
-  options: Record<string, HubspotField[] | undefined>
+  options: Record<string, HubspotField[] | undefined>,
+  isStatusField = false
 ) => (
   <div className="mb-6">
     <h3 className="text-xl font-medium mb-2">{title}</h3>
@@ -89,6 +101,10 @@ const renderFields = (
             control={form.control}
             name={key}
             render={({ field }) => {
+              const selectedOption = isStatusField
+                ? fieldOptions.find((f: any) => f.value === field.value)
+                : fieldOptions.find((f: any) => f.name === field.value);
+
               return (
                 <FormItem className="flex items-center gap-4">
                   <FormLabel className="w-56 text-sm text-foreground">
@@ -101,15 +117,17 @@ const renderFields = (
                       value={field.value ?? ""}
                     >
                       <SelectTrigger className="w-full">
-                        {field.value
-                          ? fieldOptions.find((f) => f.name === field.value)
-                              ?.label ?? field.value
-                          : "Choose an option"}
+                        {selectedOption?.label ||
+                          field.value ||
+                          "Choose an option"}
                       </SelectTrigger>
                       <SelectContent>
                         {fieldOptions.length > 0 ? (
-                          fieldOptions.map((opt) => (
-                            <SelectItem key={opt.name} value={opt.name}>
+                          fieldOptions.map((opt: any) => (
+                            <SelectItem
+                              key={isStatusField ? opt.value : opt.name}
+                              value={isStatusField ? opt.value : opt.name}
+                            >
                               {opt.label}
                             </SelectItem>
                           ))
@@ -130,7 +148,6 @@ const renderFields = (
     </div>
   </div>
 );
-
 const HubspotSettings = () => {
   const { contactsFields, bindings, companiesFields } =
     useHubspotSettingsData();
@@ -215,7 +232,8 @@ const HubspotSettings = () => {
                 form,
                 leadSyncFields.status,
                 "Status",
-                contactsFields || {}
+                contactsFields || {},
+                true
               )}
             </TabsContent>
 
@@ -228,9 +246,10 @@ const HubspotSettings = () => {
               )}
               {renderFields(
                 form,
-                leadSyncFields.status,
+                leadSyncFields.accountStatus,
                 "Status",
-                contactsFields || {}
+                companiesFields || {},
+                true
               )}
             </TabsContent>
           </Tabs>

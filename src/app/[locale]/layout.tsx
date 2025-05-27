@@ -7,6 +7,7 @@ import { Locale, routing } from "@/i18n/routing";
 import "../globals.css";
 import QueryProvider from "@/providers/providers";
 import { Toaster } from "sonner";
+import { SalesNavigatorGuard } from "@/components/SalesNavigatorGuard/SalesNavigatorGuard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>{children}</QueryProvider>
+          <SalesNavigatorGuard />
           <Toaster position="top-right" />
         </NextIntlClientProvider>
       </body>

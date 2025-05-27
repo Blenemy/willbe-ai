@@ -75,6 +75,9 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
 
       await queryClient.setQueryData(["authUser"], user);
       Cookies.set("userRole", user.role, { sameSite: "Strict" });
+      Cookies.set("salesNavigator", user.accounts.salesNavigator, {
+        sameSite: "Strict",
+      });
 
       const lang = user.language || "en";
       router.push(`/${lang}/dashboard/home`);

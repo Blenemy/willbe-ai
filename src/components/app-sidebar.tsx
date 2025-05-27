@@ -40,6 +40,8 @@ import IconList from "../assets/sidebar-icons/list_16dp_E3E3E3 1.svg";
 import IconLogout from "../assets/sidebar-icons/logout_16dp_E3E3E3 1.svg";
 import IconPeople from "../assets/sidebar-icons/people_16dp_E3E3E3 2.svg";
 import IconPerson from "../assets/sidebar-icons/person_16dp_E3E3E3 1.svg";
+import { useConnections } from "@/hooks/useConnections";
+import { toast } from "sonner";
 
 const getIcon = (src?: string, size: number = 24) => {
   if (!src) return null;
@@ -75,6 +77,7 @@ export function SidebarContentWithLogic({
   const { logout, user, isLoading } = useAuth({ enableFetch: true });
   const { open } = useSidebar();
   const pathname = usePathname();
+  const { userStatus } = useConnections({ enableFetch: true });
 
   const data = {
     navMain: [
@@ -101,6 +104,7 @@ export function SidebarContentWithLogic({
             icon: IconDomainAdd,
             allowedRoles: ALL_ROLES,
             isSubItem: true,
+            requiresSalesNavigator: true,
           },
         ],
         icon: FileStack,
@@ -122,6 +126,7 @@ export function SidebarContentWithLogic({
             icon: IconGroupAdd,
             allowedRoles: ALL_ROLES,
             isSubItem: true,
+            requiresSalesNavigator: true,
           },
         ],
         icon: FileStack,
@@ -218,6 +223,18 @@ export function SidebarContentWithLogic({
     ],
   };
 
+  const handleSidebarNavClick = (subItem: {
+    url: string;
+    requiresSalesNavigator?: boolean;
+  }): boolean => {
+    if (subItem.requiresSalesNavigator && !userStatus?.salesNavigator) {
+      toast.warning("This feature requires a Sales Navigator subscription.");
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <SidebarContent
       className={cn(
@@ -295,6 +312,12 @@ export function SidebarContentWithLogic({
                             >
                               <Link
                                 href={subItem.url}
+                                onClick={(e) => {
+                                  const allow = handleSidebarNavClick(subItem);
+                                  console.log(allow);
+
+                                  if (!allow) e.preventDefault();
+                                }}
                                 className={cn(
                                   "p-0 justify-center flex items-center gap-2 w-full rounded-md transition-colors",
                                   open && "p-0 justify-start",
