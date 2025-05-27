@@ -105,7 +105,7 @@ const EditProductDialog = ({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {t("product_field_name")}
                   </FormLabel>
                   <FormControl>
@@ -121,7 +121,7 @@ const EditProductDialog = ({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">
+                  <FormLabel className="font-semibold text-foreground">
                     {t("product_field_description")}
                   </FormLabel>
                   <FormControl>
