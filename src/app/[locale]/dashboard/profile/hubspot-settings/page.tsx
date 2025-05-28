@@ -183,9 +183,6 @@ const HubspotSettings = () => {
     defaultValues,
   });
 
-  console.count("FieldsGroup rendered");
-  console.count("HubspotSettings rendered");
-
   const onSubmit = async (data: Record<string, string | null>) => {
     if (!bindings?.companyId) return;
 
