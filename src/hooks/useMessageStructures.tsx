@@ -73,18 +73,8 @@ export const useMessageStructures = ({
   });
 
   const copyStructure = useMutation({
-    mutationFn: async (structure: MessageStructure) => {
-      const payload: CreateMessageStructurePayload = {
-        name: `Copy of ${structure.name}`,
-        messageType: structure.messageType,
-        subjectType: structure.subjectType,
-        wordsLimit: structure.wordsLimit,
-      };
-      const response = await protectedAxiosInstance.post(
-        "/auth/message-structures",
-        payload
-      );
-      return response.data;
+    mutationFn: async (id: string) => {
+      await protectedAxiosInstance.post(`/auth/message-structures/${id}/clone`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["message-structures"] });
