@@ -13,6 +13,12 @@ import { ScenarioMessageChain } from "../components/MessageCampaign/ScenarioMess
 import { useTranslations } from "next-intl";
 import { StatisticPage } from "../components/Statistics/StatisticPage";
 
+const PROGRESS_STATUS = {
+  not_started: 0,
+  in_progress: 1,
+  done: 2,
+} as const;
+
 const EditMessageScenarioPage = () => {
   const t = useTranslations("messageScenario");
   const [activeStep, setActiveStep] = useState(0);
@@ -34,6 +40,14 @@ const EditMessageScenarioPage = () => {
     await mutate({ id, leadsIds: selectedIds });
     setActiveStep(1);
   };
+
+  useEffect(() => {
+    if (scenario) {
+      setActiveStep(
+        PROGRESS_STATUS[scenario.status as keyof typeof PROGRESS_STATUS]
+      );
+    }
+  }, [scenario]);
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
