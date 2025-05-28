@@ -30,7 +30,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useMessageStructures } from "@/hooks/useMessageStructures";
-import { MessageStructure } from "@/types/MessageStructure";
 import { useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 5;
@@ -72,8 +71,8 @@ const MessageStructures = () => {
     }
   };
 
-  const handleCopy = (structure: MessageStructure) => {
-    copyStructure(structure);
+  const handleCopy = (messageStructureId: string) => {
+    copyStructure(messageStructureId);
   };
 
   const handleOpen = (structureId: string) => {
@@ -140,7 +139,7 @@ const MessageStructures = () => {
                 <Button
                   size="icon"
                   variant="ghost"
-                  onClick={() => handleCopy(structure)}
+                  onClick={() => handleCopy(structure.id)}
                 >
                   <Copy className="w-4 h-4" />
                 </Button>
