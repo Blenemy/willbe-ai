@@ -561,15 +561,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t(
-                                                  "experience.from"
-                                                )}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "experience.from"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "experience_years_from",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -599,13 +617,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t("experience.to")}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "experience.to"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "experience_years_to",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -686,15 +724,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t(
-                                                  "companyHeadcount.from"
-                                                )}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "companyHeadcount.from"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "company_headcount_from",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -724,15 +780,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t(
-                                                  "companyHeadcount.to"
-                                                )}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "companyHeadcount.to"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "company_headcount_to",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -777,15 +851,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t(
-                                                  "companyTenure.from"
-                                                )}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "companyTenure.from"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "company_tenure_from",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
@@ -815,15 +907,33 @@ const CreateLeadScenarios = () => {
                                       <FormItem className="flex-1">
                                         <FormControl>
                                           <Select
+                                            key={field.value}
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                           >
-                                            <SelectTrigger>
-                                              <SelectValue
-                                                placeholder={t(
-                                                  "companyTenure.to"
-                                                )}
-                                              />
+                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                              <div className="flex items-center flex-1 overflow-hidden">
+                                                <SelectValue
+                                                  placeholder={t(
+                                                    "companyTenure.to"
+                                                  )}
+                                                  className="truncate"
+                                                />
+                                              </div>
+
+                                              {field.value && (
+                                                <XIcon
+                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                                  onPointerDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    form.setValue(
+                                                      "company_tenure_to",
+                                                      ""
+                                                    );
+                                                  }}
+                                                />
+                                              )}
                                             </SelectTrigger>
                                             <SelectContent>
                                               <SelectGroup>
