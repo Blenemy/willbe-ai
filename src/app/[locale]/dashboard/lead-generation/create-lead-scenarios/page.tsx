@@ -48,6 +48,7 @@ import LeadTable from "./components/LeadTable/LeadTable";
 import { leadScenariosFiltersSchema } from "@/schemas/leadScenariosFiltersSchema";
 import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
 import { useTranslations } from "next-intl";
+import { XIcon } from "lucide-react";
 
 export type LeadScenariosFormType = z.infer<typeof leadScenariosFiltersSchema>;
 
@@ -353,9 +354,7 @@ const CreateLeadScenarios = () => {
 
                         <FormAccordion label={t("jobTenure.label")}>
                           <div className="flex gap-2 flex-col">
-                            <h4>
-                              <h4>{t("jobTenure.description")}</h4>
-                            </h4>
+                            <h4>{t("jobTenure.description")}</h4>
                             <div className="flex flex-col gap-3">
                               <FormField
                                 control={form.control}
@@ -364,13 +363,31 @@ const CreateLeadScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue
-                                            placeholder={t("jobTenure.from")}
-                                          />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder={t("jobTenure.from")}
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "job_tenure_from",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
@@ -400,13 +417,31 @@ const CreateLeadScenarios = () => {
                                   <FormItem className="flex-1">
                                     <FormControl>
                                       <Select
+                                        key={field.value}
                                         onValueChange={field.onChange}
                                         defaultValue={field.value}
                                       >
-                                        <SelectTrigger>
-                                          <SelectValue
-                                            placeholder={t("jobTenure.to")}
-                                          />
+                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                          <div className="flex items-center flex-1 overflow-hidden">
+                                            <SelectValue
+                                              placeholder={t("jobTenure.to")}
+                                              className="truncate"
+                                            />
+                                          </div>
+
+                                          {field.value && (
+                                            <XIcon
+                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                              onPointerDown={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                form.setValue(
+                                                  "job_tenure_to",
+                                                  ""
+                                                );
+                                              }}
+                                            />
+                                          )}
                                         </SelectTrigger>
                                         <SelectContent>
                                           <SelectGroup>
