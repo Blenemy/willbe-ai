@@ -113,6 +113,7 @@ const CreateAccountScenarios = () => {
 
         annual_revenue_currency: "",
       },
+      mode: "onChange",
     });
 
   async function onSubmit(values: z.infer<typeof accountScenarioFormSchema>) {
@@ -192,10 +193,12 @@ const CreateAccountScenarios = () => {
     form.trigger();
   }, [accountScenarioById, form]);
 
+  const watchRevenueFrom = form.watch("annual_revenue_from");
+  const watchRevenueTo = form.watch("annual_revenue_to");
+  const watchCurrency = form.watch("annual_revenue_currency");
+
   const hasAnnualRevenueError =
-    !!form.formState.errors.annual_revenue_from ||
-    !!form.formState.errors.annual_revenue_to ||
-    !!form.formState.errors.annual_revenue_currency;
+    !watchRevenueFrom || !watchRevenueTo || !watchCurrency;
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
@@ -1223,6 +1226,7 @@ const CreateAccountScenarios = () => {
 
                     <FormAccordion
                       label={t("annual_revenue.label")}
+                      defaultOpen
                       className={
                         hasAnnualRevenueError
                           ? "border border-red-500"
