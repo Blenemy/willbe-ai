@@ -48,7 +48,7 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
             name="companyTitle"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Company title</FormLabel>
+                <FormLabel className="text-foreground">Company title</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -117,7 +117,7 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
           name="website"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Website</FormLabel>
+              <FormLabel className="text-foreground">Website</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
