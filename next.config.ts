@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["d1muf25xaso8hp.cloudfront.net"],
+    domains: ["d1muf25xaso8hp.cloudfront.net", "media.licdn.com"],
     remotePatterns: [
       {
         protocol: "https",

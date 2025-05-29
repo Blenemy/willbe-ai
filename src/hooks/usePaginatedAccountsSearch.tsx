@@ -56,7 +56,6 @@ export const usePaginatedAccountsSearch = ({
       return res.data;
     },
     enabled: !!accountId && enabled,
-    staleTime: 1000 * 60 * 5,
   });
 
   const saveSelectedAccounts = useMutation({
