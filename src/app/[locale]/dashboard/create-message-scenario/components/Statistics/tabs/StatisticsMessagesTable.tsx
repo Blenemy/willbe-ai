@@ -26,6 +26,13 @@ import { useParams } from "next/navigation";
 import { renderHeader } from "@/components/ui/renderHeader";
 import { useTranslations } from "next-intl";
 
+const MESSAGE_STATUS = {
+  responded: "Responded",
+  not_answered: " Not answered",
+} as const;
+
+type MessageStatusKey = keyof typeof MESSAGE_STATUS;
+
 function formatMessageType(status: string): string {
   switch (status.toLowerCase()) {
     case "follow_up":
@@ -58,7 +65,7 @@ export const StatisticsMessagesTable = () => {
   const [search, setSearch] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  const [statusFilter, setStatusFilter] = useState("in_cadence");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
@@ -102,9 +109,12 @@ export const StatisticsMessagesTable = () => {
     return sorted.filter((item) => {
       const fullName =
         `${item.leadData.first_name} ${item.leadData.last_name}`.toLowerCase();
-      return fullName.includes(search.trim().toLowerCase());
+      const matchesSearch = fullName.includes(search.trim().toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || item.status === statusFilter;
+      return matchesSearch && matchesStatus;
     });
-  }, [sorted, search]);
+  }, [sorted, search, statusFilter]);
 
   const paginated = useMemo(() => {
     return filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -127,10 +137,9 @@ export const StatisticsMessagesTable = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
-            <SelectItem value="response">{t("status.response")}</SelectItem>
-            <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
-            <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="responded">Responded</SelectItem>
+            <SelectItem value="not_answered">Not answered</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -185,7 +194,9 @@ export const StatisticsMessagesTable = () => {
                     />
                     {`${leadData.first_name} ${leadData.last_name}`}
                   </TableCell>
-                  <TableCell>{item?.status || "-"}</TableCell>
+                  <TableCell>
+                    {MESSAGE_STATUS[item.status as MessageStatusKey]}
+                  </TableCell>
                   <TableCell className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
                       <AvatarImage src={leadData.profile_picture_url} />
