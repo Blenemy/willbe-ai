@@ -58,7 +58,7 @@ const fields: { name: LeadFormFields; label: string }[] = [
 
 export type LeadFormData = z.infer<typeof leadSchema>;
 
-export const normalizeLeadData = (lead: LeadDetails): LeadFormData => {
+const normalizeLeadData = (lead: LeadDetails): LeadFormData => {
   return {
     email: lead.email ?? "",
     firstName: lead.firstName ?? "",
