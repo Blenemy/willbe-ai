@@ -41,12 +41,9 @@ const LeadScenariosPage = () => {
   const [selectedScenario, setSelectedScenario] =
     useState<LeadScenarios | null>(null);
 
-  const totalPages = Math.ceil(leadScenariousTableData.length / ITEMS_PER_PAGE);
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = leadScenariousTableData.slice(
-    indexOfFirstItem,
-    indexOfLastItem
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   const handleDeleteClick = (scenario: LeadScenarios) => {
@@ -130,9 +127,9 @@ const LeadScenariosPage = () => {
       </Table>
       <CustomPagination
         page={currentPage - 1}
-        setPage={setCurrentPage}
-        totalCount={totalPages}
-        rowsPerPage={5}
+        setPage={(pageZeroBased) => setCurrentPage(pageZeroBased + 1)}
+        totalCount={leadScenariousTableData.length}
+        rowsPerPage={ITEMS_PER_PAGE}
       />
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
