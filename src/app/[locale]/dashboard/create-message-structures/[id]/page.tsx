@@ -123,11 +123,7 @@ export default function MessageStructureEditor() {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder={t("max_words_placeholder")}
-                    {...field}
-                  />
+                  <Input placeholder={t("max_words_placeholder")} {...field} />
                 </FormControl>
               </FormItem>
             )}
