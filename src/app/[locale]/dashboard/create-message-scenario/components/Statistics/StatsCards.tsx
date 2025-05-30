@@ -1,4 +1,4 @@
-import { Mail, TrendingUp, Reply, Calendar, Info } from "lucide-react";
+import { Mail, Reply, Calendar, Info } from "lucide-react";
 import { useScenarioStatistics } from "@/hooks/useScenarioStatistics";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -21,12 +21,12 @@ export const StatsCards = () => {
       icon: <Mail size={COMMON_SIZE} className="text-blue-600" />,
       valueClass: "text-blue-600",
     },
-    {
-      label: t("cards.meetingRate"),
-      value: `${data.meetingRate}%`,
-      icon: <TrendingUp size={COMMON_SIZE} className="text-green-600" />,
-      valueClass: "text-green-600",
-    },
+    // {
+    //   label: t("cards.meetingRate"),
+    //   value: `${data.meetingRate}%`,
+    //   icon: <TrendingUp size={COMMON_SIZE} className="text-green-600" />,
+    //   valueClass: "text-green-600",
+    // },
     {
       label: t("cards.responseRate"),
       value: `${data.responseRate}%`,
@@ -48,7 +48,7 @@ export const StatsCards = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
       {stats.map((stat) => (
         <div key={stat.label} className="border rounded-xl p-6 shadow-sm">
           <div className="text-sm text-muted-foreground flex justify-between items-center gap-2">
