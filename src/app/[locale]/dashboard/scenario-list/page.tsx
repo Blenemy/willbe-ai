@@ -48,14 +48,18 @@ const ScenarioList = () => {
   const t = useTranslations("scenarioList");
 
   const columns = [
-    { key: "title", label: t("table.title") },
-    { key: "leads", label: t("table.leads") },
-    { key: "sent", label: t("table.sent") },
-    { key: "responseRate", label: t("table.responseRate") },
-    { key: "meetingRate", label: t("table.meetingRate") },
-    { key: "status", label: t("table.status") },
-    { key: "createdBy", label: t("table.createdBy") },
-    { key: "createdAt", label: t("table.createdAt") },
+    { key: "title", label: t("table.title"), defaultVisible: true },
+    { key: "leads", label: t("table.leads"), defaultVisible: true },
+    { key: "sent", label: t("table.sent"), defaultVisible: false },
+    {
+      key: "responseRate",
+      label: t("table.responseRate"),
+      defaultVisible: true,
+    },
+    { key: "meetingRate", label: t("table.meetingRate"), defaultVisible: true },
+    { key: "status", label: t("table.status"), defaultVisible: true },
+    { key: "createdBy", label: t("table.createdBy"), defaultVisible: true },
+    { key: "createdAt", label: t("table.createdAt"), defaultVisible: true },
   ] as const;
 
   const STATUS_OPTIONS = [
@@ -79,7 +83,7 @@ const ScenarioList = () => {
   const [scenarioToDelete, setScenarioToDelete] = useState<string | null>(null);
   const [ownerFilter, setOwnerFilter] = useState<string>("all");
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
-    columns.map((col) => [col.key, true])
+    columns.map((col) => [col.key, col.defaultVisible !== false])
   );
 
   const { data = [] } = useMessageScenarios({ name: search });

@@ -31,7 +31,7 @@ import {
   useGenerateMessages,
   useSendMessages,
 } from "@/hooks/useGenerateMessages";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { ExportCsvButtons } from "./ExportCsvButtons";
 import { EditMessageModal } from "./EditMessageModal";
@@ -57,6 +57,7 @@ export const CreateScenarioTable = ({
   const [leadToDelete, setLeadToDelete] = useState<MessageEntryData | null>(
     null
   );
+  const router = useRouter();
   const t = useTranslations("messageScenarioData");
   const [selected, setSelected] = useState<string[]>([]);
   const [editedLeads, setEditedLeads] = useState<
@@ -133,6 +134,10 @@ export const CreateScenarioTable = ({
     });
   };
 
+  const handleLeadClick = (leadId: string) => {
+    router.replace(`/dashboard/lead-page/${leadId}`);
+  };
+
   const filteredLeads = useMemo(() => {
     return leads?.filter(
       (lead) =>
@@ -185,6 +190,8 @@ export const CreateScenarioTable = ({
         </TableHeader>
         <TableBody>
           {paginatedLeads.map((lead) => {
+            console.log(lead);
+
             const changes = editedLeads[lead.id] || {};
             return (
               <TableRow key={lead.id}>
@@ -372,7 +379,11 @@ export const CreateScenarioTable = ({
                   )}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="icon">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleLeadClick(lead.leadId)}
+                  >
                     <ExternalLink className="w-4 h-4" />
                   </Button>
                 </TableCell>

@@ -12,10 +12,11 @@ import {
   FormItem,
   FormLabel,
   FormControl,
+  FormMessage,
 } from "@/components/ui/form";
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import { useLeadsPage } from "@/hooks/useLeadsPage";
+import { LeadDetails, useLeadsPage } from "@/hooks/useLeadsPage";
 import { useAuthStore } from "@/store/useAuthStore";
 import Image from "next/image";
 import isConnectedHubspot from "@/assets/hubspot_orange.svg";
@@ -23,20 +24,21 @@ import isNotConnectedHubspot from "@/assets/hubspot_grey.svg";
 import { ConfirmationModal } from "../../profile/hubspot-settings/components/ConfirmationModal";
 
 const leadSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  position: z.string(),
-  positionDescription: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  company: z.string(),
-  industry: z.string(),
-  language: z.string(),
-  locationCountry: z.string(),
-  locationCity: z.string(),
-  subtitle: z.string(),
-  summary: z.string(),
-  linkedin: z.string(),
+  email: z.string().email("Invalid email address"),
+
+  firstName: z.string().optional().or(z.literal("")),
+  lastName: z.string().optional().or(z.literal("")),
+  position: z.string().optional().or(z.literal("")),
+  positionDescription: z.string().optional().or(z.literal("")),
+  phone: z.string().optional().or(z.literal("")),
+  company: z.string().optional().or(z.literal("")),
+  industry: z.string().optional().or(z.literal("")),
+  language: z.string().optional().or(z.literal("")),
+  locationCountry: z.string().optional().or(z.literal("")),
+  locationCity: z.string().optional().or(z.literal("")),
+  subtitle: z.string().optional().or(z.literal("")),
+  summary: z.string().optional().or(z.literal("")),
+  linkedin: z.string().optional().or(z.literal("")),
 });
 
 type LeadFormFields = keyof z.infer<typeof leadSchema>;
@@ -53,6 +55,27 @@ const fields: { name: LeadFormFields; label: string }[] = [
   { name: "locationCountry", label: "Location country" },
   { name: "locationCity", label: "Location city" },
 ];
+
+export type LeadFormData = z.infer<typeof leadSchema>;
+
+export const normalizeLeadData = (lead: LeadDetails): LeadFormData => {
+  return {
+    email: lead.email ?? "",
+    firstName: lead.firstName ?? "",
+    lastName: lead.lastName ?? "",
+    position: lead.position ?? "",
+    positionDescription: lead.positionDescription ?? "",
+    phone: lead.phone ?? "",
+    company: lead.company ?? "",
+    industry: lead.industry ?? "",
+    language: lead.language ?? "",
+    locationCountry: lead.locationCountry ?? "",
+    locationCity: lead.locationCity ?? "",
+    subtitle: lead.subtitle ?? "",
+    summary: lead.summary ?? "",
+    linkedin: lead.linkedin ?? "",
+  };
+};
 
 export default function LeadDetailsPage() {
   const params = useParams();
@@ -92,7 +115,7 @@ export default function LeadDetailsPage() {
 
   useEffect(() => {
     if (!isNew && lead) {
-      form.reset(lead);
+      form.reset(normalizeLeadData(lead));
     }
   }, [lead, form, isNew]);
 
@@ -157,10 +180,11 @@ export default function LeadDetailsPage() {
               name={name}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{label}</FormLabel>
+                  <FormLabel className="text-foreground">{label}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -172,7 +196,7 @@ export default function LeadDetailsPage() {
             render={({ field }) => (
               <FormItem className="col-span-2">
                 <FormLabel>Language</FormLabel>
-                <FormControl>
+                <FormControl className="text-foreground">
                   <Input {...field} />
                 </FormControl>
               </FormItem>
@@ -184,7 +208,7 @@ export default function LeadDetailsPage() {
             name="subtitle"
             render={({ field }) => (
               <FormItem className="col-span-2">
-                <FormLabel>Subtitle</FormLabel>
+                <FormLabel className="text-foreground">Subtitle</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -197,7 +221,7 @@ export default function LeadDetailsPage() {
             name="summary"
             render={({ field }) => (
               <FormItem className="col-span-2">
-                <FormLabel>Summary</FormLabel>
+                <FormLabel className="text-foreground">Summary</FormLabel>
                 <FormControl>
                   <Textarea {...field} rows={5} />
                 </FormControl>
@@ -219,7 +243,9 @@ export default function LeadDetailsPage() {
           />
 
           <div className="col-span-2 flex justify-start">
-            <Button className="max-w-fit min-w-24">Save</Button>
+            <Button type="submit" className="max-w-fit min-w-24">
+              Save
+            </Button>
           </div>
         </form>
       </Form>

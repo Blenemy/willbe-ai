@@ -12,13 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSavedAccounts } from "@/hooks/useSavedAccounts";
 import { useGenerateLeadScenario } from "@/hooks/useGenerateLeadScenario";
 import { useTranslations } from "next-intl";
 
 const AccountSave = () => {
   const t = useTranslations("accountSave");
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
@@ -40,8 +41,8 @@ const AccountSave = () => {
     deleteSavedAccounts(id);
   };
 
-  const handleOpenProfile = (url: string) => {
-    window.open(url, "_blank");
+  const handleOpenProfile = (id: string) => {
+    router.replace(`/dashboard/account-list/${id}`);
   };
 
   const handleGenerateScenario = () => {
@@ -125,7 +126,7 @@ const AccountSave = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleOpenProfile(data.profile_url)}
+                      onClick={() => handleOpenProfile(item.id)}
                     >
                       {t("table.open")}
                     </Button>

@@ -30,7 +30,6 @@ export const useSearchLeads = ({
       return response.data;
     },
     enabled: enableFetch && !!scenarioId,
-    staleTime: 1000 * 60 * 5,
   });
 
   return {

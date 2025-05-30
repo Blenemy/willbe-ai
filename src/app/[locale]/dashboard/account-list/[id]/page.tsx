@@ -18,14 +18,14 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { ConfirmationModal } from "../../profile/hubspot-settings/components/ConfirmationModal";
 
 const formSchema = z.object({
-  companyTitle: z.string(),
-  description: z.string(),
-  foundedIn: z.string(),
-  headquarters: z.string(),
-  employees: z.string(),
-  industry: z.string(),
-  website: z.string(),
-  linkedin: z.string(),
+  companyTitle: z.string().min(1, "Company title is required"),
+  website: z.string().min(1, "Website is required"),
+  description: z.string().optional(),
+  foundedIn: z.string().optional(),
+  headquarters: z.string().optional(),
+  employees: z.string().optional(),
+  industry: z.string().optional(),
+  linkedin: z.string().optional(),
 });
 
 export default function AccountPage() {

@@ -109,6 +109,7 @@ export const useMessageStructureForm = (editingId?: string) => {
       queryClient.invalidateQueries({
         queryKey: ["message-structure", id],
       });
+      queryClient.invalidateQueries({ queryKey: ["message-structures"] });
     },
     onError: () => {
       toast.error("Failed to update structure");
