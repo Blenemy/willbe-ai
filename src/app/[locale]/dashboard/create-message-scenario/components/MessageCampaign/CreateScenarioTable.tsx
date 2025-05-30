@@ -69,7 +69,7 @@ export const CreateScenarioTable = ({
   const { mutate: updateLead } = useUpdateMessageEntryLead();
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
   const { mutate: generateMessages } = useGenerateMessages();
-  const { mutate: sendMessages } = useSendMessages();
+  const { mutateAsync: sendMessages } = useSendMessages();
   const { mutate: searchField, isPending } = useSearchLeadField();
   const [loadingField, setLoadingField] = useState<{
     leadId: string;
@@ -86,7 +86,7 @@ export const CreateScenarioTable = ({
 
   const handleSendMessages = async () => {
     try {
-      sendMessages({ messageEntryDataIds: selected });
+      await sendMessages({ messageEntryDataIds: selected });
       setSelected([]);
       setActiveStep((prev) => prev + 1);
     } catch (error) {

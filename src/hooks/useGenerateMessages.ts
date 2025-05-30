@@ -53,7 +53,7 @@ export const useSendMessages = () => {
       });
     },
     onError: () => {
-      toast.error("Failed to generate messages.");
+      toast.error("Unable to launch message campaign, no email is connected");
     },
   });
 };
