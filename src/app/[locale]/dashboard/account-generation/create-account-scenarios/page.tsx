@@ -762,9 +762,6 @@ const CreateAccountScenarios = () => {
 
                                     <SelectContent>
                                       <SelectGroup>
-                                        <SelectLabel>
-                                          Connection degree
-                                        </SelectLabel>
                                         {dropdowns?.recentActivities.map(
                                           ({
                                             value,
