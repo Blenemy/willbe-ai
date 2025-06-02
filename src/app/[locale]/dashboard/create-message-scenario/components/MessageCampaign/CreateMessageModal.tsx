@@ -49,26 +49,6 @@ interface Props {
   initialData?: { id: string; type: string; sendDate: string };
 }
 
-const formSchema = z
-  .object({
-    type: z.string().min(1, "validation.typeRequired"),
-    date: z.string().optional(),
-    time: z.string().optional(),
-    sendNow: z.boolean().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.sendNow) return true;
-      return !!data.date && !!data.time;
-    },
-    {
-      message: "validation.dateRequired",
-      path: ["date"],
-    }
-  );
-
-type FormValues = z.infer<typeof formSchema>;
-
 export const CreateMessageModal = ({
   open,
   onClose,
@@ -79,6 +59,26 @@ export const CreateMessageModal = ({
 }: Props) => {
   const t = useTranslations("messageChain");
   const store = useMessageChainStore();
+
+  const formSchema = z
+    .object({
+      type: z.string().min(1, t("validation.typeRequired")),
+      date: z.string().optional(),
+      time: z.string().optional(),
+      sendNow: z.boolean().optional(),
+    })
+    .refine(
+      (data) => {
+        if (data.sendNow) return true;
+        return !!data.date && !!data.time;
+      },
+      {
+        message: t("validation.dateRequired"),
+        path: ["date"],
+      }
+    );
+
+  type FormValues = z.infer<typeof formSchema>;
 
   const availableTypes = useMemo(() => {
     return store.getAvailableMessageTypes(initialData?.id ?? "");

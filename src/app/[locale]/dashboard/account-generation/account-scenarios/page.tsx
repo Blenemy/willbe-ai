@@ -41,14 +41,9 @@ const AccountScenariosPage = () => {
   const [selectedScenario, setSelectedScenario] =
     useState<AccountScenario | null>(null);
 
-  const totalPages = Math.ceil(
-    accountScenariosDataTable.length / ITEMS_PER_PAGE
-  );
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = accountScenariosDataTable.slice(
-    indexOfFirstItem,
-    indexOfLastItem
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   const handleDeleteClick = (scenario: AccountScenario) => {
@@ -123,8 +118,8 @@ const AccountScenariosPage = () => {
       </Table>
       <CustomPagination
         page={currentPage - 1}
-        setPage={setCurrentPage}
-        totalCount={totalPages}
+        setPage={(pageZeroBased) => setCurrentPage(pageZeroBased + 1)}
+        totalCount={accountScenariosDataTable.length}
         rowsPerPage={ITEMS_PER_PAGE}
       />
 
