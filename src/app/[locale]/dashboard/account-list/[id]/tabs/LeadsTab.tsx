@@ -51,8 +51,6 @@ export const LeadsTab = () => {
       sortAsc,
     });
 
-  console.log(id);
-
   const isAllSelected =
     paginated.length > 0 && selectedIds.length === paginated.length;
 

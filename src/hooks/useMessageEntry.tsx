@@ -12,7 +12,13 @@ interface CreateMessageEntryDto {
 
 export const useCreateMessageEntry = () => {
   const queryClient = useQueryClient();
-  const nowISO = new Date().toISOString();
+  const now = new Date();
+  const localDateTime = `${now.getFullYear()}-${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}T${now
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:00`;
 
   return useMutation({
     mutationFn: async (data: CreateMessageEntryDto) => {
@@ -22,7 +28,7 @@ export const useCreateMessageEntry = () => {
           messageScenarioId: data.messageScenarioId,
           type: data.type,
           sendNow: !!data.sendNow,
-          sendDate: data.sendNow ? nowISO : data.sendDate,
+          sendDate: data.sendNow ? localDateTime : data.sendDate,
         }
       );
       return res.data;
@@ -57,14 +63,20 @@ export const useUpdateMessageEntry = () => {
       sendDate,
       sendNow,
     }: UpdateMessageEntryDto) => {
-      const nowISO = new Date().toISOString();
+      const now = new Date();
+      const localDateTime = `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}T${now
+        .getHours()
+        .toString()
+        .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:00`;
 
       const res = await protectedAxiosInstance.patch<MessageEntry>(
         `/auth/message-campaign-entries/${id}`,
         {
           type,
           sendNow: !!sendNow,
-          sendDate: sendNow ? nowISO : sendDate,
+          sendDate: sendNow ? localDateTime : sendDate,
         }
       );
       return res.data;
