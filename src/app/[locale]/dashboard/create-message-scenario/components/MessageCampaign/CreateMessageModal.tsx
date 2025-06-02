@@ -67,16 +67,24 @@ export const CreateMessageModal = ({
       time: z.string().optional(),
       sendNow: z.boolean().optional(),
     })
-    .refine(
-      (data) => {
-        if (data.sendNow) return true;
-        return !!data.date && !!data.time;
-      },
-      {
-        message: t("validation.dateRequired"),
-        path: ["date"],
+    .superRefine((data, ctx) => {
+      if (!data.sendNow) {
+        if (!data.date) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("validation.dateRequired"),
+            path: ["date"],
+          });
+        }
+        if (!data.time) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("validation.timeRequired"),
+            path: ["time"],
+          });
+        }
       }
-    );
+    });
 
   type FormValues = z.infer<typeof formSchema>;
 
@@ -88,12 +96,8 @@ export const CreateMessageModal = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       type: initialData?.type || "",
-      date: initialData?.sendDate
-        ? new Date(initialData.sendDate).toISOString().slice(0, 10)
-        : "",
-      time: initialData?.sendDate
-        ? new Date(initialData.sendDate).toTimeString().slice(0, 5)
-        : "",
+      date: initialData?.sendDate?.slice(0, 10) || "",
+      time: initialData?.sendDate?.slice(11, 16) || "",
     },
   });
 
@@ -114,8 +118,11 @@ export const CreateMessageModal = ({
       }
 
       combined = `${date}T${time}:00`;
+
       const now = new Date();
-      const selected = new Date(combined);
+      const [year, month, day] = date.split("-").map(Number);
+      const [hours, minutes] = time.split(":").map(Number);
+      const selected = new Date(year, month - 1, day, hours, minutes);
 
       if (selected < now) {
         toast.error(t("validation.dateInPast"));
@@ -146,15 +153,10 @@ export const CreateMessageModal = ({
     if (open) {
       if (initialData) {
         if (initialData.sendDate) {
-          const d = new Date(initialData.sendDate);
-
           form.reset({
             type: initialData.type || "",
-            date: d.toISOString().slice(0, 10),
-            time: `${d.getUTCHours().toString().padStart(2, "0")}:${d
-              .getUTCMinutes()
-              .toString()
-              .padStart(2, "0")}`,
+            date: initialData.sendDate.slice(0, 10),
+            time: initialData.sendDate.slice(11, 16),
             sendNow: false,
           });
         } else {
@@ -175,6 +177,7 @@ export const CreateMessageModal = ({
       }
     }
   }, [form, initialData, open]);
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="min-w-[451px] p-6">
@@ -194,7 +197,9 @@ export const CreateMessageModal = ({
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("modal.typeLabel")}</FormLabel>
+                  <FormLabel className="text-foreground">
+                    {t("modal.typeLabel")}
+                  </FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
@@ -223,7 +228,9 @@ export const CreateMessageModal = ({
                   name="date"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <FormLabel>{t("modal.dateLabel")}</FormLabel>
+                      <FormLabel className="text-foreground">
+                        {t("modal.dateLabel")}
+                      </FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -237,7 +244,9 @@ export const CreateMessageModal = ({
                   name="time"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <FormLabel>{t("modal.timeLabel")}</FormLabel>
+                      <FormLabel className="text-foreground">
+                        {t("modal.timeLabel")}
+                      </FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
