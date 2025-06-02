@@ -190,8 +190,6 @@ export const CreateScenarioTable = ({
         </TableHeader>
         <TableBody>
           {paginatedLeads.map((lead) => {
-            console.log(lead);
-
             const changes = editedLeads[lead.id] || {};
             return (
               <TableRow key={lead.id}>

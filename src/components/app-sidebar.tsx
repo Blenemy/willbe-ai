@@ -320,8 +320,6 @@ export function SidebarContentWithLogic({
                                 href={subItem.url}
                                 onClick={(e) => {
                                   const allow = handleSidebarNavClick(subItem);
-                                  // console.log(allow);
-
                                   if (!allow) e.preventDefault();
                                 }}
                                 className={cn(
