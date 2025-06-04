@@ -1429,7 +1429,56 @@ const CreateAccountScenarios = () => {
           {activeStep === 2 && <AccountSave />}
         </>
       )}
+
       <ScenarioSidebarLite
+        form={form}
+        fieldMap={{
+          Industry: ["industry_include", "industry_exclude"],
+          Location: ["location_include", "location_exclude"],
+          Headcount: ["headcount_from", "headcount_to"],
+          "Headcount Growth": ["headcount_growth_from", "headcount_growth_to"],
+          "Fortune 500 List": ["fortune_from", "fortune_to"],
+          "Followers Count": ["followers_count_from", "followers_count_to"],
+          "Recent Activities": ["recent_activities"],
+          "Has Job Offers": ["has_job_offers"],
+          Technology: ["technology"],
+          "Network Distance": ["network_distance"],
+          Keywords: ["keywords"],
+          "Department Headcount": [
+            "department_headcount_from",
+            "department_headcount_to",
+          ],
+          "Department Headcount Growth": [
+            "department_headcount_growth_from",
+            "department_headcount_growth_to",
+          ],
+          "Saved Accounts": [
+            "saved_accounts_include",
+            "saved_accounts_exclude",
+          ],
+          "Annual Revenue": [
+            "annual_revenue_from",
+            "annual_revenue_to",
+            "annual_revenue_currency",
+          ],
+        }}
+        sidebarIconsWithLabels={[
+          { icon: "🏭", label: "Industry" },
+          { icon: "📍", label: "Location" },
+          { icon: "👥", label: "Headcount" },
+          { icon: "📈", label: "Headcount Growth" },
+          { icon: "💰", label: "Fortune 500 List" },
+          { icon: "🙋", label: "Followers Count" },
+          { icon: "📣", label: "Recent Activities" },
+          { icon: "💼", label: "Has Job Offers" },
+          { icon: "💻", label: "Technology" },
+          { icon: "🌍", label: "Network Distance" },
+          { icon: "🏷", label: "Keywords" },
+          { icon: "👔", label: "Department Headcount" },
+          { icon: "📉", label: "Department Headcount Growth" },
+          { icon: "📋", label: "Saved Accounts" },
+          { icon: "🗓", label: "Annual Revenue" },
+        ]}
         sidebarContent={
           <Form {...form}>
             <form

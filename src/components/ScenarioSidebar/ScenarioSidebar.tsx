@@ -4,21 +4,40 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { UseFormReturn } from "react-hook-form";
+
+interface IconItem {
+  icon: string;
+  label: string;
+}
 
 interface Props {
   children: React.ReactNode;
   sidebarContent?: React.ReactNode;
+  sidebarIconsWithLabels?: IconItem[];
   collapsedWidth?: number;
   minWidthPx?: number;
   percentageWidth?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form?: UseFormReturn<any>;
+  fieldMap?: Record<string, string[]>;
 }
 
 export function ScenarioSidebarLite({
   children,
   sidebarContent,
-  collapsedWidth = 50,
+  sidebarIconsWithLabels = [],
+  collapsedWidth = 60,
   minWidthPx = 425,
   percentageWidth = 33,
+  fieldMap,
+  form,
 }: Props) {
   const [isOpen, setIsOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(minWidthPx);
@@ -37,25 +56,30 @@ export function ScenarioSidebarLite({
     return () => window.removeEventListener("resize", updateWidth);
   }, [percentageWidth, minWidthPx]);
 
+  const watchedValues = form ? form.watch() : {};
+
   return (
     <div className="flex w-full min-h-[calc(100vh-100px)]">
       <div
         className={cn(
-          "bg-white border border-border h-full flex flex-col justify-start rounded-xl overflow-hidden",
+          "bg-white border border-border h-full flex flex-col justify-start rounded-xl overflow-hidden transition-all duration-300",
           isOpen ? "px-4 py-4" : "py-4 px-2 items-center"
         )}
         style={{
           width: isOpen ? `${sidebarWidth}px` : `${collapsedWidth}px`,
-          transition: "width 300ms ease",
         }}
       >
-        <div className="flex items-center justify-between w-full">
+        <div
+          className={cn(
+            "flex items-center w-full transition-all duration-300",
+            isOpen ? "justify-between px-4 py-4" : "justify-center py-4"
+          )}
+        >
           {isOpen && <h2 className="font-semibold text-lg">Filters</h2>}
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen((prev) => !prev)}
-            className="ml-auto"
           >
             {isOpen ? (
               <ChevronLeft className="w-4 h-4" />
@@ -65,9 +89,51 @@ export function ScenarioSidebarLite({
           </Button>
         </div>
 
-        {isOpen && sidebarContent && (
-          <div className="mt-4 flex flex-col gap-3">{sidebarContent}</div>
-        )}
+        <div className="flex-1 overflow-y-auto w-full">
+          {isOpen && sidebarContent}
+
+          {!isOpen && (
+            <TooltipProvider>
+              <div className="flex flex-col items-center mt-4 gap-2">
+                {sidebarIconsWithLabels.map(({ icon, label }, idx) => {
+                  const relatedFields = fieldMap?.[label] || [];
+                  const isActive = relatedFields.some((fieldName) => {
+                    const value = watchedValues?.[fieldName];
+                    if (typeof value === "boolean") return value === true;
+                    if (Array.isArray(value)) return value.length > 0;
+                    return (
+                      value !== undefined && value !== null && value !== ""
+                    );
+                  });
+
+                  return (
+                    <Tooltip key={idx}>
+                      <TooltipTrigger asChild>
+                        <div
+                          className={cn(
+                            "h-10 w-full flex items-center justify-center rounded",
+                            isActive && "border border-green-500"
+                          )}
+                        >
+                          <span
+                            className="w-6 h-6 text-xl flex items-center justify-center text-center"
+                            style={{
+                              fontFamily: "sans-serif",
+                              lineHeight: "1",
+                            }}
+                          >
+                            {icon}
+                          </span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">{label}</TooltipContent>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </TooltipProvider>
+          )}
+        </div>
       </div>
 
       <div
@@ -76,7 +142,6 @@ export function ScenarioSidebarLite({
           width: isOpen
             ? `calc(100% - ${sidebarWidth}px)`
             : `calc(100% - ${collapsedWidth}px)`,
-          transition: "width 300ms ease",
         }}
       >
         {children}
