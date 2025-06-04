@@ -11,5 +11,6 @@ export interface AccountScenario {
   id: UUID;
   name: string;
   userId: UUID;
+  createdAt: string;
   filterValues: FilterValue[];
 }
