@@ -46,6 +46,7 @@ import AccountTable from "./components/AccountTable/AccountTable";
 import AccountSave from "./components/AccountSave/AccountSave";
 import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ScenarioSidebarLite } from "@/components/ScenarioSidebar/ScenarioSidebar";
 
 export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
@@ -1428,6 +1429,1106 @@ const CreateAccountScenarios = () => {
           {activeStep === 2 && <AccountSave />}
         </>
       )}
+      <ScenarioSidebarLite
+        sidebarContent={
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+              <div className="flex flex-col gap-4">
+                <h4 className="">🗃️ {t("title")}</h4>
+                <FormAccordion label={`${t("industry.label")}`}>
+                  <MultiSelectWithSearchButton
+                    label={t("industry.label")}
+                    form={form}
+                    searchName="industry"
+                    placeholder={t("industry.placeholder")}
+                    searchType="INDUSTRY"
+                    includeName="industry_include"
+                    excludeName="industry_exclude"
+                  />
+                </FormAccordion>
+                <FormAccordion label={`${t("location.label")}`}>
+                  <MultiSelectWithSearchButton
+                    label={t("location.label")}
+                    form={form}
+                    searchName="location"
+                    placeholder={t("location.placeholder")}
+                    searchType="LOCATION"
+                    includeName="location_include"
+                    excludeName="location_exclude"
+                  />
+                </FormAccordion>
+                <FormAccordion label={`${t("headcount.label")}`}>
+                  <div className="flex gap-2 flex-col">
+                    <h4>{t("headcount.description")}</h4>
+                    <div className="flex flex-col gap-3">
+                      <FormField
+                        control={form.control}
+                        name="headcount_from"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.from")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue("headcount_from", "");
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.headcounts.from.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="headcount_to"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.to")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue("headcount_to", "");
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.headcounts.to.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </FormAccordion>
+                <FormAccordion label={`${t("headcount_growth.label")}`}>
+                  <div className="flex gap-2 flex-col">
+                    <h4>{t("headcount_growth.description")}</h4>
+                    <div className="flex flex-col gap-3">
+                      <FormField
+                        control={form.control}
+                        name="headcount_growth_from"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.from")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue(
+                                          "headcount_growth_from",
+                                          ""
+                                        );
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.headcounts.from.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="headcount_growth_to"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.to")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue(
+                                          "headcount_growth_to",
+                                          ""
+                                        );
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.headcounts.to.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </FormAccordion>
+                <FormAccordion label={`${t("fortune.label")}`}>
+                  <div className="flex gap-2 flex-col">
+                    <h4>{t("fortune.description")}</h4>
+                    <div className="flex flex-col gap-3">
+                      <FormField
+                        control={form.control}
+                        name="fortune_from"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.from")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue("fortune_from", "");
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.fortunes.from.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="fortune_to"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.to")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue("fortune_to", "");
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.fortunes.to.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </FormAccordion>
+                <FormAccordion label={`${t("followers.label")}`}>
+                  <div className="flex gap-2 flex-col">
+                    <h4>{`${t("followers.description")}`}</h4>
+                    <div className="flex flex-col gap-3">
+                      <FormField
+                        control={form.control}
+                        name="followers_count_from"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.from")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue(
+                                          "followers_count_from",
+                                          ""
+                                        );
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.followersCounts.from.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="followers_count_to"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("headcount.to")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue("followers_count_to", "");
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.followersCounts.to.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </FormAccordion>
+              </div>
+              <div className="flex flex-col gap-4">
+                <h4>{`${t("activity_focus")}`}</h4>
+                <div className="flex flex-col gap-4">
+                  <FormAccordion label={`${t("recent_activities.label")}`}>
+                    <FormField
+                      control={form.control}
+                      name="recent_activities"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Select
+                              key={field.value}
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                <div className="flex items-center flex-1 overflow-hidden">
+                                  <SelectValue
+                                    placeholder={`${t(
+                                      "recent_activities.placeholder"
+                                    )}`}
+                                    className="truncate"
+                                  />
+                                </div>
+
+                                {field.value && (
+                                  <XIcon
+                                    className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                    onPointerDown={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      form.setValue("recent_activities", "");
+                                    }}
+                                  />
+                                )}
+                              </SelectTrigger>
+
+                              <SelectContent>
+                                <SelectGroup>
+                                  {dropdowns?.recentActivities.map(
+                                    ({
+                                      value,
+                                      title,
+                                    }: {
+                                      value: string;
+                                      title: string;
+                                    }) => (
+                                      <SelectItem value={value} key={value}>
+                                        {title}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </FormAccordion>
+
+                  <div className="flex justify-between items-center bg-slate-200 p-3">
+                    <span>{`${t("has_job_offers")}`}</span>
+                    <FormField
+                      control={form.control}
+                      name="has_job_offers"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <FormAccordion label={`${t("technology.label")}`}>
+                    <MultiSelectWithSearchButton
+                      label={`${t("technology.description")}`}
+                      form={form}
+                      searchName="technology_search_input"
+                      valueName="technology"
+                      placeholder={`${t("technology.placeholder")}`}
+                      searchType="TECHNOLOGIES"
+                      isSingleSelect
+                    />
+                  </FormAccordion>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <h4>{t("connections")}</h4>
+                <Accordion type="single" collapsible>
+                  <AccordionItem
+                    value="network-distance"
+                    className="bg-slate-200"
+                  >
+                    <AccordionTrigger className="p-3">
+                      {t("network_distance.label")}
+                    </AccordionTrigger>
+                    <AccordionContent className="p-3">
+                      <div className="flex gap-2 flex-col">
+                        <h4>{t("network_distance.description")}</h4>
+                        <div className="flex gap-2">
+                          <FormField
+                            control={form.control}
+                            name="network_distance"
+                            render={({ field }) => (
+                              <FormItem className="flex-1">
+                                <FormControl>
+                                  <Select
+                                    key={field.value}
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
+                                    <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                      <div className="flex items-center flex-1 overflow-hidden">
+                                        <SelectValue
+                                          placeholder={t(
+                                            "network_distance.placeholder"
+                                          )}
+                                          className="truncate"
+                                        />
+                                      </div>
+
+                                      {field.value && (
+                                        <XIcon
+                                          className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                          onPointerDown={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            form.setValue(
+                                              "network_distance",
+                                              ""
+                                            );
+                                          }}
+                                        />
+                                      )}
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                      <SelectGroup>
+                                        <SelectLabel>
+                                          Connection degree
+                                        </SelectLabel>
+                                        {dropdowns?.networkDistances.map(
+                                          ({
+                                            value,
+                                            title,
+                                          }: {
+                                            value: string;
+                                            title: string;
+                                          }) => (
+                                            <SelectItem
+                                              value={value}
+                                              key={value}
+                                            >
+                                              {title}
+                                            </SelectItem>
+                                          )
+                                        )}
+                                      </SelectGroup>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+              <div className="flex flex-col gap-4">
+                <h4>{t("other_filters")}</h4>
+                <div className="flex flex-col gap-3">
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="keywords" className="bg-slate-200">
+                      <AccordionTrigger className="p-3">
+                        {t("keywords.label")}
+                      </AccordionTrigger>
+                      <AccordionContent className="p-3">
+                        <div className="flex gap-2 flex-col">
+                          <h4>{t("keywords.description")}</h4>
+                          <div className="flex gap-2">
+                            <FormField
+                              control={form.control}
+                              name="keywords"
+                              render={({ field }) => (
+                                <FormItem className="flex-1">
+                                  <FormControl>
+                                    <Input
+                                      className="mb-3"
+                                      {...field}
+                                      placeholder={t("keywords.placeholder")}
+                                    />
+                                  </FormControl>
+
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <h4>{t("department_filters")}</h4>
+                <div className="flex flex-col gap-4">
+                  <FormAccordion label={t("department_headcount.label")}>
+                    <div className="flex gap-2 flex-col">
+                      <h4>{t("department_headcount.description")}</h4>
+                      <div className="flex flex-col gap-3">
+                        <FormField
+                          control={form.control}
+                          name="department_headcount_from"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Select
+                                  key={field.value}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                    <div className="flex items-center flex-1 overflow-hidden">
+                                      <SelectValue
+                                        placeholder={t(
+                                          "department_headcount.from"
+                                        )}
+                                        className="truncate"
+                                      />
+                                    </div>
+
+                                    {field.value && (
+                                      <XIcon
+                                        className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                        onPointerDown={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          form.setValue(
+                                            "department_headcount_from",
+                                            ""
+                                          );
+                                        }}
+                                      />
+                                    )}
+                                  </SelectTrigger>
+
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {dropdowns?.headcounts.from.map(
+                                        (value: string) => (
+                                          <SelectItem value={value} key={value}>
+                                            {value}
+                                          </SelectItem>
+                                        )
+                                      )}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="department_headcount_to"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Select
+                                  key={field.value}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                    <div className="flex items-center flex-1 overflow-hidden">
+                                      <SelectValue
+                                        placeholder={t(
+                                          "department_headcount.to"
+                                        )}
+                                        className="truncate"
+                                      />
+                                    </div>
+
+                                    {field.value && (
+                                      <XIcon
+                                        className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                        onPointerDown={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          form.setValue(
+                                            "department_headcount_to",
+                                            ""
+                                          );
+                                        }}
+                                      />
+                                    )}
+                                  </SelectTrigger>
+
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {dropdowns?.headcounts.to.map(
+                                        (value: string) => (
+                                          <SelectItem value={value} key={value}>
+                                            {value}
+                                          </SelectItem>
+                                        )
+                                      )}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </FormAccordion>
+
+                  <FormAccordion label={t("department_headcount_growth.label")}>
+                    <div className="flex gap-2 flex-col">
+                      <h4>{t("department_headcount_growth.description")}</h4>
+                      <div className="flex flex-col gap-3">
+                        <FormField
+                          control={form.control}
+                          name="department_headcount_growth_from"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Select
+                                  key={field.value}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                    <div className="flex items-center flex-1 overflow-hidden">
+                                      <SelectValue
+                                        placeholder={t(
+                                          "department_headcount_growth.from"
+                                        )}
+                                        className="truncate"
+                                      />
+                                    </div>
+
+                                    {field.value && (
+                                      <XIcon
+                                        className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                        onPointerDown={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          form.setValue(
+                                            "department_headcount_growth_from",
+                                            ""
+                                          );
+                                        }}
+                                      />
+                                    )}
+                                  </SelectTrigger>
+
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {dropdowns?.headcounts.from.map(
+                                        (value: string) => (
+                                          <SelectItem value={value} key={value}>
+                                            {value}
+                                          </SelectItem>
+                                        )
+                                      )}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="department_headcount_growth_to"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormControl>
+                                <Select
+                                  key={field.value}
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                    <div className="flex items-center flex-1 overflow-hidden">
+                                      <SelectValue
+                                        placeholder={t(
+                                          "department_headcount_growth.to"
+                                        )}
+                                        className="truncate"
+                                      />
+                                    </div>
+
+                                    {field.value && (
+                                      <XIcon
+                                        className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                        onPointerDown={(e) => {
+                                          e.preventDefault();
+                                          e.stopPropagation();
+                                          form.setValue(
+                                            "department_headcount_growth_to",
+                                            ""
+                                          );
+                                        }}
+                                      />
+                                    )}
+                                  </SelectTrigger>
+
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {dropdowns?.headcounts.to.map(
+                                        (value: string) => (
+                                          <SelectItem value={value} key={value}>
+                                            {value}
+                                          </SelectItem>
+                                        )
+                                      )}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </FormAccordion>
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <h4>{t("saved_accounts_title")}</h4>
+                <div className="flex flex-col gap-4">
+                  <FormAccordion label={t("saved_accounts.label")}>
+                    <MultiSelectWithSearchButton
+                      label={t("saved_accounts.description")}
+                      form={form}
+                      searchName="saved_accounts"
+                      placeholder={t("saved_accounts.placeholder")}
+                      searchType="SAVED_ACCOUNTS"
+                      includeName="saved_accounts_include"
+                      excludeName="saved_accounts_exclude"
+                    />
+                  </FormAccordion>
+                </div>
+              </div>
+              <FormAccordion
+                label={t("annual_revenue.label")}
+                defaultOpen
+                className={
+                  hasAnnualRevenueError
+                    ? "border border-red-500"
+                    : "border border-border"
+                }
+              >
+                <div className="flex gap-2 flex-col">
+                  <h4>{t("annual_revenue.description")}</h4>
+                  <div className="flex flex-col gap-3">
+                    <FormField
+                      control={form.control}
+                      name="annual_revenue_from"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Select
+                              key={field.value}
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                <div className="flex items-center flex-1 overflow-hidden">
+                                  <SelectValue
+                                    placeholder={t("annual_revenue.from")}
+                                    className="truncate"
+                                  />
+                                </div>
+
+                                {field.value && (
+                                  <XIcon
+                                    className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                    onPointerDown={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      form.setValue("annual_revenue_from", "");
+                                    }}
+                                  />
+                                )}
+                              </SelectTrigger>
+
+                              <SelectContent>
+                                <SelectGroup>
+                                  {dropdowns?.annualRevenues.from.map(
+                                    (value: string) => (
+                                      <SelectItem value={value} key={value}>
+                                        {value}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="annual_revenue_to"
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Select
+                              key={field.value}
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                <div className="flex items-center flex-1 overflow-hidden">
+                                  <SelectValue
+                                    placeholder={t("annual_revenue.to")}
+                                    className="truncate"
+                                  />
+                                </div>
+
+                                {field.value && (
+                                  <XIcon
+                                    className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                    onPointerDown={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      form.setValue("annual_revenue_to", "");
+                                    }}
+                                  />
+                                )}
+                              </SelectTrigger>
+
+                              <SelectContent>
+                                <SelectGroup>
+                                  {dropdowns?.annualRevenues.to.map(
+                                    (value: string) => (
+                                      <SelectItem value={value} key={value}>
+                                        {value}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex flex-col gap-3">
+                      <FormField
+                        control={form.control}
+                        name="annual_revenue_currency"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Select
+                                key={field.value}
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                                  <div className="flex items-center flex-1 overflow-hidden">
+                                    <SelectValue
+                                      placeholder={t("annual_revenue.currency")}
+                                      className="truncate"
+                                    />
+                                  </div>
+
+                                  {field.value && (
+                                    <XIcon
+                                      className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
+                                      onPointerDown={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        form.setValue(
+                                          "annual_revenue_currency",
+                                          ""
+                                        );
+                                      }}
+                                    />
+                                  )}
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                  <SelectGroup>
+                                    {dropdowns?.annualRevenues.currencies.map(
+                                      (value: string) => (
+                                        <SelectItem value={value} key={value}>
+                                          {value}
+                                        </SelectItem>
+                                      )
+                                    )}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </FormAccordion>
+            </form>
+          </Form>
+        }
+      >
+        <div className="bg-white rounded-xl  p-6 h-full">
+          Right part with table or any content
+        </div>
+      </ScenarioSidebarLite>
     </div>
   );
 };
