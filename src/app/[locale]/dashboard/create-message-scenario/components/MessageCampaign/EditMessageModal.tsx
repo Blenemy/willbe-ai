@@ -157,14 +157,22 @@ export const EditMessageModal = ({
       html = html.replace(/<span[^>]*>(.*?)<\/span>/gi, "$1");
 
       html = html.replace(/<p[^>]*>(.*?)<\/p>/gi, (_, inner) => {
-        const content = inner.trim();
-        return content === "" ? "<br>" : `${content}<br>`;
+        const trimmed = inner.trim();
+
+        if (/<(ul|ol)[\s>]/i.test(trimmed)) {
+          return trimmed;
+        }
+
+        if (trimmed === "" || trimmed === "<br>" || trimmed === "&nbsp;") {
+          return "<br>";
+        }
+
+        return `${trimmed}<br>`;
       });
 
-      html = html.replace(/(<br\s*\/?>\s*){3,}/gi, "<br><br>");
+      html = html.replace(/<br\s*\/?>\s*(<(ul|ol)[^>]*>)/gi, "$1");
 
-      html = html.replace(/^<br\s*\/?>/, "");
-
+      html = html.replace(/^(<br\s*\/?>\s*)+/, "");
       html = html.replace(/(<br\s*\/?>\s*)+$/, "");
 
       setMessage(html);
