@@ -366,7 +366,12 @@ const ScenarioList = () => {
       <div className="flex items-center justify-between pt-4 flex-1">
         <div className="text-sm flex gap-2 flex-grow items-center">
           <p className="min-w-28">{t("rowsPerPage")}</p>
-          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+          <Select
+            onValueChange={(val) => {
+              setRowsPerPage(Number(val));
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
             </SelectTrigger>
