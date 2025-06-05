@@ -14,6 +14,7 @@ interface Props {
   setPage: (page: number) => void;
   rowsPerPage: number;
   totalCount: number;
+  disablePageJumping?: boolean;
 }
 
 export const CustomPagination = ({
@@ -21,6 +22,7 @@ export const CustomPagination = ({
   setPage,
   rowsPerPage,
   totalCount,
+  disablePageJumping,
 }: Props) => {
   const totalPages = Math.ceil(totalCount / rowsPerPage);
   const currentPage = page + 1;
@@ -75,16 +77,28 @@ export const CustomPagination = ({
             </PaginationItem>
           ) : (
             <PaginationItem key={p}>
-              <button
-                onClick={() => setPage(p - 1)}
-                className={`px-3 py-1 rounded-md text-sm min-w-[32px] text-center ${
-                  p === currentPage
-                    ? "bg-primary text-white"
-                    : "hover:bg-muted text-muted-foreground"
-                }`}
-              >
-                {p}
-              </button>
+              {disablePageJumping ? (
+                <span
+                  className={`px-3 py-1 rounded-md text-sm min-w-[32px] text-center ${
+                    p === currentPage
+                      ? "bg-primary text-white"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {p}
+                </span>
+              ) : (
+                <button
+                  onClick={() => setPage(p - 1)}
+                  className={`px-3 py-1 rounded-md text-sm min-w-[32px] text-center ${
+                    p === currentPage
+                      ? "bg-primary text-white"
+                      : "hover:bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {p}
+                </button>
+              )}
             </PaginationItem>
           )
         )}

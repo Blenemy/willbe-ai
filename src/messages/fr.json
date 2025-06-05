@@ -1112,7 +1112,9 @@
   },
   "accountTable": {
     "title": "Liste des entreprises",
+    "total_number_of_items": "Nombre total de leads récupérés:",
     "itemsPerPage": "Éléments par page",
+    "view": "Affichage",
     "searchPlaceholder": "Rechercher par nom...",
     "table": {
       "selectAll": "Tout sélectionner",
@@ -1135,6 +1137,7 @@
     "table": {
       "select": "Sélectionner",
       "title": "Titre",
+      "logo": "Logo",
       "description": "Description",
       "industry": "Secteur",
       "employees": "Employés",

@@ -35,7 +35,7 @@ export function ScenarioSidebarLite({
   sidebarIconsWithLabels = [],
   collapsedWidth = 60,
   minWidthPx = 425,
-  percentageWidth = 33,
+  percentageWidth = 30,
   fieldMap,
   form,
 }: Props) {
@@ -137,7 +137,7 @@ export function ScenarioSidebarLite({
       </div>
 
       <div
-        className="pl-5 transition-all duration-300 flex-1"
+        className="transition-all duration-300 flex-1"
         style={{
           width: isOpen
             ? `calc(100% - ${sidebarWidth}px)`

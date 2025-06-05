@@ -115,6 +115,9 @@ export const useAccountScenarios = ({
         queryKey: ["account-scenarios"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["account-search"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["account-scenario-by-id"],
       });
       const currentUrl = new URL(window.location.href);

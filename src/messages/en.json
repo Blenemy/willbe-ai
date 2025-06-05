@@ -1109,6 +1109,8 @@
   },
   "accountTable": {
     "title": "Company List",
+    "total_number_of_items": "Total number of leads retrieved:",
+    "view": "View",
     "itemsPerPage": "Items per page",
     "searchPlaceholder": "Search by name...",
     "table": {
@@ -1132,6 +1134,7 @@
     "table": {
       "select": "Select",
       "title": "Title",
+      "logo": "Logo",
       "description": "Description",
       "industry": "Industry",
       "employees": "Employees",
