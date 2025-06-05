@@ -928,6 +928,7 @@
   "MessageStructures": {
     "title": "Message Structures",
     "create_button": "Create",
+    "rowsPerPage": "Rows per page:",
     "search_placeholder": "Search by structure title",
     "table_title": "Message structure title",
     "table_languages": "Languages",
