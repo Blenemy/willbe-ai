@@ -116,7 +116,12 @@ const MessageStructures = () => {
         <TableBody>
           {currentItems.map((structure) => (
             <TableRow key={structure.id}>
-              <TableCell>{structure.name}</TableCell>
+              <TableCell
+                className="max-w-[200px] truncate whitespace-nowrap overflow-hidden"
+                title={structure.name}
+              >
+                {structure.name}
+              </TableCell>
               <TableCell className="flex gap-1">
                 {structure.languages.map((lang) => (
                   <Badge key={lang}>{lang}</Badge>
