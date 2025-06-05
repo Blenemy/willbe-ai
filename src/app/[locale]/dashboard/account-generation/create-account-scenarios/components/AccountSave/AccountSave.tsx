@@ -90,7 +90,7 @@ const AccountSave = () => {
     (page + 1) * ROWS_PER_PAGE
   );
 
-  if (!savedAccounts) {
+  if (savedAccounts && savedAccounts.length === 0) {
     return null;
   }
 

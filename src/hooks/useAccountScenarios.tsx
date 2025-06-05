@@ -102,6 +102,7 @@ export const useAccountScenarios = ({
     }: {
       accountId: string;
       payload: { name: string; filterValues?: never[] };
+      shouldUpdateQueryParamsName?: boolean;
     }) => {
       const response = await protectedAxiosInstance.patch(
         `/auth/account-scenarios/${accountId}`,
@@ -109,22 +110,31 @@ export const useAccountScenarios = ({
       );
       return response.data;
     },
-    onSuccess: (data: AccountScenario) => {
+    onSuccess: (
+      data: AccountScenario,
+      variables: {
+        accountId: string;
+        payload: { name: string; filterValues?: never[] };
+        shouldUpdateQueryParamsName: boolean;
+      }
+    ) => {
+      const { shouldUpdateQueryParamsName } = variables;
+
       toast.success("Account Scenario was updated");
       queryClient.invalidateQueries({
         queryKey: ["account-scenarios"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["account-search"],
-      });
-      queryClient.invalidateQueries({
         queryKey: ["account-scenario-by-id"],
       });
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set("accountId", data.id.toString());
-      currentUrl.searchParams.set("accountName", data.name.toString());
 
-      router.push(currentUrl.toString(), undefined);
+      if (shouldUpdateQueryParamsName) {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set("accountId", data.id.toString());
+        currentUrl.searchParams.set("accountName", data.name.toString());
+
+        router.push(currentUrl.toString(), undefined);
+      }
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
       toast.error(

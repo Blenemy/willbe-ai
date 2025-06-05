@@ -46,6 +46,7 @@ import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ScenarioSidebarLite } from "@/components/ScenarioSidebar/ScenarioSidebar";
 import AccountSave from "./components/AccountSave/AccountSave";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
@@ -59,6 +60,7 @@ const CreateAccountScenarios = () => {
     enableFetch: false,
     accountId,
   });
+  const queryClient = useQueryClient();
 
   const { data: dropdowns } = useAccountScenariosDropdowns();
 
@@ -119,7 +121,11 @@ const CreateAccountScenarios = () => {
     if (accountId && accountName) {
       const payload = prepareAccountPayload(values, accountName);
 
-      updateAccountScenario({ accountId, payload });
+      updateAccountScenario({
+        accountId,
+        payload,
+        shouldUpdateQueryParamsName: false,
+      });
     }
   }
 
@@ -1373,7 +1379,20 @@ const CreateAccountScenarios = () => {
                 </FormAccordion>
 
                 <div className="flex gap-4 items-center justify-center flex-col">
-                  <Button type="submit">{t("buttons.save")}</Button>
+                  <Button type="submit" className="w-full">
+                    {t("buttons.save")}
+                  </Button>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    onClick={() => {
+                      queryClient.invalidateQueries({
+                        queryKey: ["account-search"],
+                      });
+                    }}
+                  >
+                    {t("buttons.search")}
+                  </Button>
                   <Button
                     type="button"
                     className="text-red-500"

@@ -135,7 +135,11 @@ const AccountTable = () => {
       : String(bVal).localeCompare(String(aVal));
   });
 
-  if (!data) {
+  if (isFetching) {
+    return <Spinner />;
+  }
+
+  if (data && data.items.length === 0) {
     return null;
   }
 
@@ -145,7 +149,7 @@ const AccountTable = () => {
         <h2 className="font-semibold text-2xl">{t("title")}</h2>
         <div className="flex gap-5 items-center">
           <p className="text-[#5F5F5F] text-sm">
-            {t("total_number_of_items")} {data.paging.total_count}
+            {t("total_number_of_items")} {data?.paging.total_count}
           </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

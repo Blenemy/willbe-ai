@@ -41,10 +41,13 @@ const AccountNameForm = () => {
     });
 
   function onSubmit(values: z.infer<typeof accountScenariosName>) {
+    const shouldUpdateQueryParamsName = accountName !== values.account_name;
+
     if (accountId) {
       updateAccountScenario({
         accountId,
         payload: { name: values.account_name },
+        shouldUpdateQueryParamsName,
       });
     } else {
       createAccountScenario({ name: values.account_name });

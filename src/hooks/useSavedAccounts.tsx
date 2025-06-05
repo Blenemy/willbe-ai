@@ -18,7 +18,7 @@ interface UseAuthProps {
 export const useSavedAccounts = ({ enableFetch, accountId }: UseAuthProps) => {
   const queryClient = useQueryClient();
 
-  const { data: savedAccounts } = useQuery<
+  const { data: savedAccounts, isLoading } = useQuery<
     SavedAccount[],
     AxiosError<APIRequestErrorPayload>
   >({
@@ -54,6 +54,7 @@ export const useSavedAccounts = ({ enableFetch, accountId }: UseAuthProps) => {
 
   return {
     savedAccounts,
+    isLoading,
     deleteSavedAccounts: deleteSavedAccounts.mutate,
   };
 };
