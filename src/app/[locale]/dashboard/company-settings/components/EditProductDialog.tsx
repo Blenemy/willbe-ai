@@ -40,7 +40,7 @@ const EditProductDialog = ({
     name: z
       .string()
       .min(1, t("validation_required"))
-      .max(15, t("validation_name_max")),
+      .max(100, t("validation_name_max")),
     description: z
       .string()
       .min(1, t("validation_required"))

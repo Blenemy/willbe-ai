@@ -39,7 +39,7 @@ const EditCompanySectorDialog = ({
     companySector: z
       .string()
       .min(1, t("validation_required"))
-      .max(60, t("validation_sector_max")),
+      .max(100, t("validation_sector_max")),
   });
 
   const form = useForm({
