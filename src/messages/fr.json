@@ -1134,18 +1134,19 @@
   },
   "accountSave": {
     "title": "Comptes enregistrés",
+    "deleteSelected": "Supprimer la sélection ({count})",
     "table": {
       "select": "Sélectionner",
-      "title": "Titre",
       "logo": "Logo",
-      "description": "Description",
+      "name": "Nom",
       "industry": "Secteur",
-      "employees": "Employés",
+      "headcount": "Effectif",
+      "linkedin": "LinkedIn",
+      "summary": "Résumé",
       "country": "Pays",
       "city": "Ville",
       "created": "Créé",
       "website": "Site web",
-      "linkedin": "LinkedIn",
       "actions": "Actions",
       "open": "Ouvrir",
       "delete": "Supprimer"

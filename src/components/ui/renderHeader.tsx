@@ -1,4 +1,5 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { TableHead } from "@/components/ui/table";
 
 export const renderHeader = <T extends string>(
   label: string,
@@ -29,4 +30,36 @@ export const renderHeader = <T extends string>(
       {label}
     </div>
   </th>
+);
+
+export const renderCompactHeader = <T extends string>(
+  label: string,
+  key: T,
+  sortKey: T,
+  sortAsc: boolean,
+  handleSort: (key: T) => void
+) => (
+  <TableHead
+    onClick={() => handleSort(key)}
+    className="w-[120px] truncate cursor-pointer select-none"
+  >
+    <div className="flex items-center gap-1">
+      <div className="w-5 flex justify-center items-center text-muted-foreground">
+        {sortKey === key ? (
+          sortAsc ? (
+            <ChevronUp className="w-4 h-4 text-foreground" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-foreground" />
+          )
+        ) : (
+          <div className="flex items-center justify-center leading-none">
+            <ChevronUp className="w-4 h-4 p-0 -mr-1" />
+            <ChevronDown className="w-4 h-4 p-0" />
+          </div>
+        )}
+      </div>
+
+      <span>{label}</span>
+    </div>
+  </TableHead>
 );

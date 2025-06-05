@@ -33,6 +33,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { renderCompactHeader } from "@/components/ui/renderHeader";
 
 const ROWS_PER_PAGE_LIMIT = 30;
 
@@ -40,6 +41,8 @@ const AccountTable = () => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId") || "";
   const t = useTranslations("accountTable");
+  const [sortKey, setSortKey] = useState<string>("title");
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const columns: { key: string; label: string; defaultVisible: boolean }[] = [
     { key: "logo", label: t("table.logo"), defaultVisible: true },
     { key: "name", label: t("table.name"), defaultVisible: true },
@@ -80,6 +83,14 @@ const AccountTable = () => {
     }
   );
 
+  const handleSort = (key: string) => {
+    if (sortKey === key) setSortAsc((prev) => !prev);
+    else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
   const companies = data?.items || [];
 
   const toggleCompanySelection = (id: string) => {
@@ -113,6 +124,16 @@ const AccountTable = () => {
 
     await saveSelectedAccounts({ accountScenarioId: accountId, accounts });
   };
+
+  const sortedCompanies = [...filteredCompanies].sort((a, b) => {
+    //@ts-expect-error element implicity has an "any" type
+    const aVal = a?.[sortKey] || "";
+    //@ts-expect-error element implicity has an "any" type
+    const bVal = b?.[sortKey] || "";
+    return sortAsc
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
+  });
 
   if (!data) {
     return null;
@@ -196,21 +217,30 @@ const AccountTable = () => {
                     {t("table.logo")}
                   </TableHead>
                 )}
-                {visibleColumns.name && (
-                  <TableHead className="w-[120px] truncate">
-                    {t("table.name")}
-                  </TableHead>
-                )}
-                {visibleColumns.industry && (
-                  <TableHead className="w-[120px] truncate">
-                    {t("table.industry")}
-                  </TableHead>
-                )}
-                {visibleColumns.headcount && (
-                  <TableHead className="w-[60px] truncate">
-                    {t("table.headcount")}
-                  </TableHead>
-                )}
+                {visibleColumns.name &&
+                  renderCompactHeader(
+                    t("table.name"),
+                    "name",
+                    sortKey,
+                    sortAsc,
+                    handleSort
+                  )}
+                {visibleColumns.industry &&
+                  renderCompactHeader(
+                    t("table.industry"),
+                    "industry",
+                    sortKey,
+                    sortAsc,
+                    handleSort
+                  )}
+                {visibleColumns.headcount &&
+                  renderCompactHeader(
+                    t("table.headcount"),
+                    "headcount",
+                    sortKey,
+                    sortAsc,
+                    handleSort
+                  )}
                 {visibleColumns.linkedin && (
                   <TableHead className="w-[90px] truncate">
                     {t("table.linkedin")}
@@ -224,16 +254,17 @@ const AccountTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCompanies.map((company) => (
+              {sortedCompanies.map((company) => (
                 <TableRow key={company.id}>
-                  <TableCell className="p-1">
+                  <TableCell className="p-1 w-[36px]">
                     <Checkbox
                       checked={selectedCompanies.includes(company.id)}
                       onCheckedChange={() => toggleCompanySelection(company.id)}
                     />
                   </TableCell>
+
                   {visibleColumns.logo && (
-                    <TableCell className="p-1">
+                    <TableCell className="p-1 w-[44px]">
                       {company.logo && (
                         <Image
                           src={company.logo}
@@ -252,12 +283,12 @@ const AccountTable = () => {
                   )}
                   {visibleColumns.industry && (
                     <TableCell className="w-[120px] truncate">
-                      {company.industry || "-"}
+                      {company.industry}
                     </TableCell>
                   )}
                   {visibleColumns.headcount && (
                     <TableCell className="w-[60px] truncate">
-                      {company.headcount || "-"}
+                      {company.headcount}
                     </TableCell>
                   )}
                   {visibleColumns.linkedin && (

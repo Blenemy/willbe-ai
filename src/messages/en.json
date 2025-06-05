@@ -1131,18 +1131,19 @@
   },
   "accountSave": {
     "title": "Saved Accounts",
+    "deleteSelected": "Delete selected ({count})",
     "table": {
       "select": "Select",
-      "title": "Title",
       "logo": "Logo",
-      "description": "Description",
+      "name": "Name",
       "industry": "Industry",
-      "employees": "Employees",
+      "headcount": "Headcount",
+      "linkedin": "LinkedIn",
+      "summary": "Summary",
       "country": "Country",
       "city": "City",
       "created": "Created",
       "website": "Website",
-      "linkedin": "LinkedIn",
       "actions": "Actions",
       "open": "Open",
       "delete": "Delete"

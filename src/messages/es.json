@@ -1133,18 +1133,19 @@
   },
   "accountSave": {
     "title": "Cuentas guardadas",
+    "deleteSelected": "Eliminar seleccionados ({count})",
     "table": {
       "select": "Seleccionar",
-      "title": "Título",
       "logo": "Logo",
-      "description": "Descripción",
+      "name": "Nombre",
       "industry": "Industria",
-      "employees": "Empleados",
+      "headcount": "Número de empleados",
+      "linkedin": "LinkedIn",
+      "summary": "Resumen",
       "country": "País",
       "city": "Ciudad",
       "created": "Creado",
       "website": "Sitio web",
-      "linkedin": "LinkedIn",
       "actions": "Acciones",
       "open": "Abrir",
       "delete": "Eliminar"
