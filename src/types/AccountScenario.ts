@@ -13,4 +13,7 @@ export interface AccountScenario {
   userId: UUID;
   createdAt: string;
   filterValues: FilterValue[];
+  status: "search";
+  createdBy: string;
+  updatedAt: string;
 }

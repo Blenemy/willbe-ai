@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
-  TableHead,
   TableRow,
   TableCell,
   TableBody,
@@ -31,8 +30,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 const ITEMS_PER_PAGE = 5;
+
+const STATUS_STYLES = {
+  save: "bg-green-100 text-green-700",
+  select: "bg-yellow-100 text-yellow-700",
+  search: "bg-pink-100 text-pink-700",
+};
+
+const STATUS_OPTIONS = [
+  { value: "search", label: "Account search" },
+  { value: "select", label: "Account select" },
+  { value: "save", label: "Account save" },
+  { value: "all", label: "All" },
+];
 
 const AccountScenariosPage = () => {
   const t = useTranslations("AccountScenarios");
@@ -41,6 +54,8 @@ const AccountScenariosPage = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const router = useRouter();
+  const [sortKey, setSortKey] = useState<string>("title");
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const { accountScenariosDataTable = [], deleteAccountScenario } =
     useAccountScenarios({
       enableFetch: true,
@@ -51,10 +66,49 @@ const AccountScenariosPage = () => {
   const [selectedScenario, setSelectedScenario] =
     useState<AccountScenario | null>(null);
 
-  const currentItems = accountScenariosDataTable.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+  const filteredItems = accountScenariosDataTable.filter((scenario) => {
+    return (
+      (statusFilter === "all" || scenario.status === statusFilter) &&
+      scenario.name.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
+  const currentItems = filteredItems.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
   );
+
+  const handleSort = (key: string) => {
+    if (sortKey === key) setSortAsc((prev) => !prev);
+    else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
+  const sortedAccounts = [...currentItems].sort((a, b) => {
+    const getValue = (item: AccountScenario) => {
+      switch (sortKey) {
+        case "name":
+          return item.name || "";
+        case "status":
+          return item.status || "";
+        case "createBy":
+          return item.createdBy || "";
+        case "createDate":
+          return item.createdAt || "";
+        default:
+          return "";
+      }
+    };
+
+    const aVal = getValue(a);
+    const bVal = getValue(b);
+
+    return sortAsc
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
+  });
 
   const handleDeleteClick = (scenario: AccountScenario) => {
     setSelectedScenario(scenario);
@@ -88,13 +142,6 @@ const AccountScenariosPage = () => {
     router.replace(newUrl.toString());
   };
 
-  const STATUS_OPTIONS = [
-    { value: "account_search", label: "Account search" },
-    { value: "account_select", label: "Account select" },
-    { value: "account_save", label: "Account save" },
-    { value: "all", label: "All" },
-  ];
-
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-5">
       <div className="flex justify-between items-center">
@@ -127,17 +174,53 @@ const AccountScenariosPage = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t("table_name")}</TableHead>
-            <TableHead>Scenario status</TableHead>
-            <TableHead>Created date</TableHead>
-            {/* <TableHead className="text-right">{t("table_actions")}</TableHead> */}
+            {renderHeader(
+              t("table_name"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Scenario status",
+              "status",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Create by",
+              "createBy",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              "Created date",
+              "createDate",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentItems.map((scenario) => (
+          {sortedAccounts.map((scenario) => (
             <TableRow key={scenario.id}>
               <TableCell>{scenario.name}</TableCell>
-              <TableCell>Scenario status</TableCell>
+              <TableCell>
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    STATUS_STYLES[scenario.status as keyof typeof STATUS_STYLES]
+                  }`}
+                >
+                  {
+                    STATUS_OPTIONS.find((s) => s.value === scenario.status)
+                      ?.label
+                  }
+                </span>
+              </TableCell>
+              <TableCell>{scenario.createdBy}</TableCell>
               <TableCell>{scenario.createdAt}</TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button
@@ -163,7 +246,12 @@ const AccountScenariosPage = () => {
       <div className="flex items-center justify-between pt-4 flex-1">
         <div className="text-sm flex gap-2 flex-grow items-center">
           <p className="min-w-28">Rows per page</p>
-          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+          <Select
+            onValueChange={(val) => {
+              setRowsPerPage(Number(val));
+              setCurrentPage(1);
+            }}
+          >
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
             </SelectTrigger>
@@ -180,8 +268,8 @@ const AccountScenariosPage = () => {
         <CustomPagination
           page={currentPage - 1}
           setPage={(pageZeroBased) => setCurrentPage(pageZeroBased + 1)}
-          totalCount={accountScenariosDataTable.length}
-          rowsPerPage={ITEMS_PER_PAGE}
+          totalCount={filteredItems.length}
+          rowsPerPage={rowsPerPage}
         />
       </div>
 

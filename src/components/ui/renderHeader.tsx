@@ -8,7 +8,7 @@ export const renderHeader = <T extends string>(
   sortAsc: boolean,
   handleSort: (key: T) => void
 ) => (
-  <th
+  <TableHead
     onClick={() => handleSort(key)}
     className="cursor-pointer select-none whitespace-nowrap"
   >
@@ -29,7 +29,7 @@ export const renderHeader = <T extends string>(
       </div>
       {label}
     </div>
-  </th>
+  </TableHead>
 );
 
 export const renderCompactHeader = <T extends string>(
