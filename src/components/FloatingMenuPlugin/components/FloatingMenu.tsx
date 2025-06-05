@@ -47,7 +47,7 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
             if (!$isRangeSelection(selection)) return;
 
             const anchorNode = selection.anchor.getNode();
-            const topLevel = anchorNode.getTopLevelElementOrThrow();
+            const topLevel = anchorNode.getTopLevelElement?.();
 
             setState({
               isBold: selection.hasFormat("bold"),
@@ -69,13 +69,22 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
         if (!$isRangeSelection(selection)) return;
 
         const anchorNode = selection.anchor.getNode();
-        const parent = anchorNode.getTopLevelElementOrThrow();
+        const topLevel = anchorNode.getTopLevelElementOrThrow();
 
-        if ($isListNode(parent)) {
+        if ($isListNode(topLevel)) {
           editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-        } else {
-          editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+          return;
         }
+
+        if (
+          topLevel.getType() === "paragraph" &&
+          topLevel.getChildrenSize() === 1 &&
+          topLevel.getTextContent().trim() === ""
+        ) {
+          topLevel.remove();
+        }
+
+        editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
       });
     };
 
