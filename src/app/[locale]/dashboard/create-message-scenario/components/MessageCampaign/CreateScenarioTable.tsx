@@ -44,6 +44,13 @@ interface Props {
   setActiveStep: (step: number) => void;
 }
 
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
 const ITEMS_PER_PAGE = 5;
 
 export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
@@ -187,6 +194,7 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
         <TableBody>
           {paginatedLeads.map((lead) => {
             const changes = editedLeads[lead.id] || {};
+
             return (
               <TableRow key={lead.id}>
                 <TableCell>
@@ -346,7 +354,8 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                 <TableCell>
                   <div className="flex items-center justify-between gap-2">
                     <span className="truncate max-w-[180px] text-sm text-muted-foreground">
-                      {lead.message?.slice(0, 60) || t("placeholders.message")}
+                      {stripHtml(lead.message ?? "").slice(0, 60) ||
+                        t("placeholders.message")}
                     </span>
                     <Button
                       variant="ghost"

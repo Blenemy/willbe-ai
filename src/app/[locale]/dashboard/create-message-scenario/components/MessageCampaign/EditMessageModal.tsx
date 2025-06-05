@@ -16,17 +16,21 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+
 import {
   $getRoot,
   TextNode,
   $isElementNode,
   $isDecoratorNode,
   $createParagraphNode,
+  LexicalEditor,
+  EditorState,
 } from "lexical";
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { ListNode, ListItemNode } from "@lexical/list";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { EditorThemeClasses } from "lexical";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { FloatingMenuPlugin } from "@/components/FloatingMenuPlugin/FloatingMenuPlugin";
 
 const theme: EditorThemeClasses = {
@@ -57,8 +61,20 @@ export function OnChangeHtmlPlugin({
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {
       editorState.read(() => {
-        const htmlString = $generateHtmlFromNodes(editor, null);
-        onChange(htmlString);
+        let rawHtml = $generateHtmlFromNodes(editor, null);
+
+        rawHtml = rawHtml.replace(/<span[^>]*>(.*?)<\/span>/gi, "$1");
+
+        rawHtml = rawHtml.replace(/<p[^>]*>(&nbsp;|\s)*<\/p>/gi, "<br>");
+
+        rawHtml = rawHtml.replace(
+          /<p[^>]*>(.*?)<\/p>/gi,
+          (_, inner) => `${inner}<br>`
+        );
+
+        rawHtml = rawHtml.replace(/(<br\s*\/?>\s*)+$/, "");
+
+        onChange(rawHtml);
       });
     });
   }, [editor, onChange]);
@@ -74,7 +90,15 @@ function InitialContentPlugin({ content }: { content: string }) {
 
     editor.update(() => {
       const parser = new DOMParser();
-      const safeContent = content.trim() || "<p></p>";
+
+      const safeContent =
+        "<p>" +
+        content
+          .trim()
+          .replace(/<br\s*\/?>/gi, "</p><p>")
+          .replace(/<p><\/p>/gi, "<p>&nbsp;</p>") +
+        "</p>";
+
       const dom = parser.parseFromString(safeContent, "text/html");
       const nodes = $generateNodesFromDOM(editor, dom);
 
@@ -126,6 +150,27 @@ export const EditMessageModal = ({
     ],
   };
 
+  function onChange(editorState: EditorState, editor: LexicalEditor) {
+    editorState.read(() => {
+      let html = $generateHtmlFromNodes(editor, null);
+
+      html = html.replace(/<span[^>]*>(.*?)<\/span>/gi, "$1");
+
+      html = html.replace(/<p[^>]*>(.*?)<\/p>/gi, (_, inner) => {
+        const content = inner.trim();
+        return content === "" ? "<br>" : `${content}<br>`;
+      });
+
+      html = html.replace(/(<br\s*\/?>\s*){3,}/gi, "<br><br>");
+
+      html = html.replace(/^<br\s*\/?>/, "");
+
+      html = html.replace(/(<br\s*\/?>\s*)+$/, "");
+
+      setMessage(html);
+    });
+  }
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
@@ -147,7 +192,7 @@ export const EditMessageModal = ({
             />
             <FloatingMenuPlugin />
 
-            <OnChangeHtmlPlugin onChange={setMessage} />
+            <OnChangePlugin onChange={onChange} />
           </LexicalComposer>
         </div>
 

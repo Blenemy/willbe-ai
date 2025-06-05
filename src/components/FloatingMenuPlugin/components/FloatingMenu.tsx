@@ -47,7 +47,7 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
             if (!$isRangeSelection(selection)) return;
 
             const anchorNode = selection.anchor.getNode();
-            const topLevel = anchorNode.getTopLevelElementOrThrow();
+            const topLevel = anchorNode.getTopLevelElement?.();
 
             setState({
               isBold: selection.hasFormat("bold"),
