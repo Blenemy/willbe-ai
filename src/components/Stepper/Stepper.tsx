@@ -13,7 +13,7 @@ const CustomStepper = ({
   disabled,
 }: {
   activeStep: number;
-  setActiveStep: Dispatch<SetStateAction<number>>;
+  setActiveStep: Dispatch<SetStateAction<number>> | ((step: number) => void);
   steps: string[];
   disabled?: boolean;
 }) => {

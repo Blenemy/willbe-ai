@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MessageEntry,
   MessageEntryStructure,
@@ -22,7 +22,7 @@ import { SelectMessageStructureForm } from "./SelectedMessageStructureForm";
 interface Props {
   scenarioId: string;
   scenarioTitle: string;
-  setActiveStep: Dispatch<SetStateAction<number>>;
+  setActiveStep: (step: number) => void;
 }
 
 const isStructureFormResponse = (

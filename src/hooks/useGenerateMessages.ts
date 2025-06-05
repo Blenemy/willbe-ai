@@ -49,6 +49,9 @@ export const useSendMessages = () => {
         queryKey: ["message-campaign-entry"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["message-scenario"],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["message-campaign-entries"],
       });
     },
