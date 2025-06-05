@@ -177,7 +177,7 @@ const ScenarioList = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <Button
-          className="bg-[#084960]"
+          className="bg-[#030A27]"
           onClick={() => router.push("/dashboard/create-message-scenario")}
         >
           <Plus className="mr-2 h-4 w-4" />
