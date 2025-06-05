@@ -25,7 +25,7 @@ const ProductsList = ({
     <>
       {productsList.map((product) => (
         <ProfileCard key={product.id} title={product.name}>
-          <p className="text-gray-500 truncate">{product.description}</p>
+          <p className="text-gray-500">{product.description}</p>
           <div className="flex gap-2 mt-2">
             <Button
               variant="outline"
