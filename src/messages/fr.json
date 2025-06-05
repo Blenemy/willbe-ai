@@ -1456,6 +1456,7 @@
     },
     "buttons": {
       "generate": "Générer message(s)",
+      "generating": "Génération en cours",
       "send": "Envoyer {count} message(s)",
       "import": "Importer des leads",
       "cancel": "Annuler",
