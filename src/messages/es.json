@@ -1541,7 +1541,9 @@
         "in_cadence": "En cadencia",
         "response": "Respondió",
         "meeting": "Reunión",
-        "bounced": "Rebotado"
+        "bounced": "Rebotado",
+        "all": "Todos",
+        "out_of_office": "Fuera de la oficina"
       },
       "columns": {
         "fullName": "Nombre completo",
