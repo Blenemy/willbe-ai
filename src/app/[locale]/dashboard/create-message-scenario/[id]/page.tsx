@@ -12,6 +12,7 @@ import { ScenarioMessageChain } from "../components/MessageCampaign/ScenarioMess
 import { useTranslations } from "next-intl";
 import { StatisticPage } from "../components/Statistics/StatisticPage";
 import { useScenarioStepStore } from "@/store/useScenarioStepStore";
+import CustomStepper from "@/components/Stepper/Stepper";
 
 const EditMessageScenarioPage = () => {
   const t = useTranslations("messageScenario");
@@ -44,6 +45,15 @@ const EditMessageScenarioPage = () => {
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("editTitle")}</h2>
+
+      <CustomStepper
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+        steps={[t("steps.import"), t("steps.campaign"), t("steps.stats")]}
+        disabled={!id}
+        hideBackButton={true}
+        hideNextButton={true}
+      />
 
       {activeStep === 0 && (
         <>
