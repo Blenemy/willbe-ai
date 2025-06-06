@@ -82,7 +82,7 @@
     "continue_with_linkedin": "S'inscrire avec LinkedIn"
   },
   "Profile": {
-    "account_settings": "Paramètres du compte",
+    "account_settings": "Paramètres du profil",
     "change_password": "Changer le mot de passe",
     "tab_profile": "Mon profil",
     "tab_security": "Sécurité",
@@ -918,7 +918,7 @@
     "Settings": "Paramètres",
     "Company settings": "Paramètres de l'entreprise",
     "Users": "Utilisateurs",
-    "My account": "Mon compte",
+    "My account": "Paramètres du profil",
     "Scenario list": "Liste des scénarios",
     "Create message scenario": "Créer un scénario de message",
     "Create message structures": "Créer des structures de message",

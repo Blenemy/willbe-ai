@@ -151,7 +151,7 @@
     "delete": "Delete"
   },
   "Profile": {
-    "account_settings": "Account Settings",
+    "account_settings": "Profile Settings",
     "change_password": "Change password",
     "tab_profile": "My profile",
     "tab_security": "Security",
@@ -922,7 +922,7 @@
     "Settings": "Settings",
     "Company settings": "Company settings",
     "Users": "Users",
-    "My account": "My account",
+    "My account": "Profile settings",
     "Log out": "Log out"
   },
   "MessageStructures": {
