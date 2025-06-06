@@ -153,7 +153,7 @@
     "delete": "Eliminar"
   },
   "Profile": {
-    "account_settings": "Configuración de la cuenta",
+    "account_settings": "Configuración del perfil",
     "change_password": "Cambiar contraseña",
     "tab_profile": "Mi perfil",
     "tab_security": "Seguridad",
@@ -917,7 +917,7 @@
     "Settings": "Configuración",
     "Company settings": "Configuración de la empresa",
     "Users": "Usuarios",
-    "My account": "Mi cuenta",
+    "My account": "Configuración del perfil",
     "Scenario list": "Lista de escenarios",
     "Create message scenario": "Crear escenario de mensaje",
     "Create message structures": "Crear estructuras de mensaje",
