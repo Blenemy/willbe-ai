@@ -164,7 +164,7 @@
     "go_back": "Retour",
 
     "validation_name_required": "Le nom est requis",
-    "validation_name_max": "15 caractères maximum",
+    "validation_name_max": "100 caractères maximum",
     "validation_description_required": "La description est requise",
     "validation_description_max": "3000 caractères maximum",
 
@@ -177,7 +177,7 @@
     "company_description_placeholder": "Introduce la descripción de tu empresa",
 
     "company_sector_placeholder": "Entrez le secteur de votre entreprise",
-    "validation_sector_max": "60 caractères maximum",
+    "validation_sector_max": "100 caractères maximum",
 
     "product_add_title": "Ajouter un produit",
     "product_edit_title": "Modifier le produit",
