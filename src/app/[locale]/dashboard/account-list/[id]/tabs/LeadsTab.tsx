@@ -27,8 +27,6 @@ import { useLocale } from "next-intl";
 type SortKey = "firstName" | "lastName" | "email" | "phone" | "role" | "";
 
 export const LeadsTab = () => {
-  console.log(123);
-
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
