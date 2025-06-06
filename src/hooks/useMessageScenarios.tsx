@@ -8,6 +8,55 @@ interface User {
   lastName: string;
 }
 
+export interface Tenure {
+  years: number;
+  months: number;
+}
+
+export interface CurrentPosition {
+  company: string;
+  company_id: string;
+  description: string;
+  industry: string[];
+  location: string;
+  role: string;
+  tenure_at_company: Tenure;
+  tenure_at_role: Tenure;
+}
+
+export interface LeadData {
+  id: string;
+  first_name: string;
+  last_name: string;
+  name: string;
+  headline: string;
+  industry: string | null;
+  location: string;
+  current_positions: CurrentPosition[];
+  network_distance: string;
+  pending_invitation: boolean;
+  profile_picture_url: string;
+  profile_picture_url_large: string;
+  profile_url: string;
+  public_identifier: string;
+  public_profile_url: string;
+  member_urn: string;
+  type: "PEOPLE" | string;
+}
+
+export interface MessageScenarioLead {
+  id: string;
+  leadId: string;
+  messageScenarioId: string;
+  createdAt: string;
+  updatedAt: string;
+  accountId: string;
+  companyId: string | null;
+  hubspotContactId: string | null;
+  isSyncedWithCrm: boolean;
+  leadData: LeadData;
+}
+
 export interface Scenario {
   id: string;
   name: string;
@@ -17,6 +66,7 @@ export interface Scenario {
   messagesSent: number;
   createdAt: string;
   updatedAt: string;
+  leads: MessageScenarioLead[];
 }
 
 interface GetScenariosParams {

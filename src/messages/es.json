@@ -130,7 +130,7 @@
     "go_back": "Volver",
 
     "validation_name_required": "El nombre es obligatorio",
-    "validation_name_max": "Máximo 15 caracteres",
+    "validation_name_max": "Máximo 100 caracteres",
     "validation_description_required": "La descripción es obligatoria",
     "validation_description_max": "Máximo 3000 caracteres",
 
@@ -143,7 +143,7 @@
     "company_description_placeholder": "Enter your company description",
 
     "company_sector_placeholder": "Introduce el sector de tu empresa",
-    "validation_sector_max": "Máximo 60 caracteres",
+    "validation_sector_max": "Máximo 100 caracteres",
 
     "product_add_title": "Agregar producto",
     "product_edit_title": "Editar producto",
@@ -153,7 +153,7 @@
     "delete": "Eliminar"
   },
   "Profile": {
-    "account_settings": "Configuración de la cuenta",
+    "account_settings": "Configuración del perfil",
     "change_password": "Cambiar contraseña",
     "tab_profile": "Mi perfil",
     "tab_security": "Seguridad",
@@ -917,7 +917,7 @@
     "Settings": "Configuración",
     "Company settings": "Configuración de la empresa",
     "Users": "Usuarios",
-    "My account": "Mi cuenta",
+    "My account": "Configuración del perfil",
     "Scenario list": "Lista de escenarios",
     "Create message scenario": "Crear escenario de mensaje",
     "Create message structures": "Crear estructuras de mensaje",
@@ -925,6 +925,7 @@
   },
   "MessageStructures": {
     "title": "Estructuras de Mensajes",
+    "rowsPerPage": "Filas por página:",
     "create_button": "Crear",
     "search_placeholder": "Buscar por título de estructura",
     "table_title": "Título de la estructura",
@@ -1455,6 +1456,7 @@
     },
     "buttons": {
       "generate": "Generar mensaje(s)",
+      "generating": "Generando",
       "send": "Enviar {count} mensaje(s)",
       "import": "Importar leads",
       "cancel": "Cancelar",
