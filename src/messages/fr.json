@@ -1113,7 +1113,9 @@
   },
   "accountTable": {
     "title": "Liste des entreprises",
+    "total_number_of_items": "Nombre total de leads récupérés:",
     "itemsPerPage": "Éléments par page",
+    "view": "Affichage",
     "searchPlaceholder": "Rechercher par nom...",
     "table": {
       "selectAll": "Tout sélectionner",
@@ -1133,17 +1135,19 @@
   },
   "accountSave": {
     "title": "Comptes enregistrés",
+    "deleteSelected": "Supprimer la sélection ({count})",
     "table": {
       "select": "Sélectionner",
-      "title": "Titre",
-      "description": "Description",
+      "logo": "Logo",
+      "name": "Nom",
       "industry": "Secteur",
-      "employees": "Employés",
+      "headcount": "Effectif",
+      "linkedin": "LinkedIn",
+      "summary": "Résumé",
       "country": "Pays",
       "city": "Ville",
       "created": "Créé",
       "website": "Site web",
-      "linkedin": "LinkedIn",
       "actions": "Actions",
       "open": "Ouvrir",
       "delete": "Supprimer"

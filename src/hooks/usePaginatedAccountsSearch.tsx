@@ -86,7 +86,7 @@ export const usePaginatedAccountsSearch = ({
   return {
     ...query,
     isFetching: query.isFetching,
-    saveSelectedAccounts: saveSelectedAccounts.mutate,
+    saveSelectedAccounts: saveSelectedAccounts.mutateAsync,
     saveError: saveSelectedAccounts.error,
   };
 };
