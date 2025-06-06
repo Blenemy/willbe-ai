@@ -27,6 +27,8 @@ import { useLocale } from "next-intl";
 type SortKey = "firstName" | "lastName" | "email" | "phone" | "role" | "";
 
 export const LeadsTab = () => {
+  console.log(123);
+
   const { id } = useParams();
   const [search, setSearch] = useState("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -138,7 +140,7 @@ export const LeadsTab = () => {
         </TableHeader>
         <TableBody>
           {paginated.map((lead) => (
-            <TableRow key={lead.id}>
+            <TableRow key={lead.id} className="h-14">
               <TableCell>
                 <Checkbox
                   checked={selectedIds.includes(lead.id)}
