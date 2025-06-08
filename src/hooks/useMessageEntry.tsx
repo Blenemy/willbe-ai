@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { MessageEntry } from "./useMessageCampaignEntries";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 interface CreateMessageEntryDto {
   messageScenarioId: string;
@@ -40,7 +41,17 @@ export const useCreateMessageEntry = () => {
       toast("Message entry was sucessfully created");
     },
     onError: (err) => {
-      toast(err.message);
+      const axiosError = err as AxiosError<{
+        detail?: string;
+        message?: string;
+      }>;
+
+      const message =
+        axiosError.response?.data?.detail ||
+        axiosError.response?.data?.message ||
+        axiosError.message;
+
+      toast.error(message);
     },
   });
 };
@@ -87,8 +98,8 @@ export const useUpdateMessageEntry = () => {
       });
       toast("Message entry was successfully updated");
     },
-    onError: () => {
-      toast("Failed to update a message entry");
+    onError: (err) => {
+      toast(err.message);
     },
   });
 };
