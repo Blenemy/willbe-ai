@@ -239,6 +239,9 @@ export const useStartHubspotIntegration = () => {
 
       toast("Account was succesfully updated");
     },
+    onError: (err) => {
+      toast(`An error occured during the account update: ${err.message}`);
+    },
   });
 };
 
@@ -259,8 +262,8 @@ export const useStartHubspotIntegrationInBulk = () => {
       queryClient.invalidateQueries({ queryKey: ["account-page"] });
       queryClient.invalidateQueries({ queryKey: ["lead"] });
     },
-    onError: () => {
-      toast(`An error occured during the account update`);
+    onError: (err) => {
+      toast(`An error occured during the account update: ${err.message}`);
     },
   });
 };
