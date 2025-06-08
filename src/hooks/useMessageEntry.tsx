@@ -39,8 +39,8 @@ export const useCreateMessageEntry = () => {
       });
       toast("Message entry was sucessfully created");
     },
-    onError: () => {
-      toast("Failed to create a message entry");
+    onError: (err) => {
+      toast(err.message);
     },
   });
 };
