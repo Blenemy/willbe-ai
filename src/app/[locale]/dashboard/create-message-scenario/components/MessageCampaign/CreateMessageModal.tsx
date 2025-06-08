@@ -95,9 +95,9 @@ export const CreateMessageModal = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: initialData?.type || "",
-      date: initialData?.sendDate?.slice(0, 10) || "",
-      time: initialData?.sendDate?.slice(11, 16) || "",
+      type: "",
+      date: "",
+      time: "",
     },
   });
 
