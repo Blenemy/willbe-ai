@@ -342,9 +342,6 @@ const AccountTable = () => {
             <CustomPagination
               page={currentCursorIndex}
               setPage={(newIndex) => {
-                console.log("currentCursorIndex", currentCursorIndex);
-                console.log("newIndex", newIndex);
-                console.log("cursorStack", cursorStack);
                 if (newIndex === currentCursorIndex) return;
                 if (cursorStack[newIndex] !== undefined) {
                   setCurrentCursorIndex(newIndex);
