@@ -44,6 +44,7 @@ export const ScenarioMessageChain = ({
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
   const [editingEntry, setEditingEntry] = useState<MessageEntry | null>(null);
+  const [initialDate, setInitialDate] = useState<string | null>(null);
 
   const { data: messageEntries } = useMessageCampaignEntries(scenarioId);
   const { data: selectedEntry } = useMessageCampaignEntry(
@@ -155,13 +156,22 @@ export const ScenarioMessageChain = ({
         onDeleteStep={handleDeleteEntry}
         onSelectStep={(id) => setSelectedEntryId(id)}
         selectedEntryId={selectedEntryId}
+        onCreateWithDate={(date) => {
+          setEditMode("create");
+          setEditingEntry(null);
+          setInitialDate(date);
+          setCreateModalOpen(true);
+        }}
       />
 
       <ScenarioCalendarStats entries={messageEntries || []} />
 
       <CreateMessageModal
         open={isCreateModalOpen}
-        onClose={() => setCreateModalOpen(false)}
+        onClose={() => {
+          setCreateModalOpen(false);
+          setInitialDate(null);
+        }}
         onAdd={handleCreateEntry}
         onEdit={handleEditEntry}
         mode={editMode}
@@ -171,6 +181,12 @@ export const ScenarioMessageChain = ({
                 id: editingEntry.id,
                 type: editingEntry.type,
                 sendDate: editingEntry.sendDate,
+              }
+            : initialDate
+            ? {
+                id: "",
+                type: "",
+                sendDate: initialDate,
               }
             : undefined
         }

@@ -48,6 +48,7 @@ import {
 import { renderHeader } from "@/components/ui/renderHeader";
 import { ConfirmationModal } from "../profile/hubspot-settings/components/ConfirmationModal";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useConnections } from "@/hooks/useConnections";
 
 type SortKey = "name" | "createdBy" | "createdAt" | "isSyncedWithCrm" | "";
 
@@ -72,6 +73,7 @@ const AccountListPage = () => {
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
   const { user } = useAuthStore();
+  const { userStatus } = useConnections({ enableFetch: true });
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -248,13 +250,14 @@ const AccountListPage = () => {
               sortAsc,
               handleSort
             )}
-            {renderHeader(
-              t("table.crm"),
-              "isSyncedWithCrm",
-              sortKey,
-              sortAsc,
-              handleSort
-            )}
+            {userStatus?.hubspot &&
+              renderHeader(
+                t("table.crm"),
+                "isSyncedWithCrm",
+                sortKey,
+                sortAsc,
+                handleSort
+              )}
             <TableHead className="text-right">{t("actions")}</TableHead>
           </TableRow>
         </TableHeader>
@@ -289,34 +292,38 @@ const AccountListPage = () => {
                   "dd/MM/yyyy, HH:mm"
                 )}
               </TableCell>
-              <TableCell>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className="text-xs text-gray-500 cursor-default">
-                      {acc.isSyncedWithCrm ? (
-                        <Image
-                          alt="hubspot_connected"
-                          src={hubspotConnected}
-                          width={20}
-                          height={20}
-                        />
-                      ) : (
-                        <Image
-                          alt="hubspot_not_connected"
-                          src={hubspotNotConnected}
-                          width={20}
-                          height={20}
-                        />
-                      )}
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="top" align="center">
-                    {acc.isSyncedWithCrm
-                      ? "Synced with HubSpot"
-                      : "Not synced with HubSpot"}
-                  </TooltipContent>
-                </Tooltip>
-              </TableCell>
+
+              {userStatus?.hubspot && (
+                <TableCell>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="text-xs text-gray-500 cursor-default">
+                        {acc.isSyncedWithCrm ? (
+                          <Image
+                            alt="hubspot_connected"
+                            src={hubspotConnected}
+                            width={20}
+                            height={20}
+                          />
+                        ) : (
+                          <Image
+                            alt="hubspot_not_connected"
+                            src={hubspotNotConnected}
+                            width={20}
+                            height={20}
+                          />
+                        )}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" align="center">
+                      {acc.isSyncedWithCrm
+                        ? "Synced with HubSpot"
+                        : "Not synced with HubSpot"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TableCell>
+              )}
+
               <TableCell className="text-right space-x-2">
                 <Button
                   size="icon"

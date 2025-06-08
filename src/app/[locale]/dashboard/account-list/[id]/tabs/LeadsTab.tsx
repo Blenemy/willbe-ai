@@ -138,7 +138,7 @@ export const LeadsTab = () => {
         </TableHeader>
         <TableBody>
           {paginated.map((lead) => (
-            <TableRow key={lead.id}>
+            <TableRow key={lead.id} className="h-14">
               <TableCell>
                 <Checkbox
                   checked={selectedIds.includes(lead.id)}

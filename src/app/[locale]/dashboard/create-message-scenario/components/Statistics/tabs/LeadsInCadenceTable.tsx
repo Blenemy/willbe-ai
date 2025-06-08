@@ -73,7 +73,8 @@ export const LeadsInCadenceTable = () => {
       const lead = item.lead.leadData;
       const fullName = `${lead.first_name} ${lead.last_name}`.toLowerCase();
       const matchesName = fullName.includes(search.trim().toLowerCase());
-      const matchesStatus = item.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "all" ? true : item.status === statusFilter;
       return matchesName && matchesStatus;
     });
   }, [data, search, statusFilter]);
@@ -123,10 +124,14 @@ export const LeadsInCadenceTable = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">{t("status.all")}</SelectItem>
             <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
             <SelectItem value="response">{t("status.response")}</SelectItem>
             <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
             <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
+            <SelectItem value="out_of_office">
+              {t("status.out_of_office")}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

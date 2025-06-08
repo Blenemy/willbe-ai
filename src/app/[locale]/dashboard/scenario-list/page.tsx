@@ -220,6 +220,7 @@ const ScenarioList = () => {
 
         <Button
           variant="destructive"
+          className="min-w-[160px]"
           disabled={selectedIds.length === 0}
           onClick={() => {
             deleteMutation.mutate(selectedIds);
@@ -369,7 +370,7 @@ const ScenarioList = () => {
           <Select
             onValueChange={(val) => {
               setRowsPerPage(Number(val));
-              setPage(1);
+              setPage(0);
             }}
           >
             <SelectTrigger className="w-16">

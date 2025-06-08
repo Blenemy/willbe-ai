@@ -1536,10 +1536,12 @@
     "leadsTable": {
       "searchPlaceholder": "Search by lead first name, last name",
       "status": {
+        "all": "All",
         "in_cadence": "In cadence",
         "response": "Response",
         "meeting": "Meeting",
-        "bounced": "Bounced"
+        "bounced": "Bounced",
+        "out_of_office": "Out of Office"
       },
       "columns": {
         "fullName": "Full Name",
