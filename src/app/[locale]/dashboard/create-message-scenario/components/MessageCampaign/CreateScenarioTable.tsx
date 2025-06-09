@@ -37,6 +37,7 @@ import { ExportCsvButtons } from "./ExportCsvButtons";
 import { EditMessageModal } from "./EditMessageModal";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
+import { useSearchLanguage } from "@/hooks/useSearchLanguage";
 
 interface Props {
   leads: MessageEntryData[];
@@ -76,6 +77,11 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
     useGenerateMessages();
   const { mutateAsync: sendMessages } = useSendMessages();
   const { mutate: searchField, isPending } = useSearchLeadField();
+  const { mutate: searchLanguage, isPending: isSearchingLanguage } =
+    useSearchLanguage();
+  const [loadingLanguageId, setLoadingLanguageId] = useState<string | null>(
+    null
+  );
   const [loadingField, setLoadingField] = useState<{
     leadId: string;
     field: "email" | "phone";
@@ -303,7 +309,7 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Select
                     value={lead.language ?? ""}
                     onValueChange={(val) => {
@@ -326,6 +332,53 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                       ))}
                     </SelectContent>
                   </Select>
+                </TableCell> */}
+                <TableCell className="align-middle">
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={lead.language ?? ""}
+                      onValueChange={(val) => {
+                        updateLead({
+                          leadId: lead.id,
+                          language: val,
+                        });
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("placeholders.selectLanguage")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {lead.languages?.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {lang}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      disabled={isSearchingLanguage}
+                      onClick={() => {
+                        setLoadingLanguageId(lead.id);
+                        searchLanguage(
+                          { messageEntryLeadDataId: lead.id },
+                          {
+                            onSettled: () => setLoadingLanguageId(null),
+                          }
+                        );
+                      }}
+                    >
+                      {loadingLanguageId === lead.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Select
