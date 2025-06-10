@@ -166,6 +166,20 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
 
   if (!leads || leads.length === 0) return null;
 
+  const currentPageIds = paginatedLeads.map((item) => item.id);
+
+  const isAllSelectedOnPage = currentPageIds.every((id) =>
+    selected.includes(id)
+  );
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelectedOnPage) {
+      setSelected([]);
+    } else {
+      setSelected(paginatedLeads.map((lead) => lead.id));
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -182,7 +196,14 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead />
+            <TableHead className="w-[40px] align-middle">
+              <div className="flex items-center justify-center h-6">
+                <Checkbox
+                  checked={isAllSelectedOnPage}
+                  onCheckedChange={handleToggleSelectAll}
+                />
+              </div>
+            </TableHead>
             <TableHead>{t("table.firstName")}</TableHead>
             <TableHead>{t("table.lastName")}</TableHead>
             <TableHead>{t("table.email")}</TableHead>
@@ -203,11 +224,14 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
 
             return (
               <TableRow key={lead.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={selected.includes(lead.id)}
-                    onCheckedChange={() => toggleSelection(lead.id)}
-                  />
+                <TableCell className="w-[40px] align-middle">
+                  <div className="flex items-center justify-center h-6">
+                    <Checkbox
+                      checked={selected.includes(lead.id)}
+                      onCheckedChange={() => toggleSelection(lead.id)}
+                      aria-label="Select row"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell>{lead.firstName}</TableCell>
                 <TableCell>{lead.lastname}</TableCell>

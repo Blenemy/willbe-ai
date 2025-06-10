@@ -22,6 +22,7 @@ import { ExternalLink, ChevronUp, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Lead } from "@/hooks/useEditScenarioData";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   data: Lead[];
@@ -120,6 +121,20 @@ export const LeadsTable = ({
     [filtered, page, rowsPerPage]
   );
 
+  const currentPageIds = paginated.map((item) => item.id);
+
+  const isAllSelectedOnPage = currentPageIds.every((id) =>
+    selected.includes(id)
+  );
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelectedOnPage) {
+      setSelected([]);
+    } else {
+      setSelected(paginated.map((scenario) => scenario.id));
+    }
+  };
+
   const renderHeader = (label: string, key: SortKey) => (
     <TableHead
       onClick={() => handleSort(key)}
@@ -175,25 +190,33 @@ export const LeadsTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40px]" />
+            <TableHead className="w-[40px] align-middle">
+              <div className="flex items-center justify-center h-6">
+                <Checkbox
+                  checked={isAllSelectedOnPage}
+                  onCheckedChange={handleToggleSelectAll}
+                />
+              </div>
+            </TableHead>
             {renderHeader(t("table.firstName"), "first_name")}
             {renderHeader(t("table.lastName"), "last_name")}
             {renderHeader(t("table.email"), "email")}
             {renderHeader(t("table.role"), "headline")}
             {renderHeader(t("table.account"), "account")}
             {renderHeader(t("table.lastResponse"), "last_response")}
-            <TableHead className="w-[40px]" />
           </TableRow>
         </TableHeader>
         <TableBody>
           {paginated.map((item) => (
             <TableRow key={item.id}>
-              <TableCell>
-                <input
-                  type="checkbox"
-                  checked={selected.includes(item.id)}
-                  onChange={() => toggleSelection(item.id)}
-                />
+              <TableCell className="w-[40px] align-middle">
+                <div className="flex items-center justify-center h-6">
+                  <Checkbox
+                    checked={selected.includes(item.id)}
+                    onCheckedChange={() => toggleSelection(item.id)}
+                    aria-label="Select row"
+                  />
+                </div>
               </TableCell>
               <TableCell className="break-words">
                 {item.leadData.first_name}
