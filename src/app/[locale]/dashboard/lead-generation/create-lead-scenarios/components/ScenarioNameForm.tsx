@@ -50,6 +50,8 @@ const ScenarioNameForm = () => {
   useEffect(() => {
     if (scenarioName) {
       form.setValue("name", scenarioName);
+    } else {
+      form.reset({ name: "" });
     }
   }, [scenarioName, form]);
 
