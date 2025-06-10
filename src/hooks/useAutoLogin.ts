@@ -1,18 +1,22 @@
+"use client";
+
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
 import { useAuthStore } from "@/store/useAuthStore";
+import { useQueryClient } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 
 export const useAutoLogin = () => {
+  const { user, setUser } = useAuthStore();
+  const queryClient = useQueryClient();
+  const pathname = usePathname();
   const router = useRouter();
-  const locale = useLocale();
-  const { user } = useAuthStore();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
+    const isDashboardPage = pathname?.startsWith("/dashboard");
 
-    if (!user && accessToken) {
-      router.replace(`/${locale}/dashboard/home`);
+    if (!accessToken && isDashboardPage) {
+      router.replace("/sign-in");
     }
-  }, [user, router, locale]);
+  }, [user, setUser, queryClient, pathname, router]);
 };

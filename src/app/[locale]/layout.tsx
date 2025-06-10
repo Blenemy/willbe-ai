@@ -47,6 +47,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <QueryProvider>
             <AutoRedirectClientWrapper>{children}</AutoRedirectClientWrapper>
+            {/* {children} */}
           </QueryProvider>
           <SalesNavigatorGuard />
           <Toaster position="top-right" />

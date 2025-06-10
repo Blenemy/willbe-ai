@@ -55,7 +55,6 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       return response.data;
     },
     retry: false,
-    staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
   });
 
@@ -84,8 +83,6 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     },
     onSuccess: (data, variables) => {
       const { accessToken, refreshToken } = data;
-
-      console.log(variables.rememberMe);
 
       if (variables.rememberMe) {
         localStorage.setItem("accessToken", accessToken);
