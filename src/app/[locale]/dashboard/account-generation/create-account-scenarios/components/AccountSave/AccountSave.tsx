@@ -37,7 +37,7 @@ const AccountSave = () => {
 
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
-  const { savedAccounts } = useSavedAccounts({
+  const { savedAccounts, deleteSavedAccounts } = useSavedAccounts({
     enableFetch: true,
     accountId,
   });
@@ -70,9 +70,10 @@ const AccountSave = () => {
       : String(bVal).localeCompare(String(aVal));
   });
 
-  // const handleDelete = async (id: string) => {
-  //   deleteSavedAccounts(id);
-  // };
+  const handleDelete = async () => {
+    deleteSavedAccounts(selectedIds);
+    setSelectedIds([]);
+  };
 
   // const handleOpenProfile = (id: string) => {
   //   router.replace(`/dashboard/account-list/${id}`);
@@ -102,10 +103,7 @@ const AccountSave = () => {
         <Button
           variant="destructive"
           disabled={selectedIds.length === 0}
-          onClick={() => {
-            // deleteMutation.mutate(selectedIds);
-            setSelectedIds([]);
-          }}
+          onClick={handleDelete}
         >
           {t("deleteSelected", { count: selectedIds.length })}
         </Button>
