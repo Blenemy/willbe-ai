@@ -8,6 +8,7 @@ import "../globals.css";
 import QueryProvider from "@/providers/providers";
 import { Toaster } from "sonner";
 import { SalesNavigatorGuard } from "@/components/SalesNavigatorGuard/SalesNavigatorGuard";
+import { AutoRedirectClientWrapper } from "@/components/AutoRedirectClientWrapper/AutoRedirectClientWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,7 +45,10 @@ export default async function LocaleLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            <AutoRedirectClientWrapper>{children}</AutoRedirectClientWrapper>
+            {/* {children} */}
+          </QueryProvider>
           <SalesNavigatorGuard />
           <Toaster position="top-right" />
         </NextIntlClientProvider>

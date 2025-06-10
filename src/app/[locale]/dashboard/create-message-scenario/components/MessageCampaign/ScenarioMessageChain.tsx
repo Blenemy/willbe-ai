@@ -181,6 +181,7 @@ export const ScenarioMessageChain = ({
                 id: editingEntry.id,
                 type: editingEntry.type,
                 sendDate: editingEntry.sendDate,
+                sendNow: editingEntry.sendNow,
               }
             : initialDate
             ? {

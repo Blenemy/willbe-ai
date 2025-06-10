@@ -110,10 +110,10 @@ export function AuthForm({
   });
 
   function onSubmit(values: z.infer<typeof signUpSchema>) {
-    const { email, password, firstName, lastName } = values;
+    const { email, password, firstName, lastName, remember } = values;
 
     if (isSignIn) {
-      login({ email, password });
+      login({ email, password, rememberMe: remember });
     } else {
       register({ email, password, firstName, lastName });
     }
