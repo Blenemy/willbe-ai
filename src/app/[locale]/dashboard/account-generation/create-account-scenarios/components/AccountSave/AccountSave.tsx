@@ -25,6 +25,7 @@ import Image from "next/image";
 import linkedinImage from "@/assets/LinkedinLogo.svg";
 import { renderCompactHeader } from "@/components/ui/renderHeader";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { parseHeadcount } from "@/utils/parsedHeadcount";
 
 const ROWS_PER_PAGE = 30;
 
@@ -37,7 +38,7 @@ const AccountSave = () => {
 
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
-  const { savedAccounts } = useSavedAccounts({
+  const { savedAccounts, deleteSavedAccounts } = useSavedAccounts({
     enableFetch: true,
     accountId,
   });
@@ -65,14 +66,21 @@ const AccountSave = () => {
     //@ts-expect-error element implicity has an "any" type
     const bVal = b.accountData?.[sortKey] || "";
 
+    if (sortKey === "headcount") {
+      const numA = parseHeadcount(String(aVal));
+      const numB = parseHeadcount(String(bVal));
+      return sortAsc ? numA - numB : numB - numA;
+    }
+
     return sortAsc
       ? String(aVal).localeCompare(String(bVal))
       : String(bVal).localeCompare(String(aVal));
   });
 
-  // const handleDelete = async (id: string) => {
-  //   deleteSavedAccounts(id);
-  // };
+  const handleDelete = async () => {
+    deleteSavedAccounts(selectedIds);
+    setSelectedIds([]);
+  };
 
   // const handleOpenProfile = (id: string) => {
   //   router.replace(`/dashboard/account-list/${id}`);
@@ -102,10 +110,7 @@ const AccountSave = () => {
         <Button
           variant="destructive"
           disabled={selectedIds.length === 0}
-          onClick={() => {
-            // deleteMutation.mutate(selectedIds);
-            setSelectedIds([]);
-          }}
+          onClick={handleDelete}
         >
           {t("deleteSelected", { count: selectedIds.length })}
         </Button>

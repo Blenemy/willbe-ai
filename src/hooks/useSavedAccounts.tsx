@@ -30,15 +30,14 @@ export const useSavedAccounts = ({ enableFetch, accountId }: UseAuthProps) => {
       return res.data;
     },
     retry: false,
-    staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
   });
 
   const deleteSavedAccounts = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await protectedAxiosInstance.delete(
-        `/auth/account-scenarios/saved-accounts/${id}`
-      );
+    mutationFn: async (accountIds: string[]) => {
+      const response = await protectedAxiosInstance.delete(`/auth/accounts`, {
+        data: { accountIds },
+      });
       return response.data;
     },
     onSuccess: () => {
