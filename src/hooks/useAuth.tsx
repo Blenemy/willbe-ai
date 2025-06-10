@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 interface LoginPayload {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 interface RegisterPayload {
@@ -58,17 +59,7 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
     enabled: enableFetch,
   });
 
-  const handleAuthSuccess = async (data: {
-    accessToken: string;
-    refreshToken: string;
-  }) => {
-    Cookies.set("accessToken", data.accessToken, {
-      sameSite: "Strict",
-    });
-    Cookies.set("refreshToken", data.refreshToken, {
-      sameSite: "Strict",
-    });
-
+  const handleAuthSuccess = async () => {
     try {
       const response = await protectedAxiosInstance.get("/auth/me");
       const user = response.data;
@@ -91,7 +82,22 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
       const response = await axiosInstance.post("/auth/login", credentials);
       return response.data;
     },
-    onSuccess: handleAuthSuccess,
+    onSuccess: (data, variables) => {
+      const { accessToken, refreshToken } = data;
+
+      console.log(variables.rememberMe);
+
+      if (variables.rememberMe) {
+        localStorage.setItem("accessToken", accessToken);
+      }
+
+      Cookies.set("accessToken", accessToken, { sameSite: "Strict" });
+      Cookies.set("refreshToken", refreshToken, { sameSite: "Strict" });
+      localStorage.setItem("refreshToken", refreshToken);
+
+      handleAuthSuccess();
+    },
+
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
       const errorMessage = error.response?.data.message || "Login failed.";
       toast(errorMessage);
@@ -126,9 +132,13 @@ export const useAuth = ({ enableFetch = false }: UseAuthProps) => {
   const logoutHandler = () => {
     logout();
     queryClient.setQueryData(["authUser"], null);
+
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     Cookies.remove("userRole");
+
     router.replace(`/${locale}/sign-in`);
   };
 
