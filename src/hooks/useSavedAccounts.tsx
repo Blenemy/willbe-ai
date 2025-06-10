@@ -30,7 +30,6 @@ export const useSavedAccounts = ({ enableFetch, accountId }: UseAuthProps) => {
       return res.data;
     },
     retry: false,
-    staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
   });
 
