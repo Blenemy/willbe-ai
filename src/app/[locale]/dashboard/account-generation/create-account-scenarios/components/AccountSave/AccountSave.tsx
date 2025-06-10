@@ -25,6 +25,7 @@ import Image from "next/image";
 import linkedinImage from "@/assets/LinkedinLogo.svg";
 import { renderCompactHeader } from "@/components/ui/renderHeader";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { parseHeadcount } from "@/utils/parsedHeadcount";
 
 const ROWS_PER_PAGE = 30;
 
@@ -64,6 +65,12 @@ const AccountSave = () => {
     const aVal = a.accountData?.[sortKey] || "";
     //@ts-expect-error element implicity has an "any" type
     const bVal = b.accountData?.[sortKey] || "";
+
+    if (sortKey === "headcount") {
+      const numA = parseHeadcount(String(aVal));
+      const numB = parseHeadcount(String(bVal));
+      return sortAsc ? numA - numB : numB - numA;
+    }
 
     return sortAsc
       ? String(aVal).localeCompare(String(bVal))

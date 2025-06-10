@@ -34,6 +34,8 @@ import {
 } from "@/components/ui/tooltip";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { renderCompactHeader } from "@/components/ui/renderHeader";
+import { useSelectedCompaniesStore } from "@/store/useSelectedCompaniesStore";
+import { parseHeadcount } from "@/utils/parsedHeadcount";
 
 const ROWS_PER_PAGE_LIMIT = 30;
 
@@ -53,7 +55,14 @@ const AccountTable = () => {
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+  const {
+    selectedCompanies,
+    toggleCompany,
+    addCompanies,
+    removeCompanies,
+    clear: clearSelected,
+  } = useSelectedCompaniesStore();
+
   const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
   const [cursor, setCursor] = useState<string | null>(null);
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
@@ -93,24 +102,14 @@ const AccountTable = () => {
 
   const companies = data?.items || [];
 
-  const toggleCompanySelection = (id: string) => {
-    setSelectedCompanies((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
-
   const filteredCompanies = companies.filter((company) =>
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = async () => {
-    if (!accountId || !data) return;
+    if (!accountId) return;
 
-    const selectedData = data.items.filter((item) =>
-      selectedCompanies.includes(item.id)
-    );
-
-    const accounts = selectedData.map((company) => ({
+    const accounts = Object.values(selectedCompanies).map((company) => ({
       type: company.type,
       id: company.id,
       name: company.name,
@@ -123,6 +122,7 @@ const AccountTable = () => {
     }));
 
     await saveSelectedAccounts({ accountScenarioId: accountId, accounts });
+    clearSelected();
   };
 
   const sortedCompanies = [...filteredCompanies].sort((a, b) => {
@@ -130,6 +130,13 @@ const AccountTable = () => {
     const aVal = a?.[sortKey] || "";
     //@ts-expect-error element implicity has an "any" type
     const bVal = b?.[sortKey] || "";
+
+    if (sortKey === "headcount") {
+      const numA = parseHeadcount(String(aVal));
+      const numB = parseHeadcount(String(bVal));
+      return sortAsc ? numA - numB : numB - numA;
+    }
+
     return sortAsc
       ? String(aVal).localeCompare(String(bVal))
       : String(bVal).localeCompare(String(aVal));
@@ -194,24 +201,13 @@ const AccountTable = () => {
                   <Checkbox
                     checked={
                       filteredCompanies.length > 0 &&
-                      filteredCompanies.every((c) =>
-                        selectedCompanies.includes(c.id)
-                      )
+                      filteredCompanies.every((c) => c.id in selectedCompanies)
                     }
                     onCheckedChange={(checked) => {
                       if (checked) {
-                        setSelectedCompanies((prev) => [
-                          ...new Set([
-                            ...prev,
-                            ...filteredCompanies.map((c) => c.id),
-                          ]),
-                        ]);
+                        addCompanies(filteredCompanies);
                       } else {
-                        setSelectedCompanies((prev) =>
-                          prev.filter(
-                            (id) => !filteredCompanies.some((c) => c.id === id)
-                          )
-                        );
+                        removeCompanies(filteredCompanies);
                       }
                     }}
                   />
@@ -262,8 +258,8 @@ const AccountTable = () => {
                 <TableRow key={company.id}>
                   <TableCell className="p-1 w-[36px]">
                     <Checkbox
-                      checked={selectedCompanies.includes(company.id)}
-                      onCheckedChange={() => toggleCompanySelection(company.id)}
+                      checked={!!selectedCompanies[company.id]}
+                      onCheckedChange={() => toggleCompany(company)}
                     />
                   </TableCell>
 
@@ -363,7 +359,7 @@ const AccountTable = () => {
           <Button
             className="mt-4 self-center"
             onClick={handleSubmit}
-            disabled={selectedCompanies.length === 0}
+            disabled={Object.keys(selectedCompanies).length === 0}
           >
             {t("submit")}
           </Button>
