@@ -60,10 +60,10 @@ const AccountSave = () => {
   };
 
   const sortedAccounts = (savedAccounts ?? []).sort((a, b) => {
-    //@ts-expect-error element implicity has an "any" type
-    const aVal = a.accountData?.[sortKey] || "";
-    //@ts-expect-error element implicity has an "any" type
-    const bVal = b.accountData?.[sortKey] || "";
+    // @ts-expect-error element implicitly has an "any" type
+    const aVal = a.accountData?.[sortKey] ?? "";
+    // @ts-expect-error element implicitly has an "any" type
+    const bVal = b.accountData?.[sortKey] ?? "";
 
     if (sortKey === "headcount") {
       const numA = parseHeadcount(String(aVal));
