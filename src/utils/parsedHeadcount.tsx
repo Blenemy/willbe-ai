@@ -2,8 +2,9 @@ export const parseHeadcount = (value: string): number => {
   if (!value) return 0;
 
   const trimmed = value.trim().toUpperCase().replace("+", "");
+  const regex = /^([\d.]+)([KM]?)$/;
+  const match = regex.exec(trimmed);
 
-  const match = trimmed.match(/^([\d.]+)([KM]?)$/);
   if (!match) return 0;
 
   const num = parseFloat(match[1]);
