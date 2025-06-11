@@ -42,7 +42,6 @@ import { useSearchLanguage } from "@/hooks/useSearchLanguage";
 interface Props {
   leads: MessageEntryData[];
   selectedEntry: MessageEntry;
-  setActiveStep: (step: number) => void;
 }
 
 const stripHtml = (html: string) =>
@@ -333,30 +332,6 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                     </SelectContent>
                   </Select>
                 </TableCell>
-                {/* <TableCell>
-                  <Select
-                    value={lead.language ?? ""}
-                    onValueChange={(val) => {
-                      updateLead({
-                        leadId: lead.id,
-                        language: val,
-                      });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("placeholders.selectLanguage")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {lead.languages?.map((lang) => (
-                        <SelectItem key={lang} value={lang}>
-                          {lang}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </TableCell> */}
                 <TableCell className="align-middle">
                   <div className="flex items-center gap-2">
                     <Select
