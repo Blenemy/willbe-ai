@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 import Image from "next/image";
 import linkedinImage from "@/assets/LinkedinLogo.svg";
-import { RenderCompactHeader } from "@/components/ui/renderHeader";
+import { renderCompactHeader } from "@/components/ui/renderHeader";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { parseHeadcount } from "@/utils/parsedHeadcount";
 
@@ -130,21 +130,21 @@ const AccountSave = () => {
               />
             </TableHead>
             <TableHead className="w-[44px] p-1">{t("table.logo")}</TableHead>
-            {RenderCompactHeader(
+            {renderCompactHeader(
               t("table.name"),
               "name",
               sortKey,
               sortAsc,
               handleSort
             )}
-            {RenderCompactHeader(
+            {renderCompactHeader(
               t("table.industry"),
               "industry",
               sortKey,
               sortAsc,
               handleSort
             )}
-            {RenderCompactHeader(
+            {renderCompactHeader(
               t("table.headcount"),
               "headcount",
               sortKey,
