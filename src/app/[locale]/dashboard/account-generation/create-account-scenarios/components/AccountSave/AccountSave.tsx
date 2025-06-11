@@ -34,7 +34,6 @@ const AccountSave = () => {
   const [sortKey, setSortKey] = useState<string>("title");
   const [page, setPage] = useState(0);
   const [sortAsc, setSortAsc] = useState<boolean>(true);
-  // const router = useRouter();
 
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
@@ -81,10 +80,6 @@ const AccountSave = () => {
     deleteSavedAccounts(selectedIds);
     setSelectedIds([]);
   };
-
-  // const handleOpenProfile = (id: string) => {
-  //   router.replace(`/dashboard/account-list/${id}`);
-  // };
 
   const handleGenerateScenario = () => {
     generateLeadScenario({
