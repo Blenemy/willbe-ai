@@ -126,10 +126,10 @@ const AccountTable = () => {
   };
 
   const sortedCompanies = [...filteredCompanies].sort((a, b) => {
-    //@ts-expect-error element implicity has an "any" type
-    const aVal = a?.[sortKey] || "";
-    //@ts-expect-error element implicity has an "any" type
-    const bVal = b?.[sortKey] || "";
+    // @ts-expect-error element implicitly has an "any" type
+    const aVal = a?.[sortKey] ?? "";
+    // @ts-expect-error element implicitly has an "any" type
+    const bVal = b?.[sortKey] ?? "";
 
     if (sortKey === "headcount") {
       const numA = parseHeadcount(String(aVal));
@@ -351,7 +351,7 @@ const AccountTable = () => {
                 }
               }}
               rowsPerPage={ROWS_PER_PAGE_LIMIT}
-              totalCount={data?.paging.total_count || 0}
+              totalCount={data?.paging.total_count ?? 0}
               disablePageJumping
             />
           </div>
