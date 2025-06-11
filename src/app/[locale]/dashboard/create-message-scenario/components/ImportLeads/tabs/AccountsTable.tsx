@@ -33,6 +33,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   data: AccountScenario[] | AccountRecord[];
@@ -108,6 +109,20 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
     page * rowsPerPage + rowsPerPage
   );
 
+  const currentPageIds = paginated.map((item) => item.id);
+
+  const isAllSelectedOnPage = currentPageIds.every((id) =>
+    selected.includes(id)
+  );
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelectedOnPage) {
+      setSelected([]);
+    } else {
+      setSelected(paginated.map((scenario) => scenario.id));
+    }
+  };
+
   return (
     <>
       <Input
@@ -120,7 +135,14 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40px]" />
+            <TableHead className="w-[40px] align-middle">
+              <div className="flex items-center justify-center h-6">
+                <Checkbox
+                  checked={isAllSelectedOnPage}
+                  onCheckedChange={handleToggleSelectAll}
+                />
+              </div>
+            </TableHead>
             {renderHeader(
               t("table.accountTitle"),
               "name",
@@ -168,12 +190,14 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
 
             return (
               <TableRow key={item.id}>
-                <TableCell className="w-[40px]">
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(item.id)}
-                    onChange={() => toggleSelection(item.id)}
-                  />
+                <TableCell className="w-[40px] align-middle">
+                  <div className="flex items-center justify-center h-6">
+                    <Checkbox
+                      checked={selected.includes(item.id)}
+                      onCheckedChange={() => toggleSelection(item.id)}
+                      aria-label="Select row"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="max-w-[240px] break-words">
                   <div className="flex items-center gap-2">

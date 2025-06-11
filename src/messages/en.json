@@ -129,7 +129,7 @@
     "go_back": "Go back",
     "connections": "Connections",
     "validation_name_required": "Name is required",
-    "validation_name_max": "Maximum 15 characters",
+    "validation_name_max": "Maximum 100 characters",
     "validation_description_required": "Description is required",
     "validation_description_max": "Maximum 3000 characters",
     "company_settings": "Company settings",
@@ -141,7 +141,7 @@
     "company_description_placeholder": "Enter your company description",
 
     "company_sector_placeholder": "Enter your company sector",
-    "validation_sector_max": "Maximum 60 characters",
+    "validation_sector_max": "Maximum 100 characters",
 
     "product_add_title": "Add Product",
     "product_edit_title": "Edit Product",
@@ -151,7 +151,7 @@
     "delete": "Delete"
   },
   "Profile": {
-    "account_settings": "Account Settings",
+    "account_settings": "Profile Settings",
     "change_password": "Change password",
     "tab_profile": "My profile",
     "tab_security": "Security",
@@ -922,12 +922,13 @@
     "Settings": "Settings",
     "Company settings": "Company settings",
     "Users": "Users",
-    "My account": "My account",
+    "My account": "Profile settings",
     "Log out": "Log out"
   },
   "MessageStructures": {
     "title": "Message Structures",
     "create_button": "Create",
+    "rowsPerPage": "Rows per page:",
     "search_placeholder": "Search by structure title",
     "table_title": "Message structure title",
     "table_languages": "Languages",
@@ -1109,6 +1110,8 @@
   },
   "accountTable": {
     "title": "Company List",
+    "total_number_of_items": "Total number of leads retrieved:",
+    "view": "View",
     "itemsPerPage": "Items per page",
     "searchPlaceholder": "Search by name...",
     "table": {
@@ -1129,17 +1132,19 @@
   },
   "accountSave": {
     "title": "Saved Accounts",
+    "deleteSelected": "Delete selected ({count})",
     "table": {
       "select": "Select",
-      "title": "Title",
-      "description": "Description",
+      "logo": "Logo",
+      "name": "Name",
       "industry": "Industry",
-      "employees": "Employees",
+      "headcount": "Headcount",
+      "linkedin": "LinkedIn",
+      "summary": "Summary",
       "country": "Country",
       "city": "City",
       "created": "Created",
       "website": "Website",
-      "linkedin": "LinkedIn",
       "actions": "Actions",
       "open": "Open",
       "delete": "Delete"
@@ -1449,6 +1454,7 @@
     },
     "buttons": {
       "generate": "Generate message(s)",
+      "generating": "Generating",
       "send": "Send {count} message(s)",
       "import": "Import leads",
       "cancel": "Cancel",
@@ -1530,10 +1536,12 @@
     "leadsTable": {
       "searchPlaceholder": "Search by lead first name, last name",
       "status": {
+        "all": "All",
         "in_cadence": "In cadence",
         "response": "Response",
         "meeting": "Meeting",
-        "bounced": "Bounced"
+        "bounced": "Bounced",
+        "out_of_office": "Out of Office"
       },
       "columns": {
         "fullName": "Full Name",

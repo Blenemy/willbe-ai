@@ -1,4 +1,6 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { TableHead } from "@/components/ui/table";
+import { useMemo } from "react";
 
 export const renderHeader = <T extends string>(
   label: string,
@@ -7,7 +9,7 @@ export const renderHeader = <T extends string>(
   sortAsc: boolean,
   handleSort: (key: T) => void
 ) => (
-  <th
+  <TableHead
     onClick={() => handleSort(key)}
     className="cursor-pointer select-none whitespace-nowrap"
   >
@@ -28,5 +30,45 @@ export const renderHeader = <T extends string>(
       </div>
       {label}
     </div>
-  </th>
+  </TableHead>
 );
+
+export const RenderCompactHeader = <T extends string>(
+  label: string,
+  key: T,
+  sortKey: T,
+  sortAsc: boolean,
+  handleSort: (key: T) => void
+) => {
+  const sortIcon = useMemo(() => {
+    if (sortKey === key) {
+      return sortAsc ? (
+        <ChevronUp className="w-4 h-4 text-foreground" />
+      ) : (
+        <ChevronDown className="w-4 h-4 text-foreground" />
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-center leading-none">
+        <ChevronUp className="w-4 h-4 p-0 -mr-1" />
+        <ChevronDown className="w-4 h-4 p-0" />
+      </div>
+    );
+  }, [sortKey, key, sortAsc]);
+
+  return (
+    <TableHead
+      onClick={() => handleSort(key)}
+      className="w-[120px] truncate cursor-pointer select-none"
+    >
+      <div className="flex items-center gap-1">
+        <div className="w-5 flex justify-center items-center text-muted-foreground">
+          {sortIcon}
+        </div>
+
+        <span>{label}</span>
+      </div>
+    </TableHead>
+  );
+};

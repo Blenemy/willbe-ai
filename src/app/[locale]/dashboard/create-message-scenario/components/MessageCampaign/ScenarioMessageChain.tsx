@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MessageEntry,
   MessageEntryStructure,
@@ -22,7 +22,7 @@ import { SelectMessageStructureForm } from "./SelectedMessageStructureForm";
 interface Props {
   scenarioId: string;
   scenarioTitle: string;
-  setActiveStep: Dispatch<SetStateAction<number>>;
+  setActiveStep: (step: number) => void;
 }
 
 const isStructureFormResponse = (
@@ -35,15 +35,12 @@ const isStructureFormResponse = (
   );
 };
 
-export const ScenarioMessageChain = ({
-  scenarioId,
-  scenarioTitle,
-  setActiveStep,
-}: Props) => {
+export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");
   const [editingEntry, setEditingEntry] = useState<MessageEntry | null>(null);
+  const [initialDate, setInitialDate] = useState<string | null>(null);
 
   const { data: messageEntries } = useMessageCampaignEntries(scenarioId);
   const { data: selectedEntry } = useMessageCampaignEntry(
@@ -137,6 +134,25 @@ export const ScenarioMessageChain = ({
     setSelectedEntryId(null);
   };
 
+  let initialFormData;
+
+  if (editingEntry) {
+    initialFormData = {
+      id: editingEntry.id,
+      type: editingEntry.type,
+      sendDate: editingEntry.sendDate,
+      sendNow: editingEntry.sendNow,
+    };
+  } else if (initialDate) {
+    initialFormData = {
+      id: "",
+      type: "",
+      sendDate: initialDate,
+    };
+  } else {
+    initialFormData = undefined;
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <ScenarioCalendar
@@ -155,25 +171,26 @@ export const ScenarioMessageChain = ({
         onDeleteStep={handleDeleteEntry}
         onSelectStep={(id) => setSelectedEntryId(id)}
         selectedEntryId={selectedEntryId}
+        onCreateWithDate={(date) => {
+          setEditMode("create");
+          setEditingEntry(null);
+          setInitialDate(date);
+          setCreateModalOpen(true);
+        }}
       />
 
       <ScenarioCalendarStats entries={messageEntries || []} />
 
       <CreateMessageModal
         open={isCreateModalOpen}
-        onClose={() => setCreateModalOpen(false)}
+        onClose={() => {
+          setCreateModalOpen(false);
+          setInitialDate(null);
+        }}
         onAdd={handleCreateEntry}
         onEdit={handleEditEntry}
         mode={editMode}
-        initialData={
-          editingEntry
-            ? {
-                id: editingEntry.id,
-                type: editingEntry.type,
-                sendDate: editingEntry.sendDate,
-              }
-            : undefined
-        }
+        initialData={initialFormData}
       />
 
       {selectedEntry &&
@@ -187,7 +204,6 @@ export const ScenarioMessageChain = ({
           <CreateScenarioTable
             leads={selectedEntry.messageEntryLeadData}
             selectedEntry={selectedEntry}
-            setActiveStep={setActiveStep}
           />
         ))}
     </div>

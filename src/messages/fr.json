@@ -82,7 +82,7 @@
     "continue_with_linkedin": "S'inscrire avec LinkedIn"
   },
   "Profile": {
-    "account_settings": "Paramètres du compte",
+    "account_settings": "Paramètres du profil",
     "change_password": "Changer le mot de passe",
     "tab_profile": "Mon profil",
     "tab_security": "Sécurité",
@@ -164,7 +164,7 @@
     "go_back": "Retour",
 
     "validation_name_required": "Le nom est requis",
-    "validation_name_max": "15 caractères maximum",
+    "validation_name_max": "100 caractères maximum",
     "validation_description_required": "La description est requise",
     "validation_description_max": "3000 caractères maximum",
 
@@ -177,7 +177,7 @@
     "company_description_placeholder": "Introduce la descripción de tu empresa",
 
     "company_sector_placeholder": "Entrez le secteur de votre entreprise",
-    "validation_sector_max": "60 caractères maximum",
+    "validation_sector_max": "100 caractères maximum",
 
     "product_add_title": "Ajouter un produit",
     "product_edit_title": "Modifier le produit",
@@ -918,7 +918,7 @@
     "Settings": "Paramètres",
     "Company settings": "Paramètres de l'entreprise",
     "Users": "Utilisateurs",
-    "My account": "Mon compte",
+    "My account": "Paramètres du profil",
     "Scenario list": "Liste des scénarios",
     "Create message scenario": "Créer un scénario de message",
     "Create message structures": "Créer des structures de message",
@@ -926,6 +926,7 @@
   },
   "MessageStructures": {
     "title": "Structures de Messages",
+    "rowsPerPage": "Lignes par page :",
     "create_button": "Créer",
     "search_placeholder": "Rechercher par titre de structure",
     "table_title": "Titre de la structure",
@@ -1112,7 +1113,9 @@
   },
   "accountTable": {
     "title": "Liste des entreprises",
+    "total_number_of_items": "Nombre total de leads récupérés:",
     "itemsPerPage": "Éléments par page",
+    "view": "Affichage",
     "searchPlaceholder": "Rechercher par nom...",
     "table": {
       "selectAll": "Tout sélectionner",
@@ -1132,17 +1135,19 @@
   },
   "accountSave": {
     "title": "Comptes enregistrés",
+    "deleteSelected": "Supprimer la sélection ({count})",
     "table": {
       "select": "Sélectionner",
-      "title": "Titre",
-      "description": "Description",
+      "logo": "Logo",
+      "name": "Nom",
       "industry": "Secteur",
-      "employees": "Employés",
+      "headcount": "Effectif",
+      "linkedin": "LinkedIn",
+      "summary": "Résumé",
       "country": "Pays",
       "city": "Ville",
       "created": "Créé",
       "website": "Site web",
-      "linkedin": "LinkedIn",
       "actions": "Actions",
       "open": "Ouvrir",
       "delete": "Supprimer"
@@ -1456,6 +1461,7 @@
     },
     "buttons": {
       "generate": "Générer message(s)",
+      "generating": "Génération en cours",
       "send": "Envoyer {count} message(s)",
       "import": "Importer des leads",
       "cancel": "Annuler",
@@ -1540,7 +1546,9 @@
         "in_cadence": "En cadence",
         "response": "Réponse",
         "meeting": "Réunion",
-        "bounced": "Rejeté"
+        "bounced": "Rejeté",
+        "all": "Tous",
+        "out_of_office": "Absent du bureau"
       },
       "columns": {
         "fullName": "Nom complet",

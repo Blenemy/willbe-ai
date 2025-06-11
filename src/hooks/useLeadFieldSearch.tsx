@@ -26,6 +26,9 @@ export const useSearchLeadField = () => {
 
       return res.data;
     },
+    onMutate: () => {
+      toast(`Note that the search can take up to 10 minutes.`);
+    },
     onSuccess: (data) => {
       toast.success("Search completed");
 

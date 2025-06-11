@@ -24,6 +24,7 @@ interface Props {
   onSelectStep: (id: string) => void;
   selectedEntryId: string | null;
   scenarioTitle: string;
+  onCreateWithDate?: (date: string) => void;
 }
 
 const getDayKey = (date: Date) => format(date, "yyyy-MM-dd");
@@ -36,6 +37,7 @@ export const ScenarioCalendar = ({
   onSelectStep,
   selectedEntryId,
   scenarioTitle,
+  onCreateWithDate,
 }: Props) => {
   const [startDate, setStartDate] = useState(startOfToday());
 
@@ -119,8 +121,20 @@ export const ScenarioCalendar = ({
           return (
             <div
               key={key}
+              role="calendar-day-button-email"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onCreateWithDate?.(format(day, "yyyy-MM-dd"));
+                }
+              }}
+              onClick={(e) => {
+                const target = e.target as HTMLElement;
+                if (target.closest("[data-entry-popover]")) return;
+                onCreateWithDate?.(format(day, "yyyy-MM-dd"));
+              }}
               className={cn(
-                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2",
+                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2 cursor-pointer",
                 isWeekend(day) ? "bg-gray-100" : "bg-white"
               )}
             >
@@ -157,10 +171,22 @@ export const ScenarioCalendar = ({
           return (
             <div
               key={key}
+              role="calendar-day-button-ln"
+              onClick={(e) => {
+                const target = e.target as HTMLElement;
+                if (target.closest("[data-entry-popover]")) return;
+                onCreateWithDate?.(format(day, "yyyy-MM-dd"));
+              }}
               className={cn(
-                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2",
+                "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2 cursor-pointer",
                 isWeekend(day) ? "bg-gray-100" : "bg-white"
               )}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onCreateWithDate?.(format(day, "yyyy-MM-dd"));
+                }
+              }}
             >
               {linkedins.map((entry) => (
                 <MessageEntryPopover

@@ -46,7 +46,12 @@ interface Props {
     sendNow: boolean
   ) => void;
   mode?: "create" | "edit";
-  initialData?: { id: string; type: string; sendDate: string };
+  initialData?: {
+    id: string;
+    type: string;
+    sendDate: string;
+    sendNow?: boolean;
+  };
 }
 
 export const CreateMessageModal = ({
@@ -95,9 +100,9 @@ export const CreateMessageModal = ({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: initialData?.type || "",
-      date: initialData?.sendDate?.slice(0, 10) || "",
-      time: initialData?.sendDate?.slice(11, 16) || "",
+      type: "",
+      date: "",
+      time: "",
     },
   });
 
@@ -157,7 +162,7 @@ export const CreateMessageModal = ({
             type: initialData.type || "",
             date: initialData.sendDate.slice(0, 10),
             time: initialData.sendDate.slice(11, 16),
-            sendNow: false,
+            sendNow: initialData.sendNow,
           });
         } else {
           form.reset({

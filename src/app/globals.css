@@ -94,3 +94,8 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.compact-table th,
+.compact-table td {
+  @apply px-1 py-1 text-sm whitespace-nowrap;
+}

@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Trash2, Sparkles, Pencil, Loader2, ExternalLink } from "lucide-react";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   MessageEntry,
@@ -37,20 +37,23 @@ import { ExportCsvButtons } from "./ExportCsvButtons";
 import { EditMessageModal } from "./EditMessageModal";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
+import { useSearchLanguage } from "@/hooks/useSearchLanguage";
 
 interface Props {
   leads: MessageEntryData[];
   selectedEntry: MessageEntry;
-  setActiveStep: Dispatch<SetStateAction<number>>;
 }
+
+const stripHtml = (html: string) =>
+  html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 const ITEMS_PER_PAGE = 5;
 
-export const CreateScenarioTable = ({
-  leads,
-  selectedEntry,
-  setActiveStep,
-}: Props) => {
+export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalLeadId, setModalLeadId] = useState<string | null>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -69,9 +72,15 @@ export const CreateScenarioTable = ({
 
   const { mutate: updateLead } = useUpdateMessageEntryLead();
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
-  const { mutate: generateMessages } = useGenerateMessages();
+  const { mutate: generateMessages, isPending: isGenerating } =
+    useGenerateMessages();
   const { mutateAsync: sendMessages } = useSendMessages();
   const { mutate: searchField, isPending } = useSearchLeadField();
+  const { mutate: searchLanguage, isPending: isSearchingLanguage } =
+    useSearchLanguage();
+  const [loadingLanguageId, setLoadingLanguageId] = useState<string | null>(
+    null
+  );
   const [loadingField, setLoadingField] = useState<{
     leadId: string;
     field: "email" | "phone";
@@ -89,7 +98,6 @@ export const CreateScenarioTable = ({
     try {
       await sendMessages({ messageEntryDataIds: selected });
       setSelected([]);
-      setActiveStep((prev) => prev + 1);
     } catch (error) {
       console.log(error);
     }
@@ -157,6 +165,20 @@ export const CreateScenarioTable = ({
 
   if (!leads || leads.length === 0) return null;
 
+  const currentPageIds = paginatedLeads.map((item) => item.id);
+
+  const isAllSelectedOnPage = currentPageIds.every((id) =>
+    selected.includes(id)
+  );
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelectedOnPage) {
+      setSelected([]);
+    } else {
+      setSelected(paginatedLeads.map((lead) => lead.id));
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
@@ -173,7 +195,14 @@ export const CreateScenarioTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead />
+            <TableHead className="w-[40px] align-middle">
+              <div className="flex items-center justify-center h-6">
+                <Checkbox
+                  checked={isAllSelectedOnPage}
+                  onCheckedChange={handleToggleSelectAll}
+                />
+              </div>
+            </TableHead>
             <TableHead>{t("table.firstName")}</TableHead>
             <TableHead>{t("table.lastName")}</TableHead>
             <TableHead>{t("table.email")}</TableHead>
@@ -191,13 +220,17 @@ export const CreateScenarioTable = ({
         <TableBody>
           {paginatedLeads.map((lead) => {
             const changes = editedLeads[lead.id] || {};
+
             return (
               <TableRow key={lead.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={selected.includes(lead.id)}
-                    onCheckedChange={() => toggleSelection(lead.id)}
-                  />
+                <TableCell className="w-[40px] align-middle">
+                  <div className="flex items-center justify-center h-6">
+                    <Checkbox
+                      checked={selected.includes(lead.id)}
+                      onCheckedChange={() => toggleSelection(lead.id)}
+                      aria-label="Select row"
+                    />
+                  </div>
                 </TableCell>
                 <TableCell>{lead.firstName}</TableCell>
                 <TableCell>{lead.lastname}</TableCell>
@@ -299,29 +332,52 @@ export const CreateScenarioTable = ({
                     </SelectContent>
                   </Select>
                 </TableCell>
-                <TableCell>
-                  <Select
-                    value={lead.language ?? ""}
-                    onValueChange={(val) => {
-                      updateLead({
-                        leadId: lead.id,
-                        language: val,
-                      });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("placeholders.selectLanguage")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {lead.languages?.map((lang) => (
-                        <SelectItem key={lang} value={lang}>
-                          {lang}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                <TableCell className="align-middle">
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={lead.language ?? ""}
+                      onValueChange={(val) => {
+                        updateLead({
+                          leadId: lead.id,
+                          language: val,
+                        });
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("placeholders.selectLanguage")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {lead.languages?.map((lang) => (
+                          <SelectItem key={lang} value={lang}>
+                            {lang}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      disabled={isSearchingLanguage}
+                      onClick={() => {
+                        setLoadingLanguageId(lead.id);
+                        searchLanguage(
+                          { messageEntryLeadDataId: lead.id },
+                          {
+                            onSettled: () => setLoadingLanguageId(null),
+                          }
+                        );
+                      }}
+                    >
+                      {loadingLanguageId === lead.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 text-muted-foreground" />
+                      )}
+                    </Button>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Select
@@ -350,7 +406,8 @@ export const CreateScenarioTable = ({
                 <TableCell>
                   <div className="flex items-center justify-between gap-2">
                     <span className="truncate max-w-[180px] text-sm text-muted-foreground">
-                      {lead.message?.slice(0, 60) || t("placeholders.message")}
+                      {stripHtml(lead.message ?? "").slice(0, 60) ||
+                        t("placeholders.message")}
                     </span>
                     <Button
                       variant="ghost"
@@ -458,9 +515,16 @@ export const CreateScenarioTable = ({
         </Button>
         <Button
           onClick={() => generateMessages({ messageEntryDataIds: selected })}
-          disabled={selected.length === 0}
+          disabled={selected.length === 0 || isGenerating}
         >
-          {t("buttons.generate")}
+          {isGenerating ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              {t("buttons.generating")}
+            </>
+          ) : (
+            t("buttons.generate")
+          )}
         </Button>
       </div>
 

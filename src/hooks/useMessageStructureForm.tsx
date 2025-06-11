@@ -93,14 +93,25 @@ export const useMessageStructureForm = (editingId?: string) => {
   const updateMessageStructure = useMutation({
     mutationFn: async ({ id }: { id: string }) => {
       const values = form.getValues();
+
+      const payload: {
+        name: string;
+        messageType: string;
+        wordsLimit: number;
+        subjectType?: string;
+      } = {
+        name: values.title,
+        messageType: values.emailType,
+        wordsLimit: Number(values.maxWords),
+      };
+
+      if (values.subjectType) {
+        payload.subjectType = values.subjectType;
+      }
+
       const res = await protectedAxiosInstance.patch(
         `/auth/message-structures/${id}`,
-        {
-          name: values.title,
-          messageType: values.emailType,
-          wordsLimit: Number(values.maxWords),
-          subjectType: values.subjectType,
-        }
+        payload
       );
       return res.data;
     },

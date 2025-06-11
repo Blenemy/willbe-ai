@@ -19,6 +19,8 @@ const CreateMessageScenario = () => {
         setActiveStep={setActiveStep}
         steps={[t("steps.import"), t("steps.campaign"), t("steps.stats")]}
         disabled={!id}
+        hideBackButton={true}
+        hideNextButton={true}
       />
       <CreateMessageForm />
     </div>

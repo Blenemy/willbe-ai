@@ -11,14 +11,6 @@ import {
   TableBody,
   TableHeader,
 } from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Badge } from "@/components/ui/badge";
 import { Trash, Copy, Eye, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -31,6 +23,14 @@ import {
 } from "@/components/ui/dialog";
 import { useMessageStructures } from "@/hooks/useMessageStructures";
 import { useTranslations } from "next-intl";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -38,6 +38,7 @@ const MessageStructures = () => {
   const t = useTranslations("MessageStructures");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(ITEMS_PER_PAGE);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
@@ -52,10 +53,9 @@ const MessageStructures = () => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
   const currentItems = filteredData.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
   );
 
   const handleDeleteClick = (id: string) => {
@@ -116,7 +116,12 @@ const MessageStructures = () => {
         <TableBody>
           {currentItems.map((structure) => (
             <TableRow key={structure.id}>
-              <TableCell>{structure.name}</TableCell>
+              <TableCell
+                className="max-w-[200px] truncate whitespace-nowrap overflow-hidden"
+                title={structure.name}
+              >
+                {structure.name}
+              </TableCell>
               <TableCell className="flex gap-1">
                 {structure.languages.map((lang) => (
                   <Badge key={lang}>{lang}</Badge>
@@ -156,36 +161,33 @@ const MessageStructures = () => {
         </TableBody>
       </Table>
 
-      <div className="flex justify-center mt-4">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              />
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
-                  href="#"
-                  onClick={() => setCurrentPage(i + 1)}
-                  isActive={i + 1 === currentPage}
-                >
-                  {i + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      <div className="flex items-center justify-between pt-4 flex-1">
+        <div className="text-sm flex gap-2 flex-grow items-center">
+          <p className="min-w-28">{t("rowsPerPage")}</p>
+          <Select
+            onValueChange={(val) => {
+              setRowsPerPage(Number(val));
+              setCurrentPage(1);
+            }}
+          >
+            <SelectTrigger className="w-16">
+              <SelectValue placeholder={String(rowsPerPage)} />
+            </SelectTrigger>
+            <SelectContent>
+              {[5, 10, 20].map((v) => (
+                <SelectItem key={v} value={String(v)}>
+                  {v}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <CustomPagination
+          page={currentPage - 1}
+          setPage={(p) => setCurrentPage(p + 1)}
+          rowsPerPage={rowsPerPage}
+          totalCount={structures.length}
+        />
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

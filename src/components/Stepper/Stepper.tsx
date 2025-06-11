@@ -11,11 +11,15 @@ const CustomStepper = ({
   setActiveStep,
   steps,
   disabled,
+  hideBackButton,
+  hideNextButton,
 }: {
   activeStep: number;
-  setActiveStep: Dispatch<SetStateAction<number>>;
+  setActiveStep: Dispatch<SetStateAction<number>> | ((step: number) => void);
   steps: string[];
   disabled?: boolean;
+  hideBackButton?: boolean;
+  hideNextButton?: boolean;
 }) => {
   const t = useTranslations("scenariosFilter.stepper_buttons");
   const handleNext = () => {
@@ -40,18 +44,22 @@ const CustomStepper = ({
         ))}
       </Stepper>
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        <Button
-          color="inherit"
-          disabled={activeStep === 0}
-          onClick={handleBack}
-          sx={{ mr: 1 }}
-        >
-          {t("back")}
-        </Button>
+        {!hideBackButton && (
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            {t("back")}
+          </Button>
+        )}
         <Box sx={{ flex: "1 1 auto" }} />
-        <Button onClick={handleNext} disabled={disabled}>
-          {activeStep === steps.length - 1 ? t("finish") : t("next")}
-        </Button>
+        {!hideNextButton && (
+          <Button onClick={handleNext} disabled={disabled}>
+            {activeStep === steps.length - 1 ? t("finish") : t("next")}
+          </Button>
+        )}
       </Box>
     </Box>
   );

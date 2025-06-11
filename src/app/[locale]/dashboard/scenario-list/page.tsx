@@ -177,7 +177,7 @@ const ScenarioList = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <Button
-          className="bg-[#084960]"
+          className="bg-[#030A27]"
           onClick={() => router.push("/dashboard/create-message-scenario")}
         >
           <Plus className="mr-2 h-4 w-4" />
@@ -220,6 +220,7 @@ const ScenarioList = () => {
 
         <Button
           variant="destructive"
+          className="min-w-[160px]"
           disabled={selectedIds.length === 0}
           onClick={() => {
             deleteMutation.mutate(selectedIds);
@@ -366,7 +367,12 @@ const ScenarioList = () => {
       <div className="flex items-center justify-between pt-4 flex-1">
         <div className="text-sm flex gap-2 flex-grow items-center">
           <p className="min-w-28">{t("rowsPerPage")}</p>
-          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+          <Select
+            onValueChange={(val) => {
+              setRowsPerPage(Number(val));
+              setPage(0);
+            }}
+          >
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
             </SelectTrigger>

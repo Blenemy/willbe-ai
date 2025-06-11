@@ -19,7 +19,6 @@ import {
 import { useLeadsInCadence } from "@/hooks/useLeadsInCadence";
 import { useParams } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
-import Image from "next/image";
 import { ExternalLink, Loader2, Sparkles, Trash } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { Input } from "@/components/ui/input";
@@ -32,6 +31,7 @@ import {
 } from "@/hooks/useMessageCampaignEntries";
 import { ConfirmDeleteModal } from "../../MessageCampaign/ConfirmDeleteModal";
 import { useTranslations } from "next-intl";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type SortKey = "name" | "company" | "";
 
@@ -58,6 +58,7 @@ export const LeadsInCadenceTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortKey, setSortKey] = useState<SortKey>("");
   const [sortAsc, setSortAsc] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -73,7 +74,8 @@ export const LeadsInCadenceTable = () => {
       const lead = item.lead.leadData;
       const fullName = `${lead.first_name} ${lead.last_name}`.toLowerCase();
       const matchesName = fullName.includes(search.trim().toLowerCase());
-      const matchesStatus = item.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "all" ? true : item.status === statusFilter;
       return matchesName && matchesStatus;
     });
   }, [data, search, statusFilter]);
@@ -105,6 +107,27 @@ export const LeadsInCadenceTable = () => {
     deleteLeads({ leadsIds: [leadId], id: scenarioId as string });
   };
 
+  const currentPageIds = paginated.map((item) => item.id);
+  const isAllSelectedOnPage = currentPageIds.every((id) =>
+    selectedIds.includes(id)
+  );
+
+  const toggleSelectAll = () => {
+    if (isAllSelectedOnPage) {
+      setSelectedIds((prev) =>
+        prev.filter((id) => !currentPageIds.includes(id))
+      );
+    } else {
+      setSelectedIds((prev) => [...new Set([...prev, ...currentPageIds])]);
+    }
+  };
+
+  const toggleSingleSelection = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
@@ -123,10 +146,14 @@ export const LeadsInCadenceTable = () => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="all">{t("status.all")}</SelectItem>
             <SelectItem value="in_cadence">{t("status.in_cadence")}</SelectItem>
             <SelectItem value="response">{t("status.response")}</SelectItem>
             <SelectItem value="meeting">{t("status.meeting")}</SelectItem>
             <SelectItem value="bounced">{t("status.bounced")}</SelectItem>
+            <SelectItem value="out_of_office">
+              {t("status.out_of_office")}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -134,7 +161,15 @@ export const LeadsInCadenceTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40px]" />
+            <TableHead className="w-[40px] align-middle">
+              <div className="flex items-center justify-center h-10">
+                <Checkbox
+                  checked={isAllSelectedOnPage}
+                  onCheckedChange={toggleSelectAll}
+                  aria-label="Select all"
+                />
+              </div>
+            </TableHead>
             {renderHeader(
               t("columns.fullName"),
               "name",
@@ -170,17 +205,25 @@ export const LeadsInCadenceTable = () => {
 
               return (
                 <TableRow key={item.id}>
-                  <TableCell>
-                    <Checkbox />
+                  <TableCell className="w-[40px] align-middle">
+                    <div className="flex items-center justify-center h-10">
+                      <Checkbox
+                        checked={selectedIds.includes(item.id)}
+                        onCheckedChange={() => toggleSingleSelection(item.id)}
+                        aria-label="Select row"
+                      />
+                    </div>
                   </TableCell>
                   <TableCell className="flex items-center gap-2">
-                    <Image
-                      src={lead.profile_picture_url}
-                      alt={fullName}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
+                    <Avatar className="w-8 h-8">
+                      <AvatarImage
+                        src={lead.profile_picture_url}
+                        alt={fullName}
+                      />
+                      <AvatarFallback>
+                        {lead.first_name?.[0]?.toUpperCase() ?? "?"}
+                      </AvatarFallback>
+                    </Avatar>
                     <span>{fullName}</span>
                   </TableCell>
                   <TableCell>{item.phone ?? t("editPhone")}</TableCell>
