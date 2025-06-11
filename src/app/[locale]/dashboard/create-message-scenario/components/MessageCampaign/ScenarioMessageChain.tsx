@@ -35,11 +35,7 @@ const isStructureFormResponse = (
   );
 };
 
-export const ScenarioMessageChain = ({
-  scenarioId,
-  scenarioTitle,
-  setActiveStep,
-}: Props) => {
+export const ScenarioMessageChain = ({ scenarioId, scenarioTitle }: Props) => {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [editMode, setEditMode] = useState<"create" | "edit">("create");

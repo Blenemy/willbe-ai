@@ -41,7 +41,7 @@ export interface LeadData {
   public_identifier: string;
   public_profile_url: string;
   member_urn: string;
-  type: "PEOPLE" | string;
+  type: string;
 }
 
 export interface MessageScenarioLead {

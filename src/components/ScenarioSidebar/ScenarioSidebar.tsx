@@ -18,15 +18,14 @@ interface IconItem {
 }
 
 interface Props {
-  children: React.ReactNode;
-  sidebarContent?: React.ReactNode;
-  sidebarIconsWithLabels?: IconItem[];
-  collapsedWidth?: number;
-  minWidthPx?: number;
-  percentageWidth?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form?: UseFormReturn<any>;
-  fieldMap?: Record<string, string[]>;
+  readonly children: React.ReactNode;
+  readonly sidebarContent?: React.ReactNode;
+  readonly sidebarIconsWithLabels?: ReadonlyArray<IconItem>;
+  readonly collapsedWidth?: number;
+  readonly minWidthPx?: number;
+  readonly percentageWidth?: number;
+  readonly form?: UseFormReturn<any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  readonly fieldMap?: Readonly<Record<string, readonly string[]>>;
 }
 
 export function ScenarioSidebarLite({
@@ -95,7 +94,7 @@ export function ScenarioSidebarLite({
           {!isOpen && (
             <TooltipProvider>
               <div className="flex flex-col items-center mt-4 gap-2">
-                {sidebarIconsWithLabels.map(({ icon, label }, idx) => {
+                {sidebarIconsWithLabels.map(({ icon, label }) => {
                   const relatedFields = fieldMap?.[label] || [];
                   const isActive = relatedFields.some((fieldName) => {
                     const value = watchedValues?.[fieldName];
@@ -107,7 +106,7 @@ export function ScenarioSidebarLite({
                   });
 
                   return (
-                    <Tooltip key={idx}>
+                    <Tooltip key={label}>
                       <TooltipTrigger asChild>
                         <div
                           className={cn(

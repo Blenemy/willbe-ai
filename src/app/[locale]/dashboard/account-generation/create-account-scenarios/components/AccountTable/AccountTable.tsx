@@ -33,7 +33,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
-import { renderCompactHeader } from "@/components/ui/renderHeader";
+import { RenderCompactHeader } from "@/components/ui/renderHeader";
 import { useSelectedCompaniesStore } from "@/store/useSelectedCompaniesStore";
 import { parseHeadcount } from "@/utils/parsedHeadcount";
 
@@ -218,7 +218,7 @@ const AccountTable = () => {
                   </TableHead>
                 )}
                 {visibleColumns.name &&
-                  renderCompactHeader(
+                  RenderCompactHeader(
                     t("table.name"),
                     "name",
                     sortKey,
@@ -226,7 +226,7 @@ const AccountTable = () => {
                     handleSort
                   )}
                 {visibleColumns.industry &&
-                  renderCompactHeader(
+                  RenderCompactHeader(
                     t("table.industry"),
                     "industry",
                     sortKey,
@@ -234,7 +234,7 @@ const AccountTable = () => {
                     handleSort
                   )}
                 {visibleColumns.headcount &&
-                  renderCompactHeader(
+                  RenderCompactHeader(
                     t("table.headcount"),
                     "headcount",
                     sortKey,

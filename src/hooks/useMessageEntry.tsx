@@ -46,10 +46,7 @@ export const useCreateMessageEntry = () => {
         message?: string;
       }>;
 
-      const message =
-        axiosError.response?.data?.detail ||
-        axiosError.response?.data?.message ||
-        axiosError.message;
+      const message = axiosError.response?.data?.message ?? axiosError.message;
 
       toast.error(message);
     },

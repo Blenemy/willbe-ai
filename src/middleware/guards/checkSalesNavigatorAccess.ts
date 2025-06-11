@@ -8,7 +8,7 @@ const salesNavigatorProtectedRoutes = [
 export function checkSalesNavigatorAccess(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const salesNavigator = req.cookies.get("salesNavigator")?.value;
-  const locale = req.cookies.get("NEXT_LOCALE")?.value || "en";
+  const locale = req.cookies.get("NEXT_LOCALE")?.value ?? "en";
 
   const normalizedPath = pathname.replace(/^\/(en|es|fr)/, "");
 

@@ -22,8 +22,6 @@ export const useScenarioStepStore = create<ScenarioStepStore>((set) => ({
       step = 2;
     } else if (status === "not_started" && leadsCount > 0) {
       step = 1;
-    } else if (status === "not_started" && leadsCount === 0) {
-      step = 0;
     }
 
     set({ activeStep: step });
