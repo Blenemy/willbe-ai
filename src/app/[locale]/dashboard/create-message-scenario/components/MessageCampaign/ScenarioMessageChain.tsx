@@ -138,6 +138,25 @@ export const ScenarioMessageChain = ({
     setSelectedEntryId(null);
   };
 
+  let initialFormData;
+
+  if (editingEntry) {
+    initialFormData = {
+      id: editingEntry.id,
+      type: editingEntry.type,
+      sendDate: editingEntry.sendDate,
+      sendNow: editingEntry.sendNow,
+    };
+  } else if (initialDate) {
+    initialFormData = {
+      id: "",
+      type: "",
+      sendDate: initialDate,
+    };
+  } else {
+    initialFormData = undefined;
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <ScenarioCalendar
@@ -175,22 +194,7 @@ export const ScenarioMessageChain = ({
         onAdd={handleCreateEntry}
         onEdit={handleEditEntry}
         mode={editMode}
-        initialData={
-          editingEntry
-            ? {
-                id: editingEntry.id,
-                type: editingEntry.type,
-                sendDate: editingEntry.sendDate,
-                sendNow: editingEntry.sendNow,
-              }
-            : initialDate
-            ? {
-                id: "",
-                type: "",
-                sendDate: initialDate,
-              }
-            : undefined
-        }
+        initialData={initialFormData}
       />
 
       {selectedEntry &&
@@ -204,7 +208,6 @@ export const ScenarioMessageChain = ({
           <CreateScenarioTable
             leads={selectedEntry.messageEntryLeadData}
             selectedEntry={selectedEntry}
-            setActiveStep={setActiveStep}
           />
         ))}
     </div>
