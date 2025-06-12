@@ -2,6 +2,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 export const useConnectHubspot = () => {
   return useMutation({
@@ -211,7 +212,15 @@ export const useUpdateHubspotBindings = () => {
 
       toast("Successfully updated bindings");
     },
-    onError: () => {},
+    onError: (err) => {
+      const axiosError = err as AxiosError<{
+        message?: string;
+      }>;
+
+      const message = axiosError.response?.data?.message ?? axiosError.message;
+
+      toast.error(message);
+    },
   });
 };
 
@@ -240,7 +249,13 @@ export const useStartHubspotIntegration = () => {
       toast("Account was succesfully updated");
     },
     onError: (err) => {
-      toast(`An error occured during the account update: ${err.message}`);
+      const axiosError = err as AxiosError<{
+        message?: string;
+      }>;
+
+      const message = axiosError.response?.data?.message ?? axiosError.message;
+
+      toast.error(message);
     },
   });
 };
@@ -263,7 +278,13 @@ export const useStartHubspotIntegrationInBulk = () => {
       queryClient.invalidateQueries({ queryKey: ["lead"] });
     },
     onError: (err) => {
-      toast(`An error occured during the account update: ${err.message}`);
+      const axiosError = err as AxiosError<{
+        message?: string;
+      }>;
+
+      const message = axiosError.response?.data?.message ?? axiosError.message;
+
+      toast.error(message);
     },
   });
 };
