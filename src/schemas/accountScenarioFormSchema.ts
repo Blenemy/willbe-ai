@@ -5,14 +5,21 @@ const searchOptionSchema = z.object({
   id: z.string(),
 });
 
-const compareFromTo = (
+export const compareFromTo = (
   from: string | undefined,
   to: string | undefined
 ): boolean => {
   if (!from || !to) return true;
-  return Number(from) <= Number(to);
-};
 
+  const fromNum = Number(from);
+  const toNum = Number(to);
+
+  if (!Number.isFinite(fromNum) || !Number.isFinite(toNum)) {
+    return false;
+  }
+
+  return fromNum <= toNum;
+};
 export const accountScenarioFormSchema = z
   .object({
     industry: z.string().optional(),
