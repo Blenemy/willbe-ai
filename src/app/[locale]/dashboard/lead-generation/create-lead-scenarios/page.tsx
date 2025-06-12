@@ -163,6 +163,24 @@ const CreateLeadScenarios = () => {
     },
   });
 
+  type SearchOption = { title: string; id: string };
+  type FieldValue = string | string[] | boolean | SearchOption[];
+
+  const watchedValues = form.watch();
+
+  const isFormEmpty = useMemo(() => {
+    const isEmpty = (val: FieldValue): boolean => {
+      if (typeof val === "string") return val.trim() === "";
+      if (Array.isArray(val)) return val.length === 0;
+      if (typeof val === "boolean") return val === false;
+      return false;
+    };
+
+    return Object.values(watchedValues).every(isEmpty);
+  }, [watchedValues]);
+
+  console.log(form.getValues());
+
   async function onSubmit(values: z.infer<typeof leadScenariosFiltersSchema>) {
     if (scenarioId) {
       const payload = preparePayload(values, scenarioId, newPreset);
@@ -681,6 +699,18 @@ const CreateLeadScenarios = () => {
                             searchType="COMPANY"
                             includeName="past_company_include"
                             excludeName="past_company_exclude"
+                          />
+                        </FormAccordion>
+
+                        <FormAccordion label={t("currentCompany.label")}>
+                          <FormInputWithSearchMultiSelect
+                            label={t("currentCompany.description")}
+                            form={form}
+                            searchName="current_company"
+                            placeholder={t("currentCompany.placeholder")}
+                            searchType="COMPANY"
+                            includeName="current_company_include"
+                            excludeName="current_company_exclude"
                           />
                         </FormAccordion>
 
@@ -1335,6 +1365,7 @@ const CreateLeadScenarios = () => {
                   handleLoadFilter={handleLoadFilter}
                   setActiveStep={setActiveStep}
                   leadScenarioById={leadScenarioById}
+                  isFormEmpty={isFormEmpty}
                 />
               </form>
             </Form>

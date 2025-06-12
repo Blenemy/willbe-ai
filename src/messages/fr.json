@@ -1233,6 +1233,11 @@
       "description": "Cibler des personnes ayant travaillé dans des entreprises spécifiques.",
       "placeholder": "Rechercher par nom d'entreprise..."
     },
+    "currentCompany": {
+      "label": "🏢 Entreprise actuelle",
+      "description": "Ciblez les personnes actuellement employées dans des entreprises spécifiques.",
+      "placeholder": "Rechercher par nom d'entreprise..."
+    },
     "companyLocation": {
       "label": "🏢📍 Localisation de l’entreprise",
       "description": "Personnes travaillant dans des entreprises situées dans des zones géographiques précises.",
