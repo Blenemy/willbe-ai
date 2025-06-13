@@ -27,8 +27,8 @@ export const useGenerateMessages = () => {
         queryKey: ["message-campaign-entries"],
       });
     },
-    onError: () => {
-      toast.error("Failed to generate messages.");
+    onError: (err) => {
+      handleAxiosError(err, "Failed to generate messages.");
     },
   });
 };
