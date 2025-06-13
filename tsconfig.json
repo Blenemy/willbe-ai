@@ -29,7 +29,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/AuthForm",
-    "src/app/[locale]/dashboard/profile/components/ProfileSidebar"
+    "src/app/[locale]/dashboard/profile/components/ProfileSidebar",
+    "src/utils/handleAxiosError/handleAxiosError.test.ts",
+    "jest.config.js"
   ],
   "exclude": ["node_modules"]
 }
