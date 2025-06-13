@@ -179,8 +179,6 @@ const CreateLeadScenarios = () => {
     return Object.values(watchedValues).every(isEmpty);
   }, [watchedValues]);
 
-  console.log(form.getValues());
-
   async function onSubmit(values: z.infer<typeof leadScenariosFiltersSchema>) {
     if (scenarioId) {
       const payload = preparePayload(values, scenarioId, newPreset);
