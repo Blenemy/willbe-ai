@@ -1101,7 +1101,14 @@
       "errors": {
         "annual_revenue_from_required": "Por favor selecciona los ingresos mínimos",
         "annual_revenue_to_required": "Por favor selecciona los ingresos máximos",
-        "annual_revenue_currency_required": "Por favor selecciona la moneda"
+        "annual_revenue_currency_required": "Por favor selecciona la moneda",
+        "headcount_range_invalid": "El valor 'Desde' de la plantilla debe ser menor o igual que 'Hasta'",
+        "headcount_growth_range_invalid": "El crecimiento de empleados 'Desde' debe ser menor o igual que 'Hasta'",
+        "fortune_range_invalid": "El valor 'Desde' de Fortune debe ser menor o igual que 'Hasta'",
+        "followers_count_range_invalid": "El número de seguidores 'Desde' debe ser menor o igual que 'Hasta'",
+        "department_headcount_range_invalid": "El número de empleados del departamento 'Desde' debe ser menor o igual que 'Hasta'",
+        "department_headcount_growth_range_invalid": "El crecimiento del departamento 'Desde' debe ser menor o igual que 'Hasta'",
+        "annual_revenue_range_invalid": "Los ingresos anuales 'Desde' deben ser menores o iguales que 'Hasta'"
       }
     },
     "buttons": {
