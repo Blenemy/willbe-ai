@@ -1099,7 +1099,14 @@
       "errors": {
         "annual_revenue_from_required": "Please select revenue from",
         "annual_revenue_to_required": "Please select revenue to",
-        "annual_revenue_currency_required": "Please select currency"
+        "annual_revenue_currency_required": "Please select currency",
+        "headcount_range_invalid": "Headcount From must be less than or equal to To",
+        "headcount_growth_range_invalid": "Headcount Growth From must be less than or equal to To",
+        "fortune_range_invalid": "Fortune From must be less than or equal to To",
+        "followers_count_range_invalid": "Followers Count From must be less than or equal to To",
+        "department_headcount_range_invalid": "Department Headcount From must be less than or equal to To",
+        "department_headcount_growth_range_invalid": "Department Headcount Growth From must be less than or equal to To",
+        "annual_revenue_range_invalid": "Annual Revenue From must be less than or equal to To"
       }
     },
     "buttons": {
