@@ -5,127 +5,10 @@ const searchOptionSchema = z.object({
   id: z.string(),
 });
 
-export const compareFromTo = (
-  from: string | undefined,
-  to: string | undefined
-): boolean => {
-  if (!from || !to) return true;
-
-  const fromNum = Number(from);
-  const toNum = Number(to);
-
-  if (!Number.isFinite(fromNum) || !Number.isFinite(toNum)) {
-    return false;
-  }
-
-  return fromNum <= toNum;
-};
-export const accountScenarioFormSchema = z
-  .object({
-    industry: z.string().optional(),
-    industry_include: z.array(searchOptionSchema).optional(),
-    industry_exclude: z.array(searchOptionSchema).optional(),
-
-    location: z.string().optional(),
-    location_include: z.array(searchOptionSchema).optional(),
-    location_exclude: z.array(searchOptionSchema).optional(),
-
-    headcount_from: z.string().optional(),
-    headcount_to: z.string().optional(),
-
-    headcount_growth_from: z.string().optional(),
-    headcount_growth_to: z.string().optional(),
-
-    fortune_from: z.string().optional(),
-    fortune_to: z.string().optional(),
-
-    followers_count_from: z.string().optional(),
-    followers_count_to: z.string().optional(),
-
-    recent_activities: z.string().optional(),
-
-    has_job_offers: z.boolean().optional(),
-
-    technology_search_input: z.string().optional(),
-    technology: z.array(searchOptionSchema).optional(),
-
-    network_distance: z.string().optional(),
-
-    keywords: z.string().optional(),
-
-    department_headcount_growth_from: z.string().optional(),
-    department_headcount_growth_to: z.string().optional(),
-
-    department_headcount_from: z.string().optional(),
-    department_headcount_to: z.string().optional(),
-
-    saved_accounts: z.string().optional(),
-    saved_accounts_include: z.array(searchOptionSchema).optional(),
-    saved_accounts_exclude: z.array(searchOptionSchema).optional(),
-
-    annual_revenue_from: z
-      .string()
-      .min(1, { message: "Annual revenue (from) is required" }),
-    annual_revenue_to: z
-      .string()
-      .min(1, { message: "Annual revenue (to) is required" }),
-    annual_revenue_currency: z
-      .string()
-      .min(1, { message: "Currency is required" }),
-  })
-  .refine((data) => compareFromTo(data.headcount_from, data.headcount_to), {
-    message: "Headcount From must be less than or equal to To",
-    path: ["headcount_to"],
-  })
-  .refine(
-    (data) =>
-      compareFromTo(data.headcount_growth_from, data.headcount_growth_to),
-    {
-      message: "Headcount Growth From must be less than or equal to To",
-      path: ["headcount_growth_to"],
-    }
-  )
-  .refine((data) => compareFromTo(data.fortune_from, data.fortune_to), {
-    message: "Fortune From must be less than or equal to To",
-    path: ["fortune_to"],
-  })
-  .refine(
-    (data) => compareFromTo(data.followers_count_from, data.followers_count_to),
-    {
-      message: "Followers Count From must be less than or equal to To",
-      path: ["followers_count_to"],
-    }
-  )
-  .refine(
-    (data) =>
-      compareFromTo(
-        data.department_headcount_from,
-        data.department_headcount_to
-      ),
-    {
-      message: "Department Headcount From must be less than or equal to To",
-      path: ["department_headcount_to"],
-    }
-  )
-  .refine(
-    (data) =>
-      compareFromTo(
-        data.department_headcount_growth_from,
-        data.department_headcount_growth_to
-      ),
-    {
-      message:
-        "Department Headcount Growth From must be less than or equal to To",
-      path: ["department_headcount_growth_to"],
-    }
-  )
-  .refine(
-    (data) => compareFromTo(data.annual_revenue_from, data.annual_revenue_to),
-    {
-      message: "Annual Revenue From must be less than or equal to To",
-      path: ["annual_revenue_to"],
-    }
-  );
+const optionalNumberString = z.preprocess(
+  (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
+  z.union([z.string(), z.undefined()])
+);
 
 export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
   z
@@ -138,17 +21,17 @@ export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
       location_include: z.array(searchOptionSchema).optional(),
       location_exclude: z.array(searchOptionSchema).optional(),
 
-      headcount_from: z.string().optional(),
-      headcount_to: z.string().optional(),
+      headcount_from: optionalNumberString,
+      headcount_to: optionalNumberString,
 
-      headcount_growth_from: z.string().optional(),
-      headcount_growth_to: z.string().optional(),
+      headcount_growth_from: optionalNumberString,
+      headcount_growth_to: optionalNumberString,
 
-      fortune_from: z.string().optional(),
-      fortune_to: z.string().optional(),
+      fortune_from: optionalNumberString,
+      fortune_to: optionalNumberString,
 
-      followers_count_from: z.string().optional(),
-      followers_count_to: z.string().optional(),
+      followers_count_from: optionalNumberString,
+      followers_count_to: optionalNumberString,
 
       recent_activities: z.string().optional(),
 
@@ -161,11 +44,11 @@ export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
 
       keywords: z.string().optional(),
 
-      department_headcount_growth_from: z.string().optional(),
-      department_headcount_growth_to: z.string().optional(),
+      department_headcount_growth_from: optionalNumberString,
+      department_headcount_growth_to: optionalNumberString,
 
-      department_headcount_from: z.string().optional(),
-      department_headcount_to: z.string().optional(),
+      department_headcount_from: optionalNumberString,
+      department_headcount_to: optionalNumberString,
 
       saved_accounts: z.string().optional(),
       saved_accounts_include: z.array(searchOptionSchema).optional(),
@@ -181,56 +64,66 @@ export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
         .string()
         .min(1, { message: t("annual_revenue_currency_required") }),
     })
-    .refine((data) => compareFromTo(data.headcount_from, data.headcount_to), {
-      message: t("headcount_range_invalid"),
-      path: ["headcount_to"],
-    })
-    .refine(
-      (data) =>
-        compareFromTo(data.headcount_growth_from, data.headcount_growth_to),
-      {
-        message: t("headcount_growth_range_invalid"),
-        path: ["headcount_growth_to"],
+    .superRefine((data, ctx) => {
+      const pairs: [keyof typeof data, keyof typeof data, string][] = [
+        ["headcount_from", "headcount_to", t("headcount_range_invalid")],
+        [
+          "headcount_growth_from",
+          "headcount_growth_to",
+          t("headcount_growth_range_invalid"),
+        ],
+        ["fortune_from", "fortune_to", t("fortune_range_invalid")],
+        [
+          "followers_count_from",
+          "followers_count_to",
+          t("followers_count_range_invalid"),
+        ],
+        [
+          "department_headcount_from",
+          "department_headcount_to",
+          t("department_headcount_range_invalid"),
+        ],
+        [
+          "department_headcount_growth_from",
+          "department_headcount_growth_to",
+          t("department_headcount_growth_range_invalid"),
+        ],
+        [
+          "annual_revenue_from",
+          "annual_revenue_to",
+          t("annual_revenue_range_invalid"),
+        ],
+      ];
+
+      for (const [fromKey, toKey, message] of pairs) {
+        const fromVal = data[fromKey];
+        const toVal = data[toKey];
+
+        const fromEmpty = fromVal === undefined || fromVal === "";
+        const toEmpty = toVal === undefined || toVal === "";
+
+        // Если одно из полей annual_revenue — и оно пустое, не продолжаем (пусть сработает .min(1))
+        const isAnnualRevenue =
+          fromKey === "annual_revenue_from" || toKey === "annual_revenue_to";
+        if (isAnnualRevenue && (fromEmpty || toEmpty)) {
+          continue; // skip comparison, let min(1) trigger
+        }
+
+        // Для остальных пар: если хотя бы одно значение пустое — тоже пропускаем сравнение
+        if (fromEmpty || toEmpty) continue;
+
+        const fromNum = Number(fromVal);
+        const toNum = Number(toVal);
+
+        if (!Number.isFinite(fromNum) || !Number.isFinite(toNum)) continue;
+
+        if (fromNum > toNum) {
+          ctx.addIssue({ code: "custom", path: [fromKey], message });
+          ctx.addIssue({ code: "custom", path: [toKey], message });
+        }
       }
-    )
-    .refine((data) => compareFromTo(data.fortune_from, data.fortune_to), {
-      message: t("fortune_range_invalid"),
-      path: ["fortune_to"],
-    })
-    .refine(
-      (data) =>
-        compareFromTo(data.followers_count_from, data.followers_count_to),
-      {
-        message: t("followers_count_range_invalid"),
-        path: ["followers_count_to"],
-      }
-    )
-    .refine(
-      (data) =>
-        compareFromTo(
-          data.department_headcount_from,
-          data.department_headcount_to
-        ),
-      {
-        message: t("department_headcount_range_invalid"),
-        path: ["department_headcount_to"],
-      }
-    )
-    .refine(
-      (data) =>
-        compareFromTo(
-          data.department_headcount_growth_from,
-          data.department_headcount_growth_to
-        ),
-      {
-        message: t("department_headcount_growth_range_invalid"),
-        path: ["department_headcount_growth_to"],
-      }
-    )
-    .refine(
-      (data) => compareFromTo(data.annual_revenue_from, data.annual_revenue_to),
-      {
-        message: t("annual_revenue_range_invalid"),
-        path: ["annual_revenue_to"],
-      }
-    );
+    });
+
+export type AccountScenariosType = z.infer<
+  ReturnType<typeof getAccountScenarioFormSchema>
+>;
