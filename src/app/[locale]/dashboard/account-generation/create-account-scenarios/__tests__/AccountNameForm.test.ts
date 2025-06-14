@@ -33,10 +33,8 @@ describe("AccountNameForm (without JSX)", () => {
       .default;
     render(createElement(AccountNameForm));
 
-    const input = screen.getByPlaceholderText(
-      "form_name_placeholder"
-    ) as HTMLInputElement;
-    expect(input.value).toBe("TestCo");
+    const input = screen.getByPlaceholderText("form_name_placeholder");
+    expect((input as HTMLInputElement).value).toBe("TestCo");
   });
 
   it("shows empty input when no accountName in query", async () => {
@@ -48,9 +46,7 @@ describe("AccountNameForm (without JSX)", () => {
       .default;
     render(createElement(AccountNameForm));
 
-    const input = screen.getByPlaceholderText(
-      "form_name_placeholder"
-    ) as HTMLInputElement;
-    expect(input.value).toBe("");
+    const input = screen.getByPlaceholderText("form_name_placeholder");
+    expect((input as HTMLInputElement).value).toBe("");
   });
 });
