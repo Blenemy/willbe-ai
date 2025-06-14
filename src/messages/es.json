@@ -1235,6 +1235,11 @@
       "description": "Personas que trabajaron previamente en empresas específicas.",
       "placeholder": "Buscar por nombre de empresa..."
     },
+    "currentCompany": {
+      "label": "🏢 Empresa actual",
+      "description": "Dirígete a personas que actualmente trabajan en empresas específicas.",
+      "placeholder": "Buscar por nombre de empresa..."
+    },
     "companyLocation": {
       "label": "🏢📍 Ubicación de la empresa",
       "description": "Personas que trabajan en empresas ubicadas en zonas específicas.",
