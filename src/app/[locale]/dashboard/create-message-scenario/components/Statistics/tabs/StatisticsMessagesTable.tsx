@@ -25,6 +25,7 @@ import { useStatisticMessages } from "@/hooks/useStatisticMessages";
 import { useParams } from "next/navigation";
 import { renderHeader } from "@/components/ui/renderHeader";
 import { useTranslations } from "next-intl";
+import { SafeHtmlRenderer } from "@/components/SafeHtmlRender/SafeHtmlRender";
 
 const MESSAGE_STATUS = {
   responded: "Responded",
@@ -52,14 +53,6 @@ function formatMessageType(status: string): string {
 }
 
 type SortKey = "name" | "account" | "date" | "";
-
-function htmlToPlainText(html: string): string {
-  if (typeof window === "undefined") return html;
-
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  return doc.body.textContent?.trim() ?? html;
-}
 
 export const StatisticsMessagesTable = () => {
   const [search, setSearch] = useState("");
@@ -287,7 +280,7 @@ export const StatisticsMessagesTable = () => {
                                 className="grid grid-cols-3 border-t border-border py-2 text-muted-foreground gap-4"
                               >
                                 <div className="whitespace-pre-wrap">
-                                  {htmlToPlainText(msg.message || "—")}
+                                  <SafeHtmlRenderer html={msg.message || "—"} />
                                 </div>
                                 <div>{formatMessageType(msg.status)}</div>
                                 <div>
