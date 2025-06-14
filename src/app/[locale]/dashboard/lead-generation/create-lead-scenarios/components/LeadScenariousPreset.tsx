@@ -21,12 +21,14 @@ const LeadScenariousPresets = ({
   newPreset,
   handleLoadFilter,
   setActiveStep,
+  isFormEmpty,
 }: {
   setNewPreset: Dispatch<SetStateAction<string>>;
   newPreset: string;
   handleLoadFilter: (id: string, flag: boolean) => void;
   setActiveStep: Dispatch<SetStateAction<number>>;
   leadScenarioById: LeadScenarios | undefined;
+  isFormEmpty: boolean;
 }) => {
   const t = useTranslations("leadScenarioPreset");
 
@@ -103,6 +105,7 @@ const LeadScenariousPresets = ({
           variant="outline"
           className="flex items-center gap-2"
           type="button"
+          disabled={isFormEmpty}
           onClick={() => setActiveStep((prev) => prev + 1)}
         >
           <Users size={16} /> {t("actions.search")}

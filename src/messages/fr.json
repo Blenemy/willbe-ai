@@ -1102,7 +1102,14 @@
       "errors": {
         "annual_revenue_from_required": "Veuillez sélectionner le chiffre d'affaires minimum",
         "annual_revenue_to_required": "Veuillez sélectionner le chiffre d'affaires maximum",
-        "annual_revenue_currency_required": "Veuillez sélectionner la devise"
+        "annual_revenue_currency_required": "Veuillez sélectionner la devise",
+        "headcount_range_invalid": "L'effectif 'De' doit être inférieur ou égal à 'À'",
+        "headcount_growth_range_invalid": "La croissance des effectifs 'De' doit être inférieure ou égale à 'À'",
+        "fortune_range_invalid": "La valeur Fortune 'De' doit être inférieure ou égale à 'À'",
+        "followers_count_range_invalid": "Le nombre d'abonnés 'De' doit être inférieur ou égal à 'À'",
+        "department_headcount_range_invalid": "L'effectif du département 'De' doit être inférieur ou égal à 'À'",
+        "department_headcount_growth_range_invalid": "La croissance de l'effectif du département 'De' doit être inférieure ou égale à 'À'",
+        "annual_revenue_range_invalid": "Le chiffre d'affaires annuel 'De' doit être inférieur ou égal à 'À'"
       }
     },
     "buttons": {
@@ -1231,6 +1238,11 @@
     "pastCompany": {
       "label": "🕰️🏢 Ancienne entreprise",
       "description": "Cibler des personnes ayant travaillé dans des entreprises spécifiques.",
+      "placeholder": "Rechercher par nom d'entreprise..."
+    },
+    "currentCompany": {
+      "label": "🏢 Entreprise actuelle",
+      "description": "Ciblez les personnes actuellement employées dans des entreprises spécifiques.",
       "placeholder": "Rechercher par nom d'entreprise..."
     },
     "companyLocation": {
