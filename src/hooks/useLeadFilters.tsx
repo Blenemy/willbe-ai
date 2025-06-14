@@ -96,7 +96,7 @@ export const useLeadFilters = ({
   });
 
   return {
-    createLeadFilter: createLeadFilter.mutate,
+    createLeadFilter: createLeadFilter.mutateAsync,
     deleteLeadFilter: deleteLeadFilter.mutate,
     leadFiltersTableData,
     leadFilterById,

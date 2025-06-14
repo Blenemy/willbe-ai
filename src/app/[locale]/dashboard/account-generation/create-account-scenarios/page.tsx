@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import {
@@ -33,8 +32,8 @@ import { useAccountScenariosDropdowns } from "@/hooks/useDropdownOptionsQuery";
 import FormAccordion from "../../lead-generation/create-lead-scenarios/components/formComponents/FormAccordion";
 import AccountNameForm from "./components/AccountNameForm";
 import {
-  accountScenarioFormSchema,
   getAccountScenarioFormSchema,
+  AccountScenariosType,
 } from "@/schemas/accountScenarioFormSchema";
 import MultiSelectWithSearchButton from "./components/formComponents/MultiSelectWithSearchButton";
 import { Button } from "@/components/ui/button";
@@ -47,8 +46,6 @@ import { useTranslations } from "next-intl";
 import { ScenarioSidebarLite } from "@/components/ScenarioSidebar/ScenarioSidebar";
 import AccountSave from "./components/AccountSave/AccountSave";
 import { useQueryClient } from "@tanstack/react-query";
-
-export type AccountScenariosType = z.infer<typeof accountScenarioFormSchema>;
 
 const CreateAccountScenarios = () => {
   const searchParams = useSearchParams();
@@ -117,7 +114,7 @@ const CreateAccountScenarios = () => {
       mode: "onChange",
     });
 
-  async function onSubmit(values: z.infer<typeof accountScenarioFormSchema>) {
+  async function onSubmit(values: AccountScenariosType) {
     if (accountId && accountName) {
       const payload = prepareAccountPayload(values, accountName);
 
@@ -204,6 +201,14 @@ const CreateAccountScenarios = () => {
 
   const hasAnnualRevenueError =
     !watchRevenueFrom || !watchRevenueTo || !watchCurrency;
+
+  const clearField = (
+    from: keyof AccountScenariosType,
+    to?: keyof AccountScenariosType
+  ) => {
+    form.setValue(from, "", { shouldValidate: true });
+    if (to) form.trigger(to);
+  };
 
   return (
     <div className="w-full px-6 py-10 flex flex-col">
@@ -323,7 +328,10 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue("headcount_from", "");
+                                          clearField(
+                                            "headcount_from",
+                                            "headcount_to"
+                                          );
                                         }}
                                       />
                                     )}
@@ -373,7 +381,10 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue("headcount_to", "");
+                                          clearField(
+                                            "headcount_to",
+                                            "headcount_from"
+                                          );
                                         }}
                                       />
                                     )}
@@ -428,9 +439,9 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue(
+                                          clearField(
                                             "headcount_growth_from",
-                                            ""
+                                            "headcount_growth_to"
                                           );
                                         }}
                                       />
@@ -479,9 +490,9 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue(
+                                          clearField(
                                             "headcount_growth_to",
-                                            ""
+                                            "headcount_growth_from"
                                           );
                                         }}
                                       />
@@ -537,7 +548,10 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue("fortune_from", "");
+                                          clearField(
+                                            "fortune_from",
+                                            "fortune_to"
+                                          );
                                         }}
                                       />
                                     )}
@@ -585,7 +599,10 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue("fortune_to", "");
+                                          clearField(
+                                            "fortune_to",
+                                            "fortune_from"
+                                          );
                                         }}
                                       />
                                     )}
@@ -641,9 +658,9 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue(
+                                          clearField(
                                             "followers_count_from",
-                                            ""
+                                            "followers_count_to"
                                           );
                                         }}
                                       />
@@ -693,9 +710,9 @@ const CreateAccountScenarios = () => {
                                         onPointerDown={(e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          form.setValue(
+                                          clearField(
                                             "followers_count_to",
-                                            ""
+                                            "followers_count_from"
                                           );
                                         }}
                                       />
@@ -973,9 +990,9 @@ const CreateAccountScenarios = () => {
                                           onPointerDown={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            form.setValue(
+                                            clearField(
                                               "department_headcount_from",
-                                              ""
+                                              "department_headcount_to"
                                             );
                                           }}
                                         />
@@ -1030,9 +1047,9 @@ const CreateAccountScenarios = () => {
                                           onPointerDown={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            form.setValue(
+                                            clearField(
                                               "department_headcount_to",
-                                              ""
+                                              "department_headcount_from"
                                             );
                                           }}
                                         />
@@ -1097,9 +1114,9 @@ const CreateAccountScenarios = () => {
                                           onPointerDown={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            form.setValue(
+                                            clearField(
                                               "department_headcount_growth_from",
-                                              ""
+                                              "department_headcount_growth_to"
                                             );
                                           }}
                                         />
@@ -1154,9 +1171,9 @@ const CreateAccountScenarios = () => {
                                           onPointerDown={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
-                                            form.setValue(
+                                            clearField(
                                               "department_headcount_growth_to",
-                                              ""
+                                              "department_headcount_growth_from"
                                             );
                                           }}
                                         />
@@ -1242,9 +1259,9 @@ const CreateAccountScenarios = () => {
                                       onPointerDown={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        form.setValue(
+                                        clearField(
                                           "annual_revenue_from",
-                                          ""
+                                          "annual_revenue_to"
                                         );
                                       }}
                                     />
@@ -1294,7 +1311,10 @@ const CreateAccountScenarios = () => {
                                       onPointerDown={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        form.setValue("annual_revenue_to", "");
+                                        clearField(
+                                          "annual_revenue_to",
+                                          "annual_revenue_from"
+                                        );
                                       }}
                                     />
                                   )}
