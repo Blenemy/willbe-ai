@@ -31,7 +31,7 @@ const MESSAGE_STATUS = {
   responded: "Responded",
   not_answered: "Not answered",
   out_of_office: "Out of office",
-  bouced: "Bounced",
+  bounced: "Bounced",
 } as const;
 
 type MessageStatusKey = keyof typeof MESSAGE_STATUS;
@@ -135,7 +135,7 @@ export const StatisticsMessagesTable = () => {
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="responded">Responded</SelectItem>
             <SelectItem value="not_answered">Not answered</SelectItem>
-            <SelectItem value="bouced">Bounced</SelectItem>
+            <SelectItem value="bounced">Bounced</SelectItem>
             <SelectItem value="out_of_office">Out of office</SelectItem>
           </SelectContent>
         </Select>
