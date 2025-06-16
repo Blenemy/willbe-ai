@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - "**"
+      - '**'
   pull_request:
     branches:
-      - "**"
+      - '**'
 
 jobs:
   sonarcloud:
@@ -28,7 +28,7 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
-        run: npm run test:coverage
+        run: npm run test -- --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -36,9 +36,10 @@ jobs:
           args: >
             -Dsonar.projectKey=Willbe-AI_willbe-front
             -Dsonar.organization=willbe-ai
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+          
   deploy-repo:
     name: Build and Deploy (only on dev)
     runs-on: ubuntu-latest
