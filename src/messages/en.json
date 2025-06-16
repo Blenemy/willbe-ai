@@ -1233,6 +1233,11 @@
       "description": "Target individuals who were previously employed at specific companies.",
       "placeholder": "Search by company name..."
     },
+    "currentCompany": {
+      "label": "🏢 Current company",
+      "description": "Target individuals who are currently employed at specific companies.",
+      "placeholder": "Search by company name..."
+    },
     "companyLocation": {
       "label": "🏢📍 Company location",
       "description": "Target individuals working at companies located in specific geographical areas.",
