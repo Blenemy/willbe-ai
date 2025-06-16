@@ -15,4 +15,8 @@ module.exports = {
       tsconfig: "tsconfig.jest.json",
     },
   },
+
+  collectCoverage: true,
+  coverageDirectory: "coverage",
+  coverageReporters: ["lcov", "text"],
 };
