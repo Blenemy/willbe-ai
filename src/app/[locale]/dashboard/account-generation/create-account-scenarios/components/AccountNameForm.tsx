@@ -34,11 +34,10 @@ const AccountNameForm = () => {
   const accountName = searchParams.get("accountName");
   const accountId = searchParams.get("accountId");
 
-  const { createAccountScenario, updateAccountScenario, accountScenarioById } =
-    useAccountScenarios({
-      enableFetch: false,
-      accountId,
-    });
+  const { createAccountScenario, updateAccountScenario } = useAccountScenarios({
+    enableFetch: false,
+    accountId,
+  });
 
   function onSubmit(values: z.infer<typeof accountScenariosName>) {
     const shouldUpdateQueryParamsName = accountName !== values.account_name;
@@ -55,10 +54,12 @@ const AccountNameForm = () => {
   }
 
   useEffect(() => {
-    if (accountId && accountScenarioById?.name) {
-      form.setValue("account_name", accountScenarioById.name);
+    if (accountName) {
+      form.setValue("account_name", accountName);
+    } else {
+      form.reset({ account_name: "" });
     }
-  }, [accountScenarioById, form, accountId]);
+  }, [accountName, form]);
 
   return (
     <Form {...form}>

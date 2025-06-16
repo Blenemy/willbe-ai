@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { toast } from "sonner";
+import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 
 interface GenerateMessagesDto {
   messageEntryDataIds: string[];
@@ -26,8 +27,8 @@ export const useGenerateMessages = () => {
         queryKey: ["message-campaign-entries"],
       });
     },
-    onError: () => {
-      toast.error("Failed to generate messages.");
+    onError: (err) => {
+      handleAxiosError(err, "Failed to generate messages.");
     },
   });
 };
@@ -55,8 +56,8 @@ export const useSendMessages = () => {
         queryKey: ["message-campaign-entries"],
       });
     },
-    onError: () => {
-      toast.error("Unable to launch message campaign, no email is connected");
+    onError: (err) => {
+      handleAxiosError(err);
     },
   });
 };
