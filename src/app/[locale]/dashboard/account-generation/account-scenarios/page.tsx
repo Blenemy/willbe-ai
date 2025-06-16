@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { renderHeader } from "@/components/ui/renderHeader";
+import { format } from "date-fns";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -221,7 +222,10 @@ const AccountScenariosPage = () => {
                 </span>
               </TableCell>
               <TableCell>{scenario.createdBy}</TableCell>
-              <TableCell>{scenario.createdAt}</TableCell>
+              <TableCell>
+                {" "}
+                {format(new Date(scenario.createdAt), "dd/MM/yyyy HH:mm")}
+              </TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button
                   size="icon"
