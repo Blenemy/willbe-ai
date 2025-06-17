@@ -40,9 +40,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy-repo:
-    name: Build and Deploy (only on dev)
+    name: Build and Deploy (only on master)
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/master'
     needs: sonarcloud
     steps:
       - uses: actions/checkout@v4
@@ -55,19 +55,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Get Azure Account Name
-        run: |
-          # Get branch name and generate Azure account name
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-
-          # Use tail -n1 to get only the last line of output (the actual name)
-          AZURE_ACCOUNT_NAME=$(node .github/scripts/azure-name/azure-name.generator.js "$BRANCH_NAME" | tail -n1)
-
-          # Debug output
-          echo "Generated Azure account name for branch $BRANCH_NAME: $AZURE_ACCOUNT_NAME"
-
-          # Save to environment
-          echo "AZURE_ACCOUNT_NAME=$AZURE_ACCOUNT_NAME" >> $GITHUB_ENV
+      - name: Use hardcoded Azure Account Name from secret
+        run: echo "AZURE_ACCOUNT_NAME=${{ secrets.AZURE_ACCOUNT_NAME }}" >> $GITHUB_ENV
 
       - name: Check and Get Config
         run: |
@@ -130,6 +119,8 @@ jobs:
           fi
 
       - name: Build Applications
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: npm run build
 
       - name: Prepare Deploy Flow
