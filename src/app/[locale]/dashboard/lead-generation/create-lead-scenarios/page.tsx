@@ -50,8 +50,6 @@ import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
 import { useTranslations } from "next-intl";
 import { XIcon } from "lucide-react";
 
-export type LeadScenariosFormType = z.infer<typeof leadScenariosFiltersSchema>;
-
 const CreateLeadScenarios = () => {
   const [activeStep, setActiveStep] = useState(0);
   const searchParams = useSearchParams();

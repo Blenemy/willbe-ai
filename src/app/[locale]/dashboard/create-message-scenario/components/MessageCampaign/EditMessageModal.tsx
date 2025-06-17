@@ -51,6 +51,17 @@ interface EditMessageModalProps {
   leadName?: string;
 }
 
+function cleanHtml(rawHtml: string): string {
+  let html = rawHtml;
+
+  html = html.replace(/<span[^>]*>(.*?)<\/span>/gi, "$1");
+  html = html.replace(/<p[^>]*>(&nbsp;|\s)*<\/p>/gi, "<br>");
+  html = html.replace(/<p[^>]*>(.*?)<\/p>/gi, (_, inner) => `${inner}<br>`);
+  html = html.replace(/(<br\s*\/?>\s*)+$/, "");
+
+  return html;
+}
+
 export function OnChangeHtmlPlugin({
   onChange,
 }: {
@@ -59,24 +70,15 @@ export function OnChangeHtmlPlugin({
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {
-    return editor.registerUpdateListener(({ editorState }) => {
+    const unregister = editor.registerUpdateListener(({ editorState }) => {
       editorState.read(() => {
-        let rawHtml = $generateHtmlFromNodes(editor, null);
-
-        rawHtml = rawHtml.replace(/<span[^>]*>(.*?)<\/span>/gi, "$1");
-
-        rawHtml = rawHtml.replace(/<p[^>]*>(&nbsp;|\s)*<\/p>/gi, "<br>");
-
-        rawHtml = rawHtml.replace(
-          /<p[^>]*>(.*?)<\/p>/gi,
-          (_, inner) => `${inner}<br>`
-        );
-
-        rawHtml = rawHtml.replace(/(<br\s*\/?>\s*)+$/, "");
-
-        onChange(rawHtml);
+        const rawHtml = $generateHtmlFromNodes(editor, null);
+        const cleanedHtml = cleanHtml(rawHtml);
+        onChange(cleanedHtml);
       });
     });
+
+    return unregister;
   }, [editor, onChange]);
 
   return null;

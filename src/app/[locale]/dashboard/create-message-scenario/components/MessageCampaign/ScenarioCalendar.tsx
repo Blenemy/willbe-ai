@@ -119,15 +119,8 @@ export const ScenarioCalendar = ({
           const emails =
             entriesByDay[key]?.filter((e) => emailTypes.includes(e.type)) ?? [];
           return (
-            <div
+            <button
               key={key}
-              role="calendar-day-button-email"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onCreateWithDate?.(format(day, "yyyy-MM-dd"));
-                }
-              }}
               onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if (target.closest("[data-entry-popover]")) return;
@@ -148,7 +141,7 @@ export const ScenarioCalendar = ({
                   isSelected={selectedEntryId === entry.id}
                 />
               ))}
-            </div>
+            </button>
           );
         })}
       </div>
@@ -169,9 +162,8 @@ export const ScenarioCalendar = ({
             entriesByDay[key]?.filter((e) => linkedinTypes.includes(e.type)) ??
             [];
           return (
-            <div
+            <button
               key={key}
-              role="calendar-day-button-ln"
               onClick={(e) => {
                 const target = e.target as HTMLElement;
                 if (target.closest("[data-entry-popover]")) return;
@@ -181,12 +173,6 @@ export const ScenarioCalendar = ({
                 "py-3 border-r border-b text-center relative group flex items-center justify-center gap-2 cursor-pointer",
                 isWeekend(day) ? "bg-gray-100" : "bg-white"
               )}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onCreateWithDate?.(format(day, "yyyy-MM-dd"));
-                }
-              }}
             >
               {linkedins.map((entry) => (
                 <MessageEntryPopover
@@ -198,7 +184,7 @@ export const ScenarioCalendar = ({
                   isSelected={selectedEntryId === entry.id}
                 />
               ))}
-            </div>
+            </button>
           );
         })}
       </div>

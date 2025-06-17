@@ -146,8 +146,8 @@ const AccountTable = () => {
     return <Spinner />;
   }
 
-  if (data && data.items.length === 0) {
-    return null;
+  if (!data || data?.items.length === 0) {
+    return <div>Companies were not found</div>;
   }
 
   return (

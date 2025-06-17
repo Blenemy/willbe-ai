@@ -22,7 +22,6 @@ import { SelectMessageStructureForm } from "./SelectedMessageStructureForm";
 interface Props {
   scenarioId: string;
   scenarioTitle: string;
-  setActiveStep: (step: number) => void;
 }
 
 const isStructureFormResponse = (
