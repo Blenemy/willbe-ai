@@ -31,7 +31,7 @@ jobs:
         run: npm run test -- --coverage
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
+        uses: SonarSource/sonarcloud-github-action@v5
         with:
           args: >
             -Dsonar.projectKey=Willbe-AI_willbe-front
