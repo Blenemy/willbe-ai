@@ -2,6 +2,7 @@ import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "./useAuth";
 import { toast } from "sonner";
+import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 
 export const useConnectHubspot = () => {
   return useMutation({
@@ -211,7 +212,9 @@ export const useUpdateHubspotBindings = () => {
 
       toast("Successfully updated bindings");
     },
-    onError: () => {},
+    onError: (err) => {
+      handleAxiosError(err, "Failed to update bindings");
+    },
   });
 };
 
@@ -240,7 +243,7 @@ export const useStartHubspotIntegration = () => {
       toast("Account was succesfully updated");
     },
     onError: (err) => {
-      toast(`An error occured during the account update: ${err.message}`);
+      handleAxiosError(err, "Failed to update account");
     },
   });
 };
@@ -263,7 +266,7 @@ export const useStartHubspotIntegrationInBulk = () => {
       queryClient.invalidateQueries({ queryKey: ["lead"] });
     },
     onError: (err) => {
-      toast(`An error occured during the account update: ${err.message}`);
+      handleAxiosError(err, "Failed to integrate hubspot in bulk");
     },
   });
 };
