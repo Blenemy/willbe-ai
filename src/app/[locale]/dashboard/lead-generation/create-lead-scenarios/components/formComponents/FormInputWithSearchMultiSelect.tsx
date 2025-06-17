@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useSearchParamsQuery } from "@/hooks/useSearchParamsQuery";
-import { LeadScenariosFormType } from "../../page";
 import { useTranslations } from "next-intl";
+import { LeadScenariosFormType } from "@/schemas/leadScenariosFiltersSchema";
 
 interface SearchOption {
   id: string;

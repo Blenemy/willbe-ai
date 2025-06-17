@@ -25,6 +25,7 @@ import { LeadScenarios } from "@/types/LeadScenarios";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { format } from "date-fns";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -104,7 +105,9 @@ const LeadScenariosPage = () => {
               <TableCell>
                 {scenario.user.firstName + " " + scenario.user.lastName}
               </TableCell>
-              <TableCell>{scenario.createdAt}</TableCell>
+              <TableCell>
+                {format(new Date(scenario.createdAt), "dd/MM/yyyy HH:mm")}
+              </TableCell>
               <TableCell className="flex justify-end gap-2">
                 <Button
                   size="icon"

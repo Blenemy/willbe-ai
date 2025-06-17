@@ -22,7 +22,7 @@ const EditMessageScenarioPage = () => {
 
   const { data: scenario } = useMessageScenarioById(id);
   const { data: messageEntries } = useMessageCampaignEntries(id);
-  const { mutate } = usePostMessageScenarioLeads();
+  const { mutateAsync } = usePostMessageScenarioLeads();
   const { activeStep, setActiveStep, initStep } = useScenarioStepStore();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const EditMessageScenarioPage = () => {
   }, [messageEntries, selectedEntryId]);
 
   const handleOnImport = async (selectedIds: string[]) => {
-    await mutate({ id, leadsIds: selectedIds });
+    await mutateAsync({ id, leadsIds: selectedIds });
     setActiveStep(1);
   };
 
@@ -65,7 +65,6 @@ const EditMessageScenarioPage = () => {
         <ScenarioMessageChain
           scenarioId={scenario.id}
           scenarioTitle={scenario.name}
-          setActiveStep={setActiveStep}
         />
       )}
 

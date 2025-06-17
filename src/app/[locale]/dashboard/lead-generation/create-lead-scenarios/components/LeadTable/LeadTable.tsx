@@ -20,8 +20,6 @@ import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
 
-// const INITIAL_NUMBER_ITEMS_PER_PAGE = 10;
-
 const LeadTable = ({
   setCurrentStep,
 }: {
@@ -36,9 +34,6 @@ const LeadTable = ({
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
-  // const [itemsPerPage, setItemsPerPage] = useState(
-  //   INITIAL_NUMBER_ITEMS_PER_PAGE
-  // );
 
   const { saveSelectedLeads } = useSavedLeads({
     enableFetch: true,
@@ -67,13 +62,6 @@ const LeadTable = ({
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
-
-  // const handleLimitChange = (value: string) => {
-  //   const newLimit = parseInt(value);
-  //   setItemsPerPage(newLimit);
-  //   setCursorStack([null]);
-  //   setCurrentCursorIndex(0);
-  // };
 
   const handleNext = () => {
     if (cursor) {
@@ -122,6 +110,10 @@ const LeadTable = ({
     setCurrentStep((prev) => prev + 1);
   };
 
+  if (!searchLeads || searchLeads.length === 0) {
+    return <div>Leads not found</div>;
+  }
+
   return (
     <div className="w-full px-6 py-10 flex flex-col gap-4">
       <h2 className="font-semibold text-2xl">{t("title")}</h2>
@@ -131,20 +123,6 @@ const LeadTable = ({
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-4">
-            {/* <Select
-              value={itemsPerPage.toString()}
-              onValueChange={(value) => handleLimitChange(value)}
-            >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder={t("itemsPerPage")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="25">25</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select> */}
-
             <Input
               placeholder={t("searchPlaceholder")}
               value={searchTerm}

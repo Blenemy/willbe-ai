@@ -103,7 +103,7 @@ export const useSavedLeads = ({ enableFetch, scenarioId }: UseAuthProps) => {
 
   return {
     savedLeads,
-    saveSelectedLeads: saveSelectedLeads.mutate,
+    saveSelectedLeads: saveSelectedLeads.mutateAsync,
     deleteLead: deleteLead.mutate,
   };
 };

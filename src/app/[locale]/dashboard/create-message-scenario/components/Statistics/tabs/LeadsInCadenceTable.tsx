@@ -226,7 +226,7 @@ export const LeadsInCadenceTable = () => {
                     </Avatar>
                     <span>{fullName}</span>
                   </TableCell>
-                  <TableCell>{item.phone ?? t("editPhone")}</TableCell>
+                  <TableCell>{item.phone ?? "-"}</TableCell>
                   <TableCell>{company}</TableCell>
                   <TableCell>
                     <Select

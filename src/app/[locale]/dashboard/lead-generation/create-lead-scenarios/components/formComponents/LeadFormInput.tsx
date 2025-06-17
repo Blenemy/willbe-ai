@@ -5,8 +5,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { LeadScenariosFormType } from "@/schemas/leadScenariosFiltersSchema";
 import { UseFormReturn } from "react-hook-form";
-import { LeadScenariosFormType } from "../../page";
 
 interface FormInputAccordionProps {
   form: UseFormReturn<LeadScenariosFormType>;
