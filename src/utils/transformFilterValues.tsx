@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-nocheck
 
+import { LeadScenariosFormType } from "@/schemas/leadScenariosFiltersSchema";
+
 export function transformFilterValues(
   filterValues
 ): Partial<LeadScenariosFormType> {
