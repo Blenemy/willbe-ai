@@ -58,3 +58,5 @@ export const leadScenariosFiltersSchema = z.object({
   company_tenure_from: z.string(),
   company_tenure_to: z.string(),
 });
+
+export type LeadScenariosFormType = z.infer<typeof leadScenariosFiltersSchema>;

@@ -15,4 +15,10 @@ module.exports = {
       tsconfig: "tsconfig.jest.json",
     },
   },
+
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.{ts,tsx}"],
+  coverageDirectory: "coverage",
+  coverageReporters: ["lcov", "text"],
+  moduleDirectories: ["node_modules", "src"],
 };

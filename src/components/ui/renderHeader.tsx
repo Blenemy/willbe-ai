@@ -39,6 +39,23 @@ export const renderCompactHeader = <T extends string>(
   sortAsc: boolean,
   handleSort: (key: T) => void
 ) => {
+  let icon;
+
+  if (sortKey === key) {
+    icon = sortAsc ? (
+      <ChevronUp className="w-4 h-4 text-foreground" />
+    ) : (
+      <ChevronDown className="w-4 h-4 text-foreground" />
+    );
+  } else {
+    icon = (
+      <div className="flex items-center justify-center leading-none">
+        <ChevronUp className="w-4 h-4 p-0 -mr-1" />
+        <ChevronDown className="w-4 h-4 p-0" />
+      </div>
+    );
+  }
+
   return (
     <TableHead
       onClick={() => handleSort(key)}
@@ -46,18 +63,7 @@ export const renderCompactHeader = <T extends string>(
     >
       <div className="flex items-center gap-1">
         <div className="w-5 flex justify-center items-center text-muted-foreground">
-          {sortKey === key ? (
-            sortAsc ? (
-              <ChevronUp className="w-4 h-4 text-foreground" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-foreground" />
-            )
-          ) : (
-            <div className="flex items-center justify-center leading-none">
-              <ChevronUp className="w-4 h-4 p-0 -mr-1" />
-              <ChevronDown className="w-4 h-4 p-0" />
-            </div>
-          )}
+          {icon}
         </div>
 
         <span>{label}</span>
