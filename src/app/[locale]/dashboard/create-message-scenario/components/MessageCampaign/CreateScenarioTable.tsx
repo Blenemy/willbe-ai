@@ -44,12 +44,11 @@ interface Props {
   selectedEntry: MessageEntry;
 }
 
-const stripHtml = (html: string) =>
-  html
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+export const stripHtml = (html: string) => {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent?.replace(/\s+/g, " ").trim() || "";
+};
 
 const ITEMS_PER_PAGE = 5;
 
