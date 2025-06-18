@@ -48,22 +48,6 @@ import AccountSave from "./components/AccountSave/AccountSave";
 import { useQueryClient } from "@tanstack/react-query";
 import { RangeSelectPair } from "@/components/RangeSelectPair/RangePairSelect";
 
-export const getFilteredRangeOptions = (
-  options: string[],
-  bound?: string,
-  mode: "min" | "max" = "min"
-) => {
-  if (!bound) return options;
-  const boundNum = Number(bound);
-  if (isNaN(boundNum)) return options;
-
-  return options.filter((opt) => {
-    const num = Number(opt);
-    if (isNaN(num)) return true;
-    return mode === "min" ? num >= boundNum : num <= boundNum;
-  });
-};
-
 const CreateAccountScenarios = () => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId");
