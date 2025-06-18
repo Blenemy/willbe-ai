@@ -15,7 +15,7 @@ module.exports = {
       tsconfig: "tsconfig.jest.json",
     },
   },
-
+  setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
   collectCoverage: true,
   collectCoverageFrom: ["src/**/*.{ts,tsx}"],
   coverageDirectory: "coverage",
