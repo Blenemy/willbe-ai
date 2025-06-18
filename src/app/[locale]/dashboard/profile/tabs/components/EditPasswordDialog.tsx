@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,6 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslations } from "next-intl";
 import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 import { useEffect } from "react";
+import { PasswordInput } from "@/components/ui/password-input";
 
 const EditPasswordDialog = ({
   open,
@@ -98,11 +98,7 @@ const EditPasswordDialog = ({
                     {t("old_password")}
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t("old_password")}
-                      {...field}
-                      type="password"
-                    />
+                    <PasswordInput placeholder={t("old_password")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -118,10 +114,9 @@ const EditPasswordDialog = ({
                     {t("new_password_title")}
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       placeholder={t("new_password_title")}
                       {...field}
-                      type="password"
                     />
                   </FormControl>
                   <FormMessage />
@@ -138,10 +133,9 @@ const EditPasswordDialog = ({
                     {t("confirm_password")}
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       placeholder={t("confirm_password")}
                       {...field}
-                      type="password"
                     />
                   </FormControl>
                   <FormMessage />
