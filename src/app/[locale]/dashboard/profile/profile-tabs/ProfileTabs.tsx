@@ -60,7 +60,7 @@ const ProfileTabs = ({ translations }: Props) => {
         {translations.account_settings}
       </h2>
       <Tabs
-        defaultValue={visibleTabs[0]?.value}
+        defaultValue="profile"
         className="flex gap-2 bg-white rounded-xl h-full w-full"
       >
         <TabsList className="flex flex-col items-start justify-start bg-white gap-1">
