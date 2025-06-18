@@ -1,32 +1,24 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { render, screen } from "@testing-library/react";
 import { UserRoles } from "@/types/Roles";
 import * as useAuthStoreModule from "@/store/useAuthStore";
-import ProfileTabs from "./ProfileTabs";
+import ProfileTabs from "../ProfileTabs";
 
-jest.mock("../tabs/ProfileTab", () => {
-  const Mock = () => <div />;
-  Mock.displayName = "MockProfileTab";
-  return Mock;
+jest.mock("../../tabs/ProfileTab", () => {
+  const { createMockTab } = require("./mocks/createMockTab");
+  return createMockTab("ProfileTab");
 });
-jest.mock("../tabs/SecurityTab", () => {
-  const Mock = () => <div />;
-  Mock.displayName = "MockSecurityTab";
-  return Mock;
+jest.mock("../../tabs/SecurityTab", () => {
+  const { createMockTab } = require("./mocks/createMockTab");
+  return createMockTab("SecurityTab");
 });
-jest.mock("../tabs/ConnectionsTab", () => {
-  const Mock = () => <div />;
-  Mock.displayName = "MockConnectionsTab";
-  return Mock;
+jest.mock("../../tabs/ConnectionsTab", () => {
+  const { createMockTab } = require("./mocks/createMockTab");
+  return createMockTab("ConnectionsTab");
 });
-jest.mock("../tabs/SignatureTab", () => {
-  const Mock = () => <div />;
-  Mock.displayName = "MockSignatureTab";
-  return Mock;
-});
-jest.mock("../tabs/BillingTab", () => {
-  const Mock = () => <div />;
-  Mock.displayName = "MockBillingTab";
-  return Mock;
+jest.mock("../../tabs/SignatureTab", () => {
+  const { createMockTab } = require("./mocks/createMockTab");
+  return createMockTab("SignatureTab");
 });
 
 const baseTranslations = {
