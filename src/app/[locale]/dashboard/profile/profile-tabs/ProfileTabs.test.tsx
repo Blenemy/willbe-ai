@@ -64,8 +64,6 @@ describe("ProfileTabs role-based rendering", () => {
   });
 
   it("renders nothing if role is undefined", () => {
-    mockUserRole(undefined);
-
     render(<ProfileTabs translations={baseTranslations} />);
 
     expect(screen.queryByText("Profile")).not.toBeInTheDocument();

@@ -23,7 +23,7 @@ describe("hasPermission", () => {
   });
 
   it("returns false if current role is undefined", () => {
-    expect(hasPermission([UserRoles.admin], undefined)).toBe(false);
+    expect(hasPermission([UserRoles.admin])).toBe(false);
   });
 
   it("returns false if required is empty array", () => {
