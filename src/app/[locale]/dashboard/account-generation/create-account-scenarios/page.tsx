@@ -62,8 +62,6 @@ const CreateAccountScenarios = () => {
 
   const { data: dropdowns } = useAccountScenariosDropdowns();
 
-  console.log(dropdowns);
-
   const form: UseFormReturn<AccountScenariosType> =
     useForm<AccountScenariosType>({
       resolver: zodResolver(getAccountScenarioFormSchema(tErrors)),

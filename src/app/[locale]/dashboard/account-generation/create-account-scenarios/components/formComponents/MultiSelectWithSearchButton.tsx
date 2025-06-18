@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useSearchParamsQuery } from "@/hooks/useSearchParamsQuery";
-import { AccountScenariosType } from "../../page";
 import { useTranslations } from "next-intl";
+import { AccountScenariosType } from "@/schemas/accountScenarioFormSchema";
 
 interface SearchOption {
   id: string;
