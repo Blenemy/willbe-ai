@@ -349,12 +349,6 @@ export function AuthForm({
               </div>
             </form>
           </Form>
-
-          {isSignIn && (
-            <div className="mb-8">
-              <SocialAuthButtons translations={translations} />
-            </div>
-          )}
         </CardContent>
       </Card>
 
