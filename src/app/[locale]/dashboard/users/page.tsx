@@ -38,11 +38,6 @@ const UsersPage = () => {
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
-      <div className="flex justify-end">
-        <Button onClick={() => setOpenInvite(true)}>
-          {t("invite_button")}
-        </Button>
-      </div>
 
       {isLoading ? (
         <TableSkeleton />
