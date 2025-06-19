@@ -28,7 +28,14 @@ jobs:
         run: npm ci
 
       - name: Run tests with coverage
-        run: npm run test -- --coverage
+        run: npm run test:coverage
+
+      - name: Check lcov file
+        run: |
+          echo "Files in coverage/:"
+          ls -l coverage
+          echo "First 20 lines of lcov.info:"
+          head -n 20 coverage/lcov.info
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v5
@@ -36,6 +43,11 @@ jobs:
           args: >
             -Dsonar.projectKey=Willbe-AI_willbe-front
             -Dsonar.organization=willbe-ai
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions=**/*.test.ts,**/*.test.tsx
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.sourceEncoding=UTF-8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
