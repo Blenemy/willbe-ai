@@ -45,10 +45,13 @@ import {
   useLanguagesQuery,
 } from "@/hooks/useDropdownOptionsQuery";
 import LeadTable from "./components/LeadTable/LeadTable";
-import { leadScenariosFiltersSchema } from "@/schemas/leadScenariosFiltersSchema";
+import {
+  leadScenariosFiltersSchema,
+  LeadScenariosFormType,
+} from "@/schemas/leadScenariosFiltersSchema";
 import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
 import { useTranslations } from "next-intl";
-import { XIcon } from "lucide-react";
+import { RangeSelectPair } from "@/components/RangeSelectPair/RangePairSelect";
 
 const CreateLeadScenarios = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -278,6 +281,13 @@ const CreateLeadScenarios = () => {
     }
   }, [leadScenarioById, leadFilterById, applyWithReset, form]);
 
+  const clearField = (from: string, to?: string) => {
+    form.setValue(from as keyof LeadScenariosFormType, "", {
+      shouldValidate: true,
+    });
+    if (to) form.trigger(to as keyof LeadScenariosFormType);
+  };
+
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
@@ -369,116 +379,16 @@ const CreateLeadScenarios = () => {
                         <FormAccordion label={t("jobTenure.label")}>
                           <div className="flex gap-2 flex-col">
                             <h4>{t("jobTenure.description")}</h4>
-                            <div className="flex flex-col gap-3">
-                              <FormField
-                                control={form.control}
-                                name="job_tenure_from"
-                                render={({ field }) => (
-                                  <FormItem className="flex-1">
-                                    <FormControl>
-                                      <Select
-                                        key={field.value}
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                      >
-                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                          <div className="flex items-center flex-1 overflow-hidden">
-                                            <SelectValue
-                                              placeholder={t("jobTenure.from")}
-                                              className="truncate"
-                                            />
-                                          </div>
 
-                                          {field.value && (
-                                            <XIcon
-                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                              onPointerDown={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                form.setValue(
-                                                  "job_tenure_from",
-                                                  ""
-                                                );
-                                              }}
-                                            />
-                                          )}
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectGroup>
-                                            {data.tenuresAtJobTitle.from.map(
-                                              (value: string) => (
-                                                <SelectItem
-                                                  value={value}
-                                                  key={value}
-                                                >
-                                                  {value}
-                                                </SelectItem>
-                                              )
-                                            )}
-                                          </SelectGroup>
-                                        </SelectContent>
-                                      </Select>
-                                    </FormControl>
-
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="job_tenure_to"
-                                render={({ field }) => (
-                                  <FormItem className="flex-1">
-                                    <FormControl>
-                                      <Select
-                                        key={field.value}
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                      >
-                                        <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                          <div className="flex items-center flex-1 overflow-hidden">
-                                            <SelectValue
-                                              placeholder={t("jobTenure.to")}
-                                              className="truncate"
-                                            />
-                                          </div>
-
-                                          {field.value && (
-                                            <XIcon
-                                              className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                              onPointerDown={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                form.setValue(
-                                                  "job_tenure_to",
-                                                  ""
-                                                );
-                                              }}
-                                            />
-                                          )}
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectGroup>
-                                            {data.tenuresAtJobTitle.to.map(
-                                              (value: string) => (
-                                                <SelectItem
-                                                  value={value}
-                                                  key={value}
-                                                >
-                                                  {value}
-                                                </SelectItem>
-                                              )
-                                            )}
-                                          </SelectGroup>
-                                        </SelectContent>
-                                      </Select>
-                                    </FormControl>
-
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
+                            <RangeSelectPair
+                              fromName="headcount_from"
+                              toName="headcount_to"
+                              fromOptions={data?.tenuresAtJobTitle.from ?? []}
+                              toOptions={data?.tenuresAtJobTitle.to ?? []}
+                              placeholderFrom={t("jobTenure.from")}
+                              placeholderTo={t("jobTenure.to")}
+                              clearField={clearField}
+                            />
                           </div>
                         </FormAccordion>
 
@@ -567,120 +477,20 @@ const CreateLeadScenarios = () => {
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
                                 <h4>{t("experience.description")}</h4>
-                                <div className="flex flex-col gap-3">
-                                  <FormField
-                                    control={form.control}
-                                    name="experience_years_from"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "experience.from"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
 
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "experience_years_from",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.totalYearsOfExpirience.from.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name="experience_years_to"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "experience.to"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
-
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "experience_years_to",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.totalYearsOfExpirience.to.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                </div>
+                                <RangeSelectPair
+                                  fromName="experience_years_from"
+                                  toName="experience_years_to"
+                                  fromOptions={
+                                    data?.totalYearsOfExpirience.from ?? []
+                                  }
+                                  toOptions={
+                                    data?.totalYearsOfExpirience.to ?? []
+                                  }
+                                  placeholderFrom={t("experience.from")}
+                                  placeholderTo={t("experience.to")}
+                                  clearField={clearField}
+                                />
                               </div>
                             </AccordionContent>
                           </AccordionItem>
@@ -742,120 +552,18 @@ const CreateLeadScenarios = () => {
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
                                 <h4>{t("companyHeadcount.description")}</h4>
-                                <div className="flex flex-col gap-3">
-                                  <FormField
-                                    control={form.control}
-                                    name="company_headcount_from"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "companyHeadcount.from"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
 
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "company_headcount_from",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.companyHeadcounts.from.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name="company_headcount_to"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "companyHeadcount.to"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
-
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "company_headcount_to",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.companyHeadcounts.to.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                </div>
+                                <RangeSelectPair
+                                  fromName="company_headcount_from"
+                                  toName="company_headcount_to"
+                                  fromOptions={
+                                    data?.companyHeadcounts.from ?? []
+                                  }
+                                  toOptions={data?.companyHeadcounts.to ?? []}
+                                  placeholderFrom={t("companyHeadcount.from")}
+                                  placeholderTo={t("companyHeadcount.to")}
+                                  clearField={clearField}
+                                />
                               </div>
                             </AccordionContent>
                           </AccordionItem>
@@ -869,120 +577,18 @@ const CreateLeadScenarios = () => {
                             <AccordionContent className="p-3">
                               <div className="flex gap-2 flex-col">
                                 <h4>{t("companyTenure.description")}</h4>
-                                <div className="flex flex-col gap-3">
-                                  <FormField
-                                    control={form.control}
-                                    name="company_tenure_from"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "companyTenure.from"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
 
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "company_tenure_from",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.tenuresAtCompany.from.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                  <FormField
-                                    control={form.control}
-                                    name="company_tenure_to"
-                                    render={({ field }) => (
-                                      <FormItem className="flex-1">
-                                        <FormControl>
-                                          <Select
-                                            key={field.value}
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                          >
-                                            <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
-                                              <div className="flex items-center flex-1 overflow-hidden">
-                                                <SelectValue
-                                                  placeholder={t(
-                                                    "companyTenure.to"
-                                                  )}
-                                                  className="truncate"
-                                                />
-                                              </div>
-
-                                              {field.value && (
-                                                <XIcon
-                                                  className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-destructive"
-                                                  onPointerDown={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    form.setValue(
-                                                      "company_tenure_to",
-                                                      ""
-                                                    );
-                                                  }}
-                                                />
-                                              )}
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectGroup>
-                                                {data.tenuresAtCompany.to.map(
-                                                  (value: string) => (
-                                                    <SelectItem
-                                                      value={value}
-                                                      key={value}
-                                                    >
-                                                      {value}
-                                                    </SelectItem>
-                                                  )
-                                                )}
-                                              </SelectGroup>
-                                            </SelectContent>
-                                          </Select>
-                                        </FormControl>
-
-                                        <FormMessage />
-                                      </FormItem>
-                                    )}
-                                  />
-                                </div>
+                                <RangeSelectPair
+                                  fromName="company_tenure_from"
+                                  toName="company_tenure_to"
+                                  fromOptions={
+                                    data?.tenuresAtCompany.from ?? []
+                                  }
+                                  toOptions={data?.tenuresAtCompany.to ?? []}
+                                  placeholderFrom={t("companyTenure.from")}
+                                  placeholderTo={t("companyTenure.to")}
+                                  clearField={clearField}
+                                />
                               </div>
                             </AccordionContent>
                           </AccordionItem>

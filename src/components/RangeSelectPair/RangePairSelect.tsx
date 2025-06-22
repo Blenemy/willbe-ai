@@ -15,9 +15,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { AccountScenariosType } from "@/schemas/accountScenarioFormSchema";
-
-type FieldName = keyof AccountScenariosType;
 
 type RangeSelectPairProps = {
   fromName: string;
@@ -26,7 +23,7 @@ type RangeSelectPairProps = {
   toOptions: string[];
   placeholderFrom?: string;
   placeholderTo?: string;
-  clearField: (from: FieldName, to?: FieldName) => void;
+  clearField: (from: string, to?: string) => void;
 };
 
 const getFilteredRangeOptions = (
@@ -94,7 +91,6 @@ export const RangeSelectPair = ({
                       onPointerDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        //@ts-expect-error type string
                         clearField(fromName, toName);
                       }}
                     />
@@ -140,7 +136,6 @@ export const RangeSelectPair = ({
                       onPointerDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        //@ts-expect-error type string
                         clearField(toName, fromName);
                       }}
                     />

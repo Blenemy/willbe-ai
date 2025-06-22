@@ -203,12 +203,11 @@ const CreateAccountScenarios = () => {
   const hasAnnualRevenueError =
     !watchRevenueFrom || !watchRevenueTo || !watchCurrency;
 
-  const clearField = (
-    from: keyof AccountScenariosType,
-    to?: keyof AccountScenariosType
-  ) => {
-    form.setValue(from, "", { shouldValidate: true });
-    if (to) form.trigger(to);
+  const clearField = (from: string, to?: string) => {
+    form.setValue(from as keyof AccountScenariosType, "", {
+      shouldValidate: true,
+    });
+    if (to) form.trigger(to as keyof AccountScenariosType);
   };
 
   return (
