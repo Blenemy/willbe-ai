@@ -7,9 +7,6 @@ module.exports = {
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   testMatch: ["**/?(*.)+(spec|test).[jt]s?(x)"],
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-  },
   globals: {
     "ts-jest": {
       tsconfig: "tsconfig.jest.json",
@@ -21,4 +18,10 @@ module.exports = {
   coverageDirectory: "coverage",
   coverageReporters: ["lcov", "text"],
   moduleDirectories: ["node_modules", "src"],
+
+  transformIgnorePatterns: ["/node_modules/(?!lucide-react).+\\.js$"],
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^lucide-react$": "<rootDir>/__mocks__/lucide-react.ts",
+  },
 };

@@ -94,8 +94,6 @@ const ScenarioList = () => {
 
   const { data = [] } = useMessageScenarios({ name: search });
 
-  console.log(data);
-
   const uniqueOwners = React.useMemo(() => {
     const names = data.map((s) =>
       `${s.user.firstName} ${s.user.lastName}`.trim()
