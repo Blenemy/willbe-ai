@@ -18,7 +18,6 @@ module.exports = {
   coverageDirectory: "coverage",
   coverageReporters: ["lcov", "text"],
   moduleDirectories: ["node_modules", "src"],
-
   transformIgnorePatterns: ["/node_modules/(?!lucide-react).+\\.js$"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
