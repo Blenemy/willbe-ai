@@ -64,6 +64,10 @@ export interface Scenario {
   user: User;
   leadsInCadence: number;
   messagesSent: number;
+  responseRate: number;
+  meetingRate: number;
+  bounceRate: number;
+  outOfOfficeRate: number;
   createdAt: string;
   updatedAt: string;
   leads: MessageScenarioLead[];
