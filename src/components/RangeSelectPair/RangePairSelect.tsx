@@ -78,7 +78,10 @@ export const RangeSelectPair = ({
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
-                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                <SelectTrigger
+                  className="flex h-10 w-full items-center justify-between gap-2 px-3"
+                  aria-label="From"
+                >
                   <div className="flex items-center flex-1 overflow-hidden">
                     <SelectValue
                       placeholder={placeholderFrom}
@@ -99,7 +102,11 @@ export const RangeSelectPair = ({
                 <SelectContent>
                   <SelectGroup>
                     {filteredFromOptions.map((val) => (
-                      <SelectItem value={val} key={val}>
+                      <SelectItem
+                        value={val}
+                        key={val}
+                        data-testid="select-item-from"
+                      >
                         {val}
                       </SelectItem>
                     ))}
@@ -123,7 +130,10 @@ export const RangeSelectPair = ({
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
-                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                <SelectTrigger
+                  className="flex h-10 w-full items-center justify-between gap-2 px-3"
+                  aria-label="To"
+                >
                   <div className="flex items-center flex-1 overflow-hidden">
                     <SelectValue
                       placeholder={placeholderTo}
@@ -144,7 +154,11 @@ export const RangeSelectPair = ({
                 <SelectContent>
                   <SelectGroup>
                     {filteredToOptions.map((val) => (
-                      <SelectItem value={val} key={val}>
+                      <SelectItem
+                        value={val}
+                        key={val}
+                        data-testid="select-item-to"
+                      >
                         {val}
                       </SelectItem>
                     ))}
