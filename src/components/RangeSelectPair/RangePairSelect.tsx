@@ -15,9 +15,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { AccountScenariosType } from "@/schemas/accountScenarioFormSchema";
-
-type FieldName = keyof AccountScenariosType;
 
 type RangeSelectPairProps = {
   fromName: string;
@@ -26,7 +23,7 @@ type RangeSelectPairProps = {
   toOptions: string[];
   placeholderFrom?: string;
   placeholderTo?: string;
-  clearField: (from: FieldName, to?: FieldName) => void;
+  clearField: (from: string, to?: string) => void;
 };
 
 const getFilteredRangeOptions = (
@@ -81,7 +78,10 @@ export const RangeSelectPair = ({
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
-                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                <SelectTrigger
+                  className="flex h-10 w-full items-center justify-between gap-2 px-3"
+                  aria-label="From"
+                >
                   <div className="flex items-center flex-1 overflow-hidden">
                     <SelectValue
                       placeholder={placeholderFrom}
@@ -94,7 +94,6 @@ export const RangeSelectPair = ({
                       onPointerDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        //@ts-expect-error type string
                         clearField(fromName, toName);
                       }}
                     />
@@ -103,7 +102,11 @@ export const RangeSelectPair = ({
                 <SelectContent>
                   <SelectGroup>
                     {filteredFromOptions.map((val) => (
-                      <SelectItem value={val} key={val}>
+                      <SelectItem
+                        value={val}
+                        key={val}
+                        data-testid="select-item-from"
+                      >
                         {val}
                       </SelectItem>
                     ))}
@@ -127,7 +130,10 @@ export const RangeSelectPair = ({
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
-                <SelectTrigger className="flex h-10 w-full items-center justify-between gap-2 px-3">
+                <SelectTrigger
+                  className="flex h-10 w-full items-center justify-between gap-2 px-3"
+                  aria-label="To"
+                >
                   <div className="flex items-center flex-1 overflow-hidden">
                     <SelectValue
                       placeholder={placeholderTo}
@@ -140,7 +146,6 @@ export const RangeSelectPair = ({
                       onPointerDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        //@ts-expect-error type string
                         clearField(toName, fromName);
                       }}
                     />
@@ -149,7 +154,11 @@ export const RangeSelectPair = ({
                 <SelectContent>
                   <SelectGroup>
                     {filteredToOptions.map((val) => (
-                      <SelectItem value={val} key={val}>
+                      <SelectItem
+                        value={val}
+                        key={val}
+                        data-testid="select-item-to"
+                      >
                         {val}
                       </SelectItem>
                     ))}
