@@ -13,22 +13,26 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LeadTable = ({
   setCurrentStep,
+  lastPageCursor,
 }: {
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  lastPageCursor: string | undefined;
 }) => {
   const t = useTranslations("leadTable");
 
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId") || "";
+  const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
@@ -67,12 +71,14 @@ const LeadTable = ({
     if (cursor) {
       setCursorStack((prev) => [...prev, cursor]);
       setCurrentCursorIndex((prev) => prev + 1);
+      queryClient.invalidateQueries({ queryKey: ["lead-scenarios-by-id"] });
     }
   };
 
   const handlePrev = () => {
     if (currentCursorIndex > 0) {
       setCurrentCursorIndex((prev) => prev - 1);
+      queryClient.invalidateQueries({ queryKey: ["lead-scenarios-by-id"] });
     }
   };
 
@@ -110,7 +116,18 @@ const LeadTable = ({
     setCurrentStep((prev) => prev + 1);
   };
 
-  if (!searchLeads || searchLeads.length === 0) {
+  useEffect(() => {
+    if (lastPageCursor) {
+      setCursorStack([null, lastPageCursor]);
+      setCurrentCursorIndex(1);
+    }
+  }, [lastPageCursor]);
+
+  if (isFetching) {
+    return <Spinner className="mr-2" />;
+  }
+
+  if (searchLeads && searchLeads.length === 0) {
     return <div>Leads not found</div>;
   }
 
