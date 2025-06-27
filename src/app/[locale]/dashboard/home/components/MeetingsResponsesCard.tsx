@@ -1,21 +1,45 @@
+"use client";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CalendarDays, Users, Reply } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useMeetingsResponseRate } from "@/hooks/useHomepage";
+import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
+import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
+import { useEffect } from "react";
 
 export default function MeetingsResponsesCard() {
-  const meetingRate = 29;
-  const responseRate = 29;
+  const { daysInterval, toggleInterval, subtitleText } =
+    useToggleDaysInterval();
+
+  const { responseRate, meetingRate, error } = useMeetingsResponseRate({
+    enableFetch: true,
+    daysInterval,
+  });
+
+  useEffect(() => {
+    if (error) {
+      handleAxiosError(error, "Failed to get the meeting response rate");
+    }
+  }, [error]);
 
   return (
-    <Card className="rounded-2xl">
-      <CardHeader className="flex justify-between items-start">
-        <div>
+    <Card className="rounded-2xl h-full">
+      <CardHeader className="flex justify-between flex-row">
+        <div className="flex flex-col gap-2">
           <CardTitle>Meetings & responses</CardTitle>
-          <p className="text-sm text-muted-foreground">In the last month</p>
+          <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <CalendarDays className="w-4 h-4" />
-        </Button>
+        <div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={toggleInterval}
+          >
+            <CalendarDays className="w-4 h-4" />
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent className="grid grid-cols-2 gap-4 text-center">

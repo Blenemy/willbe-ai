@@ -7,38 +7,72 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  YAxis,
 } from "recharts";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CalendarDays } from "lucide-react";
+import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
+import { useScenarioPerformance } from "@/hooks/useHomepage";
+import { useEffect } from "react";
+import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 
-const data = [
-  { name: "Account", actual: 12, projected: 0 },
-  { name: "Lead", actual: 28, projected: 0 },
-  { name: "Meetings", actual: 10, projected: 6 },
-  { name: "Responses", actual: 4, projected: 10 },
-  { name: "Out of office", actual: 20, projected: 0 },
-  { name: "Bounced", actual: 19, projected: 0 },
+const categories = [
+  { key: "account", label: "Account" },
+  { key: "lead", label: "Lead" },
+  { key: "meetings", label: "Meetings" },
+  { key: "responses", label: "Responses" },
+  { key: "outOfOffice", label: "Out of office" },
+  { key: "bounced", label: "Bounced" },
 ];
 
 const colors = [
-  "#0f172a", // slate-900
-  "#71717a", // zinc-500
-  "#4ade80", // green-400
-  "#facc15", // yellow-400
-  "#f97316", // orange-500
-  "#ef4444", // red-500
+  "#0f172a",
+  "#71717a",
+  "#4ade80",
+  "#facc15",
+  "#f97316",
+  "#ef4444",
 ];
 
 export default function ScenarioPerformanceChart() {
+  const { daysInterval, toggleInterval, subtitleText } =
+    useToggleDaysInterval();
+
+  const { performance, error } = useScenarioPerformance({
+    enableFetch: true,
+    daysInterval,
+  });
+
+  const chartData = categories.map(({ key, label }) => {
+    const actual = performance?.[key as keyof typeof performance] ?? 0;
+
+    return {
+      name: label,
+      value: actual,
+      visualValue: actual === 0 ? 0.2 : actual,
+    };
+  });
+
+  useEffect(() => {
+    if (error) {
+      handleAxiosError(error, "Failed to get the scenario perfomance");
+    }
+  }, [error]);
+
   return (
     <Card className="rounded-2xl">
-      <CardHeader className="flex items-start justify-between">
-        <div>
+      <CardHeader className="flex items-start justify-between flex-row">
+        <div className="flex flex-col gap-2">
           <CardTitle>Scenario performance</CardTitle>
-          <p className="text-sm text-muted-foreground">In the last month</p>
+          <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          onClick={toggleInterval}
+        >
           <CalendarDays className="w-4 h-4" />
         </Button>
       </CardHeader>
@@ -46,14 +80,20 @@ export default function ScenarioPerformanceChart() {
       <CardContent className="p-4">
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} barCategoryGap={5}>
+            <BarChart data={chartData ?? []} barCategoryGap={5}>
               <XAxis
                 dataKey="name"
                 tickLine={false}
                 axisLine={false}
                 interval={0}
               />
+              <YAxis domain={[0, 50]} hide />
               <Tooltip
+                cursor={{ fill: "transparent" }}
+                formatter={(_, __, props) => {
+                  const originalValue = props?.payload?.value ?? 0;
+                  return [originalValue, "value"];
+                }}
                 contentStyle={{
                   backgroundColor: "hsl(var(--popover))",
                   border: "1px solid hsl(var(--border))",
@@ -64,29 +104,16 @@ export default function ScenarioPerformanceChart() {
                 labelStyle={{ color: "hsl(var(--muted-foreground))" }}
               />
               <Bar
-                dataKey="actual"
+                dataKey="visualValue"
                 stackId="a"
                 radius={[4, 4, 0, 0]}
+                isAnimationActive={false}
                 activeBar={false}
               >
-                {data.map((_, index) => (
+                {chartData?.map((_, index) => (
                   <Cell
                     key={`actual-${index}`}
                     fill={colors[index % colors.length]}
-                  />
-                ))}
-              </Bar>
-              <Bar
-                dataKey="projected"
-                stackId="a"
-                radius={[0, 0, 0, 0]}
-                activeBar={false}
-              >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`projected-${index}`}
-                    fill={colors[index % colors.length]}
-                    fillOpacity={0.4}
                   />
                 ))}
               </Bar>
