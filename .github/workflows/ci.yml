@@ -39,7 +39,7 @@ jobs:
           head -n 20 coverage/lcov.info
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v5
         with:
           args: >
             -Dsonar.projectKey=Willbe-AI_willbe-front
