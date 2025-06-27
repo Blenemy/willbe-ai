@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useMeetings } from "@/hooks/useHomepage";
 import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ROWS_PER_PAGE = 7;
 
@@ -40,26 +41,23 @@ export default function MeetingsList() {
   }, [error]);
 
   return (
-    <div className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
-      <div className="px-6 py-6">
-        <div className="flex justify-between">
-          <div className="flex flex-col gap-2">
-            <div className="text-lg font-semibold">
-              Meetings ({meetings.length})
-            </div>
-            <p className="text-sm text-muted-foreground">{subtitleText}</p>
-          </div>
-
+    <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
+      <CardHeader className="flex justify-between flex-row">
+        <div className="flex flex-col gap-2">
+          <CardTitle> Meetings ({meetings.length})</CardTitle>
+          <p className="text-sm text-muted-foreground">{subtitleText}</p>
+        </div>
+        <div>
           <Button
-            size="icon"
             variant="ghost"
-            className="h-6 w-6 mt-1"
+            size="icon"
+            className="h-6 w-6"
             onClick={toggleInterval}
           >
-            <CalendarDays className="h-4 w-4" />
+            <CalendarDays className="w-4 h-4" />
           </Button>
         </div>
-      </div>
+      </CardHeader>
       {meetings.length > 0 ? (
         <Table className="flex-grow">
           <TableHeader>
@@ -102,7 +100,7 @@ export default function MeetingsList() {
           </TableBody>
         </Table>
       ) : (
-        <div className="px-6">No mettings were found</div>
+        <div className="px-10">No meetings were found</div>
       )}
 
       {meetings.length > 0 && (
@@ -117,6 +115,6 @@ export default function MeetingsList() {
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }
