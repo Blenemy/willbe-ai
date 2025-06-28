@@ -53,4 +53,36 @@ describe("LeadTable cursor propagation", () => {
       })
     );
   });
+
+  it("should default to null cursor if lastPageCursor is not provided", () => {
+    (useSearchParams as jest.Mock).mockReturnValue({
+      get: () => "test-scenario-id",
+    });
+
+    const useSearchLeadsMock = useSearchLeads as jest.Mock;
+    useSearchLeadsMock.mockReturnValue({
+      searchLeads: [],
+      paging: { total_count: 30, page_count: 30, start: 0 },
+      cursor: null,
+      isFetching: false,
+    });
+
+    (useSavedLeads as jest.Mock).mockReturnValue({
+      saveSelectedLeads: jest.fn(),
+    });
+
+    const queryClient = new QueryClient();
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <LeadTable setCurrentStep={jest.fn()} />
+      </QueryClientProvider>
+    );
+
+    expect(useSearchLeadsMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        cursor: null,
+      })
+    );
+  });
 });

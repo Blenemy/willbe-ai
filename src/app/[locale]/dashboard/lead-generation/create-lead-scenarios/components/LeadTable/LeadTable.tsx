@@ -26,7 +26,7 @@ const LeadTable = ({
   lastPageCursor,
 }: {
   setCurrentStep: Dispatch<SetStateAction<number>>;
-  lastPageCursor: string | undefined;
+  lastPageCursor?: string | undefined;
 }) => {
   const t = useTranslations("leadTable");
 
