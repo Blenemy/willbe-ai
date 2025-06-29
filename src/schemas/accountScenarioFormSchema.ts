@@ -5,9 +5,14 @@ const searchOptionSchema = z.object({
   id: z.string(),
 });
 
-const optionalNumberString = z.preprocess(
-  (val) => (typeof val === "string" && val.trim() === "" ? undefined : val),
-  z.union([z.string(), z.undefined()])
+const optionalNumber = z.preprocess(
+  (val: unknown) => {
+    if (val === "" || val === undefined || val === null) return undefined;
+    if (typeof val === "string" && val.trim() === "") return undefined;
+    const num = Number(val);
+    return isNaN(num) ? undefined : num;
+  },
+  z.number().int().min(0).optional()
 );
 
 export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
@@ -20,17 +25,17 @@ export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
     location_include: z.array(searchOptionSchema).optional(),
     location_exclude: z.array(searchOptionSchema).optional(),
 
-    headcount_from: optionalNumberString,
-    headcount_to: optionalNumberString,
+    headcount_from: optionalNumber,
+    headcount_to: optionalNumber,
 
-    headcount_growth_from: optionalNumberString,
-    headcount_growth_to: optionalNumberString,
+    headcount_growth_from: optionalNumber,
+    headcount_growth_to: optionalNumber,
 
-    fortune_from: optionalNumberString,
-    fortune_to: optionalNumberString,
+    fortune_from: optionalNumber,
+    fortune_to: optionalNumber,
 
-    followers_count_from: optionalNumberString,
-    followers_count_to: optionalNumberString,
+    followers_count_from: optionalNumber,
+    followers_count_to: optionalNumber,
 
     recent_activities: z.string().optional(),
 
@@ -43,11 +48,11 @@ export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
 
     keywords: z.string().optional(),
 
-    department_headcount_growth_from: optionalNumberString,
-    department_headcount_growth_to: optionalNumberString,
+    department_headcount_growth_from: optionalNumber,
+    department_headcount_growth_to: optionalNumber,
 
-    department_headcount_from: optionalNumberString,
-    department_headcount_to: optionalNumberString,
+    department_headcount_from: optionalNumber,
+    department_headcount_to: optionalNumber,
 
     saved_accounts: z.string().optional(),
     saved_accounts_include: z.array(searchOptionSchema).optional(),

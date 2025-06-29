@@ -7,7 +7,7 @@ import { useLocale } from "next-intl";
 interface AccountPageInterface {
   companyTitle: string;
   description: string;
-  employees: string;
+  employees: number;
   foundedIn: null | string;
   headquarters: null | string;
   id: string;

@@ -104,7 +104,7 @@ type AccountData = {
   summary: string;
   industry: string;
   location: string | null;
-  headcount: string;
+  headcount: number;
   profile_url: string;
 };
 

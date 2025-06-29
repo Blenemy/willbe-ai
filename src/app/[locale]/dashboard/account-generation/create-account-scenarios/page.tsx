@@ -74,17 +74,17 @@ const CreateAccountScenarios = () => {
         location_include: [],
         location_exclude: [],
 
-        headcount_from: "",
-        headcount_to: "",
+              headcount_from: undefined as number | undefined,
+      headcount_to: undefined as number | undefined,
 
-        headcount_growth_from: "",
-        headcount_growth_to: "",
+      headcount_growth_from: undefined as number | undefined,
+      headcount_growth_to: undefined as number | undefined,
 
-        fortune_from: "",
-        fortune_to: "",
+      fortune_from: undefined as number | undefined,
+      fortune_to: undefined as number | undefined,
 
-        followers_count_from: "",
-        followers_count_to: "",
+      followers_count_from: undefined as number | undefined,
+      followers_count_to: undefined as number | undefined,
 
         recent_activities: "",
 
@@ -97,11 +97,11 @@ const CreateAccountScenarios = () => {
 
         keywords: "",
 
-        department_headcount_growth_from: "",
-        department_headcount_growth_to: "",
+              department_headcount_growth_from: undefined as number | undefined,
+      department_headcount_growth_to: undefined as number | undefined,
 
-        department_headcount_from: "",
-        department_headcount_to: "",
+      department_headcount_from: undefined as number | undefined,
+      department_headcount_to: undefined as number | undefined,
 
         saved_accounts: "",
         saved_accounts_include: [],
@@ -137,17 +137,17 @@ const CreateAccountScenarios = () => {
       location_include: [],
       location_exclude: [],
 
-      headcount_from: "",
-      headcount_to: "",
+      headcount_from: undefined as number | undefined,
+      headcount_to: undefined as number | undefined,
 
-      headcount_growth_from: "",
-      headcount_growth_to: "",
+      headcount_growth_from: undefined as number | undefined,
+      headcount_growth_to: undefined as number | undefined,
 
-      fortune_from: "",
-      fortune_to: "",
+      fortune_from: undefined as number | undefined,
+      fortune_to: undefined as number | undefined,
 
-      followers_count_from: "",
-      followers_count_to: "",
+      followers_count_from: undefined as number | undefined,
+      followers_count_to: undefined as number | undefined,
 
       recent_activities: "",
 
@@ -160,11 +160,11 @@ const CreateAccountScenarios = () => {
 
       keywords: "",
 
-      department_headcount_growth_from: "",
-      department_headcount_growth_to: "",
+      department_headcount_growth_from: undefined as number | undefined,
+      department_headcount_growth_to: undefined as number | undefined,
 
-      department_headcount_from: "",
-      department_headcount_to: "",
+      department_headcount_from: undefined as number | undefined,
+      department_headcount_to: undefined as number | undefined,
 
       saved_accounts: "",
       saved_accounts_include: [],
@@ -204,7 +204,7 @@ const CreateAccountScenarios = () => {
     !watchRevenueFrom || !watchRevenueTo || !watchCurrency;
 
   const clearField = (from: string, to?: string) => {
-    form.setValue(from as keyof AccountScenariosType, "", {
+    form.setValue(from as keyof AccountScenariosType, undefined, {
       shouldValidate: true,
     });
     if (to) form.trigger(to as keyof AccountScenariosType);

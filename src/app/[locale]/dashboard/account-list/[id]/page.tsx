@@ -23,7 +23,15 @@ const formSchema = z.object({
   description: z.string().optional(),
   foundedIn: z.string().optional(),
   headquarters: z.string().optional(),
-  employees: z.string().optional(),
+  employees: z.preprocess(
+    (val: unknown) => {
+      if (val === "" || val === undefined || val === null) return undefined;
+      if (typeof val === "string" && val.trim() === "") return undefined;
+      const num = Number(val);
+      return isNaN(num) ? undefined : num;
+    },
+    z.number().int().min(0).optional()
+  ),
   industry: z.string().optional(),
   linkedin: z.string().optional(),
 });
@@ -45,7 +53,7 @@ export default function AccountPage() {
       description: "",
       foundedIn: "",
       headquarters: "",
-      employees: "",
+      employees: undefined as number | undefined,
       industry: "",
       website: "",
       linkedin: "",
@@ -67,7 +75,7 @@ export default function AccountPage() {
         description: account.description || "",
         foundedIn: account.foundedIn || "",
         headquarters: account.headquarters || "",
-        employees: account.employees || "",
+        employees: account.employees || undefined,
         industry: account.industry || "",
         website: account.website || "",
         linkedin: account.linkedin || "",
