@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { optionalNumber } from "@/schemas/common/schemaUtils";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { InformationTab } from "./tabs/InformationTab";
 import { LeadsTab } from "./tabs/LeadsTab";
@@ -23,15 +24,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   foundedIn: z.string().optional(),
   headquarters: z.string().optional(),
-  employees: z.preprocess(
-    (val: unknown) => {
-      if (val === "" || val === undefined || val === null) return undefined;
-      if (typeof val === "string" && val.trim() === "") return undefined;
-      const num = Number(val);
-      return isNaN(num) ? undefined : num;
-    },
-    z.number().int().min(0).optional()
-  ),
+  employees: optionalNumber,
   industry: z.string().optional(),
   linkedin: z.string().optional(),
 });

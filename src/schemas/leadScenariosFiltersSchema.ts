@@ -1,9 +1,5 @@
 import { z } from "zod";
-
-const searchOptionSchema = z.object({
-  title: z.string(),
-  id: z.string(),
-});
+import { searchOptionSchema, simpleOptionalNumber } from "./common/schemaUtils";
 
 export const leadScenariosFiltersSchema = z.object({
   first_name: z.string(),
@@ -46,14 +42,8 @@ export const leadScenariosFiltersSchema = z.object({
   past_company: z.string(),
   past_company_include: z.array(searchOptionSchema),
   past_company_exclude: z.array(searchOptionSchema),
-  company_headcount_from: z.preprocess(
-    (val: unknown) => (val === "" || val === undefined || val === null) ? undefined : Number(val),
-    z.number().int().min(0).optional()
-  ),
-  company_headcount_to: z.preprocess(
-    (val: unknown) => (val === "" || val === undefined || val === null) ? undefined : Number(val),
-    z.number().int().min(0).optional()
-  ),
+  company_headcount_from: simpleOptionalNumber,
+  company_headcount_to: simpleOptionalNumber,
   company_industry: z.string(),
   company_industry_include: z.array(searchOptionSchema),
   company_industry_exclude: z.array(searchOptionSchema),

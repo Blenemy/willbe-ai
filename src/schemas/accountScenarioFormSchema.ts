@@ -1,19 +1,5 @@
 import { z } from "zod";
-
-const searchOptionSchema = z.object({
-  title: z.string(),
-  id: z.string(),
-});
-
-const optionalNumber = z.preprocess(
-  (val: unknown) => {
-    if (val === "" || val === undefined || val === null) return undefined;
-    if (typeof val === "string" && val.trim() === "") return undefined;
-    const num = Number(val);
-    return isNaN(num) ? undefined : num;
-  },
-  z.number().int().min(0).optional()
-);
+import { searchOptionSchema, optionalNumber } from "./common/schemaUtils";
 
 export const getAccountScenarioFormSchema = (t: (key: string) => string) =>
   z.object({
