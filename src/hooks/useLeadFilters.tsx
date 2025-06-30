@@ -67,6 +67,9 @@ export const useLeadFilters = ({
       queryClient.invalidateQueries({
         queryKey: ["leads"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["lead-scenarios-by-id"],
+      });
     },
     onError: (error: AxiosError<APIRequestErrorPayload>) => {
       toast.error(

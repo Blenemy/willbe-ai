@@ -973,7 +973,12 @@ const CreateLeadScenarios = () => {
             </Form>
           )}
 
-          {activeStep === 1 && <LeadTable setCurrentStep={setActiveStep} />}
+          {activeStep === 1 && (
+            <LeadTable
+              setCurrentStep={setActiveStep}
+              lastPageCursor={leadScenarioById?.lastPageCursor}
+            />
+          )}
           {activeStep === 2 && <LeadsSaved />}
         </>
       )}
