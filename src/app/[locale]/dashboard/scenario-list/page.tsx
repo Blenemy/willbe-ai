@@ -57,6 +57,12 @@ const ScenarioList = () => {
       defaultVisible: true,
     },
     { key: "meetingRate", label: t("table.meetingRate"), defaultVisible: true },
+    { key: "bounceRate", label: t("table.bounceRate"), defaultVisible: false },
+    {
+      key: "outOfOffice",
+      label: t("table.outOfOffice"),
+      defaultVisible: false,
+    },
     { key: "status", label: t("table.status"), defaultVisible: true },
     { key: "createdBy", label: t("table.createdBy"), defaultVisible: true },
     { key: "createdAt", label: t("table.createdAt"), defaultVisible: true },
@@ -309,8 +315,18 @@ const ScenarioList = () => {
               {visibleColumns.sent && (
                 <TableCell>{scenario.messagesSent || 0}</TableCell>
               )}
-              {visibleColumns.responseRate && <TableCell>10%</TableCell>}
-              {visibleColumns.meetingRate && <TableCell>10%</TableCell>}
+              {visibleColumns.responseRate && (
+                <TableCell>{scenario.responseRate}</TableCell>
+              )}
+              {visibleColumns.meetingRate && (
+                <TableCell>{scenario.meetingRate}</TableCell>
+              )}
+              {visibleColumns.bounceRate && (
+                <TableCell>{scenario.bounceRate ?? "-"}</TableCell>
+              )}
+              {visibleColumns.outOfOffice && (
+                <TableCell>{scenario.outOfOfficeRate ?? "-"}</TableCell>
+              )}
               {visibleColumns.status && (
                 <TableCell>
                   <span
