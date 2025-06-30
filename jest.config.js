@@ -4,6 +4,7 @@ module.exports = {
   testEnvironment: "jsdom",
   transform: {
     "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.svg$": "<rootDir>/svgTransform.js",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   testMatch: ["**/?(*.)+(spec|test).[jt]s?(x)"],
@@ -22,5 +23,6 @@ module.exports = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^lucide-react$": "<rootDir>/__mocks__/lucide-react.ts",
+    "^next/image$": "<rootDir>/__mocks__/next-image.js",
   },
 };
