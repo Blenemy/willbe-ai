@@ -8,4 +8,5 @@ export interface AccountSearch {
   location: string;
   headcount: number;
   logo: string;
+  isSaved: boolean;
 }

@@ -260,6 +260,7 @@ const AccountTable = () => {
                     <Checkbox
                       checked={!!selectedCompanies[company.id]}
                       onCheckedChange={() => toggleCompany(company)}
+                      disabled={company.isSaved}
                     />
                   </TableCell>
 
