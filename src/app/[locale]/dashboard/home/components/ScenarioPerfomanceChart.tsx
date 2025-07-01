@@ -61,7 +61,7 @@ export default function ScenarioPerformanceChart() {
   }, [error]);
 
   return (
-    <Card className="rounded-2xl">
+    <Card className="rounded-2xl h-full">
       <CardHeader className="flex items-start justify-between flex-row">
         <div className="flex flex-col gap-2">
           <CardTitle>Scenario performance</CardTitle>
@@ -77,8 +77,8 @@ export default function ScenarioPerformanceChart() {
         </Button>
       </CardHeader>
 
-      <CardContent className="p-4">
-        <div className="h-64">
+      <CardContent className="p-4 h-full">
+        <div className="h-[725px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData ?? []} barCategoryGap={5}>
               <XAxis
