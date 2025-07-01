@@ -40,6 +40,8 @@ export default function MeetingsList() {
     }
   }, [error]);
 
+  const currentMeetings = meetings.slice(offset, offset + ROWS_PER_PAGE);
+
   return (
     <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
       <CardHeader className="flex justify-between flex-row">
@@ -68,7 +70,7 @@ export default function MeetingsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {meetings.map((m, i) => (
+            {currentMeetings.map((m, i) => (
               <TableRow key={i} className="h-16">
                 <TableCell>
                   <div className="flex items-center gap-2">
@@ -107,7 +109,7 @@ export default function MeetingsList() {
         <div className="w-full flex mt-auto p-6">
           <div className="mx-auto">
             <CustomPagination
-              page={0}
+              page={page}
               setPage={setPage}
               rowsPerPage={ROWS_PER_PAGE}
               totalCount={meetings.length}
