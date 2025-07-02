@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, ExternalLink } from "lucide-react";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMeetings } from "@/hooks/useHomepage";
 import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
@@ -47,6 +47,11 @@ export default function MeetingsList() {
 
   const currentMeetings = meetings.slice(offset, offset + ROWS_PER_PAGE);
 
+  const skeletonKeys = useMemo(
+    () => Array.from({ length: ROWS_PER_PAGE }, () => crypto.randomUUID()),
+    []
+  );
+
   return (
     <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
       <CardHeader className="flex justify-between flex-row">
@@ -76,8 +81,8 @@ export default function MeetingsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: ROWS_PER_PAGE }).map((_, index) => (
-              <TableRow key={`skeleton-${index}`} className="h-16">
+            {skeletonKeys.map((key) => (
+              <TableRow key={key} className="h-16">
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-8 w-8 rounded-full" />
