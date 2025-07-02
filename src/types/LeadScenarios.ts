@@ -7,6 +7,7 @@ export interface LeadScenarios {
   filterId: string;
   createdAt: string;
   updatedAt: string;
+  lastPageCursor?: string;
   status: string;
   filter: {
     id: string;

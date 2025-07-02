@@ -62,56 +62,58 @@ const CreateAccountScenarios = () => {
 
   const { data: dropdowns } = useAccountScenariosDropdowns();
 
+  const defaultAccountScenarioValues: AccountScenariosType = {
+    industry: "",
+    industry_include: [],
+    industry_exclude: [],
+
+    location: "",
+    location_include: [],
+    location_exclude: [],
+
+    headcount_from: undefined,
+    headcount_to: undefined,
+
+    headcount_growth_from: undefined,
+    headcount_growth_to: undefined,
+
+    fortune_from: undefined,
+    fortune_to: undefined,
+
+    followers_count_from: undefined,
+    followers_count_to: undefined,
+
+    recent_activities: "",
+
+    has_job_offers: false,
+
+    technology_search_input: "",
+    technology: [],
+
+    network_distance: "",
+
+    keywords: "",
+
+    department_headcount_growth_from: undefined,
+    department_headcount_growth_to: undefined,
+
+    department_headcount_from: undefined,
+    department_headcount_to: undefined,
+
+    saved_accounts: "",
+    saved_accounts_include: [],
+    saved_accounts_exclude: [],
+
+    annual_revenue_from: "",
+    annual_revenue_to: "",
+
+    annual_revenue_currency: "",
+  };
+
   const form: UseFormReturn<AccountScenariosType> =
     useForm<AccountScenariosType>({
       resolver: zodResolver(getAccountScenarioFormSchema(tErrors)),
-      defaultValues: {
-        industry: "",
-        industry_include: [],
-        industry_exclude: [],
-
-        location: "",
-        location_include: [],
-        location_exclude: [],
-
-        headcount_from: "",
-        headcount_to: "",
-
-        headcount_growth_from: "",
-        headcount_growth_to: "",
-
-        fortune_from: "",
-        fortune_to: "",
-
-        followers_count_from: "",
-        followers_count_to: "",
-
-        recent_activities: "",
-
-        has_job_offers: false,
-
-        technology_search_input: "",
-        technology: [],
-
-        network_distance: "",
-
-        keywords: "",
-
-        department_headcount_growth_from: "",
-        department_headcount_growth_to: "",
-
-        department_headcount_from: "",
-        department_headcount_to: "",
-
-        saved_accounts: "",
-        saved_accounts_include: [],
-        saved_accounts_exclude: [],
-
-        annual_revenue_from: "",
-        annual_revenue_to: "",
-
-        annual_revenue_currency: "",
-      },
+      defaultValues: defaultAccountScenarioValues,
       mode: "onChange",
     });
 
@@ -128,54 +130,7 @@ const CreateAccountScenarios = () => {
   }
 
   const handleClearAll = () => {
-    form.reset({
-      industry: "",
-      industry_include: [],
-      industry_exclude: [],
-
-      location: "",
-      location_include: [],
-      location_exclude: [],
-
-      headcount_from: "",
-      headcount_to: "",
-
-      headcount_growth_from: "",
-      headcount_growth_to: "",
-
-      fortune_from: "",
-      fortune_to: "",
-
-      followers_count_from: "",
-      followers_count_to: "",
-
-      recent_activities: "",
-
-      has_job_offers: false,
-
-      technology_search_input: "",
-      technology: [],
-
-      network_distance: "",
-
-      keywords: "",
-
-      department_headcount_growth_from: "",
-      department_headcount_growth_to: "",
-
-      department_headcount_from: "",
-      department_headcount_to: "",
-
-      saved_accounts: "",
-      saved_accounts_include: [],
-      saved_accounts_exclude: [],
-
-      annual_revenue_from: "",
-      annual_revenue_to: "",
-
-      annual_revenue_currency: "",
-    });
-
+    form.reset(defaultAccountScenarioValues);
     form.trigger();
   };
 
@@ -204,7 +159,7 @@ const CreateAccountScenarios = () => {
     !watchRevenueFrom || !watchRevenueTo || !watchCurrency;
 
   const clearField = (from: string, to?: string) => {
-    form.setValue(from as keyof AccountScenariosType, "", {
+    form.setValue(from as keyof AccountScenariosType, undefined, {
       shouldValidate: true,
     });
     if (to) form.trigger(to as keyof AccountScenariosType);

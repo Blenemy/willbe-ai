@@ -42,7 +42,6 @@ export const useLeadScenarios = ({
       return response.data;
     },
     retry: true,
-    staleTime: 1000 * 60 * 5,
     enabled: !!scenarioId,
   });
 

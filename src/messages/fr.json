@@ -1395,6 +1395,8 @@
       "sent": "Messages envoyés",
       "responseRate": "Taux de réponse",
       "meetingRate": "Taux de réunion",
+      "bounceRate": "Taux de rebond",
+      "outOfOffice": "Hors du bureau",
       "status": "Statut du scénario",
       "createdBy": "Créé par",
       "createdAt": "Date de création",

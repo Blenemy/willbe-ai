@@ -6,6 +6,7 @@ export interface AccountSearch {
   summary: string;
   industry: string;
   location: string;
-  headcount: string;
+  headcount: number;
   logo: string;
+  isSaved: boolean;
 }

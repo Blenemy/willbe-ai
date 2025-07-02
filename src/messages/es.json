@@ -1390,6 +1390,8 @@
       "sent": "Mensajes enviados",
       "responseRate": "Tasa de respuesta",
       "meetingRate": "Tasa de reuniones",
+      "bounceRate": "Tasa de rebote",
+      "outOfOffice": "Fuera de la oficina",
       "status": "Estado del escenario",
       "createdBy": "Creado por",
       "createdAt": "Fecha de creación",

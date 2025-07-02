@@ -1388,6 +1388,8 @@
       "sent": "Message sent",
       "responseRate": "Response rate",
       "meetingRate": "Meeting rate",
+      "bounceRate": "Bounce Rate",
+      "outOfOffice": "Out of Office",
       "status": "Scenario status",
       "createdBy": "Created by",
       "createdAt": "Created date",
