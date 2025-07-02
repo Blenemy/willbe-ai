@@ -8,7 +8,7 @@ export interface SavedAccount {
     name: string;
     summary: string;
     industry: string;
-    headcount: string;
+    headcount: number;
     location: string;
     profile_url: string;
     logo: string;
