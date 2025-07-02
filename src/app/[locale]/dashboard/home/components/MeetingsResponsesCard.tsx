@@ -7,15 +7,17 @@ import { useMeetingsResponseRate } from "@/hooks/useHomepage";
 import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MeetingsResponsesCard() {
   const { daysInterval, toggleInterval, subtitleText } =
     useToggleDaysInterval();
 
-  const { responseRate, meetingRate, error } = useMeetingsResponseRate({
-    enableFetch: true,
-    daysInterval,
-  });
+  const { responseRate, meetingRate, error, isLoading } =
+    useMeetingsResponseRate({
+      enableFetch: true,
+      daysInterval,
+    });
 
   useEffect(() => {
     if (error) {
@@ -48,7 +50,11 @@ export default function MeetingsResponsesCard() {
             <Users className="w-4 h-4" />
             Meeting rate
           </div>
-          <div className="text-2xl font-bold">{meetingRate}%</div>
+          {isLoading ? (
+            <Skeleton className="w-16 h-6 mx-auto rounded-md" />
+          ) : (
+            <div className="text-2xl font-bold">{meetingRate}%</div>
+          )}
         </div>
 
         <div>
@@ -56,7 +62,11 @@ export default function MeetingsResponsesCard() {
             <Reply className="w-4 h-4" />
             Response rate
           </div>
-          <div className="text-2xl font-bold">{responseRate}%</div>
+          {isLoading ? (
+            <Skeleton className="w-16 h-6 mx-auto rounded-md" />
+          ) : (
+            <div className="text-2xl font-bold">{responseRate}%</div>
+          )}
         </div>
       </CardContent>
     </Card>

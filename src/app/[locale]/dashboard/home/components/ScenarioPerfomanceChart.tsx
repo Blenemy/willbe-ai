@@ -16,6 +16,8 @@ import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { useScenarioPerformance } from "@/hooks/useHomepage";
 import { useEffect } from "react";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
+import { colors } from "@/constants/colors";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const categories = [
   { key: "account", label: "Account" },
@@ -26,20 +28,11 @@ const categories = [
   { key: "bounced", label: "Bounced" },
 ];
 
-const colors = [
-  "#0f172a",
-  "#71717a",
-  "#4ade80",
-  "#facc15",
-  "#f97316",
-  "#ef4444",
-];
-
 export default function ScenarioPerformanceChart() {
   const { daysInterval, toggleInterval, subtitleText } =
     useToggleDaysInterval();
 
-  const { performance, error } = useScenarioPerformance({
+  const { performance, error, isLoading } = useScenarioPerformance({
     enableFetch: true,
     daysInterval,
   });
@@ -56,7 +49,7 @@ export default function ScenarioPerformanceChart() {
 
   useEffect(() => {
     if (error) {
-      handleAxiosError(error, "Failed to get the scenario perfomance");
+      handleAxiosError(error, "Failed to get the scenario performance");
     }
   }, [error]);
 
@@ -77,48 +70,52 @@ export default function ScenarioPerformanceChart() {
         </Button>
       </CardHeader>
 
-      <CardContent className="p-4 h-full">
+      <CardContent className="p-4">
         <div className="h-[725px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData ?? []} barCategoryGap={5}>
-              <XAxis
-                dataKey="name"
-                tickLine={false}
-                axisLine={false}
-                interval={0}
-              />
-              <YAxis domain={[0, 50]} hide />
-              <Tooltip
-                cursor={{ fill: "transparent" }}
-                formatter={(_, __, props) => {
-                  const originalValue = props?.payload?.value ?? 0;
-                  return [originalValue, "value"];
-                }}
-                contentStyle={{
-                  backgroundColor: "hsl(var(--popover))",
-                  border: "1px solid hsl(var(--border))",
-                  fontSize: "0.875rem",
-                  borderRadius: "0.5rem",
-                  padding: "0.5rem",
-                }}
-                labelStyle={{ color: "hsl(var(--muted-foreground))" }}
-              />
-              <Bar
-                dataKey="visualValue"
-                stackId="a"
-                radius={[4, 4, 0, 0]}
-                isAnimationActive={false}
-                activeBar={false}
-              >
-                {chartData?.map((_, index) => (
-                  <Cell
-                    key={`actual-${index}`}
-                    fill={colors[index % colors.length]}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          {isLoading ? (
+            <Skeleton className="w-full h-full rounded-lg" />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData ?? []} barCategoryGap={5}>
+                <XAxis
+                  dataKey="name"
+                  tickLine={false}
+                  axisLine={false}
+                  interval={0}
+                />
+                <YAxis domain={[0, 50]} hide />
+                <Tooltip
+                  cursor={{ fill: "transparent" }}
+                  formatter={(_, __, props) => {
+                    const originalValue = props?.payload?.value ?? 0;
+                    return [originalValue, "value"];
+                  }}
+                  contentStyle={{
+                    backgroundColor: "hsl(var(--popover))",
+                    border: "1px solid hsl(var(--border))",
+                    fontSize: "0.875rem",
+                    borderRadius: "0.5rem",
+                    padding: "0.5rem",
+                  }}
+                  labelStyle={{ color: "hsl(var(--muted-foreground))" }}
+                />
+                <Bar
+                  dataKey="visualValue"
+                  stackId="a"
+                  radius={[4, 4, 0, 0]}
+                  isAnimationActive={false}
+                  activeBar={false}
+                >
+                  {chartData?.map((_, index) => (
+                    <Cell
+                      key={`actual-${index}`}
+                      fill={colors[index % colors.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </CardContent>
     </Card>

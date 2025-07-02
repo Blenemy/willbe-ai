@@ -66,7 +66,7 @@ describe("ScenarioPerformanceChart component", () => {
 
     expect(mockHandleError).toHaveBeenCalledWith(
       expect.any(Error),
-      "Failed to get the scenario perfomance"
+      "Failed to get the scenario performance"
     );
   });
 });

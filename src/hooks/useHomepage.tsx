@@ -22,8 +22,10 @@ export const useMeetings = ({
   limit,
   offset,
 }: UseMeetingsProps) => {
+  const queryKey = ["meetings", { daysInterval, limit, offset }];
+
   const { data, isLoading, error, refetch } = useQuery<Meeting[]>({
-    queryKey: ["meetings", daysInterval, limit, offset],
+    queryKey,
     queryFn: async () => {
       const response = await protectedAxiosInstance.get("/auth/home/meetings", {
         params: {

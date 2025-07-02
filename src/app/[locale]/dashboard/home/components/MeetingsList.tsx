@@ -17,6 +17,7 @@ import { useMeetings } from "@/hooks/useHomepage";
 import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ROWS_PER_PAGE = 7;
 
@@ -27,7 +28,11 @@ export default function MeetingsList() {
   const { daysInterval, toggleInterval, subtitleText } =
     useToggleDaysInterval();
 
-  const { meetings = [], error } = useMeetings({
+  const {
+    meetings = [],
+    error,
+    isLoading,
+  } = useMeetings({
     enableFetch: true,
     daysInterval,
     limit: ROWS_PER_PAGE,
@@ -60,7 +65,38 @@ export default function MeetingsList() {
           </Button>
         </div>
       </CardHeader>
-      {meetings.length > 0 ? (
+      {isLoading ? (
+        <Table className="flex-grow">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Lead name</TableHead>
+              <TableHead>Position</TableHead>
+              <TableHead className="text-right">Account name</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Array.from({ length: ROWS_PER_PAGE }).map((_, i) => (
+              <TableRow key={i} className="h-16">
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <Skeleton className="h-4 w-[120px] rounded-md" />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Skeleton className="h-4 w-[100px] rounded-md" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end items-center gap-2">
+                    <Skeleton className="h-4 w-[140px] rounded-md" />
+                    <Skeleton className="h-5 w-5 rounded-md" />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : meetings.length > 0 ? (
         <Table className="flex-grow">
           <TableHeader>
             <TableRow>
@@ -77,12 +113,12 @@ export default function MeetingsList() {
                     <Avatar className="h-8 w-8">
                       <AvatarImage
                         src={m.leadProfilePictureUrl}
-                        alt={m.accountName}
+                        alt={m.leadName}
                       />
-                      <AvatarFallback>{m.accountName[0]}</AvatarFallback>
+                      <AvatarFallback>{m.leadName[0]}</AvatarFallback>
                     </Avatar>
                     <span className="truncate font-medium text-sm">
-                      {m.accountName}
+                      {m.leadName}
                     </span>
                   </div>
                 </TableCell>
@@ -102,7 +138,14 @@ export default function MeetingsList() {
           </TableBody>
         </Table>
       ) : (
-        <div className="px-10">No meetings were found</div>
+        <div className="flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
+          <CalendarDays className="w-10 h-10 mb-4" />
+          <p className="text-lg font-medium mb-1">No meetings found</p>
+          <p className="text-sm max-w-sm">
+            Try changing the date range or come back later when new meetings
+            appear.
+          </p>
+        </div>
       )}
 
       {meetings.length > 0 && (
