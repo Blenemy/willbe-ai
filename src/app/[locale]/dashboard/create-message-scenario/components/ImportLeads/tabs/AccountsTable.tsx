@@ -34,7 +34,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toggleSelectAll } from "./utils/selectionHelpers";
+import {
+  deselectCurrentPage,
+  selectCurrentPage,
+} from "./utils/selectionHelpers";
 
 interface Props {
   data: AccountScenario[] | AccountRecord[];
@@ -110,7 +113,11 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   );
 
   const handleToggleSelectAll = () => {
-    toggleSelectAll(isAllSelectedOnPage, currentPageIds, setSelected);
+    if (isAllSelectedOnPage) {
+      deselectCurrentPage(currentPageIds, setSelected);
+    } else {
+      selectCurrentPage(currentPageIds, setSelected);
+    }
   };
 
   return (
