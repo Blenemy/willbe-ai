@@ -51,7 +51,7 @@ export default function MeetingsList() {
     <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
       <CardHeader className="flex justify-between flex-row">
         <div className="flex flex-col gap-2">
-          <CardTitle> Meetings ({meetings.length})</CardTitle>
+          <CardTitle>Meetings ({meetings.length})</CardTitle>
           <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
         <div>
@@ -65,7 +65,8 @@ export default function MeetingsList() {
           </Button>
         </div>
       </CardHeader>
-      {isLoading ? (
+
+      {isLoading && (
         <Table className="flex-grow">
           <TableHeader>
             <TableRow>
@@ -75,8 +76,8 @@ export default function MeetingsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: ROWS_PER_PAGE }).map((_, i) => (
-              <TableRow key={i} className="h-16">
+            {Array.from({ length: ROWS_PER_PAGE }).map((_, index) => (
+              <TableRow key={`skeleton-${index}`} className="h-16">
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Skeleton className="h-8 w-8 rounded-full" />
@@ -96,7 +97,9 @@ export default function MeetingsList() {
             ))}
           </TableBody>
         </Table>
-      ) : meetings.length > 0 ? (
+      )}
+
+      {!isLoading && meetings.length > 0 && (
         <Table className="flex-grow">
           <TableHeader>
             <TableRow>
@@ -106,8 +109,8 @@ export default function MeetingsList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentMeetings.map((m, i) => (
-              <TableRow key={i} className="h-16">
+            {currentMeetings.map((m) => (
+              <TableRow key={m.messageScenarioId} className="h-16">
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8">
@@ -137,7 +140,9 @@ export default function MeetingsList() {
             ))}
           </TableBody>
         </Table>
-      ) : (
+      )}
+
+      {!isLoading && meetings.length === 0 && (
         <div className="flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
           <CalendarDays className="w-10 h-10 mb-4" />
           <p className="text-lg font-medium mb-1">No meetings found</p>
@@ -148,7 +153,7 @@ export default function MeetingsList() {
         </div>
       )}
 
-      {meetings.length > 0 && (
+      {meetings.length > 0 && !isLoading && (
         <div className="w-full flex mt-auto p-6">
           <div className="mx-auto">
             <CustomPagination
