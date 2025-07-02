@@ -38,7 +38,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 interface Props {
   data: AccountScenario[] | AccountRecord[];
   selected: string[];
-  setSelected: (val: string[]) => void;
+  setSelected: (val: string[] | ((prev: string[]) => string[])) => void;
 }
 
 type SortKey = "name" | "industry" | "headcount" | "location" | "summary" | "";
@@ -52,7 +52,6 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
   const [sortAsc, setSortAsc] = useState(true);
 
   const toggleSelection = (id: string) => {
-    //@ts-expect-error type string[] is not assignable to type string[]
     setSelected((prev: string[]): string[] => {
       return prev.includes(id)
         ? prev.filter((i: string) => i !== id)
@@ -98,13 +97,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
       : String(valB).localeCompare(String(valA));
   });
 
-  const selectedFirstSorted = [...sorted].sort((a, b) => {
-    const aSelected = selected.includes(a.id);
-    const bSelected = selected.includes(b.id);
-    return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
-  });
-
-  const paginated = selectedFirstSorted.slice(
+  const paginated = sorted.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -117,9 +110,12 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
 
   const handleToggleSelectAll = () => {
     if (isAllSelectedOnPage) {
-      setSelected([]);
+      setSelected((prev) => prev.filter((id) => !currentPageIds.includes(id)));
     } else {
-      setSelected(paginated.map((scenario) => scenario.id));
+      setSelected((prev) => [
+        ...prev,
+        ...currentPageIds.filter((id) => !prev.includes(id)),
+      ]);
     }
   };
 
@@ -199,7 +195,7 @@ export const AccountsTable = ({ data, selected, setSelected }: Props) => {
                     />
                   </div>
                 </TableCell>
-                <TableCell className="max-w-[240px] break-words">
+                <TableCell className="max-w-[260px] break-words">
                   <div className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
                       <AvatarImage src={accInfo.logo} />
