@@ -150,8 +150,8 @@ const CreateLeadScenarios = () => {
       past_company: "",
       past_company_include: [],
       past_company_exclude: [],
-      company_headcount_from: "",
-      company_headcount_to: "",
+      company_headcount_from: undefined as number | undefined,
+      company_headcount_to: undefined as number | undefined,
       company_industry: "",
       company_industry_include: [],
       company_industry_exclude: [],
@@ -164,13 +164,10 @@ const CreateLeadScenarios = () => {
     },
   });
 
-  type SearchOption = { title: string; id: string };
-  type FieldValue = string | string[] | boolean | SearchOption[];
-
   const watchedValues = form.watch();
 
   const isFormEmpty = useMemo(() => {
-    const isEmpty = (val: FieldValue): boolean => {
+    const isEmpty = (val: unknown): boolean => {
       if (typeof val === "string") return val.trim() === "";
       if (Array.isArray(val)) return val.length === 0;
       if (typeof val === "boolean") return val === false;
@@ -255,8 +252,8 @@ const CreateLeadScenarios = () => {
           past_company: "",
           past_company_include: [],
           past_company_exclude: [],
-          company_headcount_from: "",
-          company_headcount_to: "",
+          company_headcount_from: undefined,
+          company_headcount_to: undefined,
           company_industry: "",
           company_industry_include: [],
           company_industry_exclude: [],

@@ -117,7 +117,7 @@ const AccountTable = () => {
       summary: company.summary,
       industry: company.industry,
       location: company.location,
-      headcount: company.headcount,
+      headcount: company.headcount.toString(),
       logo: company.logo,
     }));
 

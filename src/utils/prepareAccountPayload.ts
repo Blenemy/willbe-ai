@@ -56,10 +56,13 @@ export function prepareAccountPayload(values: any, accountName: string) {
     const fromValue = values[from];
     const toValue = values[to];
 
-    if (fromValue || toValue) {
+    if (fromValue !== undefined || toValue !== undefined) {
       payload.filterValues.push({
         filterKey: key,
-        filterValue: { from: fromValue || "0", to: toValue || "0" },
+        filterValue: { 
+          from: fromValue !== undefined ? Number(fromValue) : 0, 
+          to: toValue !== undefined ? Number(toValue) : 0 
+        },
       });
     }
   });
@@ -88,17 +91,17 @@ export function prepareAccountPayload(values: any, accountName: string) {
 
     const filteredInclude = includeValues?.filter(
       (item) => item?.title && item?.id
-    );
+    ) || [];
     const filteredExclude = excludeValues?.filter(
       (item) => item?.title && item?.id
-    );
+    ) || [];
 
     if (filteredInclude.length > 0 || filteredExclude.length > 0) {
       payload.filterValues.push({
         filterKey: key,
         filterValue: {
-          include: filteredInclude || [],
-          exclude: filteredExclude || [],
+          include: filteredInclude,
+          exclude: filteredExclude,
         },
       });
     }
