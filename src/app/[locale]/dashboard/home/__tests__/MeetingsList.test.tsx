@@ -180,13 +180,13 @@ describe("MeetingsList component", () => {
     expect(screen.getByText("Showing past 7 days")).toBeInTheDocument();
   });
 
-  it("shows 'No meetings were found' when no data", () => {
+  it("shows 'No meetings found' when no data", () => {
     useMeetings.mockReturnValueOnce({
       meetings: [],
       error: null,
     });
     render(<MeetingsList />);
-    expect(screen.getByText("No meetings were found")).toBeInTheDocument();
+    expect(screen.getByText("No meetings found")).toBeInTheDocument();
   });
 
   it("pagination works: go to next page", () => {
