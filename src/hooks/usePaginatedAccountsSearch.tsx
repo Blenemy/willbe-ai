@@ -8,6 +8,7 @@ interface UsePaginatedAccountsSearchProps {
   accountId: string;
   limit: number;
   cursor?: string | null;
+  queryString?: string;
   enabled?: boolean;
 }
 
@@ -37,12 +38,13 @@ export const usePaginatedAccountsSearch = ({
   accountId,
   limit,
   cursor,
+  queryString,
   enabled = true,
 }: UsePaginatedAccountsSearchProps) => {
   const queryClient = useQueryClient();
 
   const query = useQuery<PaginatedResponse>({
-    queryKey: ["account-search", accountId, limit, cursor],
+    queryKey: ["account-search", accountId, limit, cursor, queryString],
     queryFn: async () => {
       const res = await protectedAxiosInstance.get(
         `/auth/account-scenarios/${accountId}/accounts`,
@@ -50,6 +52,7 @@ export const usePaginatedAccountsSearch = ({
           params: {
             limit,
             cursor,
+            query: queryString,
           },
         }
       );

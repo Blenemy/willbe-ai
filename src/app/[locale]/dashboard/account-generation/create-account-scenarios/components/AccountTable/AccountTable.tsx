@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { SlidersHorizontal } from "lucide-react";
@@ -36,6 +35,8 @@ import { CustomPagination } from "@/components/CustomPagination/CustomPagination
 import { renderCompactHeader } from "@/components/ui/renderHeader";
 import { useSelectedCompaniesStore } from "@/store/useSelectedCompaniesStore";
 import { parseHeadcount } from "@/utils/parsedHeadcount";
+import { SkeletonTable } from "../../skeletons/SkeletonTable";
+import { useDebouncedValue } from "@/hooks/useDebounce";
 
 const ROWS_PER_PAGE_LIMIT = 30;
 
@@ -45,7 +46,8 @@ const AccountTable = () => {
   const t = useTranslations("accountTable");
   const [sortKey, setSortKey] = useState<string>("title");
   const [sortAsc, setSortAsc] = useState<boolean>(true);
-  const columns: { key: string; label: string; defaultVisible: boolean }[] = [
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const columns = [
     { key: "logo", label: t("table.logo"), defaultVisible: true },
     { key: "name", label: t("table.name"), defaultVisible: true },
     { key: "industry", label: t("table.industry"), defaultVisible: true },
@@ -55,6 +57,7 @@ const AccountTable = () => {
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 500);
   const {
     selectedCompanies,
     toggleCompany,
@@ -68,7 +71,7 @@ const AccountTable = () => {
   const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
 
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
-    columns.map((col) => [col.key, col.defaultVisible !== false])
+    columns.map((col) => [col.key, col.defaultVisible])
   );
 
   const [visibleColumns, setVisibleColumns] = useState(DEFAULT_VISIBLE_COLUMNS);
@@ -89,6 +92,7 @@ const AccountTable = () => {
       accountId,
       limit: ROWS_PER_PAGE_LIMIT,
       cursor,
+      queryString: debouncedSearchTerm,
     }
   );
 
@@ -100,11 +104,13 @@ const AccountTable = () => {
     }
   };
 
-  const companies = data?.items || [];
+  useEffect(() => {
+    if (!isFetching && data) {
+      setIsInitialLoading(false);
+    }
+  }, [isFetching, data]);
 
-  const filteredCompanies = companies.filter((company) =>
-    company.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const companies = data?.items || [];
 
   const handleSubmit = async () => {
     if (!accountId) return;
@@ -125,7 +131,7 @@ const AccountTable = () => {
     clearSelected();
   };
 
-  const sortedCompanies = [...filteredCompanies].sort((a, b) => {
+  const sortedCompanies = [...companies].sort((a, b) => {
     // @ts-expect-error element implicitly has an "any" type
     const aVal = a?.[sortKey] ?? "";
     // @ts-expect-error element implicitly has an "any" type
@@ -142,12 +148,8 @@ const AccountTable = () => {
       : String(bVal).localeCompare(String(aVal));
   });
 
-  if (isFetching) {
-    return <Spinner />;
-  }
-
-  if (!data || data?.items.length === 0) {
-    return <div>Companies were not found</div>;
+  if (isInitialLoading) {
+    return <SkeletonTable showHeader />;
   }
 
   return (
@@ -183,32 +185,35 @@ const AccountTable = () => {
         </div>
       </div>
 
-      {isFetching ? (
-        <Spinner className="mr-2" />
-      ) : (
-        <div className="flex flex-col gap-4">
-          <Input
-            placeholder={t("searchPlaceholder")}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-md"
-          />
+      <div className="flex gap-4 max-w-md items-center">
+        <Input
+          placeholder={t("searchPlaceholder")}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <div className="w-5 h-5 flex items-center justify-center">
+          {isFetching && <Spinner className="w-4 h-4" />}
+        </div>
+      </div>
 
+      {isFetching && <SkeletonTable showHeader={false} />}
+
+      {!isFetching && companies.length === 0 && <div>{t("no_results")}</div>}
+
+      {!isFetching && companies.length > 0 && (
+        <>
           <Table className="table-fixed border-separate border-spacing-y-1 compact-table">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[36px] p-1">
                   <Checkbox
                     checked={
-                      filteredCompanies.length > 0 &&
-                      filteredCompanies.every((c) => c.id in selectedCompanies)
+                      sortedCompanies.length > 0 &&
+                      sortedCompanies.every((c) => c.id in selectedCompanies)
                     }
                     onCheckedChange={(checked) => {
-                      if (checked) {
-                        addCompanies(filteredCompanies);
-                      } else {
-                        removeCompanies(filteredCompanies);
-                      }
+                      if (checked) addCompanies(sortedCompanies);
+                      else removeCompanies(sortedCompanies);
                     }}
                   />
                 </TableHead>
@@ -263,7 +268,6 @@ const AccountTable = () => {
                       disabled={company.isSaved}
                     />
                   </TableCell>
-
                   {visibleColumns.logo && (
                     <TableCell className="p-1 w-[44px]">
                       {company.logo && (
@@ -335,7 +339,7 @@ const AccountTable = () => {
             </TableBody>
           </Table>
 
-          <div className="flex items-center justify-between pt-4 flex-1">
+          <div className="flex items-center justify-between pt-4">
             <CustomPagination
               page={currentCursorIndex}
               setPage={(newIndex) => {
@@ -345,10 +349,6 @@ const AccountTable = () => {
                 } else if (newIndex === cursorStack.length && data) {
                   setCursorStack((prev) => [...prev, data.cursor ?? null]);
                   setCurrentCursorIndex(newIndex);
-                } else {
-                  console.warn(
-                    `Cannot jump from ${currentCursorIndex} to ${newIndex} — cursor not available`
-                  );
                 }
               }}
               rowsPerPage={ROWS_PER_PAGE_LIMIT}
@@ -364,7 +364,7 @@ const AccountTable = () => {
           >
             {t("submit")}
           </Button>
-        </div>
+        </>
       )}
     </div>
   );
