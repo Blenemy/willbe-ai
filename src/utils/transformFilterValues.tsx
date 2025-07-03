@@ -14,7 +14,8 @@ export function transformFilterValues(
       typeof filterValue === "number" ||
       typeof filterValue === "boolean"
     ) {
-      transformedValues[filterKey as keyof LeadScenariosFormType] = filterValue;
+      transformedValues[filterKey as keyof LeadScenariosFormType] =
+        typeof filterValue === "number" ? filterValue.toString() : filterValue;
     } else if (Array.isArray(filterValue)) {
       transformedValues[filterKey as keyof LeadScenariosFormType] = filterValue;
     } else if (typeof filterValue === "object" && filterValue !== null) {
@@ -27,9 +28,13 @@ export function transformFilterValues(
         ] = filterValue.exclude || [];
       } else if ("from" in filterValue || "to" in filterValue) {
         transformedValues[`${filterKey}_from` as keyof LeadScenariosFormType] =
-          filterValue.from || "";
+          filterValue.from !== undefined && filterValue.from !== null
+            ? filterValue.from.toString()
+            : "";
         transformedValues[`${filterKey}_to` as keyof LeadScenariosFormType] =
-          filterValue.to || "";
+          filterValue.to !== undefined && filterValue.to !== null
+            ? filterValue.to.toString()
+            : "";
       }
     }
   });

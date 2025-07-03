@@ -74,7 +74,7 @@ export const RangeSelectPair = ({
           <FormItem className="flex-1">
             <FormControl>
               <Select
-                value={field.value}
+                key={field.value}
                 onValueChange={field.onChange}
                 defaultValue={field.value}
               >
