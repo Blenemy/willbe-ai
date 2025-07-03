@@ -16,20 +16,33 @@ export const SkeletonTable = ({ showHeader }: Props) => {
       {showHeader && (
         <>
           <div className="flex justify-between items-center">
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="h-10 w-24" />
+            <Skeleton
+              data-testid="skeleton-header-title"
+              className="h-6 w-48"
+            />
+            <Skeleton
+              data-testid="skeleton-header-button"
+              className="h-10 w-24"
+            />
           </div>
 
           <div className="flex items-center gap-4 max-w-md">
-            <Skeleton className="h-10 w-full flex-1" />
-            <Skeleton className="h-10 w-5" />
+            <Skeleton
+              data-testid="skeleton-input"
+              className="h-10 w-full flex-1"
+            />
+            <Skeleton data-testid="skeleton-spinner" className="h-10 w-5" />
           </div>
         </>
       )}
 
       <div className="space-y-2 mt-4">
         {skeletonIds.map((id) => (
-          <Skeleton key={id} className="h-10 w-full rounded-md" />
+          <Skeleton
+            key={id}
+            data-testid="skeleton-row"
+            className="h-10 w-full rounded-md"
+          />
         ))}
       </div>
     </div>
