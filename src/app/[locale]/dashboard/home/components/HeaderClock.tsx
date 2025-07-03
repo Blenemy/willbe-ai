@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import clockBackground from "@/assets/home_clock_background.png";
 import Image from "next/image";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const salesSentences = [
   "Keep pushing towards your quota!",
@@ -16,6 +17,7 @@ const salesSentences = [
 export default function HeaderClock() {
   const [time, setTime] = useState("");
   const [sentence, setSentence] = useState("");
+  const { user } = useAuthStore();
 
   useEffect(() => {
     const updateTime = () => {
@@ -36,7 +38,7 @@ export default function HeaderClock() {
   }, []);
 
   return (
-    <Card className="bg-[#030A27] text-white w-full relative rounded-2xl">
+    <Card className="bg-[#030A27] text-white w-full relative rounded-2xl h-full">
       <Image
         src={clockBackground}
         alt="wave"
@@ -44,7 +46,7 @@ export default function HeaderClock() {
       />
       <CardHeader className="flex items-center justify-center flex-col gap-2">
         <CardTitle className="text-6xl font-semibold">{time}</CardTitle>
-        <p className="text-lg mt-2">Welcome back, Jacob 😊</p>
+        <p className="text-lg mt-2">Welcome back, {user?.firstName} 😊</p>
         <p className="text-sm text-muted mt-1">{sentence}</p>
       </CardHeader>
     </Card>
