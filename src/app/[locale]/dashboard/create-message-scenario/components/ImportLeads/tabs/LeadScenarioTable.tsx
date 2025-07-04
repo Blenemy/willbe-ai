@@ -22,11 +22,15 @@ import { LeadScenario } from "@/hooks/useEditScenarioData";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { renderHeader } from "@/components/ui/renderHeader";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  deselectCurrentPage,
+  selectCurrentPage,
+} from "./utils/selectionHelpers";
 
 interface Props {
   data: LeadScenario[];
   selected: string[];
-  setSelected: (ids: string[]) => void;
+  setSelected: (val: string[] | ((prev: string[]) => string[])) => void;
 }
 
 type SortKey = "name" | "createdBy" | "createdAt" | "";
@@ -78,11 +82,9 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
             : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         }
 
-        const aSelected = selected.includes(a.id);
-        const bSelected = selected.includes(b.id);
-        return aSelected === bSelected ? 0 : aSelected ? -1 : 1;
+        return 0;
       });
-  }, [data, selected, search, sortKey, sortAsc]);
+  }, [data, search, sortKey, sortAsc]);
 
   const paginated = useMemo(() => {
     const start = page * rowsPerPage;
@@ -97,9 +99,9 @@ export const LeadScenariosTable = ({ data, selected, setSelected }: Props) => {
 
   const handleToggleSelectAll = () => {
     if (isAllSelectedOnPage) {
-      setSelected([]);
+      deselectCurrentPage(currentPageIds, setSelected);
     } else {
-      setSelected(paginated.map((scenario) => scenario.id));
+      selectCurrentPage(currentPageIds, setSelected);
     }
   };
 
