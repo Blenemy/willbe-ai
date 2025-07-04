@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import AccountTable from "./AccountTable";
 import { usePaginatedAccountsSearch } from "@/hooks/usePaginatedAccountsSearch";
 import { useSelectedCompaniesStore } from "@/store/useSelectedCompaniesStore";
@@ -17,8 +17,24 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
+jest.mock("@/hooks/usePaginatedAccountsSearch");
+
+jest.mock("@/store/useSelectedCompaniesStore", () => ({
+  useSelectedCompaniesStore: jest.fn(() => ({
+    selectedCompanies: {},
+    toggleCompany: jest.fn(),
+    addCompanies: jest.fn(),
+    removeCompanies: jest.fn(),
+    clear: jest.fn(),
+  })),
+}));
+
 jest.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
+}));
+
+jest.mock("next/navigation", () => ({
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 describe("AccountTable — disabled checkbox", () => {
@@ -62,5 +78,49 @@ describe("AccountTable — disabled checkbox", () => {
 
     expect(targetCheckbox).toBeDefined();
     expect(targetCheckbox).toBeDisabled();
+  });
+});
+
+describe("AccountTable - debounce & skeleton behavior", () => {
+  it("shows skeleton on initial loading", () => {
+    (usePaginatedAccountsSearch as jest.Mock).mockReturnValue({
+      data: undefined,
+      isFetching: true,
+      saveSelectedAccounts: jest.fn(),
+    });
+
+    render(<AccountTable />);
+    expect(screen.getAllByTestId("skeleton-row")).toHaveLength(12);
+  });
+
+  it("renders table when data is loaded and not fetching", async () => {
+    const mockData = {
+      items: [
+        {
+          id: "1",
+          name: "Company One",
+          logo: "logo.png",
+          industry: "Tech",
+          headcount: "51-200",
+          profile_url: "https://linkedin.com/1",
+          summary: "A great company",
+          isSaved: false,
+        },
+      ],
+      paging: { total_count: 1 },
+      cursor: null,
+    };
+
+    (usePaginatedAccountsSearch as jest.Mock).mockReturnValue({
+      data: mockData,
+      isFetching: false,
+      saveSelectedAccounts: jest.fn(),
+    });
+
+    render(<AccountTable />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Company One")).toBeInTheDocument();
+    });
   });
 });
