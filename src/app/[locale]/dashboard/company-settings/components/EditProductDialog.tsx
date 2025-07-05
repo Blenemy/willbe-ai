@@ -24,6 +24,7 @@ import {
 import { ProductsAndServices } from "@/types/Company";
 import { useCompany } from "@/hooks/useCompany";
 import { useTranslations } from "next-intl";
+import { NOT_ONLY_SPACES_REGEX } from "@/constants/passwordRegex";
 
 const EditProductDialog = ({
   open,
@@ -40,11 +41,17 @@ const EditProductDialog = ({
     name: z
       .string()
       .min(1, t("validation_required"))
-      .max(100, t("validation_name_max")),
+      .max(100, t("validation_name_max"))
+      .regex(NOT_ONLY_SPACES_REGEX, {
+        message: t("validation_not_only_spaces"),
+      }),
     description: z
       .string()
       .min(1, t("validation_required"))
-      .max(3000, t("validation_description_max")),
+      .max(3000, t("validation_description_max"))
+      .regex(NOT_ONLY_SPACES_REGEX, {
+        message: t("validation_not_only_spaces"),
+      }),
   });
 
   const form = useForm({
