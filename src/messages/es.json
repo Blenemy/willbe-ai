@@ -133,6 +133,7 @@
     "validation_name_max": "Máximo 100 caracteres",
     "validation_description_required": "La descripción es obligatoria",
     "validation_description_max": "Máximo 3000 caracteres",
+    "validation_not_only_spaces": "El campo no puede contener solo espacios",
 
     "company_settings": "Configuración de la empresa",
 
