@@ -23,6 +23,7 @@ import { useCompany } from "@/hooks/useCompany";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Textarea } from "@/components/ui/textarea";
+import { NOT_ONLY_SPACES_REGEX } from "@/constants/passwordRegex";
 
 const EditCompanyDescriptionDialog = ({
   open,
@@ -39,7 +40,10 @@ const EditCompanyDescriptionDialog = ({
     companyDescription: z
       .string()
       .min(1, t("validation_required"))
-      .max(3000, t("validation_description_max")),
+      .max(3000, t("validation_description_max"))
+      .regex(NOT_ONLY_SPACES_REGEX, {
+        message: t("validation_not_only_spaces"),
+      }),
   });
 
   const form = useForm({
