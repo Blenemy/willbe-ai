@@ -137,6 +137,7 @@
     "company_name_placeholder": "Enter your company name",
     "validation_required": "This field is required",
     "validation_max_length": "Maximum 50 characters",
+    "validation_not_only_spaces": "The field cannot contain only spaces",
 
     "company_description_placeholder": "Enter your company description",
 
