@@ -23,7 +23,7 @@ export const useAccountScenarios = ({
   const router = useRouter();
 
   const { data: accountScenariosDataTable } = useQuery<AccountScenario[]>({
-    queryKey: ["account-scenarios"],
+    queryKey: ["account-scenarios", accountId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
         `/auth/account-scenarios`
@@ -31,7 +31,6 @@ export const useAccountScenarios = ({
       return response.data;
     },
     retry: true,
-    staleTime: 1000 * 60 * 5,
     enabled: enableFetch,
   });
 
