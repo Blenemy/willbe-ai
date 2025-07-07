@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ExternalLink } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
@@ -20,6 +19,8 @@ import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
 import { useQueryClient } from "@tanstack/react-query";
+import linkedinImage from "@/assets/Linkedin.svg";
+import linkedinYellowImage from "@/assets/linkedinYellow.svg";
 
 const LeadTable = ({
   setCurrentStep,
@@ -225,7 +226,16 @@ const LeadTable = ({
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:underline flex items-center gap-1"
                       >
-                        LinkedIn <ExternalLink size={16} />
+                        <Image
+                          src={
+                            lead.hasSalesNavigator
+                              ? linkedinYellowImage
+                              : linkedinImage
+                          }
+                          alt="LinkedIn"
+                          width={16}
+                          height={16}
+                        />
                       </a>
                     )}
                   </TableCell>
