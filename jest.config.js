@@ -22,6 +22,7 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/(?!lucide-react).+\\.js$"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
+    "\\.(svg)$": "<rootDir>/__mocks__/svgMock.js",
     "^lucide-react$": "<rootDir>/__mocks__/lucide-react.ts",
     "^next/image$": "<rootDir>/__mocks__/next-image.js",
   },

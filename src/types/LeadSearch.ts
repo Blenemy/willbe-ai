@@ -9,6 +9,7 @@ interface Lead {
   headline: string;
   summary: string;
   public_identifier: string;
+  hasSalesNavigator: boolean;
   public_profile_url: string;
   profile_url: string;
   profile_picture_url: string;
