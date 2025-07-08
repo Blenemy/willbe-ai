@@ -18,8 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PasswordInput } from "@/components/ui/password-input";
 import { cn } from "@/lib/utils";
 import { useInvitation } from "@/hooks/useInvitation";
-import { PASSWORD_REGEX } from "@/constants/passwordRegex";
 import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
+import { NOT_ONLY_SPACES_REGEX } from "@/constants/passwordRegex";
 
 function getSchema(t: AuthTranslations) {
   return z.object({
@@ -36,7 +36,7 @@ function getSchema(t: AuthTranslations) {
     password: z
       .string()
       .min(8, t.validation_password_min)
-      .regex(PASSWORD_REGEX, t.validation_password_regex),
+      .regex(NOT_ONLY_SPACES_REGEX, t.validation_password_regex),
   });
 }
 

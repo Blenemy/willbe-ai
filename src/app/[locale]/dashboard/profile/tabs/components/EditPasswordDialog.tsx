@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslations } from "next-intl";
-import { NO_SPACES_REGEX, PASSWORD_REGEX } from "@/constants/passwordRegex";
+import { NO_SPACES_REGEX } from "@/constants/passwordRegex";
 import { useEffect } from "react";
 import { PasswordInput } from "@/components/ui/password-input";
 
@@ -40,8 +40,9 @@ const EditPasswordDialog = ({
       newPassword: z
         .string()
         .min(8, { message: t("validation_password_min") })
-        .regex(NO_SPACES_REGEX, { message: t("validation_password_no_spaces") })
-        .regex(PASSWORD_REGEX, { message: t("validation_password_regex") }),
+        .regex(NO_SPACES_REGEX, {
+          message: t("validation_password_no_spaces"),
+        }),
       confirmPassword: z
         .string()
         .min(8, { message: t("validation_password_min") }),
