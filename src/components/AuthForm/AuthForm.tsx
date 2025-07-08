@@ -30,7 +30,7 @@ import {
 } from "../ui/form";
 import { useAuth } from "@/hooks/useAuth";
 import { PasswordInput } from "../ui/password-input";
-import { PASSWORD_REGEX } from "@/constants/passwordRegex";
+import { NOT_ONLY_SPACES_REGEX } from "@/constants/passwordRegex";
 import { AuthTranslations } from "@/hooks/translations/getAuthTranslations";
 import {
   OrDivider,
@@ -55,7 +55,7 @@ export function AuthForm({
         .string()
         .min(8, t["validation_password_min"])
         .max(64, t["validation_password_max"])
-        .regex(PASSWORD_REGEX, t["validation_password_regex"]),
+        .regex(NOT_ONLY_SPACES_REGEX, t["validation_password_regex"]),
       remember: z.boolean(),
     });
   }
