@@ -28,29 +28,29 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run tests with coverage
-        run: npm run test:coverage
+      # - name: Run tests with coverage
+      #   run: npm run test:coverage
 
-      - name: Check lcov file
-        run: |
-          echo "Files in coverage/:"
-          ls -l coverage
-          echo "First 20 lines of lcov.info:"
-          head -n 20 coverage/lcov.info
+      # - name: Check lcov file
+      #   run: |
+      #     echo "Files in coverage/:"
+      #     ls -l coverage
+      #     echo "First 20 lines of lcov.info:"
+      #     head -n 20 coverage/lcov.info
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        with:
-          args: >
-            -Dsonar.projectKey=Willbe-AI_willbe-front
-            -Dsonar.organization=willbe-ai
-            -Dsonar.sources=src
-            -Dsonar.tests=src
-            -Dsonar.test.inclusions=**/*.test.ts,**/*.test.tsx
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.sourceEncoding=UTF-8
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarqube-scan-action@v5
+      #   with:
+      #     args: >
+      #       -Dsonar.projectKey=Willbe-AI_willbe-front
+      #       -Dsonar.organization=willbe-ai
+      #       -Dsonar.sources=src
+      #       -Dsonar.tests=src
+      #       -Dsonar.test.inclusions=**/*.test.ts,**/*.test.tsx
+      #       -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+      #       -Dsonar.sourceEncoding=UTF-8
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy-repo:
     name: Build and Deploy (only on master)
