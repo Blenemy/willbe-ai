@@ -122,16 +122,20 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
 
   const handleBlur = (leadId: string) => {
     const changes = editedLeads[leadId];
-    if (!changes || Object.keys(changes).length === 0) return;
+    if (!changes) return;
+
+    const payload = Object.fromEntries(
+      Object.entries(changes).map(([key, value]) => {
+        if ((key === "email" || key === "phone") && value === "") {
+          return [key, null];
+        }
+        return [key, value];
+      })
+    );
 
     updateLead({
       leadId,
-      ...Object.fromEntries(
-        Object.entries(changes).filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([_, value]) => value !== undefined && value !== null && value !== ""
-        )
-      ),
+      ...payload,
     });
 
     setEditedLeads((prev) => {
