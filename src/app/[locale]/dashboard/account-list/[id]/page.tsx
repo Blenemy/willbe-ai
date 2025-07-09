@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { optionalNumber } from "@/schemas/common/schemaUtils";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { InformationTab } from "./tabs/InformationTab";
 import { LeadsTab } from "./tabs/LeadsTab";
@@ -24,7 +23,7 @@ const formSchema = z.object({
   description: z.string().optional(),
   foundedIn: z.string().optional(),
   headquarters: z.string().optional(),
-  employees: optionalNumber,
+  employees: z.number(),
   industry: z.string().optional(),
   linkedin: z.string().optional(),
 });
@@ -46,7 +45,7 @@ export default function AccountPage() {
       description: "",
       foundedIn: "",
       headquarters: "",
-      employees: undefined as number | undefined,
+      employees: undefined,
       industry: "",
       website: "",
       linkedin: "",
