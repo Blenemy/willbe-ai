@@ -34,19 +34,22 @@ export const useAccountScenarios = ({
     enabled: enableFetch,
   });
 
-  const { data: accountScenarioById, isLoading: isLoadingScenarioId } =
-    useQuery<AccountScenario>({
-      queryKey: ["account-scenario-by-id", accountId],
-      queryFn: async () => {
-        const response = await protectedAxiosInstance.get(
-          `/auth/account-scenarios/${accountId}`
-        );
-        return response.data;
-      },
-      retry: true,
-      staleTime: 1000 * 60 * 5,
-      enabled: !!accountId,
-    });
+  const {
+    data: accountScenarioById,
+    refetch: refetchAccountScenarioById,
+    isFetching: isLoadingScenarioId,
+  } = useQuery<AccountScenario>({
+    queryKey: ["account-scenario-by-id", accountId],
+    queryFn: async () => {
+      const response = await protectedAxiosInstance.get(
+        `/auth/account-scenarios/${accountId}`
+      );
+      return response.data;
+    },
+    retry: true,
+    staleTime: 0,
+    enabled: !!accountId,
+  });
 
   const deleteAccountScenario = useMutation({
     mutationFn: async (payload: { id: string }) => {
@@ -150,5 +153,6 @@ export const useAccountScenarios = ({
     createAccountScenario: createAccountScenario.mutate,
     deleteAccountScenario: deleteAccountScenario.mutate,
     updateAccountScenario: updateAccountScenario.mutate,
+    refetchAccountScenarioById,
   };
 };

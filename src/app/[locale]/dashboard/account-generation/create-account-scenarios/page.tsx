@@ -54,14 +54,16 @@ const CreateAccountScenarios = () => {
   const accountName = searchParams.get("accountName");
   const t = useTranslations("scenariosFilter");
   const tErrors = useTranslations("scenariosFilter.annual_revenue.errors");
-  const { updateAccountScenario, accountScenarioById, isLoadingScenarioId } =
-    useAccountScenarios({
-      enableFetch: false,
-      accountId,
-    });
+  const {
+    updateAccountScenario,
+    accountScenarioById,
+    isLoadingScenarioId,
+    refetchAccountScenarioById,
+  } = useAccountScenarios({
+    enableFetch: true,
+    accountId,
+  });
   const queryClient = useQueryClient();
-
-  console.log(accountScenarioById);
 
   const { data: dropdowns } = useAccountScenariosDropdowns();
 
@@ -153,6 +155,12 @@ const CreateAccountScenarios = () => {
 
     form.trigger();
   }, [accountScenarioById, form]);
+
+  useEffect(() => {
+    if (accountId) {
+      refetchAccountScenarioById();
+    }
+  }, [accountId, refetchAccountScenarioById]);
 
   const watchRevenueFrom = form.watch("annual_revenue_from");
   const watchRevenueTo = form.watch("annual_revenue_to");
