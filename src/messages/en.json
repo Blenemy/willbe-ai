@@ -993,7 +993,7 @@
   },
   "AccountScenarios": {
     "title": "Account Scenarios",
-    "add_button": "Add New Account",
+    "add_button": "Add New Scenario",
     "table_caption": "A list of lead scenarios",
     "table_name": "Account Name",
     "table_actions": "Actions",
