@@ -102,10 +102,20 @@ const CreateLeadScenarios = () => {
     filterId: selectedScenarioId,
   });
 
-  const { leadScenarioById } = useLeadScenarios({
+  const {
+    leadScenarioById,
+    isFetchingLeadScenarioById,
+    refetchLeadScenarioById,
+  } = useLeadScenarios({
     enableFetch: false,
     scenarioId,
   });
+
+  useEffect(() => {
+    if (scenarioId) {
+      refetchLeadScenarioById();
+    }
+  }, [scenarioId, refetchLeadScenarioById]);
 
   const form = useForm({
     resolver: zodResolver(leadScenariosFiltersSchema),
@@ -970,12 +980,16 @@ const CreateLeadScenarios = () => {
             </Form>
           )}
 
-          {activeStep === 1 && (
+          {activeStep === 1 && !isFetchingLeadScenarioById && (
             <LeadTable
               setCurrentStep={setActiveStep}
-              lastPageCursor={leadScenarioById?.lastPageCursor}
+              cursors={{
+                previousPageCursor: leadScenarioById?.previousPageCursor,
+                lastPageCursor: leadScenarioById?.lastPageCursor,
+              }}
             />
           )}
+
           {activeStep === 2 && <LeadsSaved />}
         </>
       )}

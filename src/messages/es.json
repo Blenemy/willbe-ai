@@ -991,7 +991,7 @@
   },
   "AccountScenarios": {
     "title": "Escenarios de cuentas",
-    "add_button": "Agregar nueva cuenta",
+    "add_button": "Agregar nuevo escenario",
     "table_caption": "Una lista de escenarios de clientes potenciales",
     "table_name": "Nombre de la cuenta",
     "table_actions": "Acciones",

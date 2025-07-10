@@ -992,7 +992,7 @@
   },
   "AccountScenarios": {
     "title": "Scénarios de comptes",
-    "add_button": "Ajouter un nouveau compte",
+    "add_button": "Ajouter un nouveau scénario",
     "table_caption": "Une liste de scénarios de prospects",
     "table_name": "Nom du compte",
     "table_actions": "Actions",

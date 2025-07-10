@@ -38,11 +38,14 @@ import { EditMessageModal } from "./EditMessageModal";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
 import { useSearchLeadField } from "@/hooks/useLeadFieldSearch";
 import { useSearchLanguage } from "@/hooks/useSearchLanguage";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 interface Props {
   leads: MessageEntryData[];
   selectedEntry: MessageEntry;
 }
+
+type SortableKey = "firstName" | "lastname";
 
 export const stripHtml = (html: string) => {
   const div = document.createElement("div");
@@ -86,6 +89,17 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
   } | null>(null);
   const params = useParams();
   const id = params?.id as string;
+  const [sortKey, setSortKey] = useState<SortableKey | "">("");
+  const [sortAsc, setSortAsc] = useState(true);
+
+  const handleSort = (key: SortableKey) => {
+    if (sortKey === key) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
 
   const toggleSelection = (id: string) => {
     setSelected((prev) =>
@@ -122,16 +136,20 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
 
   const handleBlur = (leadId: string) => {
     const changes = editedLeads[leadId];
-    if (!changes || Object.keys(changes).length === 0) return;
+    if (!changes) return;
+
+    const payload = Object.fromEntries(
+      Object.entries(changes).map(([key, value]) => {
+        if ((key === "email" || key === "phone") && value === "") {
+          return [key, null];
+        }
+        return [key, value];
+      })
+    );
 
     updateLead({
       leadId,
-      ...Object.fromEntries(
-        Object.entries(changes).filter(
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ([_, value]) => value !== undefined && value !== null && value !== ""
-        )
-      ),
+      ...payload,
     });
 
     setEditedLeads((prev) => {
@@ -155,12 +173,21 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
     );
   }, [leads, search]);
 
+  const sortedLeads = useMemo(() => {
+    if (!sortKey) return filteredLeads;
+
+    const sorted = [...filteredLeads].sort((a, b) => {
+      const valA = a[sortKey]?.toLowerCase?.() ?? "";
+      const valB = b[sortKey]?.toLowerCase?.() ?? "";
+      return sortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+    });
+
+    return sorted;
+  }, [filteredLeads, sortKey, sortAsc]);
+
   const indexOfFirstItem = currentPage * rowsPerPage;
   const indexOfLastItem = indexOfFirstItem + rowsPerPage;
-  const paginatedLeads = filteredLeads?.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const paginatedLeads = sortedLeads?.slice(indexOfFirstItem, indexOfLastItem);
 
   if (!leads || leads.length === 0) return null;
 
@@ -202,8 +229,20 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                 />
               </div>
             </TableHead>
-            <TableHead>{t("table.firstName")}</TableHead>
-            <TableHead>{t("table.lastName")}</TableHead>
+            {renderHeader(
+              t("table.firstName"),
+              "firstName",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.lastName"),
+              "lastname",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead>{t("table.email")}</TableHead>
             <TableHead>{t("table.phone")}</TableHead>
             <TableHead>{t("table.account")}</TableHead>

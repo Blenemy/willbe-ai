@@ -34,7 +34,11 @@ export const useAccountScenarios = ({
     enabled: enableFetch,
   });
 
-  const { data: accountScenarioById } = useQuery<AccountScenario>({
+  const {
+    data: accountScenarioById,
+    refetch: refetchAccountScenarioById,
+    isFetching: isLoadingScenarioId,
+  } = useQuery<AccountScenario>({
     queryKey: ["account-scenario-by-id", accountId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
@@ -43,7 +47,7 @@ export const useAccountScenarios = ({
       return response.data;
     },
     retry: true,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
     enabled: !!accountId,
   });
 
@@ -145,8 +149,10 @@ export const useAccountScenarios = ({
   return {
     accountScenariosDataTable,
     accountScenarioById,
+    isLoadingScenarioId,
     createAccountScenario: createAccountScenario.mutate,
     deleteAccountScenario: deleteAccountScenario.mutate,
     updateAccountScenario: updateAccountScenario.mutate,
+    refetchAccountScenarioById,
   };
 };

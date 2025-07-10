@@ -15,6 +15,8 @@ interface UsePaginatedAccountsSearchProps {
 interface PaginatedResponse {
   items: AccountSearch[];
   cursor: string | null;
+  pageIndex: number;
+  previousPageCursor: string | null;
   paging: {
     start: number;
     page_count: number;

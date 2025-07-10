@@ -54,8 +54,13 @@ const CreateAccountScenarios = () => {
   const accountName = searchParams.get("accountName");
   const t = useTranslations("scenariosFilter");
   const tErrors = useTranslations("scenariosFilter.annual_revenue.errors");
-  const { updateAccountScenario, accountScenarioById } = useAccountScenarios({
-    enableFetch: false,
+  const {
+    updateAccountScenario,
+    accountScenarioById,
+    isLoadingScenarioId,
+    refetchAccountScenarioById,
+  } = useAccountScenarios({
+    enableFetch: true,
     accountId,
   });
   const queryClient = useQueryClient();
@@ -150,6 +155,12 @@ const CreateAccountScenarios = () => {
 
     form.trigger();
   }, [accountScenarioById, form]);
+
+  useEffect(() => {
+    if (accountId) {
+      refetchAccountScenarioById();
+    }
+  }, [accountId, refetchAccountScenarioById]);
 
   const watchRevenueFrom = form.watch("annual_revenue_from");
   const watchRevenueTo = form.watch("annual_revenue_to");
@@ -691,10 +702,17 @@ const CreateAccountScenarios = () => {
             </Form>
           }
         >
-          <div className="bg-white rounded-xl  p-6 h-full">
-            <AccountTable />
-            <AccountSave />
-          </div>
+          {!isLoadingScenarioId && (
+            <div className="bg-white rounded-xl p-6 h-full">
+              <AccountTable
+                cursors={{
+                  lastPageCursor: accountScenarioById?.lastPageCursor,
+                  previousPageCursor: accountScenarioById?.previousPageCursor,
+                }}
+              />
+              <AccountSave />
+            </div>
+          )}
         </ScenarioSidebarLite>
       )}
     </div>

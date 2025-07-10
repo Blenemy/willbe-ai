@@ -33,7 +33,11 @@ export const useLeadScenarios = ({
     enabled: enableFetch,
   });
 
-  const { data: leadScenarioById } = useQuery<LeadScenarios>({
+  const {
+    data: leadScenarioById,
+    isFetching: isFetchingLeadScenarioById,
+    refetch: refetchLeadScenarioById,
+  } = useQuery<LeadScenarios>({
     queryKey: ["lead-scenarios-by-id", scenarioId],
     queryFn: async () => {
       const response = await protectedAxiosInstance.get(
@@ -124,5 +128,7 @@ export const useLeadScenarios = ({
     postLeadScenarious: postLeadScenarious.mutate,
     updateLeadScenario: updateLeadScenario.mutate,
     deleteLeadScenarious: deleteLeadScenarious.mutate,
+    isFetchingLeadScenarioById,
+    refetchLeadScenarioById,
   };
 };

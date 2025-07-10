@@ -4,7 +4,7 @@ import { TableHead } from "@/components/ui/table";
 export const renderHeader = <T extends string>(
   label: string,
   key: T,
-  sortKey: T,
+  sortKey: T | "",
   sortAsc: boolean,
   handleSort: (key: T) => void
 ) => (
