@@ -40,7 +40,14 @@ import { useDebouncedValue } from "@/hooks/useDebounce";
 
 const ROWS_PER_PAGE_LIMIT = 30;
 
-const AccountTable = () => {
+interface Props {
+  cursors: {
+    lastPageCursor: string | null | undefined;
+    previousPageCursor: string | null | undefined;
+  };
+}
+
+const AccountTable = ({ cursors }: Props) => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId") || "";
   const t = useTranslations("accountTable");
@@ -66,9 +73,9 @@ const AccountTable = () => {
     clear: clearSelected,
   } = useSelectedCompaniesStore();
 
-  const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
+  const [cursor, setCursor] = useState<string | null>(
+    cursors.lastPageCursor ?? null
+  );
 
   const DEFAULT_VISIBLE_COLUMNS = Object.fromEntries(
     columns.map((col) => [col.key, col.defaultVisible])
@@ -82,10 +89,6 @@ const AccountTable = () => {
       [key]: !prev[key],
     }));
   };
-
-  useEffect(() => {
-    setCursor(cursorStack.at(currentCursorIndex) ?? null);
-  }, [cursorStack, currentCursorIndex]);
 
   const { data, saveSelectedAccounts, isFetching } = usePaginatedAccountsSearch(
     {
@@ -109,6 +112,12 @@ const AccountTable = () => {
       setIsInitialLoading(false);
     }
   }, [isFetching, data]);
+
+  useEffect(() => {
+    if (searchTerm !== "") {
+      setCursor(null);
+    }
+  }, [debouncedSearchTerm, searchTerm]);
 
   const companies = data?.items || [];
 
@@ -341,14 +350,14 @@ const AccountTable = () => {
 
           <div className="flex items-center justify-between pt-4">
             <CustomPagination
-              page={currentCursorIndex}
-              setPage={(newIndex) => {
-                if (newIndex === currentCursorIndex) return;
-                if (cursorStack[newIndex] !== undefined) {
-                  setCurrentCursorIndex(newIndex);
-                } else if (newIndex === cursorStack.length && data) {
-                  setCursorStack((prev) => [...prev, data.cursor ?? null]);
-                  setCurrentCursorIndex(newIndex);
+              page={data?.pageIndex ?? 0}
+              setPage={(newPageIndex) => {
+                if (!data) return;
+
+                if (newPageIndex > (data.pageIndex ?? 0)) {
+                  setCursor(data.cursor ?? null);
+                } else if (newPageIndex < (data.pageIndex ?? 0)) {
+                  setCursor(data.previousPageCursor ?? null);
                 }
               }}
               rowsPerPage={ROWS_PER_PAGE_LIMIT}

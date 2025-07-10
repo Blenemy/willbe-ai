@@ -16,4 +16,6 @@ export interface AccountScenario {
   status: "search";
   createdBy: string;
   updatedAt: string;
+  lastPageCursor?: null | string;
+  previousPageCursor?: null | string;
 }

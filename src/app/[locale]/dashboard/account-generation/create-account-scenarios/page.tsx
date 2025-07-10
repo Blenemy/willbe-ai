@@ -54,11 +54,14 @@ const CreateAccountScenarios = () => {
   const accountName = searchParams.get("accountName");
   const t = useTranslations("scenariosFilter");
   const tErrors = useTranslations("scenariosFilter.annual_revenue.errors");
-  const { updateAccountScenario, accountScenarioById } = useAccountScenarios({
-    enableFetch: false,
-    accountId,
-  });
+  const { updateAccountScenario, accountScenarioById, isLoadingScenarioId } =
+    useAccountScenarios({
+      enableFetch: false,
+      accountId,
+    });
   const queryClient = useQueryClient();
+
+  console.log(accountScenarioById);
 
   const { data: dropdowns } = useAccountScenariosDropdowns();
 
@@ -691,10 +694,17 @@ const CreateAccountScenarios = () => {
             </Form>
           }
         >
-          <div className="bg-white rounded-xl  p-6 h-full">
-            <AccountTable />
-            <AccountSave />
-          </div>
+          {!isLoadingScenarioId && (
+            <div className="bg-white rounded-xl p-6 h-full">
+              <AccountTable
+                cursors={{
+                  lastPageCursor: accountScenarioById?.lastPageCursor,
+                  previousPageCursor: accountScenarioById?.previousPageCursor,
+                }}
+              />
+              <AccountSave />
+            </div>
+          )}
         </ScenarioSidebarLite>
       )}
     </div>
