@@ -102,12 +102,20 @@ const CreateLeadScenarios = () => {
     filterId: selectedScenarioId,
   });
 
-  const { leadScenarioById, isFetchingLeadScenarioById } = useLeadScenarios({
+  const {
+    leadScenarioById,
+    isFetchingLeadScenarioById,
+    refetchLeadScenarioById,
+  } = useLeadScenarios({
     enableFetch: false,
     scenarioId,
   });
 
-  console.log(leadScenarioById);
+  useEffect(() => {
+    if (scenarioId) {
+      refetchLeadScenarioById();
+    }
+  }, [scenarioId, refetchLeadScenarioById]);
 
   const form = useForm({
     resolver: zodResolver(leadScenariosFiltersSchema),

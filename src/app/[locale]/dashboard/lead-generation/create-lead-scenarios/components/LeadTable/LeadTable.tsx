@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchParams } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchLeads } from "@/hooks/useSearchLeads";
 import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
@@ -58,12 +58,6 @@ const LeadTable = ({
     limit: 30,
     cursor,
   });
-
-  useEffect(() => {
-    if (searchTerm !== "") {
-      setCursor(null);
-    }
-  }, [searchTerm]);
 
   const totalPages = paging
     ? Math.ceil(paging.total_count / paging.page_count)
