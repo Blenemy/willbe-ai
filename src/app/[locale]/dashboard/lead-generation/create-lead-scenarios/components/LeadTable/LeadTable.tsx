@@ -18,41 +18,52 @@ import Image from "next/image";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
-import { useQueryClient } from "@tanstack/react-query";
 import linkedinImage from "@/assets/Linkedin.svg";
 import linkedinYellowImage from "@/assets/linkedinYellow.svg";
 
 const LeadTable = ({
   setCurrentStep,
-  lastPageCursor,
+  cursors,
 }: {
   setCurrentStep: Dispatch<SetStateAction<number>>;
-  lastPageCursor?: string;
+  cursors: {
+    lastPageCursor: string | null | undefined;
+    previousPageCursor: string | null | undefined;
+  };
 }) => {
   const t = useTranslations("leadTable");
 
   const searchParams = useSearchParams();
   const scenarioId = searchParams.get("scenarioId") || "";
-  const queryClient = useQueryClient();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
-  const [cursorStack, setCursorStack] = useState<(string | null)[]>([null]);
-  const [currentCursorIndex, setCurrentCursorIndex] = useState(0);
+  const [cursor, setCursor] = useState<string | null>(
+    cursors.lastPageCursor ?? null
+  );
 
   const { saveSelectedLeads } = useSavedLeads({
     enableFetch: true,
     scenarioId,
   });
 
-  const currentCursor = cursorStack[currentCursorIndex];
-
-  const { searchLeads, paging, cursor, isFetching } = useSearchLeads({
+  const {
+    searchLeads,
+    paging,
+    cursor: newCursor,
+    isFetching,
+  } = useSearchLeads({
     enableFetch: true,
     scenarioId,
     limit: 30,
-    cursor: currentCursor,
+    cursor,
   });
+
+  useEffect(() => {
+    if (searchTerm !== "") {
+      setCursor(null);
+    }
+  }, [searchTerm]);
 
   const totalPages = paging
     ? Math.ceil(paging.total_count / paging.page_count)
@@ -69,17 +80,16 @@ const LeadTable = ({
   };
 
   const handleNext = () => {
-    if (cursor) {
-      setCursorStack((prev) => [...prev, cursor]);
-      setCurrentCursorIndex((prev) => prev + 1);
-      queryClient.invalidateQueries({ queryKey: ["lead-scenarios-by-id"] });
+    if (newCursor) {
+      setCursor(newCursor);
     }
   };
 
   const handlePrev = () => {
-    if (currentCursorIndex > 0) {
-      setCurrentCursorIndex((prev) => prev - 1);
-      queryClient.invalidateQueries({ queryKey: ["lead-scenarios-by-id"] });
+    if (cursors?.previousPageCursor) {
+      setCursor(cursors.previousPageCursor);
+    } else {
+      setCursor(null);
     }
   };
 
@@ -117,13 +127,6 @@ const LeadTable = ({
     setCurrentStep((prev) => prev + 1);
   };
 
-  useEffect(() => {
-    if (lastPageCursor) {
-      setCursorStack([null, lastPageCursor]);
-      setCurrentCursorIndex(1);
-    }
-  }, [lastPageCursor]);
-
   if (isFetching) {
     return <Spinner className="mr-2" />;
   }
@@ -146,8 +149,6 @@ const LeadTable = ({
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
-                setCurrentCursorIndex(0);
-                setCursorStack([null]);
               }}
               className="max-w-md"
             />
@@ -245,7 +246,7 @@ const LeadTable = ({
           </Table>
 
           <div className="flex items-center gap-4 mt-6">
-            <Button onClick={handlePrev} disabled={currentCursorIndex === 0}>
+            <Button onClick={handlePrev} disabled={!cursors.previousPageCursor}>
               {t("pagination.previous")}
             </Button>
             <span>
@@ -254,7 +255,7 @@ const LeadTable = ({
                 total: totalPages,
               })}
             </span>
-            <Button onClick={handleNext} disabled={!cursor}>
+            <Button onClick={handleNext} disabled={!newCursor}>
               {t("pagination.next")}
             </Button>
           </div>
