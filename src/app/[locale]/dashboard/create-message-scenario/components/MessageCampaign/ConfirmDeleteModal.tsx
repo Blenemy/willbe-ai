@@ -31,7 +31,7 @@ export const ConfirmDeleteModal = ({
           <DialogTitle>{t("modals.deleteTitle")}</DialogTitle>
         </DialogHeader>
         <p className="text-sm text-muted-foreground">
-          {t("modals.deleteConfirm", { name: leadName })}
+          {t("modals.deleteConfirm", { name: leadName ?? "" })}
         </p>
 
         <div className="flex justify-end gap-2 pt-4">

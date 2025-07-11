@@ -19,7 +19,7 @@ import { useSavedLeads } from "@/hooks/useSavedLeads";
 import { useTranslations } from "next-intl";
 import { Spinner } from "@/components/Spinner/Spinner";
 import linkedinImage from "@/assets/Linkedin.svg";
-import linkedinYellowImage from "@/assets/linkedinYellow.svg";
+import linkedinYellowImage from "@/assets/LinkedinYellow.svg";
 
 const LeadTable = ({
   setCurrentStep,
