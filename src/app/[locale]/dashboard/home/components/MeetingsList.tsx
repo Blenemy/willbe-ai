@@ -18,6 +18,7 @@ import { useToggleDaysInterval } from "@/hooks/useToggleDaysInterval";
 import { handleAxiosError } from "@/utils/handleAxiosError/handleAxiosError";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { v4 as uuidv4 } from "uuid";
 
 const ROWS_PER_PAGE = 7;
 
@@ -48,7 +49,7 @@ export default function MeetingsList() {
   const currentMeetings = meetings.slice(offset, offset + ROWS_PER_PAGE);
 
   const skeletonKeys = useMemo(
-    () => Array.from({ length: ROWS_PER_PAGE }, () => crypto.randomUUID()),
+    () => Array.from({ length: ROWS_PER_PAGE }, () => uuidv4()),
     []
   );
 
