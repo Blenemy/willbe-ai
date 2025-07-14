@@ -5,5 +5,4 @@ export const LANGUAGES = [
   { label: "Portuguese", code: "pt" },
   { label: "German", code: "de" },
   { label: "Italian", code: "it" },
-  { label: "Hebrew", code: "he" },
 ];
