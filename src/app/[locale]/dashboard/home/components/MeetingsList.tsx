@@ -149,7 +149,7 @@ export default function MeetingsList() {
       )}
 
       {!isLoading && meetings.length === 0 && (
-        <div className="flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
+        <div className="h-[350px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
           <CalendarDays className="w-10 h-10 mb-4" />
           <p className="text-lg font-medium mb-1">No meetings found</p>
           <p className="text-sm max-w-sm">
