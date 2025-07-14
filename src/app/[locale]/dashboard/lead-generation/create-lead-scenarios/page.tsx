@@ -52,6 +52,7 @@ import {
 import LeadsSaved from "./components/LeadsSaved/LeadsSaved";
 import { useTranslations } from "next-intl";
 import { RangeSelectPair } from "@/components/RangeSelectPair/RangePairSelect";
+import FormSearchMultiSelect from "./components/formComponents/FormSearchMultiSelect";
 
 const CreateLeadScenarios = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -153,7 +154,8 @@ const CreateLeadScenarios = () => {
       network_distance: "",
       changed_jobs: false,
       keywords: "",
-      persona: "",
+      personaSearch: "",
+      persona: [],
       current_company: "",
       current_company_include: [],
       current_company_exclude: [],
@@ -255,7 +257,7 @@ const CreateLeadScenarios = () => {
           network_distance: "",
           changed_jobs: false,
           keywords: "",
-          persona: "",
+          persona: [],
           current_company: "",
           current_company_include: [],
           current_company_exclude: [],
@@ -900,39 +902,23 @@ const CreateLeadScenarios = () => {
                           </Accordion>
                           <Accordion type="single" collapsible>
                             <AccordionItem
-                              value="keywords"
+                              value="persona"
                               className="bg-slate-200"
                             >
                               <AccordionTrigger className="p-3">
                                 {t("otherFilters.persona.label")}
                               </AccordionTrigger>
                               <AccordionContent className="p-3">
-                                <div className="flex gap-2 flex-col">
-                                  <h4>
-                                    {t("otherFilters.persona.description")}
-                                  </h4>
-                                  <div className="flex gap-2">
-                                    <FormField
-                                      control={form.control}
-                                      name="persona"
-                                      render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                          <FormControl>
-                                            <Input
-                                              className="mb-3"
-                                              {...field}
-                                              placeholder={t(
-                                                "otherFilters.persona.placeholder"
-                                              )}
-                                            />
-                                          </FormControl>
-
-                                          <FormMessage />
-                                        </FormItem>
-                                      )}
-                                    />
-                                  </div>
-                                </div>
+                                <FormSearchMultiSelect
+                                  form={form}
+                                  label={t("otherFilters.persona.description")}
+                                  searchName="personaSearch"
+                                  selectName="persona"
+                                  searchType="PERSONA"
+                                  placeholder={t(
+                                    "otherFilters.persona.placeholder"
+                                  )}
+                                />
                               </AccordionContent>
                             </AccordionItem>
                           </Accordion>
