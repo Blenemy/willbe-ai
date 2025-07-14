@@ -3,13 +3,13 @@ name: CI
 on:
   push:
     branches:
-      - "master"
-      - "dev"
+#      - "master"
+#      - "dev"
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
-      - "master"
-      - "dev"
+#      - "master"
+#      - "dev"
 
 jobs:
   ci_and_quality_gate:
