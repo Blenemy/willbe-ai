@@ -102,7 +102,7 @@ export const useCompany = ({ enableFetch = false }: UseAuthProps) => {
     mutationFn: async (data: UpdateCompanyAndServicePayload) => {
       const response = await protectedAxiosInstance.patch(
         `/auth/companies/products-and-services/${data.id}`,
-        data
+        { name: data.name, description: data.description }
       );
       return response.data;
     },

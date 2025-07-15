@@ -24,6 +24,7 @@ import { LanguageTranslateUI } from "../../messages/message-structures/component
 import { LANGUAGES } from "@/constants/languagesMessageStructure";
 import { useTranslations } from "next-intl";
 import { Controller } from "react-hook-form";
+import { Check } from "lucide-react";
 
 const EMAIL_TYPES = [
   { label: "First email", value: "first_email" },
@@ -170,11 +171,21 @@ export default function MessageStructureEditor() {
 
       <Tabs defaultValue={currentLang} onValueChange={handleLanguageChange}>
         <TabsList className="w-full justify-start overflow-x-auto">
-          {LANGUAGES.map((lang) => (
-            <TabsTrigger key={lang.code} value={lang.code}>
-              {lang.label}
-            </TabsTrigger>
-          ))}
+          {LANGUAGES.map((lang) => {
+            const isCreated = fetchedStructure?.languages.includes(lang.label);
+            return (
+              <TabsTrigger
+                key={lang.code}
+                value={lang.code}
+                className="relative pr-6"
+              >
+                {lang.label}
+                {isCreated && (
+                  <Check className="w-4 h-4 text-green-600 absolute right-1 top-1/2 -translate-y-1/2" />
+                )}
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
 
         {LANGUAGES.map((lang) => (

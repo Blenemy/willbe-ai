@@ -39,13 +39,14 @@ export default function ScenarioPerformanceChart() {
 
   const chartData = categories.map(({ key, label }) => {
     const actual = performance?.[key as keyof typeof performance] ?? 0;
-
     return {
       name: label,
       value: actual,
       visualValue: actual === 0 ? 0.2 : actual,
     };
   });
+
+  const isEmptyData = chartData.every((d) => d.value === 0);
 
   useEffect(() => {
     if (error) {
@@ -54,7 +55,7 @@ export default function ScenarioPerformanceChart() {
   }, [error]);
 
   return (
-    <Card className="rounded-2xl h-full">
+    <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
       <CardHeader className="flex items-start justify-between flex-row">
         <div className="flex flex-col gap-2">
           <CardTitle>Scenario performance</CardTitle>
@@ -70,13 +71,28 @@ export default function ScenarioPerformanceChart() {
         </Button>
       </CardHeader>
 
-      <CardContent className="p-4">
-        <div className="h-[725px]">
-          {isLoading ? (
+      <CardContent className="p-0 flex-grow">
+        {isLoading && (
+          <div className="h-[350px]">
             <Skeleton className="w-full h-full rounded-lg" />
-          ) : (
+          </div>
+        )}
+
+        {!isLoading && isEmptyData && (
+          <div className="h-[350px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
+            <CalendarDays className="w-10 h-10 mb-4" />
+            <p className="text-lg font-medium mb-1">No data found</p>
+            <p className="text-sm max-w-sm">
+              Try adjusting the date range or come back later when there is data
+              to display.
+            </p>
+          </div>
+        )}
+
+        {!isLoading && !isEmptyData && (
+          <div className="h-[500px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData ?? []} barCategoryGap={5}>
+              <BarChart data={chartData} barCategoryGap={5}>
                 <XAxis
                   dataKey="name"
                   tickLine={false}
@@ -106,7 +122,7 @@ export default function ScenarioPerformanceChart() {
                   isAnimationActive={false}
                   activeBar={false}
                 >
-                  {chartData?.map((_, index) => (
+                  {chartData.map((_, index) => (
                     <Cell
                       key={`actual-${index}`}
                       fill={colors[index % colors.length]}
@@ -115,8 +131,8 @@ export default function ScenarioPerformanceChart() {
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-          )}
-        </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

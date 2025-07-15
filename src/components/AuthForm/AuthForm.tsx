@@ -349,6 +349,27 @@ export function AuthForm({
               </div>
             </form>
           </Form>
+
+          {isSignIn && (
+            <div className="mb-8">
+              <OrDivider />
+              <SocialAuthButtons translations={translations} />
+            </div>
+          )}
+
+          <div className="mt-4 text-center text-sm text-[#5F5F5F]">
+            {isSignIn
+              ? `${translations.dont_have_account} `
+              : `${translations.already_have_account} `}
+            <Button
+              type="button"
+              variant={"link"}
+              className="no-underline p-0"
+              onClick={() => setMode(isSignIn ? "sign-up" : "sign-in")}
+            >
+              {isSignIn ? translations.signup : translations.login}
+            </Button>
+          </div>
         </CardContent>
       </Card>
 

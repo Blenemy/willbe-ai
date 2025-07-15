@@ -163,5 +163,20 @@ export function preparePayload(
     }
   });
 
+  const objectArrayFields = ["persona"];
+
+  objectArrayFields.forEach((key) => {
+    const items = values[key] as { id: string; title: string }[];
+
+    const filtered = items?.filter((item) => item?.id && item?.title) ?? [];
+
+    if (filtered.length > 0) {
+      payload.filterValues.push({
+        filterKey: key,
+        filterValue: filtered,
+      });
+    }
+  });
+
   return payload;
 }

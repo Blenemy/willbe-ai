@@ -26,7 +26,7 @@ import { ConfirmationModal } from "../../profile/hubspot-settings/components/Con
 const leadSchema = z.object({
   email: z.string().email("Invalid email address"),
 
-  firstName: z.string().optional().or(z.literal("")),
+  firstName: z.string().nonempty("First name is required"),
   lastName: z.string().optional().or(z.literal("")),
   position: z.string().optional().or(z.literal("")),
   positionDescription: z.string().optional().or(z.literal("")),

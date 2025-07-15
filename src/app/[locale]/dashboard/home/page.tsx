@@ -16,7 +16,7 @@ export default function HomePage() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="grid grid-rows-[auto_1fr]">
+        <div className="h-full">
           <ScenarioPerformanceChart />
         </div>
 
