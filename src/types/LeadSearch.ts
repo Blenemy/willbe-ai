@@ -37,4 +37,6 @@ export interface LeadSearchResponse {
   config: unknown;
   params: unknown;
   lastPageCursor: string;
+  previousPageCursor?: string;
+  pageIndex: number;
 }

@@ -37,5 +37,7 @@ export const useSearchLeads = ({
     searchLeads: searchLeads?.items || [],
     paging: searchLeads?.paging,
     cursor: searchLeads?.cursor || null,
+    previousPageCursor: searchLeads?.previousPageCursor,
+    pageIndex: searchLeads?.pageIndex,
   };
 };

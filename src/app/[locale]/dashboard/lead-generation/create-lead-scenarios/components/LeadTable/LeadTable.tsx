@@ -52,6 +52,8 @@ const LeadTable = ({
     paging,
     cursor: newCursor,
     isFetching,
+    previousPageCursor: newPreviousPageCursor,
+    pageIndex,
   } = useSearchLeads({
     enableFetch: true,
     scenarioId,
@@ -73,17 +75,19 @@ const LeadTable = ({
     );
   };
 
+  const nextPageCursor = newCursor ?? cursors.lastPageCursor ?? null;
+
   const handleNext = () => {
-    if (newCursor) {
-      setCursor(newCursor);
+    if (nextPageCursor) {
+      setCursor(nextPageCursor);
     }
   };
 
   const handlePrev = () => {
-    if (cursors?.previousPageCursor) {
-      setCursor(cursors.previousPageCursor);
-    } else {
+    if (pageIndex === 1 && !newPreviousPageCursor) {
       setCursor(null);
+    } else if (newPreviousPageCursor) {
+      setCursor(newPreviousPageCursor);
     }
   };
 
@@ -240,7 +244,7 @@ const LeadTable = ({
           </Table>
 
           <div className="flex items-center gap-4 mt-6">
-            <Button onClick={handlePrev} disabled={!cursors.previousPageCursor}>
+            <Button onClick={handlePrev} disabled={pageIndex === 0}>
               {t("pagination.previous")}
             </Button>
             <span>
