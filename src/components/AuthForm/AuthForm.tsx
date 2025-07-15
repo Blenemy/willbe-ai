@@ -87,7 +87,7 @@ export function AuthForm({
       });
   }
 
-  const [mode] = useState<"sign-in" | "sign-up">(defaultMode);
+  const [mode, setMode] = useState<"sign-in" | "sign-up">(defaultMode);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
   const { login, register } = useAuth({ enableFetch: false });
 
