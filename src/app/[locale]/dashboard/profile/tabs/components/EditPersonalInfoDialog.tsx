@@ -22,6 +22,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useLocale, useTranslations } from "next-intl";
 import { User } from "@/types/User";
+import { NO_SPACES_REGEX } from "@/constants/passwordRegex";
 
 const EditPersonalInfoDialog = ({
   open,
@@ -40,8 +41,16 @@ const EditPersonalInfoDialog = ({
     firstName: z
       .string()
       .min(1, t("validation_required"))
-      .max(50, t("validation_max")),
-    lastName: z.string().min(1, t("validation_required")),
+      .max(50, t("validation_max"))
+      .regex(NO_SPACES_REGEX, {
+        message: t("validation_password_no_spaces"),
+      }),
+    lastName: z
+      .string()
+      .min(1, t("validation_required"))
+      .regex(NO_SPACES_REGEX, {
+        message: t("validation_password_no_spaces"),
+      }),
   });
 
   const form = useForm({
