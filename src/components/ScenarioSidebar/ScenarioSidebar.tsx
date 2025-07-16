@@ -34,7 +34,7 @@ export function ScenarioSidebarLite({
   sidebarIconsWithLabels = [],
   collapsedWidth = 60,
   minWidthPx = 425,
-  percentageWidth = 30,
+  percentageWidth = 25,
   fieldMap,
   form,
 }: Props) {

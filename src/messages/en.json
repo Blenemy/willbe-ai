@@ -1129,7 +1129,9 @@
       "industry": "Industry",
       "headcount": "Headcount",
       "linkedin": "LinkedIn",
-      "summary": "Summary"
+      "summary": "Summary",
+      "messageSent": "Last Message Sent",
+      "messageReceived": "Last Message Received"
     },
     "pagination": {
       "previous": "Previous",

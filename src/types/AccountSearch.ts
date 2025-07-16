@@ -9,4 +9,11 @@ export interface AccountSearch {
   headcount: number;
   logo: string;
   isSaved: boolean;
+  messageStatus: string;
+  lastSentMessageDate: string;
+  lastSentMessageStatus: string;
+  lastSentScenarioId: string;
+  lastReceivedMessageDate: string;
+  lastReceivedMessageStatus: string;
+  lastReceivedScenarioId: string;
 }

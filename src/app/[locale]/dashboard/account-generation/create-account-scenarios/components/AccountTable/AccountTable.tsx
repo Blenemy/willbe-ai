@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -37,6 +37,7 @@ import { useSelectedCompaniesStore } from "@/store/useSelectedCompaniesStore";
 import { parseHeadcount } from "@/utils/parsedHeadcount";
 import { SkeletonTable } from "../../skeletons/SkeletonTable";
 import { useDebouncedValue } from "@/hooks/useDebounce";
+import { getAccountStatusDot } from "@/utils/getAccountsStatusDot";
 
 const ROWS_PER_PAGE_LIMIT = 30;
 
@@ -50,6 +51,7 @@ interface Props {
 const AccountTable = ({ cursors }: Props) => {
   const searchParams = useSearchParams();
   const accountId = searchParams.get("accountId") || "";
+  const router = useRouter();
   const t = useTranslations("accountTable");
   const [sortKey, setSortKey] = useState<string>("title");
   const [sortAsc, setSortAsc] = useState<boolean>(true);
@@ -61,6 +63,12 @@ const AccountTable = ({ cursors }: Props) => {
     { key: "headcount", label: t("table.headcount"), defaultVisible: true },
     { key: "linkedin", label: t("table.linkedin"), defaultVisible: true },
     { key: "summary", label: t("table.summary"), defaultVisible: true },
+    { key: "messageSent", label: t("table.messageSent"), defaultVisible: true },
+    {
+      key: "messageReceived",
+      label: t("table.messageReceived"),
+      defaultVisible: true,
+    },
   ];
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -138,6 +146,16 @@ const AccountTable = ({ cursors }: Props) => {
 
     await saveSelectedAccounts({ accountScenarioId: accountId, accounts });
     clearSelected();
+  };
+
+  const handleNavigateToAccount = (accountId: string) => {
+    router.push(`/dashboard/account-list/${accountId}`);
+  };
+
+  const openScenarioStats = (scenarioId: string | null | undefined) => {
+    if (scenarioId) {
+      router.push(`/dashboard/create-message-scenario/${scenarioId}`);
+    }
   };
 
   const sortedCompanies = [...companies].sort((a, b) => {
@@ -255,14 +273,26 @@ const AccountTable = ({ cursors }: Props) => {
                     sortAsc,
                     handleSort
                   )}
+
+                {visibleColumns.summary && (
+                  <TableHead className="w-[90px] truncate hidden md:table-cell">
+                    {t("table.summary")}
+                  </TableHead>
+                )}
                 {visibleColumns.linkedin && (
-                  <TableHead className="w-[90px] truncate">
+                  <TableHead className="w-[60px] truncate">
                     {t("table.linkedin")}
                   </TableHead>
                 )}
-                {visibleColumns.summary && (
-                  <TableHead className="w-[320px] truncate hidden md:table-cell">
-                    {t("table.summary")}
+                {visibleColumns.messageSent && (
+                  <TableHead className="w-[60px] max-w-[60px] text-xs break-words !whitespace-normal leading-tight px-1">
+                    {t("table.messageSent")}
+                  </TableHead>
+                )}
+
+                {visibleColumns.messageReceived && (
+                  <TableHead className="w-[60px] max-w-[60px] text-xs break-words !whitespace-normal leading-tight px-1">
+                    {t("table.messageReceived")}
                   </TableHead>
                 )}
               </TableRow>
@@ -271,23 +301,51 @@ const AccountTable = ({ cursors }: Props) => {
               {sortedCompanies.map((company) => (
                 <TableRow key={company.id}>
                   <TableCell className="p-1 w-[36px]">
-                    <Checkbox
-                      checked={!!selectedCompanies[company.id]}
-                      onCheckedChange={() => toggleCompany(company)}
-                      disabled={company.isSaved}
-                    />
+                    <div className="flex items-center h-full">
+                      <Checkbox
+                        checked={!!selectedCompanies[company.id]}
+                        onCheckedChange={() => toggleCompany(company)}
+                        disabled={company.isSaved}
+                      />
+                    </div>
                   </TableCell>
                   {visibleColumns.logo && (
                     <TableCell className="p-1 w-[44px]">
-                      {company.logo && (
-                        <Image
-                          src={company.logo}
-                          alt={company.name}
-                          width={40}
-                          height={40}
-                          className="rounded-full"
-                        />
-                      )}
+                      <div
+                        className="relative cursor-pointer w-10 h-10 flex items-center justify-center"
+                        onClick={() => handleNavigateToAccount(company.id)}
+                      >
+                        {company.logo && (
+                          <Image
+                            src={company.logo}
+                            alt={company.name}
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                          />
+                        )}
+
+                        <TooltipProvider delayDuration={200}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="absolute -left-[10px] -translate-x-1 top-1/2 -translate-y-1/2 w-2 h-2">
+                                <div
+                                  className={`status-dot ${
+                                    getAccountStatusDot(company.messageStatus)
+                                      .color
+                                  }`}
+                                />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="top">
+                              {
+                                getAccountStatusDot(company.messageStatus)
+                                  .tooltip
+                              }
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                     </TableCell>
                   )}
                   {visibleColumns.name && (
@@ -305,8 +363,29 @@ const AccountTable = ({ cursors }: Props) => {
                       {company.headcount}
                     </TableCell>
                   )}
+
+                  {visibleColumns.summary && (
+                    <TableCell className="w-[90px] max-w-[90px] hidden md:table-cell p-1">
+                      <TooltipProvider delayDuration={200}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="cursor-help block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                              {company.summary}
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent
+                            side="top"
+                            className="max-w-sm whitespace-pre-line break-words"
+                          >
+                            {company.summary}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </TableCell>
+                  )}
+
                   {visibleColumns.linkedin && (
-                    <TableCell className="w-[90px] truncate">
+                    <TableCell className="w-[60px] truncate">
                       {company.profile_url && (
                         <a
                           href={company.profile_url}
@@ -324,23 +403,40 @@ const AccountTable = ({ cursors }: Props) => {
                       )}
                     </TableCell>
                   )}
-                  {visibleColumns.summary && (
-                    <TableCell className="w-[320px] truncate hidden md:table-cell">
-                      <TooltipProvider delayDuration={200}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="cursor-help inline-block max-w-full truncate">
-                              {company.summary?.slice(0, 120) + "..."}
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="top"
-                            className="max-w-sm whitespace-pre-line break-words"
-                          >
-                            {company.summary}
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+
+                  {visibleColumns.messageSent && (
+                    <TableCell className="w-[60px] max-w-[60px] px-1 py-2">
+                      {company.lastSentMessageDate ? (
+                        <span
+                          onClick={() =>
+                            openScenarioStats(company.lastSentScenarioId)
+                          }
+                          title={company.lastSentMessageDate}
+                          className="text-blue-600 hover:underline cursor-pointer inline-block max-w-full truncate"
+                        >
+                          {company.lastSentMessageDate}
+                        </span>
+                      ) : (
+                        "-"
+                      )}
+                    </TableCell>
+                  )}
+
+                  {visibleColumns.messageReceived && (
+                    <TableCell className="w-[60px] max-w-[60px] px-1 py-2">
+                      {company.lastReceivedMessageDate ? (
+                        <span
+                          onClick={() =>
+                            openScenarioStats(company.lastReceivedScenarioId)
+                          }
+                          title={company.lastReceivedMessageDate}
+                          className="text-blue-600 hover:underline cursor-pointer inline-block max-w-full truncate"
+                        >
+                          {company.lastReceivedMessageDate}
+                        </span>
+                      ) : (
+                        "-"
+                      )}
                     </TableCell>
                   )}
                 </TableRow>
