@@ -8,6 +8,7 @@ import {
   FormItem,
   FormControl,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,24 +24,31 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
 const schema = z.object({
-  objective: z.string().optional(),
+  objective: z.string().min(1, "Required"),
+
   subject: z.string().optional(),
-  greeting: z.string().optional(),
+  greeting: z.string().min(1, "Required"),
+
   introduction: z.object({
-    text: z.string().optional(),
-    wordsLimit: z.string().optional(),
+    text: z.string().min(1, "Required"),
+    wordsLimit: z.string().min(1, "Required"),
   }),
-  body: z.array(
-    z.object({
-      text: z.string().optional(),
-      wordsLimit: z.string().optional(),
-    })
-  ),
+
+  body: z
+    .array(
+      z.object({
+        text: z.string().min(1, "Required"),
+        wordsLimit: z.string().min(1, "Required"),
+      })
+    )
+    .min(1, "At least one paragraph is required"),
+
   goodbye: z.object({
-    text: z.string().optional(),
-    wordsLimit: z.string().optional(),
+    text: z.string().min(1, "Required"),
+    wordsLimit: z.string().min(1, "Required"),
   }),
-  sample: z.string().optional(),
+
+  sample: z.string().min(1, "Required"),
 });
 
 type LanguageFormValues = z.infer<typeof schema>;
@@ -185,7 +193,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
 
   return (
     <Form {...form}>
-      <form className="space-y-4 mt-4">
+      <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSave)}>
         <FormField
           name="objective"
           control={form.control}
@@ -195,6 +203,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Input placeholder={t("objective")} {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -226,6 +235,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Input placeholder={t("greeting")} {...field} />
               </FormControl>
+              <FormMessage />
               <Button
                 type="button"
                 size="sm"
@@ -247,6 +257,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Textarea placeholder={t("text")} {...field} />
               </FormControl>
+              <FormMessage />
               <Button
                 type="button"
                 size="sm"
@@ -267,6 +278,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -287,6 +299,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
                       {...field}
                     />
                   </FormControl>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -303,6 +317,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
                       {...field}
                     />
                   </FormControl>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -347,6 +363,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Textarea placeholder={t("text")} {...field} />
               </FormControl>
+
+              <FormMessage />
               <Button
                 type="button"
                 size="sm"
@@ -367,6 +385,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
+
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -380,6 +400,8 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               <FormControl>
                 <Textarea placeholder={t("sample_placeholder")} {...field} />
               </FormControl>
+
+              <FormMessage />
               <Button
                 type="button"
                 size="sm"
@@ -396,9 +418,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           <Button type="button" variant="destructive" onClick={handleErase}>
             {t("erase")}
           </Button>
-          <Button type="button" onClick={handleSave}>
-            {t("save")}
-          </Button>
+          <Button type="submit">{t("save")}</Button>
         </div>
       </form>
     </Form>

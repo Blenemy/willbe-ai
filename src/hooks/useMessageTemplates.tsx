@@ -73,7 +73,6 @@ export const useMessageTemplates = () => {
         queryKey: ["message-structures"],
       });
     },
-    onError: () => toast.error("Failed to create template"),
   });
 
   const updateTemplateMutation = useMutation({
