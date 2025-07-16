@@ -1122,6 +1122,7 @@
     "view": "View",
     "itemsPerPage": "Items per page",
     "searchPlaceholder": "Search by name...",
+    "no_results": "No results were found",
     "table": {
       "selectAll": "Select all",
       "logo": "Logo",

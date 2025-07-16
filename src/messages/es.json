@@ -1124,6 +1124,7 @@
     "itemsPerPage": "Elementos por página",
     "view": "Vista",
     "searchPlaceholder": "Buscar por nombre...",
+    "no_results": "No se encontraron resultados",
     "table": {
       "selectAll": "Seleccionar todo",
       "logo": "Logo",
