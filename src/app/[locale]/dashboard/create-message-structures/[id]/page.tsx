@@ -51,6 +51,7 @@ export default function MessageStructureEditor() {
     handleLanguageChange,
     fetchedStructure,
     updateMessageStructure,
+    createdLanguages,
   } = useMessageStructureForm(id as string);
 
   const emailType = form.watch("emailType");
@@ -66,6 +67,16 @@ export default function MessageStructureEditor() {
       createStructure();
     }
   };
+
+  const createdLanguageCodes = (createdLanguages || []).map(
+    (label) => LANGUAGES.find((lang) => lang.label === label)?.code || label
+  );
+
+  const backendLanguageCodes = (fetchedStructure?.languages || [])
+    .map(
+      (label: string) => LANGUAGES.find((lang) => lang.label === label)?.code
+    )
+    .filter((code: string): code is string => !!code);
 
   return (
     <div className="p-6 flex flex-col gap-6 w-full">
@@ -169,42 +180,51 @@ export default function MessageStructureEditor() {
         {id ? t("update_button") : t("create_structure_button")}
       </Button>
 
-      <Tabs defaultValue={currentLang} onValueChange={handleLanguageChange}>
-        <TabsList className="w-full justify-start overflow-x-auto">
+      {fetchedStructure && (
+        <Tabs
+          value={currentLang}
+          onValueChange={(val) => handleLanguageChange(val)}
+        >
+          <TabsList className="w-full justify-start overflow-x-auto">
+            {LANGUAGES.map((lang) => {
+              const isSavedOnBackend = backendLanguageCodes.includes(lang.code);
+              return (
+                <TabsTrigger
+                  key={lang.code}
+                  value={lang.code}
+                  className="relative pr-6"
+                >
+                  {lang.label}
+                  {isSavedOnBackend && (
+                    <Check className="w-4 h-4 text-green-600 absolute right-1 top-1/2 -translate-y-1/2" />
+                  )}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+
           {LANGUAGES.map((lang) => {
-            const isCreated = fetchedStructure?.languages.includes(lang.label);
+            const isCreated = createdLanguageCodes.includes(lang.code);
             return (
-              <TabsTrigger
-                key={lang.code}
-                value={lang.code}
-                className="relative pr-6"
-              >
-                {lang.label}
-                {isCreated && (
-                  <Check className="w-4 h-4 text-green-600 absolute right-1 top-1/2 -translate-y-1/2" />
+              <TabsContent key={lang.code} value={lang.code} className="mt-4">
+                {isCreated ? (
+                  <LanguageForm
+                    languageCode={lang.code}
+                    subjectType={subjectType}
+                  />
+                ) : (
+                  <LanguageTranslateUI
+                    currentLang={lang.code}
+                    availableLangs={fetchedStructure?.languages || []}
+                    structureId={fetchedStructure?.id}
+                    handleLanguageChange={handleLanguageChange}
+                  />
                 )}
-              </TabsTrigger>
+              </TabsContent>
             );
           })}
-        </TabsList>
-
-        {LANGUAGES.map((lang) => (
-          <TabsContent key={lang.code} value={lang.code} className="mt-4">
-            {fetchedStructure?.languages.includes(lang.label) ? (
-              <LanguageForm
-                languageCode={lang.code}
-                subjectType={subjectType}
-              />
-            ) : (
-              <LanguageTranslateUI
-                currentLang={lang.code}
-                availableLangs={fetchedStructure?.languages || []}
-                structureId={fetchedStructure?.id}
-              />
-            )}
-          </TabsContent>
-        ))}
-      </Tabs>
+        </Tabs>
+      )}
     </div>
   );
 }
