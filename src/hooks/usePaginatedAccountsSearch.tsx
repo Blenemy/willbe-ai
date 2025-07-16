@@ -80,6 +80,9 @@ export const usePaginatedAccountsSearch = ({
       queryClient.invalidateQueries({
         queryKey: ["accounts-saved"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["account-search"],
+      });
       toast.success("Selected companies saved successfully");
     },
     onError: (error: AxiosError) => {

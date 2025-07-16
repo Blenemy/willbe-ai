@@ -176,6 +176,10 @@ const CreateAccountScenarios = () => {
     if (to) form.trigger(to as keyof AccountScenariosType);
   };
 
+  const hasSavedData =
+    !!accountScenarioById?.filterValues &&
+    Object.keys(accountScenarioById.filterValues).length > 0;
+
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
@@ -675,12 +679,17 @@ const CreateAccountScenarios = () => {
                 </FormAccordion>
 
                 <div className="flex gap-4 items-center justify-center flex-col">
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={hasAnnualRevenueError}
+                  >
                     {t("buttons.save")}
                   </Button>
                   <Button
                     type="button"
                     className="w-full"
+                    disabled={!hasSavedData}
                     onClick={() => {
                       queryClient.invalidateQueries({
                         queryKey: ["account-search"],
