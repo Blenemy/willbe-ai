@@ -180,8 +180,6 @@ const CreateAccountScenarios = () => {
     !!accountScenarioById?.filterValues &&
     Object.keys(accountScenarioById.filterValues).length > 0;
 
-  console.log(hasSavedData);
-
   return (
     <div className="w-full px-6 py-10 flex flex-col">
       <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
