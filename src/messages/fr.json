@@ -1167,6 +1167,7 @@
     "title": "Scénarios de prospects",
     "addButton": "Ajouter un nouveau scénario",
     "tableCaption": "Une liste de scénarios de prospects",
+    "searchPlaceholder": "Rechercher par nom de scénario",
     "table": {
       "name": "Nom du scénario",
       "status": "Statut du scénario",

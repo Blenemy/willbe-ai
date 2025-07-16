@@ -175,7 +175,6 @@ const AccountListPage = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-semibold">{t("title")}</h2>
         <Button
-          className="bg-[#084960]"
           onClick={() => router.push("/dashboard/account-list/new-account")}
         >
           <Plus className="mr-2 h-4 w-4" />

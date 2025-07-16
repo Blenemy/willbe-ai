@@ -26,6 +26,8 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { format } from "date-fns";
+import { renderHeader } from "@/components/ui/renderHeader";
+import { Input } from "@/components/ui/input";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -33,6 +35,9 @@ const LeadScenariosPage = () => {
   const t = useTranslations("leadScenarios");
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [sortKey, setSortKey] = useState<string>("name");
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const router = useRouter();
   const { leadScenariousTableData = [], deleteLeadScenarious } =
     useLeadScenarios({ enableFetch: true });
@@ -42,7 +47,43 @@ const LeadScenariosPage = () => {
   const [selectedScenario, setSelectedScenario] =
     useState<LeadScenarios | null>(null);
 
-  const currentItems = leadScenariousTableData.slice(
+  const handleSort = (key: string) => {
+    if (sortKey === key) setSortAsc((prev) => !prev);
+    else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
+
+  const filteredItems = leadScenariousTableData.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sortedItems = [...filteredItems].sort((a, b) => {
+    const getValue = (item: LeadScenarios) => {
+      switch (sortKey) {
+        case "name":
+          return item.name || "";
+        case "status":
+          return item.status || "";
+        case "createdBy":
+          return item.user.firstName + " " + item.user.lastName;
+        case "createdAt":
+          return item.createdAt || "";
+        default:
+          return "";
+      }
+    };
+
+    const aVal = getValue(a);
+    const bVal = getValue(b);
+
+    return sortAsc
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
+  });
+
+  const currentItems = sortedItems.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -79,7 +120,7 @@ const LeadScenariosPage = () => {
   };
 
   return (
-    <div className="w-full px-6 py-10 flex flex-col">
+    <div className="w-full px-6 py-10 flex flex-col gap-5">
       <div className="flex justify-between items-center">
         <h2 className="mb-5 font-semibold text-2xl">{t("title")}</h2>
         <div className="flex justify-end mb-4">
@@ -87,14 +128,49 @@ const LeadScenariosPage = () => {
         </div>
       </div>
 
+      <div className="flex justify-between gap-4">
+        <Input
+          placeholder={t("searchPlaceholder")}
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
       <Table>
         <TableCaption>{t("tableCaption")}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead>{t("table.name")}</TableHead>
-            <TableHead>{t("table.status")}</TableHead>
-            <TableHead>{t("table.createdBy")}</TableHead>
-            <TableHead>{t("table.createdDate")}</TableHead>
+            {renderHeader(
+              t("table.name"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.status"),
+              "status",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.createdBy"),
+              "createdBy",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table.createdDate"),
+              "createdAt",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead className="text-right">{t("table.actions")}</TableHead>
           </TableRow>
         </TableHeader>

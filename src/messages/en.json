@@ -1166,6 +1166,7 @@
     "title": "Lead Scenarios",
     "addButton": "Add New Scenario",
     "tableCaption": "A list of lead scenarios",
+    "searchPlaceholder": "Search by scenario name",
     "table": {
       "name": "Scenario Name",
       "status": "Scenario Status",
