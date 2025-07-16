@@ -14,12 +14,14 @@ interface Props {
   currentLang: string;
   availableLangs: string[];
   structureId: string;
+  handleLanguageChange: (lang: string, _: boolean) => void;
 }
 
 export const LanguageTranslateUI = ({
   currentLang,
   availableLangs,
   structureId,
+  handleLanguageChange,
 }: Props) => {
   const t = useTranslations("MessageStructures");
   const [fromLang, setFromLang] = useState<string>();
@@ -40,16 +42,8 @@ export const LanguageTranslateUI = ({
     }
   };
 
-  const handleCreateFromScratch = async () => {
-    setIsLoading(true);
-    try {
-      await createTemplate({
-        language: currentLang,
-        structureId,
-      });
-    } finally {
-      setIsLoading(false);
-    }
+  const handleCreateFromScratch = () => {
+    handleLanguageChange(currentLang, true);
   };
 
   return (

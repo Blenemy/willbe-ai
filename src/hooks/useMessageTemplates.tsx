@@ -8,6 +8,24 @@ import { LANGUAGES } from "@/constants/languagesMessageStructure";
 interface CreateTemplateInput {
   language: string;
   structureId: string;
+  payload?: {
+    objective?: string;
+    subject?: string;
+    greeting?: string;
+    introduction: {
+      text?: string;
+      wordsLimit?: number;
+    };
+    paragraphs: {
+      text?: string;
+      wordsLimit?: number;
+    }[];
+    goodbye: {
+      text?: string;
+      wordsLimit?: number;
+    };
+    sampleMessage?: string;
+  };
   from?: string;
 }
 
@@ -24,19 +42,24 @@ export const useMessageTemplates = () => {
     mutationFn: async ({
       language,
       structureId,
+      payload,
       from,
     }: CreateTemplateInput) => {
-      const payload: any = { messageStructureId: structureId, language };
+      const fullPayload: any = {
+        messageStructureId: structureId,
+        language,
+        ...payload,
+      };
 
       if (from) {
-        payload.translateFromLanguage = LANGUAGES.find(
+        fullPayload.translateFromLanguage = LANGUAGES.find(
           (lang) => lang.label === from
         )?.code;
       }
 
       const res = await protectedAxiosInstance.post(
         "/auth/message-templates",
-        payload
+        fullPayload
       );
       return res.data;
     },

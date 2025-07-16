@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -68,6 +68,7 @@ export const useMessageStructureForm = (editingId?: string) => {
     name: "body",
   });
   const [currentLang, setCurrentLang] = useState(LANGUAGES[0]);
+
   const formsByLang = useRef<Record<string, MessageStructureFormSchema>>({});
 
   const { data: fetchedStructure } = useQuery({
@@ -80,6 +81,16 @@ export const useMessageStructureForm = (editingId?: string) => {
     },
     enabled: !!editingId,
   });
+
+  const [createdLanguages, setCreatedLanguages] = useState<string[]>(
+    fetchedStructure?.languages || []
+  );
+
+  useEffect(() => {
+    if (fetchedStructure?.languages) {
+      setCreatedLanguages(fetchedStructure.languages);
+    }
+  }, [fetchedStructure]);
 
   useEffect(() => {
     if (fetchedStructure && editingId) {
@@ -160,12 +171,20 @@ export const useMessageStructureForm = (editingId?: string) => {
     },
   });
 
-  const handleLanguageChange = (lang: string) => {
-    const current = form.getValues();
-    formsByLang.current[currentLang] = current;
-    setCurrentLang(lang);
-    form.reset({ ...form.getValues(), ...(formsByLang.current[lang] || {}) });
-  };
+  const handleLanguageChange = useCallback(
+    (lang: string, forceCreate = false) => {
+      const current = form.getValues();
+      formsByLang.current[currentLang] = current;
+
+      if (forceCreate && !createdLanguages.includes(lang)) {
+        setCreatedLanguages((prev) => [...prev, lang]);
+      }
+
+      setCurrentLang(lang);
+      form.reset({ ...form.getValues(), ...(formsByLang.current[lang] || {}) });
+    },
+    [currentLang, createdLanguages, form]
+  );
 
   return {
     form,
@@ -178,5 +197,6 @@ export const useMessageStructureForm = (editingId?: string) => {
     currentLang,
     isCreating: createMutation.isPending,
     updateMessageStructure: updateMessageStructure.mutate,
+    createdLanguages,
   };
 };
