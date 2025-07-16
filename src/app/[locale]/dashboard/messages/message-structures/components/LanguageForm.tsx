@@ -199,7 +199,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("objective")}</FormLabel>
+              <FormLabel className="text-foreground">
+                {t("objective")}
+              </FormLabel>
               <FormControl>
                 <Input placeholder={t("objective")} {...field} />
               </FormControl>
@@ -214,7 +216,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("subject")}</FormLabel>
+                <FormLabel className="text-foreground">
+                  {t("subject")}
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder={t("subject_text_placeholder")}
@@ -231,7 +235,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("greeting")}</FormLabel>
+              <FormLabel className="text-foreground">{t("greeting")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("greeting")} {...field} />
               </FormControl>
@@ -253,7 +257,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("introduction")}</FormLabel>
+              <FormLabel className="text-foreground">
+                {t("introduction")}
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder={t("text")} {...field} />
               </FormControl>
@@ -274,7 +280,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("words_limit")}</FormLabel>
+              <FormLabel className="text-foreground">
+                {t("words_limit")}
+              </FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -292,7 +300,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("paragraph", { index: index + 1 })}</FormLabel>
+                  <FormLabel className="text-foreground">
+                    {t("paragraph", { index: index + 1 })}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder={t("paragraph_text_placeholder")}
@@ -309,7 +319,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("words_limit")}</FormLabel>
+                  <FormLabel className="text-foreground">
+                    {t("words_limit")}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -359,7 +371,7 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("goodbye")}</FormLabel>
+              <FormLabel className="text-foreground">{t("goodbye")}</FormLabel>
               <FormControl>
                 <Textarea placeholder={t("text")} {...field} />
               </FormControl>
@@ -381,7 +393,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("words_limit")}</FormLabel>
+              <FormLabel className="text-foreground">
+                {t("words_limit")}
+              </FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -396,7 +410,9 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("sample_email")}</FormLabel>
+              <FormLabel className="text-foreground">
+                {t("sample_email")}
+              </FormLabel>
               <FormControl>
                 <Textarea placeholder={t("sample_placeholder")} {...field} />
               </FormControl>
