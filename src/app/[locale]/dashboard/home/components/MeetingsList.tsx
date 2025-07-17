@@ -78,7 +78,8 @@ export default function MeetingsList() {
             <TableRow>
               <TableHead>Lead name</TableHead>
               <TableHead>Position</TableHead>
-              <TableHead className="text-right">Account name</TableHead>
+              <TableHead>Account name</TableHead>
+              <TableHead />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -111,7 +112,7 @@ export default function MeetingsList() {
             <TableRow>
               <TableHead>Lead name</TableHead>
               <TableHead>Position</TableHead>
-              <TableHead className="text-right">Account name</TableHead>
+              <TableHead>Account name</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -134,13 +135,19 @@ export default function MeetingsList() {
                 <TableCell className="truncate text-sm text-muted-foreground">
                   {m.position}
                 </TableCell>
-                <TableCell className="text-right text-sm font-medium truncate">
-                  <div className="flex justify-end items-center gap-1">
-                    <span>{m.accountUrl}</span>
+                <TableCell className="text-sm font-medium truncate">
+                  {m.accountUrl}
+                </TableCell>
+                <TableCell className="text-right">
+                  <a
+                    href={m.accountUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Button size="icon" variant="ghost" className="h-5 w-5 p-0">
                       <ExternalLink className="h-4 w-4" />
                     </Button>
-                  </div>
+                  </a>
                 </TableCell>
               </TableRow>
             ))}
