@@ -1166,6 +1166,7 @@
     "title": "Escenarios de clientes potenciales",
     "addButton": "Agregar nuevo escenario",
     "tableCaption": "Una lista de escenarios de clientes potenciales",
+    "searchPlaceholder": "Buscar por nombre de escenario",
     "table": {
       "name": "Nombre del escenario",
       "status": "Estado del escenario",

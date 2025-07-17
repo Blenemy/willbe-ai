@@ -236,11 +236,16 @@ const AccountTable = ({ cursors }: Props) => {
                   <Checkbox
                     checked={
                       sortedCompanies.length > 0 &&
-                      sortedCompanies.every((c) => c.id in selectedCompanies)
+                      sortedCompanies
+                        .filter((c) => !c.isSaved)
+                        .every((c) => c.id in selectedCompanies)
                     }
                     onCheckedChange={(checked) => {
-                      if (checked) addCompanies(sortedCompanies);
-                      else removeCompanies(sortedCompanies);
+                      const selectableCompanies = sortedCompanies.filter(
+                        (c) => !c.isSaved
+                      );
+                      if (checked) addCompanies(selectableCompanies);
+                      else removeCompanies(selectableCompanies);
                     }}
                   />
                 </TableHead>
