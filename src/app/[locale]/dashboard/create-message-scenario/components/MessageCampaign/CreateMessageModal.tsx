@@ -122,17 +122,18 @@ export const CreateMessageModal = ({
         return;
       }
 
-      combined = `${date}T${time}:00`;
-
-      const now = new Date();
       const [year, month, day] = date.split("-").map(Number);
       const [hours, minutes] = time.split(":").map(Number);
-      const selected = new Date(year, month - 1, day, hours, minutes);
 
-      if (selected < now) {
+      const localDate = new Date(year, month - 1, day, hours, minutes);
+
+      const now = new Date();
+      if (localDate < now) {
         toast.error(t("validation.dateInPast"));
         return;
       }
+
+      combined = localDate.toISOString();
     }
 
     const { valid, reason } = store.canCreateEntry(
