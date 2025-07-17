@@ -1517,7 +1517,7 @@
     "structureForm": {
       "label": "Estructura del mensaje",
       "placeholder": "Elija una estructura de mensaje",
-      "button": "Enviar mensajes",
+      "button": "Guardar mensajes",
       "success": "La estructura del mensaje fue actualizada",
       "error": "No se pudo actualizar la estructura del mensaje"
     }

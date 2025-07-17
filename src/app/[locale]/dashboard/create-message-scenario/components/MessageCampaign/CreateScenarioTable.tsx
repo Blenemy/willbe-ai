@@ -514,7 +514,12 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
       <div className="flex items-center justify-between pt-4">
         <div className="text-sm flex gap-2 items-center">
           <span className="min-w-28">{t("dropdown.rowsPerPage")}</span>
-          <Select onValueChange={(val) => setRowsPerPage(Number(val))}>
+          <Select
+            onValueChange={(val) => {
+              setRowsPerPage(Number(val));
+              setCurrentPage(0);
+            }}
+          >
             <SelectTrigger className="w-16">
               <SelectValue placeholder={String(rowsPerPage)} />
             </SelectTrigger>

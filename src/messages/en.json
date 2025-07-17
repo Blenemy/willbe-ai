@@ -1517,7 +1517,7 @@
     "structureForm": {
       "label": "Message structure",
       "placeholder": "Choose message structure",
-      "button": "Send messages",
+      "button": "Save messages",
       "success": "Message structure was updated",
       "error": "Failed to update message structure"
     }

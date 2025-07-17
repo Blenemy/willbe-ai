@@ -148,7 +148,8 @@ const AccountTable = ({ cursors }: Props) => {
     clearSelected();
   };
 
-  const handleNavigateToAccount = (accountId: string) => {
+  const handleNavigateToAccount = (accountId: string, status: string) => {
+    if (status === "not_contacted") return;
     router.push(`/dashboard/account-list/${accountId}`);
   };
 
@@ -318,7 +319,12 @@ const AccountTable = ({ cursors }: Props) => {
                     <TableCell className="p-1 w-[44px]">
                       <div
                         className="relative cursor-pointer w-10 h-10 flex items-center justify-center"
-                        onClick={() => handleNavigateToAccount(company.id)}
+                        onClick={() =>
+                          handleNavigateToAccount(
+                            company.id,
+                            company.lastSentMessageStatus
+                          )
+                        }
                       >
                         {company.logo && (
                           <Image
