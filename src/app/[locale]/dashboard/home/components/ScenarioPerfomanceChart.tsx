@@ -28,6 +28,37 @@ const categories = [
   { key: "bounced", label: "Bounced" },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CustomTooltip = ({ active, payload }: any) => {
+  if (!active || !payload || !payload.length) return null;
+
+  const data = payload[0].payload;
+
+  const isMeetings = data.name === "Meetings";
+  const isResponses = data.name === "Responses";
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg shadow-md p-3 text-sm space-y-1">
+      <div className="font-medium text-muted-foreground">{data.name}</div>
+
+      {!isMeetings && !isResponses && <div>Total: {data.value}</div>}
+
+      {isMeetings && (
+        <>
+          <div>Email: {data.meetingsEmail}</div>
+          <div>LinkedIn: {data.meetingsLinkedin}</div>
+        </>
+      )}
+      {isResponses && (
+        <>
+          <div>Email: {data.responsesEmail}</div>
+          <div>LinkedIn: {data.responsesLinkedin}</div>
+        </>
+      )}
+    </div>
+  );
+};
+
 export default function ScenarioPerformanceChart() {
   const { daysInterval, toggleInterval, subtitleText } =
     useToggleDaysInterval();
@@ -43,6 +74,10 @@ export default function ScenarioPerformanceChart() {
       name: label,
       value: actual,
       visualValue: actual === 0 ? 0.2 : actual,
+      meetingsEmail: performance?.meetingsEmail ?? 0,
+      meetingsLinkedin: performance?.meetingsLinkedin ?? 0,
+      responsesEmail: performance?.responsesEmail ?? 0,
+      responsesLinkedin: performance?.responsesLinkedin ?? 0,
     };
   });
 
@@ -101,19 +136,8 @@ export default function ScenarioPerformanceChart() {
                 />
                 <YAxis domain={[0, 50]} hide />
                 <Tooltip
+                  content={<CustomTooltip />}
                   cursor={{ fill: "transparent" }}
-                  formatter={(_, __, props) => {
-                    const originalValue = props?.payload?.value ?? 0;
-                    return [originalValue, "value"];
-                  }}
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--popover))",
-                    border: "1px solid hsl(var(--border))",
-                    fontSize: "0.875rem",
-                    borderRadius: "0.5rem",
-                    padding: "0.5rem",
-                  }}
-                  labelStyle={{ color: "hsl(var(--muted-foreground))" }}
                 />
                 <Bar
                   dataKey="visualValue"
