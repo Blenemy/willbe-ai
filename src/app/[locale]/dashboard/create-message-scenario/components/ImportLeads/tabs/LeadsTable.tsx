@@ -23,6 +23,10 @@ import { useMemo, useState } from "react";
 import { Lead } from "@/hooks/useEditScenarioData";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  deselectCurrentPage,
+  selectCurrentPage,
+} from "./utils/selectionHelpers";
 
 interface Props {
   data: Lead[];
@@ -129,9 +133,11 @@ export const LeadsTable = ({
 
   const handleToggleSelectAll = () => {
     if (isAllSelectedOnPage) {
-      setSelected([]);
+      // @ts-expect-error correct types
+      deselectCurrentPage(currentPageIds, setSelected);
     } else {
-      setSelected(paginated.map((scenario) => scenario.id));
+      // @ts-expect-error correct types
+      selectCurrentPage(currentPageIds, setSelected);
     }
   };
 
