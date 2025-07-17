@@ -89,6 +89,10 @@ interface ScenarioPerformance {
   responses: number;
   outOfOffice: number;
   bounced: number;
+  meetingsEmail: number;
+  meetingsLinkedin: number;
+  responsesEmail: number;
+  responsesLinkedin: number;
 }
 
 interface UseScenarioPerformanceProps {
