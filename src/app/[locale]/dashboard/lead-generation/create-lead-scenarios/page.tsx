@@ -179,14 +179,12 @@ const CreateLeadScenarios = () => {
   const watchedValues = form.watch();
 
   const isFormEmpty = useMemo(() => {
-    const isEmpty = (val: unknown): boolean => {
+    return Object.values(watchedValues).every((val) => {
       if (typeof val === "string") return val.trim() === "";
       if (Array.isArray(val)) return val.length === 0;
-      if (typeof val === "boolean") return val === false;
-      return false;
-    };
-
-    return Object.values(watchedValues).every(isEmpty);
+      if (typeof val === "boolean") return !val;
+      return val === undefined || val === null;
+    });
   }, [watchedValues]);
 
   async function onSubmit(values: z.infer<typeof leadScenariosFiltersSchema>) {
