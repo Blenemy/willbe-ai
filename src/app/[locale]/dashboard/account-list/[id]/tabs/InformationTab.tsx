@@ -96,7 +96,7 @@ export const InformationTab = ({ form, onSubmit, logo }: Props) => {
                   type="number"
                   {...field}
                   value={field.value ?? ""}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  onChange={(e) => field.onChange(e.target.value)}
                 />
               </FormControl>
               <FormMessage />

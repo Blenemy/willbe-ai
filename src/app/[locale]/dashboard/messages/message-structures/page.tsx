@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
+import { renderHeader } from "@/components/ui/renderHeader";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -40,6 +41,10 @@ const MessageStructures = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(ITEMS_PER_PAGE);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<"name" | "createdBy" | "createdAt">(
+    "name"
+  );
+  const [sortAsc, setSortAsc] = useState(true);
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
   );
@@ -53,10 +58,45 @@ const MessageStructures = () => {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const currentItems = filteredData.slice(
+  const sortedData = [...filteredData].sort((a, b) => {
+    const getValue = (item: (typeof structures)[number]) => {
+      switch (sortKey) {
+        case "name":
+          return item.name || "";
+        case "createdBy":
+          return `${item.user.firstName} ${item.user.lastName}`;
+        case "createdAt":
+          return new Date(item.createdAt).getTime();
+        default:
+          return "";
+      }
+    };
+
+    const aVal = getValue(a);
+    const bVal = getValue(b);
+
+    if (typeof aVal === "number" && typeof bVal === "number") {
+      return sortAsc ? aVal - bVal : bVal - aVal;
+    }
+
+    return sortAsc
+      ? String(aVal).localeCompare(String(bVal))
+      : String(bVal).localeCompare(String(aVal));
+  });
+
+  const currentItems = sortedData.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
+
+  const handleSort = (key: typeof sortKey) => {
+    if (key === sortKey) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortKey(key);
+      setSortAsc(true);
+    }
+  };
 
   const handleDeleteClick = (id: string) => {
     setSelectedStructureId(id);
@@ -106,10 +146,28 @@ const MessageStructures = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t("table_title")}</TableHead>
+            {renderHeader(
+              t("table_title"),
+              "name",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead>{t("table_languages")}</TableHead>
-            <TableHead>{t("table_created_by")}</TableHead>
-            <TableHead>{t("table_created_date")}</TableHead>
+            {renderHeader(
+              t("table_created_by"),
+              "createdBy",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
+            {renderHeader(
+              t("table_created_date"),
+              "createdAt",
+              sortKey,
+              sortAsc,
+              handleSort
+            )}
             <TableHead className="text-right">{t("table_actions")}</TableHead>
           </TableRow>
         </TableHeader>
@@ -117,23 +175,23 @@ const MessageStructures = () => {
           {currentItems.map((structure) => (
             <TableRow key={structure.id}>
               <TableCell
-                className="max-w-[200px] truncate whitespace-nowrap overflow-hidden"
+                className="w-[220px] truncate whitespace-nowrap overflow-hidden"
                 title={structure.name}
               >
                 {structure.name}
               </TableCell>
-              <TableCell className="flex gap-1">
+              <TableCell className="w-[280px] flex gap-1">
                 {structure.languages.map((lang) => (
                   <Badge key={lang}>{lang}</Badge>
                 ))}
               </TableCell>
-              <TableCell>
+              <TableCell className="w-[180px]">
                 {structure.user.firstName} {structure.user.lastName}
               </TableCell>
-              <TableCell>
+              <TableCell className="w-[180px]">
                 {new Date(structure.createdAt).toLocaleString()}
               </TableCell>
-              <TableCell className="flex justify-end gap-2">
+              <TableCell className=" flex justify-end gap-2">
                 <Button
                   size="icon"
                   variant="ghost"

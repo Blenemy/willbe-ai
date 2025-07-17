@@ -47,6 +47,9 @@ export interface ScenarioMessage {
     messageId: string;
     messageScenarioId: string;
     sentEmailMessageId: string;
+    createdAt: string;
+    message: string;
+    updatedAt: string;
   }[];
   createdAt: string;
   updatedAt: string;

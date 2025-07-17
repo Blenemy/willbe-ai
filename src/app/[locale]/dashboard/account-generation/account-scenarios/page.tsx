@@ -74,11 +74,6 @@ const AccountScenariosPage = () => {
     );
   });
 
-  const currentItems = filteredItems.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
-
   const handleSort = (key: string) => {
     if (sortKey === key) setSortAsc((prev) => !prev);
     else {
@@ -87,7 +82,7 @@ const AccountScenariosPage = () => {
     }
   };
 
-  const sortedAccounts = [...currentItems].sort((a, b) => {
+  const sortedItems = [...filteredItems].sort((a, b) => {
     const getValue = (item: AccountScenario) => {
       switch (sortKey) {
         case "name":
@@ -110,6 +105,11 @@ const AccountScenariosPage = () => {
       ? String(aVal).localeCompare(String(bVal))
       : String(bVal).localeCompare(String(aVal));
   });
+
+  const currentItems = sortedItems.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   const handleDeleteClick = (scenario: AccountScenario) => {
     setSelectedScenario(scenario);
@@ -206,7 +206,7 @@ const AccountScenariosPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedAccounts.map((scenario) => (
+          {currentItems.map((scenario) => (
             <TableRow key={scenario.id}>
               <TableCell>{scenario.name}</TableCell>
               <TableCell>

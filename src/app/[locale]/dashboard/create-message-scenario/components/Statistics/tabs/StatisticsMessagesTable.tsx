@@ -254,9 +254,15 @@ export const StatisticsMessagesTable = () => {
                                 key={msg.id}
                                 className="grid grid-cols-3 border-t border-border py-2 text-muted-foreground gap-4"
                               >
-                                <div>LinkedIn Connection Sent without text</div>
-                                <div>LinkedIn Connection</div>
-                                <div>—</div>
+                                <div className="whitespace-pre-wrap">
+                                  <SafeHtmlRenderer html={msg.message || "—"} />
+                                </div>
+                                <div>Email</div>{" "}
+                                <div>
+                                  {msg.createdAt
+                                    ? new Date(msg.createdAt).toLocaleString()
+                                    : "—"}
+                                </div>
                               </div>
                             ))
                           ) : (
@@ -272,7 +278,7 @@ export const StatisticsMessagesTable = () => {
                           </div>
 
                           <div className="grid grid-cols-3 mb-2 gap-4">
-                            <div>{t("columns.messageReceived")}</div>
+                            <div>{t("sentTitle")}</div>
                             <div>{t("columns.messageType")}</div>
                             <div>{t("columns.date")}</div>
                           </div>

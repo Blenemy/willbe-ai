@@ -23,7 +23,10 @@ const formSchema = z.object({
   description: z.string().optional(),
   foundedIn: z.string().optional(),
   headquarters: z.string().optional(),
-  employees: z.number(),
+  employees: z.preprocess(
+    (val) => (val === "" ? null : Number(val)),
+    z.number().nullable().optional()
+  ),
   industry: z.string().optional(),
   linkedin: z.string().optional(),
 });
@@ -45,18 +48,22 @@ export default function AccountPage() {
       description: "",
       foundedIn: "",
       headquarters: "",
-      employees: undefined,
+      employees: 0,
       industry: "",
       website: "",
       linkedin: "",
     },
   });
-
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    const payload = {
+      ...data,
+      employees: data.employees ?? null,
+    };
+
     if (isNew) {
-      createAccount(data);
+      createAccount(payload);
     } else {
-      updateAccount(data);
+      updateAccount(payload);
     }
   };
 
@@ -67,7 +74,7 @@ export default function AccountPage() {
         description: account.description || "",
         foundedIn: account.foundedIn || "",
         headquarters: account.headquarters || "",
-        employees: account.employees || undefined,
+        employees: account.employees || 0,
         industry: account.industry || "",
         website: account.website || "",
         linkedin: account.linkedin || "",
