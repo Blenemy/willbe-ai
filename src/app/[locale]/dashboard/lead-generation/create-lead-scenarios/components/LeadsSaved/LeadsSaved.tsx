@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSavedLeads } from "@/hooks/useSavedLeads";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -27,6 +27,7 @@ const LeadsSaved = () => {
     enableFetch: true,
     scenarioId,
   });
+  const router = useRouter();
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -51,9 +52,22 @@ const LeadsSaved = () => {
     deleteLead(id);
   };
 
-  const handleOpenProfile = (url: string) => {
-    if (url) {
-      window.open(url, "_blank");
+  const handleOpenProfile = (id: string) => {
+    if (id) {
+      router.push(`/dashboard/lead-page/${id}`);
+    }
+  };
+
+  const allIds = savedLeads?.map((lead) => lead.id) ?? [];
+
+  const isAllSelected =
+    allIds.length > 0 && allIds.every((id) => selectedIds.includes(id));
+
+  const toggleAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(allIds);
     }
   };
 
@@ -64,7 +78,9 @@ const LeadsSaved = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead></TableHead>
+            <TableHead>
+              <Checkbox checked={isAllSelected} onCheckedChange={toggleAll} />
+            </TableHead>
             <TableHead>{t("table.avatar")}</TableHead>
             <TableHead>{t("table.fullName")}</TableHead>
             <TableHead>{t("table.headline")}</TableHead>
@@ -131,7 +147,7 @@ const LeadsSaved = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleOpenProfile(data.public_profile_url)}
+                      onClick={() => handleOpenProfile(item.id)}
                     >
                       {t("table.open")}
                     </Button>
