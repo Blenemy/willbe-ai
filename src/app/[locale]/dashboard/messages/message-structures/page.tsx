@@ -244,7 +244,7 @@ const MessageStructures = () => {
           page={currentPage - 1}
           setPage={(p) => setCurrentPage(p + 1)}
           rowsPerPage={rowsPerPage}
-          totalCount={structures.length}
+          totalCount={filteredData.length}
         />
       </div>
 
