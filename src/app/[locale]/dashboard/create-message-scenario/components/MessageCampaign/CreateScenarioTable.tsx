@@ -24,6 +24,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   MessageEntry,
   MessageEntryData,
+  useBulkUpdateMessageEntryLeads,
   useDeleteMessageCampaignEntry,
   useUpdateMessageEntryLead,
 } from "@/hooks/useMessageCampaignEntries";
@@ -73,6 +74,7 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
   const [rowsPerPage, setRowsPerPage] = useState(ITEMS_PER_PAGE);
 
   const { mutate: updateLead } = useUpdateMessageEntryLead();
+  const { mutate: bulkUpdateLeads } = useBulkUpdateMessageEntryLeads();
   const { mutate: deleteLeads } = useDeleteMessageCampaignEntry();
   const { mutate: generateMessages, isPending: isGenerating } =
     useGenerateMessages();
@@ -350,10 +352,17 @@ export const CreateScenarioTable = ({ leads, selectedEntry }: Props) => {
                   <Select
                     value={lead.messageStructureId ?? ""}
                     onValueChange={(val) => {
-                      updateLead({
-                        leadId: lead.id,
-                        messageStructureId: val,
-                      });
+                      if (selected.length >= 2 && selected.includes(lead.id)) {
+                        bulkUpdateLeads({
+                          leadIds: selected,
+                          messageStructureId: val,
+                        });
+                      } else {
+                        updateLead({
+                          leadId: lead.id,
+                          messageStructureId: val,
+                        });
+                      }
                     }}
                   >
                     <SelectTrigger>

@@ -136,7 +136,7 @@ export default function MeetingsList() {
                   {m.position}
                 </TableCell>
                 <TableCell className="text-sm font-medium truncate">
-                  {m.accountUrl}
+                  {m.accountName}
                 </TableCell>
                 <TableCell className="text-right">
                   <a

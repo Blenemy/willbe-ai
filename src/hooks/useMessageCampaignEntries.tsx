@@ -179,3 +179,41 @@ export const useUpdateMessageEntryLead = () => {
     },
   });
 };
+
+interface BulkUpdateDto {
+  leadIds: string[];
+  message?: string | null;
+  language?: string | null;
+  messageStructureId?: string | null;
+  productServiceId?: string | null;
+  status?: string;
+}
+
+export const useBulkUpdateMessageEntryLeads = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: BulkUpdateDto) => {
+      const response = await protectedAxiosInstance.patch(
+        `/auth/message-campaign-entries/leads/bulk`,
+        data
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Leads updated successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entry"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["message-campaign-entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["leads-in-cadence"],
+      });
+    },
+    onError: (err) => {
+      toast.error(`Error while bulk updating: ${err.message}`);
+    },
+  });
+};
