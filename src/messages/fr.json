@@ -928,7 +928,7 @@
   "MessageStructures": {
     "title": "Structures de Messages",
     "rowsPerPage": "Lignes par page :",
-    "create_button": "Créer",
+    "create_button": "Créer une structure",
     "search_placeholder": "Rechercher par titre de structure",
     "table_title": "Titre de la structure",
     "table_languages": "Langues",

@@ -12,7 +12,7 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Trash, Copy, Eye, Plus } from "lucide-react";
+import { Trash, Copy, Eye, Plus, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -32,8 +32,23 @@ import {
 } from "@/components/ui/select";
 import { CustomPagination } from "@/components/CustomPagination/CustomPagination";
 import { renderHeader } from "@/components/ui/renderHeader";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const ITEMS_PER_PAGE = 5;
+
+const LANGUAGE_OPTIONS = [
+  { value: "English", label: "English" },
+  { value: "Spanish", label: "Spanish" },
+  { value: "French", label: "French" },
+  { value: "Portuguese", label: "Portuguese" },
+  { value: "German", label: "German" },
+  { value: "Italian", label: "Italian" },
+];
 
 const MessageStructures = () => {
   const t = useTranslations("MessageStructures");
@@ -44,6 +59,31 @@ const MessageStructures = () => {
   const [sortKey, setSortKey] = useState<"name" | "createdBy" | "createdAt">(
     "name"
   );
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([
+    ...LANGUAGE_OPTIONS.map((l) => l.value),
+  ]);
+
+  const isAllSelected = selectedLanguages.length === LANGUAGE_OPTIONS.length;
+
+  const toggleLanguage = (lang: string) => {
+    setCurrentPage(1);
+    if (selectedLanguages.includes(lang)) {
+      const updated = selectedLanguages.filter((l) => l !== lang);
+      setSelectedLanguages(updated);
+    } else {
+      setSelectedLanguages([...selectedLanguages, lang]);
+    }
+  };
+
+  const toggleAllLanguages = () => {
+    setCurrentPage(1);
+    if (isAllSelected) {
+      setSelectedLanguages([]);
+    } else {
+      setSelectedLanguages(LANGUAGE_OPTIONS.map((l) => l.value));
+    }
+  };
+
   const [sortAsc, setSortAsc] = useState(true);
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
@@ -54,9 +94,15 @@ const MessageStructures = () => {
 
   const router = useRouter();
 
-  const filteredData = structures.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = structures.filter((item) => {
+    const matchesSearch = item.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesLanguage =
+      selectedLanguages.length > 0 &&
+      item.languages.some((lang) => selectedLanguages.includes(lang));
+    return matchesSearch && matchesLanguage;
+  });
 
   const sortedData = [...filteredData].sort((a, b) => {
     const getValue = (item: (typeof structures)[number]) => {
@@ -137,11 +183,49 @@ const MessageStructures = () => {
         </Button>
       </div>
 
-      <Input
-        placeholder="Search by structure title"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="flex gap-4">
+        <Input
+          placeholder="Search by structure title"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <SlidersHorizontal className="w-4 h-4 mr-2" />
+              {isAllSelected
+                ? "All languages"
+                : selectedLanguages.length > 0
+                ? `${selectedLanguages.length} selected`
+                : "No language selected"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56">
+            <DropdownMenuCheckboxItem
+              checked={isAllSelected}
+              onSelect={(e) => {
+                e.preventDefault();
+                toggleAllLanguages();
+              }}
+            >
+              All
+            </DropdownMenuCheckboxItem>
+            {LANGUAGE_OPTIONS.map((opt) => (
+              <DropdownMenuCheckboxItem
+                key={opt.value}
+                checked={selectedLanguages.includes(opt.value)}
+                onSelect={(e) => {
+                  e.preventDefault();
+                  toggleLanguage(opt.value);
+                }}
+              >
+                {opt.label}
+              </DropdownMenuCheckboxItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       <Table>
         <TableHeader>
@@ -153,7 +237,7 @@ const MessageStructures = () => {
               sortAsc,
               handleSort
             )}
-            <TableHead>{t("table_languages")}</TableHead>
+            <TableHead className="w-[500px]">{t("table_languages")}</TableHead>
             {renderHeader(
               t("table_created_by"),
               "createdBy",
@@ -180,11 +264,14 @@ const MessageStructures = () => {
               >
                 {structure.name}
               </TableCell>
-              <TableCell className="w-[280px] flex gap-1">
-                {structure.languages.map((lang) => (
-                  <Badge key={lang}>{lang}</Badge>
-                ))}
+              <TableCell className="w-[500px]">
+                <div className="flex flex-wrap gap-1">
+                  {structure.languages.map((lang) => (
+                    <Badge key={lang}>{lang}</Badge>
+                  ))}
+                </div>
               </TableCell>
+
               <TableCell className="w-[180px]">
                 {structure.user.firstName} {structure.user.lastName}
               </TableCell>
@@ -208,10 +295,10 @@ const MessageStructures = () => {
                 </Button>
                 <Button
                   size="icon"
-                  variant="destructive"
+                  variant="ghost"
                   onClick={() => handleDeleteClick(structure.id)}
                 >
-                  <Trash className="w-4 h-4" />
+                  <Trash className="w-4 h-4 text-red-500" />
                 </Button>
               </TableCell>
             </TableRow>

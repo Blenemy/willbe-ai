@@ -928,7 +928,7 @@
   },
   "MessageStructures": {
     "title": "Message Structures",
-    "create_button": "Create",
+    "create_button": "Create structure",
     "rowsPerPage": "Rows per page:",
     "search_placeholder": "Search by structure title",
     "table_title": "Message structure title",
