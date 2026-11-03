@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -43,9 +44,9 @@ const nextConfig: NextConfig = {
 
 const config = withNextIntl(nextConfig);
 
-// Sentry webpack plugin adds a lot of compile time. Skip it in local dev;
-// instrumentation files still init Sentry at runtime.
-export default isDev
+// Sentry webpack plugin adds a lot of compile time and needs an auth token to
+// upload source maps. Skip it in local dev and on the VPS image build.
+export default isDev || !process.env.SENTRY_AUTH_TOKEN
   ? config
   : withSentryConfig(config, {
       // For all available options, see:
