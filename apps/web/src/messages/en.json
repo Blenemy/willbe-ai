@@ -988,7 +988,15 @@
       "text": "Text"
     },
     "create_structure_button": "Create structure",
-    "update_button": "Update structure"
+    "update_button": "Update structure",
+    "details_title": "Structure",
+    "details_hint": "Name it and choose the message type. Languages open after this is saved.",
+    "languages_title": "Languages",
+    "languages_hint": "Write one language, then translate the others from it.",
+    "max_words_label": "Max words",
+    "section_goal": "Goal",
+    "section_message": "Message",
+    "section_sample": "Example"
   },
   "AccountScenarios": {
     "title": "Account Scenarios",
@@ -1424,6 +1432,12 @@
     },
     "validation": {
       "titleRequired": "Title is required"
+    },
+    "setupHint": "Name the campaign. After that you import leads, build the sequence, and open statistics.",
+    "stepHints": {
+      "import": "Pick accounts or lead scenarios, then import the people.",
+      "campaign": "Add steps on the calendar and attach a message structure.",
+      "stats": "Replies, meetings and bounces for this campaign."
     }
   },
   "messageScenarioData": {

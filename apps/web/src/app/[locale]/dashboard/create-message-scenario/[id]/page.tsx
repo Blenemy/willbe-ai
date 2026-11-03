@@ -12,7 +12,7 @@ import { ScenarioMessageChain } from "../components/MessageCampaign/ScenarioMess
 import { useTranslations } from "next-intl";
 import { StatisticPage } from "../components/Statistics/StatisticPage";
 import { useScenarioStepStore } from "@/store/useScenarioStepStore";
-import CustomStepper from "@/components/Stepper/Stepper";
+import { ScenarioStepNav } from "../components/ScenarioStepNav";
 
 const EditMessageScenarioPage = () => {
   const t = useTranslations("messageScenario");
@@ -42,17 +42,25 @@ const EditMessageScenarioPage = () => {
     }
   }, [scenario, initStep]);
 
+  const steps = [
+    { label: t("steps.import"), hint: t("stepHints.import") },
+    { label: t("steps.campaign"), hint: t("stepHints.campaign") },
+    { label: t("steps.stats"), hint: t("stepHints.stats") },
+  ];
+
   return (
     <div className="w-full px-6 py-10 flex flex-col">
-      <h2 className="mb-5 font-semibold text-2xl">{t("editTitle")}</h2>
+      <div className="mb-5">
+        <h2 className="font-semibold text-2xl">
+          {scenario?.name || t("editTitle")}
+        </h2>
+        <p className="mt-1 text-sm text-slate-500">{steps[activeStep]?.hint}</p>
+      </div>
 
-      <CustomStepper
+      <ScenarioStepNav
+        steps={steps}
         activeStep={activeStep}
-        setActiveStep={setActiveStep}
-        steps={[t("steps.import"), t("steps.campaign"), t("steps.stats")]}
-        disabled={!id}
-        hideBackButton={true}
-        hideNextButton={true}
+        onChange={setActiveStep}
       />
 
       {activeStep === 0 && (

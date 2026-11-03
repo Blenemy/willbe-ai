@@ -7,6 +7,7 @@ import {
   FormItem,
   FormControl,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,18 +28,18 @@ import { Controller } from "react-hook-form";
 import { Check } from "lucide-react";
 
 const EMAIL_TYPES = [
-  { label: "First email", value: "first_email" },
-  { label: "Follow up email", value: "follow_up_email" },
-  { label: "LinkedIn Connection", value: "linkedin_connection" },
-  { label: "LinkedIn Message", value: "linkedin_message" },
-  { label: "LinkedIn Follow up", value: "linkedin_follow_up" },
-];
+  "first_email",
+  "follow_up_email",
+  "linkedin_connection",
+  "linkedin_message",
+  "linkedin_follow_up",
+] as const;
 
 const SUBJECT_TYPES = [
-  { label: "Account <> Your company", value: "account_company" },
-  { label: "Account <> Your company + Text", value: "account_company_text" },
-  { label: "Text", value: "text" },
-];
+  "account_company",
+  "account_company_text",
+  "text",
+] as const;
 
 export default function MessageStructureEditor() {
   const t = useTranslations("MessageStructures");
@@ -58,7 +59,12 @@ export default function MessageStructureEditor() {
   const isFirstEmail = emailType === "first_email";
   const subjectType = form.watch("subjectType");
 
-  const handleSave = () => {
+  const handleSave = form.handleSubmit((values) => {
+    if (values.emailType === "first_email" && !values.subjectType) {
+      form.setError("subjectType", { message: t("subject_type_placeholder") });
+      return;
+    }
+
     const safeId = Array.isArray(id) ? id[0] : id;
 
     if (safeId) {
@@ -66,7 +72,7 @@ export default function MessageStructureEditor() {
     } else {
       createStructure();
     }
-  };
+  });
 
   const createdLanguageCodes = (createdLanguages || []).map(
     (label) => LANGUAGES.find((lang) => lang.label === label)?.code || label
@@ -79,87 +85,59 @@ export default function MessageStructureEditor() {
     .filter((code: string): code is string => !!code);
 
   return (
-    <div className="p-6 flex flex-col gap-6 w-full">
-      <h1 className="text-2xl font-bold">{t("create_Structure_title")}</h1>
+    <div className="w-full px-6 py-10 flex flex-col gap-6">
+      <div>
+        <h2 className="text-2xl font-semibold">
+          {fetchedStructure?.name || t("create_Structure_title")}
+        </h2>
+        <p className="mt-1 max-w-2xl text-sm text-slate-500">
+          {fetchedStructure ? t("languages_hint") : t("details_hint")}
+        </p>
+      </div>
 
-      <Form {...form}>
-        <form className="space-y-4">
-          <FormField
-            name="title"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder={t("input_title_placeholder")}
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <Controller
-            name="emailType"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("email_type_label")}</FormLabel>
-                <Select
-                  key={field.value}
-                  value={field.value}
-                  onValueChange={(val) => {
-                    field.onChange(val);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder={t("email_type_placeholder")} />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {EMAIL_TYPES.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            name="maxWords"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder={t("max_words_placeholder")} {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          {isFirstEmail && (
+      <section className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <h2 className="mb-4 text-sm font-semibold text-slate-900">
+          {t("details_title")}
+        </h2>
+        <Form {...form}>
+          <form className="grid gap-4 md:grid-cols-2">
             <FormField
-              name="subjectType"
+              name="title"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="md:col-span-2">
+                  <FormLabel>{t("input_title_placeholder")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("input_title_placeholder")}
+                      className="bg-white"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <Controller
+              name="emailType"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("subject_type_label")}</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <FormLabel>{t("email_type_label")}</FormLabel>
+                  <Select
+                    key={field.value}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={t("subject_type_placeholder")}
-                        />
+                      <SelectTrigger className="bg-white">
+                        <SelectValue placeholder={t("email_type_placeholder")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {SUBJECT_TYPES.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
+                      {EMAIL_TYPES.map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {t(`email_types.${value}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -167,63 +145,118 @@ export default function MessageStructureEditor() {
                 </FormItem>
               )}
             />
-          )}
-        </form>
-      </Form>
 
-      <Button
-        type="button"
-        onClick={handleSave}
-        disabled={isCreating}
-        className="max-w-fit"
-      >
-        {id ? t("update_button") : t("create_structure_button")}
-      </Button>
+            <FormField
+              name="maxWords"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("max_words_label")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("max_words_placeholder")}
+                      className="bg-white"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            {isFirstEmail && (
+              <FormField
+                name="subjectType"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="md:col-span-2">
+                    <FormLabel>{t("subject_type_label")}</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="bg-white">
+                          <SelectValue
+                            placeholder={t("subject_type_placeholder")}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {SUBJECT_TYPES.map((value) => (
+                          <SelectItem key={value} value={value}>
+                            {t(`subject_types.${value}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+          </form>
+        </Form>
+        <div className="mt-4 flex justify-end">
+          <Button
+            type="button"
+            onClick={handleSave}
+            disabled={isCreating}
+            className="bg-[#030A27]"
+          >
+            {id ? t("update_button") : t("create_structure_button")}
+          </Button>
+        </div>
+      </section>
 
       {fetchedStructure && (
-        <Tabs
-          value={currentLang}
-          onValueChange={(val) => handleLanguageChange(val)}
-        >
-          <TabsList className="w-full justify-start overflow-x-auto">
-            {LANGUAGES.map((lang) => {
-              const isSavedOnBackend = backendLanguageCodes.includes(lang.code);
-              return (
-                <TabsTrigger
-                  key={lang.code}
-                  value={lang.code}
-                  className="relative pr-6"
-                >
-                  {lang.label}
-                  {isSavedOnBackend && (
-                    <Check className="w-4 h-4 text-green-600 absolute right-1 top-1/2 -translate-y-1/2" />
-                  )}
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
+        <section className="flex flex-col gap-3">
+          <h2 className="text-sm font-semibold text-slate-900">
+            {t("languages_title")}
+          </h2>
+          <Tabs
+            value={currentLang}
+            onValueChange={(val) => handleLanguageChange(val)}
+            className="grid items-start gap-4 lg:grid-cols-[200px_1fr]"
+          >
+            <TabsList className="flex h-auto w-full flex-col items-stretch gap-1 bg-transparent p-0">
+              {LANGUAGES.map((lang) => {
+                const isSavedOnBackend = backendLanguageCodes.includes(lang.code);
+                return (
+                  <TabsTrigger
+                    key={lang.code}
+                    value={lang.code}
+                    className="justify-between rounded-lg border border-transparent px-3 py-2 data-[state=active]:border-slate-200 data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                  >
+                    {lang.label}
+                    {isSavedOnBackend && (
+                      <Check className="h-4 w-4 text-green-600" />
+                    )}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
 
-          {LANGUAGES.map((lang) => {
-            const isCreated = createdLanguageCodes.includes(lang.code);
-            return (
-              <TabsContent key={lang.code} value={lang.code} className="mt-4">
-                {isCreated ? (
-                  <LanguageForm
-                    languageCode={lang.code}
-                    subjectType={subjectType}
-                  />
-                ) : (
-                  <LanguageTranslateUI
-                    currentLang={lang.code}
-                    availableLangs={fetchedStructure?.languages || []}
-                    structureId={fetchedStructure?.id}
-                    handleLanguageChange={handleLanguageChange}
-                  />
-                )}
-              </TabsContent>
-            );
-          })}
-        </Tabs>
+            <div className="rounded-xl border border-slate-200 bg-white p-5">
+              {LANGUAGES.map((lang) => {
+                const isCreated = createdLanguageCodes.includes(lang.code);
+                return (
+                  <TabsContent key={lang.code} value={lang.code} className="mt-0">
+                    {isCreated ? (
+                      <LanguageForm
+                        languageCode={lang.code}
+                        subjectType={subjectType}
+                      />
+                    ) : (
+                      <LanguageTranslateUI
+                        currentLang={lang.code}
+                        availableLangs={fetchedStructure?.languages || []}
+                        structureId={fetchedStructure?.id}
+                        handleLanguageChange={handleLanguageChange}
+                      />
+                    )}
+                  </TabsContent>
+                );
+              })}
+            </div>
+          </Tabs>
+        </section>
       )}
     </div>
   );

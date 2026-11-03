@@ -67,7 +67,7 @@ export const useMessageStructureForm = (editingId?: string) => {
     control: form.control,
     name: "body",
   });
-  const [currentLang, setCurrentLang] = useState(LANGUAGES[0]);
+  const [currentLang, setCurrentLang] = useState("en");
 
   const formsByLang = useRef<Record<string, MessageStructureFormSchema>>({});
 

@@ -986,7 +986,15 @@
       "text": "Texto"
     },
     "create_structure_button": "Crear estructura",
-    "update_button": "Actualizar estructura"
+    "update_button": "Actualizar estructura",
+    "details_title": "Estructura",
+    "details_hint": "Ponle nombre y elige el tipo. Los idiomas se abren al guardar.",
+    "languages_title": "Idiomas",
+    "languages_hint": "Escribe un idioma y traduce los demás a partir de él.",
+    "max_words_label": "Máximo de palabras",
+    "section_goal": "Objetivo",
+    "section_message": "Mensaje",
+    "section_sample": "Ejemplo"
   },
   "AccountScenarios": {
     "title": "Escenarios de cuentas",
@@ -1424,6 +1432,12 @@
     },
     "validation": {
       "titleRequired": "El título es obligatorio"
+    },
+    "setupHint": "Ponle nombre a la campaña. Después importas leads, armas la secuencia y ves las estadísticas.",
+    "stepHints": {
+      "import": "Elige cuentas o escenarios y luego importa a las personas.",
+      "campaign": "Añade pasos en el calendario y asigna una estructura.",
+      "stats": "Respuestas, reuniones y rebotes de esta campaña."
     }
   },
   "messageScenarioData": {

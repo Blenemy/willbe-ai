@@ -987,7 +987,15 @@
       "text": "Texte"
     },
     "create_structure_button": "Créer la structure",
-    "update_button": "Mettre à jour la structure"
+    "update_button": "Mettre à jour la structure",
+    "details_title": "Structure",
+    "details_hint": "Nommez-la et choisissez le type. Les langues s'ouvrent après l'enregistrement.",
+    "languages_title": "Langues",
+    "languages_hint": "Rédigez une langue, puis traduisez les autres à partir de celle-ci.",
+    "max_words_label": "Nombre de mots max",
+    "section_goal": "Objectif",
+    "section_message": "Message",
+    "section_sample": "Exemple"
   },
   "AccountScenarios": {
     "title": "Scénarios de comptes",
@@ -1429,6 +1437,12 @@
     },
     "validation": {
       "titleRequired": "Le titre est requis"
+    },
+    "setupHint": "Nommez la campagne. Ensuite vous importez les leads, construisez la séquence et ouvrez les statistiques.",
+    "stepHints": {
+      "import": "Choisissez des comptes ou des scénarios, puis importez les personnes.",
+      "campaign": "Ajoutez des étapes au calendrier et associez une structure.",
+      "stats": "Réponses, réunions et rebonds de cette campagne."
     }
   },
   "messageScenarioData": {

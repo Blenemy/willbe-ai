@@ -89,7 +89,12 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
 
   useEffect(() => {
     const loadTemplate = async () => {
-      const data = await fetchTemplateId(structureId as string, languageCode);
+      let data;
+      try {
+        data = await fetchTemplateId(structureId as string, languageCode);
+      } catch {
+        return;
+      }
 
       if (!data) {
         form.reset();
@@ -152,7 +157,12 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
   };
 
   const handleErase = async () => {
+    if (!hasTemplate(languageCode)) {
+      form.reset();
+      return;
+    }
     await deleteTemplate(languageCode);
+    form.reset();
   };
 
   const handleSave = async () => {
@@ -191,250 +201,245 @@ export function LanguageForm({ languageCode, subjectType }: Props) {
     }
   };
 
+  const friendlyButton = (field: string, index?: number) => (
+    <Button
+      type="button"
+      size="sm"
+      variant="ghost"
+      className="h-7 px-2 text-slate-500"
+      onClick={() => insertFriendly(field, index)}
+    >
+      <Wand2 className="w-4 h-4" /> {t("friendly")}
+    </Button>
+  );
+
   return (
     <Form {...form}>
-      <form className="space-y-4 mt-4" onSubmit={form.handleSubmit(handleSave)}>
-        <FormField
-          name="objective"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">
-                {t("objective")}
-              </FormLabel>
-              <FormControl>
-                <Input placeholder={t("objective")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {subjectType?.includes("text") && (
+      <form className="space-y-6" onSubmit={form.handleSubmit(handleSave)}>
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold text-slate-900">
+            {t("section_goal")}
+          </h3>
           <FormField
-            name="subject"
+            name="objective"
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-foreground">
-                  {t("subject")}
-                </FormLabel>
+                <FormLabel>{t("objective")}</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder={t("subject_text_placeholder")}
-                    {...field}
-                  />
+                  <Input placeholder={t("objective")} {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
-        )}
 
-        <FormField
-          name="greeting"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">{t("greeting")}</FormLabel>
-              <FormControl>
-                <Input placeholder={t("greeting")} {...field} />
-              </FormControl>
-              <FormMessage />
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => insertFriendly("greeting")}
-              >
-                <Wand2 className="w-4 h-4" /> {t("friendly")}
-              </Button>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="introduction.text"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">
-                {t("introduction")}
-              </FormLabel>
-              <FormControl>
-                <Textarea placeholder={t("text")} {...field} />
-              </FormControl>
-              <FormMessage />
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => insertFriendly("introduction")}
-              >
-                <Wand2 className="w-4 h-4" /> {t("friendly")}
-              </Button>
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="introduction.wordsLimit"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">
-                {t("words_limit")}
-              </FormLabel>
-              <FormControl>
-                <Input type="number" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormLabel className="font-semibold">{t("body_paragraphs")}</FormLabel>
-
-        {fields.map((item, index) => (
-          <div key={item.id} className="border rounded p-4 space-y-2">
+          {subjectType?.includes("text") && (
             <FormField
-              name={`body.${index}.text`}
+              name="subject"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-foreground">
-                    {t("paragraph", { index: index + 1 })}
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder={t("paragraph_text_placeholder")}
-                      {...field}
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name={`body.${index}.wordsLimit`}
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground">
-                    {t("words_limit")}
-                  </FormLabel>
+                  <FormLabel>{t("subject")}</FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
-                      placeholder={t("paragraph_limit_placeholder")}
+                      placeholder={t("subject_text_placeholder")}
                       {...field}
                     />
                   </FormControl>
+                </FormItem>
+              )}
+            />
+          )}
+        </section>
 
+        <section className="space-y-4">
+          <h3 className="text-sm font-semibold text-slate-900">
+            {t("section_message")}
+          </h3>
+
+          <FormField
+            name="greeting"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between">
+                  <FormLabel>{t("greeting")}</FormLabel>
+                  {friendlyButton("greeting")}
+                </div>
+                <FormControl>
+                  <Input placeholder={t("greeting")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_9rem]">
+            <FormField
+              name="introduction.text"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>{t("introduction")}</FormLabel>
+                    {friendlyButton("introduction")}
+                  </div>
+                  <FormControl>
+                    <Textarea placeholder={t("text")} {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex gap-2 items-center">
-              <Button
-                type="button"
-                size="icon"
-                onClick={() => append({ text: "", wordsLimit: "" })}
-              >
-                <Plus className="w-4 h-4" />
-              </Button>
+            <FormField
+              name="introduction.wordsLimit"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("words_limit")}</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
-              {fields.length > 1 && (
+          <p className="text-sm font-medium text-slate-700">
+            {t("body_paragraphs")}
+          </p>
+
+          {fields.map((item, index) => (
+            <div
+              key={item.id}
+              className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4"
+            >
+              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_9rem]">
+                <FormField
+                  name={`body.${index}.text`}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {t("paragraph", { index: index + 1 })}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={t("paragraph_text_placeholder")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name={`body.${index}.wordsLimit`}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("words_limit")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder={t("paragraph_limit_placeholder")}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex items-center gap-2">
                 <Button
                   type="button"
                   size="icon"
-                  variant="destructive"
-                  onClick={() => remove(index)}
+                  variant="outline"
+                  className="bg-white"
+                  onClick={() => append({ text: "", wordsLimit: "" })}
                 >
-                  <Minus className="w-4 h-4" />
+                  <Plus className="w-4 h-4" />
                 </Button>
-              )}
-
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => insertFriendly("body", index)}
-              >
-                <Wand2 className="w-4 h-4" /> {t("friendly")}
-              </Button>
+                {fields.length > 1 && (
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="destructive"
+                    onClick={() => remove(index)}
+                  >
+                    <Minus className="w-4 h-4" />
+                  </Button>
+                )}
+                {friendlyButton("body", index)}
+              </div>
             </div>
+          ))}
+
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_9rem]">
+            <FormField
+              name="goodbye.text"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>{t("goodbye")}</FormLabel>
+                    {friendlyButton("goodbye")}
+                  </div>
+                  <FormControl>
+                    <Textarea placeholder={t("text")} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="goodbye.wordsLimit"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("words_limit")}</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-        ))}
+        </section>
 
-        <FormField
-          name="goodbye.text"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">{t("goodbye")}</FormLabel>
-              <FormControl>
-                <Textarea placeholder={t("text")} {...field} />
-              </FormControl>
+        <section className="space-y-3">
+          <h3 className="text-sm font-semibold text-slate-900">
+            {t("section_sample")}
+          </h3>
+          <FormField
+            name="sample"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between">
+                  <FormLabel>{t("sample_email")}</FormLabel>
+                  {friendlyButton("sample")}
+                </div>
+                <FormControl>
+                  <Textarea placeholder={t("sample_placeholder")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </section>
 
-              <FormMessage />
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => insertFriendly("goodbye")}
-              >
-                <Wand2 className="w-4 h-4" /> {t("friendly")}
-              </Button>
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="goodbye.wordsLimit"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">
-                {t("words_limit")}
-              </FormLabel>
-              <FormControl>
-                <Input type="number" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="sample"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-foreground">
-                {t("sample_email")}
-              </FormLabel>
-              <FormControl>
-                <Textarea placeholder={t("sample_placeholder")} {...field} />
-              </FormControl>
-
-              <FormMessage />
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => insertFriendly("sample")}
-              >
-                <Wand2 className="w-4 h-4" /> {t("friendly")}
-              </Button>
-            </FormItem>
-          )}
-        />
-
-        <div className="flex gap-2 pt-2">
-          <Button type="button" variant="destructive" onClick={handleErase}>
+        <div className="flex justify-end gap-2">
+          <Button type="button" variant="outline" onClick={handleErase}>
             {t("erase")}
           </Button>
-          <Button type="submit">{t("save")}</Button>
+          <Button type="submit" className="bg-[#030A27]">
+            {t("save")}
+          </Button>
         </div>
       </form>
     </Form>

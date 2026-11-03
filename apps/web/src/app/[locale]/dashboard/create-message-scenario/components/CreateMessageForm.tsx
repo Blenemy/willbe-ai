@@ -55,7 +55,10 @@ const CreateMessageForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="rounded-xl border border-slate-200 bg-slate-50 p-5"
+      >
         <FormField
           control={form.control}
           name="scenario_title"
@@ -72,7 +75,7 @@ const CreateMessageForm = ({
                     {...field}
                   />
                 </FormControl>
-                <Button type="submit" className="whitespace-nowrap">
+                <Button type="submit" className="whitespace-nowrap bg-[#030A27]">
                   {id ? t("form.updateBtn") : t("form.createBtn")}
                 </Button>
               </div>

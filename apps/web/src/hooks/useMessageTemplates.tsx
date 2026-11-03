@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { protectedAxiosInstance } from "@/api/axiosInstance";
 import { toast } from "sonner";
 import { useRef } from "react";
@@ -45,10 +46,9 @@ export const useMessageTemplates = () => {
       payload,
       from,
     }: CreateTemplateInput) => {
-      const fullPayload: any = {
+      const fullPayload: { messageStructureId: string; language: string; translateFromLanguage?: string } = {
         messageStructureId: structureId,
         language,
-        ...payload,
       };
 
       if (from) {
@@ -61,6 +61,15 @@ export const useMessageTemplates = () => {
         "/auth/message-templates",
         fullPayload
       );
+
+      if (payload && res.data?.id) {
+        const updated = await protectedAxiosInstance.patch(
+          `/auth/message-templates/${res.data.id}`,
+          payload
+        );
+        return updated.data;
+      }
+
       return res.data;
     },
     onSuccess: (data, variables) => {
@@ -115,7 +124,10 @@ export const useMessageTemplates = () => {
 
       return res.data;
     } catch (err: unknown) {
-      console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 404) {
+        return null;
+      }
+      throw err;
     }
   };
 

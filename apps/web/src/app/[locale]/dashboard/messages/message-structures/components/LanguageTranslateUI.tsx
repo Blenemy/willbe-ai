@@ -47,22 +47,30 @@ export const LanguageTranslateUI = ({
   };
 
   return (
-    <div className="border rounded p-4 space-y-4">
-      <p>{t("template_not_created")}</p>
+    <div className="space-y-4">
+      <p className="text-sm text-slate-600">{t("template_not_created")}</p>
 
-      <div className="flex flex-col gap-2">
-        <Button
-          variant="outline"
-          onClick={handleCreateFromScratch}
-          disabled={isLoading}
-        >
-          {isLoading ? t("creating") : t("create_from_scratch")}
-        </Button>
+      <div className="grid gap-3 md:grid-cols-2">
+        <div className="flex flex-col justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <p className="text-sm font-medium text-slate-800">
+            {t("create_from_scratch")}
+          </p>
+          <Button
+            variant="outline"
+            className="bg-white"
+            onClick={handleCreateFromScratch}
+            disabled={isLoading}
+          >
+            {isLoading ? t("creating") : t("create_from_scratch")}
+          </Button>
+        </div>
 
-        <div className="space-y-2">
-          <label className="font-medium">{t("translate_from_label")}</label>
+        <div className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+          <label className="text-sm font-medium text-slate-800">
+            {t("translate_from_label")}
+          </label>
           <Select onValueChange={setFromLang} value={fromLang}>
-            <SelectTrigger>
+            <SelectTrigger className="bg-white">
               <SelectValue placeholder={t("select_source_language")} />
             </SelectTrigger>
             <SelectContent>
@@ -73,11 +81,14 @@ export const LanguageTranslateUI = ({
               ))}
             </SelectContent>
           </Select>
+          <Button
+            className="bg-[#030A27]"
+            onClick={handleTranslate}
+            disabled={!fromLang || isLoading}
+          >
+            {isLoading ? t("translating") : t("translate")}
+          </Button>
         </div>
-
-        <Button onClick={handleTranslate} disabled={!fromLang || isLoading}>
-          {isLoading ? t("translating") : t("translate")}
-        </Button>
       </div>
     </div>
   );
