@@ -1,0 +1,29 @@
+{
+  "name": "db-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/db-core/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build-migrations": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "outputPath": "dist/libs/db-core",
+        "main": "libs/db-core/src/lib/migrations-control.ts",
+        "tsConfig": "libs/db-core/tsconfig.build-migrations.json",
+        "assets": [
+          {
+            "input": "libs/db-core/src/lib/migrations",
+            "glob": "**/*.js",
+            "output": "src/lib/migrations"
+          },
+          {
+            "input": "libs/db-core/src/lib/seeders",
+            "glob": "**/*.js",
+            "output": "src/lib/seeders"
+          }
+        ]
+      }
+    }
+  }
+}

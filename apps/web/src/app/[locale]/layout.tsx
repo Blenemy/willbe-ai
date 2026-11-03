@@ -1,0 +1,55 @@
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { notFound } from "next/navigation";
+import { getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { Locale, routing } from "@/i18n/routing";
+import "../globals.css";
+import QueryProvider from "@/providers/providers";
+import { Toaster } from "sonner";
+import { AutoRedirectClientWrapper } from "@/components/AutoRedirectClientWrapper/AutoRedirectClientWrapper";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Willbe",
+  description: "AI-assisted B2B outbound: find accounts and leads, generate outreach, track replies.",
+};
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  if (!routing.locales.includes(locale)) {
+    notFound();
+  }
+
+  const messages = await getMessages();
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <NextIntlClientProvider messages={messages}>
+          <QueryProvider>
+            <AutoRedirectClientWrapper>{children}</AutoRedirectClientWrapper>
+          </QueryProvider>
+          <Toaster position="top-right" />
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}

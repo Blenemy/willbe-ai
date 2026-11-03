@@ -1,0 +1,9 @@
+{
+  "name": "comm",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/comm/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project comm --web",
+  "targets": {}
+}

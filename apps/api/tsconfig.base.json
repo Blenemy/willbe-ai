@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@willbe-server/comm": ["libs/comm/src/index.ts"],
+      "@willbe-server/config-core": ["libs/config-core/src/index.ts"],
+      "@willbe-server/db-core": ["libs/db-core/src/index.ts"],
+      "@willbe-server/shared-auth": ["libs/shared-auth/src/index.ts"],
+      "@willbe-server/shared-logger": ["libs/shared-logger/src/index.ts"],
+      "@willbe-server/swagger-docs": ["libs/swagger-docs/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
