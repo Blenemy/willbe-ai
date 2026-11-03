@@ -72,3 +72,64 @@ cd apps/web && npx tsc --noEmit && npx next lint && npx jest
 ```
 
 `npm run smoke` drives the API end to end: login, lead search, campaign creation, enrichment, generation, sending and dashboards.
+
+## Deploy
+
+Live demo: https://willbe.topchyidev.shop (`demo@willbe.dev` / `Demo1234!`).
+
+One subdomain serves the whole product. The host nginx terminates HTTPS (certbot) and proxies to an nginx gateway container on `127.0.0.1:8100`, which sends `/auth` to the API and everything else to Next.js. Postgres and Redis stay on the private Docker network, so the stack can share a VPS with other projects.
+
+GitHub Actions builds the images and pushes them to GHCR. The server only pulls and restarts.
+
+| | |
+| --- | --- |
+| RAM in use | about 600 MB for the whole stack after boot |
+| RAM to buy | 2 GB if the VPS runs nothing else |
+| CPU | 1 vCPU is enough for a demo |
+| Disk | Images take about 2 GB, the database starts small |
+
+### One-time server setup
+
+DNS: an A record for the subdomain pointing to the VPS. Docker, Docker Compose, nginx and certbot installed on the host.
+
+```bash
+sudo mkdir -p /opt/willbe && sudo chown deploy:deploy /opt/willbe
+git clone https://github.com/Blenemy/willbe-ai.git /opt/willbe
+cd /opt/willbe
+cp deploy/.env.example deploy/.env
+chmod 600 deploy/.env
+```
+
+In `deploy/.env` set `PUBLIC_URL` (`https://` plus the subdomain), `DB_PASS` and `JWT_SECRET` (`openssl rand -hex 32` for both). The remaining keys run every integration in mock mode; the API refuses to boot without them, so placeholders stay.
+
+Host nginx site, then the certificate:
+
+```bash
+sudo cp deploy/host-nginx.conf /etc/nginx/sites-available/willbe
+sudo ln -s /etc/nginx/sites-available/willbe /etc/nginx/sites-enabled/willbe
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d willbe.topchyidev.shop --redirect
+```
+
+### GitHub
+
+Repository variable:
+
+- `PUBLIC_URL`, the same value as in `deploy/.env`. The web image bakes it in at build time, so changing the domain means a new deploy.
+
+Repository secrets:
+
+- `VPS_HOST`
+- `VPS_USER`, a user in the `docker` group that owns `/opt/willbe`
+- `VPS_SSH_KEY`, a private key whose public half is in that user's `~/.ssh/authorized_keys`
+
+A push to `main` runs CI. When it passes, Deploy builds `ghcr.io/blenemy/willbe-api` and `willbe-web`, pulls them on the VPS, restarts the stack and waits until both the web app and the API answer. The API container applies migrations and base seeds on every start.
+
+After the first successful deploy, load the demo campaigns once:
+
+```bash
+cd /opt/willbe
+docker compose --env-file deploy/.env -f docker-compose.prod.yml exec api npm run seed:demo -- http://localhost:3000/auth
+```
+
+`seed:all` already created the demo user; `seed:demo` fills scenarios and history. It is safe to run again, and it wipes the demo workspace campaigns first.

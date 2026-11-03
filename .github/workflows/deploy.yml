@@ -1,0 +1,109 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io/blenemy
+  SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+jobs:
+  images:
+    name: Image ${{ matrix.app }}
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        app: [api, web]
+
+    steps:
+      - name: Check PUBLIC_URL
+        if: vars.PUBLIC_URL == ''
+        run: |
+          echo "Set the PUBLIC_URL repository variable, for example https://app.example.com"
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SHA }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: apps/${{ matrix.app }}
+          push: true
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.PUBLIC_URL }}
+          tags: |
+            ${{ env.REGISTRY }}/willbe-${{ matrix.app }}:${{ env.SHA }}
+            ${{ env.REGISTRY }}/willbe-${{ matrix.app }}:latest
+          cache-from: type=gha,scope=${{ matrix.app }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app }}
+
+  deploy:
+    name: Update server
+    needs: images
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Pull, restart and check
+        uses: appleboy/ssh-action@v1.2.2
+        env:
+          IMAGE_TAG: ${{ env.SHA }}
+          GHCR_USER: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: IMAGE_TAG,GHCR_USER,GHCR_TOKEN
+          command_timeout: 15m
+          script: |
+            set -eu
+            cd /opt/willbe
+
+            git fetch --prune origin main
+            git reset --hard "$IMAGE_TAG"
+
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            export IMAGE_TAG
+            compose="docker compose --env-file deploy/.env -f docker-compose.prod.yml"
+            $compose pull
+            $compose up -d --remove-orphans
+            docker image prune -f
+
+            ok() {
+              code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:8100$1" || true)
+              [ "$code" != 000 ] && [ "$code" -lt 500 ]
+            }
+            for i in $(seq 1 60); do
+              if ok /en/sign-in && ok /auth/; then
+                echo "willbe is up"
+                exit 0
+              fi
+              sleep 5
+            done
+            $compose ps
+            $compose logs --tail 80 api web
+            exit 1

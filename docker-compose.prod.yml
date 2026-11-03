@@ -1,0 +1,76 @@
+name: willbe
+
+services:
+  gateway:
+    image: nginx:1.28-alpine
+    ports:
+      - "127.0.0.1:${GATEWAY_PORT:-8100}:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/blenemy/willbe-web}:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+
+  api:
+    image: ${API_IMAGE:-ghcr.io/blenemy/willbe-api}:${IMAGE_TAG:-latest}
+    env_file:
+      - deploy/.env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_GLOBAL_PREFIX: auth
+      DB_HOST: postgres
+      DB_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      API_PUBLIC_URL: ${PUBLIC_URL:?PUBLIC_URL is required}/auth
+      ALLOWED_ORIGINS: ${PUBLIC_URL}
+      APP_PROFILE_URL: ${PUBLIC_URL}/en/dashboard/profile
+      AUTH_REDIRECT_BASE_URL: ${PUBLIC_URL}
+      SENDGRID_RESET_PASSWORD_LINK: ${PUBLIC_URL}/en/reset-password
+      SENDGRID_INVITE_LINK: ${PUBLIC_URL}/en/sign-in
+      GOOGLE_CALLBACK_URL: ${PUBLIC_URL}/auth/users-accounts/gmail/redirect
+      GOOGLE_AUTH_CALLBACK_URL: ${PUBLIC_URL}/auth/google/redirect
+      LINKEDIN_CALLBACK_URL: ${PUBLIC_URL}/auth/linkedin/redirect
+      MICROSOFT_CALLBACK_URL: ${PUBLIC_URL}/auth/users-accounts/outlook/redirect
+      UNIPILE_LINKEDIN_AUTH_REDIRECT_URL: ${PUBLIC_URL}/en/dashboard/profile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15.5
+    environment:
+      POSTGRES_USER: ${DB_USER:-willbe}
+      POSTGRES_PASSWORD: ${DB_PASS:?DB_PASS is required}
+      POSTGRES_DB: ${DB_NAME:-willbe}
+    command: ["postgres", "-c", "shared_buffers=128MB", "-c", "max_connections=40"]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
