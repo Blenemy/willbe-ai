@@ -10,3 +10,4 @@ export const YAxis = () => <div data-testid="YAxis" />;
 export const Tooltip = () => <div data-testid="Tooltip" />;
 export const ResponsiveContainer = ({ children }: any) => <div>{children}</div>;
 export const Cell = () => <div className="mock-bar" />;
+export const CartesianGrid = () => <div data-testid="CartesianGrid" />;

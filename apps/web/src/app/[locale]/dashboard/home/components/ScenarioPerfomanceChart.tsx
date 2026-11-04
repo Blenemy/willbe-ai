@@ -3,6 +3,7 @@
 import {
   BarChart,
   Bar,
+  CartesianGrid,
   XAxis,
   Tooltip,
   ResponsiveContainer,
@@ -106,15 +107,15 @@ export default function ScenarioPerformanceChart() {
         </Button>
       </CardHeader>
 
-      <CardContent className="p-0 flex-grow">
+      <CardContent className="p-0 flex-1 min-h-0 flex flex-col">
         {isLoading && (
-          <div className="h-[350px]">
+          <div className="flex-1 min-h-[240px] px-6 pb-6">
             <Skeleton className="w-full h-full rounded-lg" />
           </div>
         )}
 
         {!isLoading && isEmptyData && (
-          <div className="h-[350px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
+          <div className="flex-1 min-h-[240px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
             <CalendarDays className="w-10 h-10 mb-4" />
             <p className="text-lg font-medium mb-1">No data found</p>
             <p className="text-sm max-w-sm">
@@ -125,25 +126,40 @@ export default function ScenarioPerformanceChart() {
         )}
 
         {!isLoading && !isEmptyData && (
-          <div className="h-[500px]">
+          <div className="flex-1 min-h-[240px] px-4 pb-4">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} barCategoryGap={5}>
+              <BarChart
+                data={chartData}
+                barCategoryGap="22%"
+                margin={{ top: 8, right: 8, bottom: 0, left: 8 }}
+              >
+                <CartesianGrid vertical={false} stroke="#e5e7eb" />
                 <XAxis
                   dataKey="name"
                   tickLine={false}
                   axisLine={false}
                   interval={0}
+                  tickMargin={8}
+                  tick={{ fontSize: 12, fill: "#64748b" }}
                 />
-                <YAxis domain={[0, 50]} hide />
+                <YAxis
+                  domain={[
+                    0,
+                    (dataMax: number) => Math.max(10, Math.ceil(dataMax * 1.1)),
+                  ]}
+                  hide
+                />
                 <Tooltip
                   content={<CustomTooltip />}
                   cursor={{ fill: "transparent" }}
                 />
                 <Bar
                   dataKey="visualValue"
-                  stackId="a"
-                  radius={[4, 4, 0, 0]}
-                  isAnimationActive={false}
+                  radius={[6, 6, 0, 0]}
+                  maxBarSize={64}
+                  animationBegin={150}
+                  animationDuration={900}
+                  animationEasing="ease-out"
                   activeBar={false}
                 >
                   {chartData.map((_, index) => (
