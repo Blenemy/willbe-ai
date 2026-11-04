@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
 import { CurrentUser, JwtAuthGuard } from '@willbe-server/shared-auth';
 import { User } from '@willbe-server/db-core';
 import { Type } from 'class-transformer';
@@ -29,6 +29,14 @@ class HomeMeetingsQuery extends HomeIntervalQuery {
   offset?: number;
 }
 
+class QuarterlyGoalBody {
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  @Max(1_000_000_000)
+  goal: number;
+}
+
 @UseGuards(JwtAuthGuard)
 @Controller('home')
 export class HomeController {
@@ -47,5 +55,15 @@ export class HomeController {
   @Get('scenario-performance')
   async findScenarioPerformance(@Query() query: HomeIntervalQuery, @CurrentUser() user: User) {
     return this.homeService.findScenarioPerformance(user.companyId, query.daysInterval);
+  }
+
+  @Get('quarterly-goal')
+  async findQuarterlyGoal(@CurrentUser() user: User) {
+    return this.homeService.findQuarterlyGoal(user.companyId);
+  }
+
+  @Put('quarterly-goal')
+  async updateQuarterlyGoal(@Body() body: QuarterlyGoalBody, @CurrentUser() user: User) {
+    return this.homeService.updateQuarterlyGoal(user.companyId, body.goal);
   }
 }

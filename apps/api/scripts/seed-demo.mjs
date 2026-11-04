@@ -122,6 +122,8 @@ const OUTCOMES = [
   'not_answered', 'response', 'bounced', 'not_answered', 'not_answered',
 ];
 
+const QUARTERLY_GOAL = { goal: 20000, won: 16000, pipeline: 60000 };
+
 const TEAMMATES = [
   { id: 'a7d1c3e5-1b2f-4c6d-8e9f-0a1b2c3d4e05', first: 'Sofia', last: 'Marino', email: 'sofia@willbe.dev', role: 'admin', position: 'SDR Team Lead' },
   { id: 'b8e2d4f6-2c3a-4d7e-9f0a-1b2c3d4e5f06', first: 'Lukas', last: 'Becker', email: 'lukas@willbe.dev', role: 'member', position: 'Account Executive' },
@@ -206,6 +208,16 @@ async function resetDatabase(db) {
     `INSERT INTO users_invitations (id, email, role, position, is_accepted, company_id, created_at, updated_at)
      VALUES ($1, 'maria@willbe.dev', 'member', 'Sales Development Rep', false, $2, now() - interval '2 days', now())`,
     [randomUUID(), COMPANY_ID],
+  );
+
+  const now = new Date();
+  const quarter = `${now.getUTCFullYear()}-Q${Math.floor(now.getUTCMonth() / 3) + 1}`;
+  await db.query(
+    `INSERT INTO company_quarterly_goals (id, company_id, quarter, goal_amount, won_amount, pipeline_amount, currency, created_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6, 'EUR', now(), now())
+     ON CONFLICT (company_id, quarter) DO UPDATE
+     SET goal_amount = EXCLUDED.goal_amount, won_amount = EXCLUDED.won_amount, pipeline_amount = EXCLUDED.pipeline_amount, updated_at = now()`,
+    [randomUUID(), COMPANY_ID, quarter, QUARTERLY_GOAL.goal, QUARTERLY_GOAL.won, QUARTERLY_GOAL.pipeline],
   );
 }
 

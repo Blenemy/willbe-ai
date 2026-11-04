@@ -24,7 +24,17 @@ export interface HomeScenarioPerformance {
   responsesLinkedin: number;
 }
 
+export interface HomeQuarterlyGoal {
+  quarter: string;
+  goal: number;
+  won: number;
+  pipeline: number;
+  currency: string;
+}
+
 const EMAIL_ENTRY_TYPES = `('first_email', 'follow_up_email')`;
+
+const currentQuarter = (date = new Date()) => `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
 
 /** Lead campaign data that belongs to message scenarios created by users of the given company. */
 const COMPANY_LEADS_DATA = `
@@ -165,5 +175,38 @@ export class HomeService {
       responsesEmail: n(statuses?.responsesEmail),
       responsesLinkedin: n(statuses?.responsesLinkedin),
     };
+  }
+
+  async findQuarterlyGoal(companyId: string): Promise<HomeQuarterlyGoal> {
+    const quarter = currentQuarter();
+    const [row] = await this.sequelize.query<{ goal: number; won: number; pipeline: number; currency: string }>(
+      `
+      SELECT goal_amount AS goal, won_amount AS won, pipeline_amount AS pipeline, currency
+      FROM company_quarterly_goals
+      WHERE company_id = :companyId AND quarter = :quarter
+      `,
+      { type: QueryTypes.SELECT, replacements: { companyId, quarter } },
+    );
+
+    return {
+      quarter,
+      goal: row?.goal ?? 0,
+      won: row?.won ?? 0,
+      pipeline: row?.pipeline ?? 0,
+      currency: row?.currency ?? 'EUR',
+    };
+  }
+
+  async updateQuarterlyGoal(companyId: string, goal: number): Promise<HomeQuarterlyGoal> {
+    await this.sequelize.query(
+      `
+      INSERT INTO company_quarterly_goals (id, company_id, quarter, goal_amount, created_at, updated_at)
+      VALUES (gen_random_uuid(), :companyId, :quarter, :goal, now(), now())
+      ON CONFLICT (company_id, quarter) DO UPDATE SET goal_amount = EXCLUDED.goal_amount, updated_at = now()
+      `,
+      { replacements: { companyId, quarter: currentQuarter(), goal } },
+    );
+
+    return this.findQuarterlyGoal(companyId);
   }
 }
