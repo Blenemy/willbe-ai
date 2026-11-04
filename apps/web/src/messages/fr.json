@@ -1,112 +1,177 @@
 {
   "homepage": {
     "header": {
-      "features": "Fonctionnalités",
-      "how_it_works": "Comment ça marche",
-      "portfolio": "Édition portfolio",
-      "real_product": "willbe.ai",
-      "sign_in": "Se connecter"
+      "leads": "Leads",
+      "prospecting": "Prospection",
+      "analytics": "Analyses",
+      "ai": "IA",
+      "log_in": "Se connecter",
+      "start": "Commencer"
     },
     "hero": {
-      "badge": "Édition portfolio · intégrations payantes simulées",
-      "title": "La prospection B2B, de la première recherche au rendez-vous fixé",
-      "subtitle": "Willbe trouve les comptes cibles et les décideurs, rédige des séquences e-mail et LinkedIn personnalisées, les envoie et suit chaque réponse. Cette copie tourne sur des données de démo, vous pouvez donc parcourir tout le produit.",
-      "cta_demo": "Ouvrir la démo",
-      "cta_product": "Voir le vrai produit",
-      "demo_label": "Accès démo",
+      "eyebrow": "Équipe + Données + IA",
+      "title": "Plus de rendez-vous, moins d'intuition",
+      "title_accent": "Une prospection personnelle, quelle que soit l'échelle",
+      "subtitle": "Trouvez des contacts vérifiés en quelques secondes, écrivez à chaque personne un message pensé pour elle dans plus de 80 langues et gardez votre CRM à jour sans effort.",
+      "cta_primary": "Commencer",
+      "cta_secondary": "Se connecter",
       "stats": {
-        "companies": {
-          "value": "400",
-          "label": "entreprises dans le jeu de données"
+        "contacts": {
+          "value": "+85%",
+          "label": "de contacts vérifiés"
         },
-        "people": {
-          "value": "6 000",
-          "label": "décideurs à rechercher"
+        "pipeline": {
+          "value": "+67%",
+          "label": "de pipeline en plus"
         },
-        "channels": {
-          "value": "3",
-          "label": "canaux de prospection"
-        },
-        "languages": {
-          "value": "3",
-          "label": "langues de l'interface"
+        "time": {
+          "value": "+5h",
+          "label": "gagnées par commercial chaque jour"
         }
       }
     },
-    "features": {
-      "title": "Tout le travail d'une équipe outbound, dans un seul espace",
-      "subtitle": "Les mêmes parcours que l'application en production, avec des simulations locales à la place des API payantes.",
+    "preview": {
+      "home": "Accueil",
+      "accounts": "Comptes",
+      "leads": "Leads",
+      "campaigns": "Campagnes",
+      "analytics": "Analyses",
+      "settings": "Paramètres",
+      "greeting": "Bon retour, Jacob",
+      "date": "Mardi 4 novembre",
+      "meeting_rate": "Taux de rendez-vous",
+      "reply_rate": "Taux de réponse",
+      "goal": "Objectif trimestriel",
+      "performance": "Performance des campagnes",
+      "sent": "Envoyés",
+      "replies": "Réponses",
+      "meetings": "Rendez-vous",
+      "upcoming": "Prochains rendez-vous"
+    },
+    "pain": {
+      "title": "Imaginez votre semaine sans…",
       "items": {
-        "accounts": {
-          "title": "Scénarios de comptes",
-          "text": "Recherchez des entreprises par secteur, localisation, effectif et mots-clés, puis enregistrez les listes utiles."
-        },
-        "leads": {
-          "title": "Scénarios de leads",
-          "text": "Trouvez les personnes de ces entreprises par poste, séniorité et fonction, et choisissez qui contacter."
-        },
-        "campaigns": {
-          "title": "Campagnes de messages",
-          "text": "Créez des cadences qui combinent invitations LinkedIn, messages LinkedIn et e-mails."
-        },
-        "enrichment": {
-          "title": "Enrichissement et langue",
-          "text": "Détectez la langue de chaque lead et complétez e-mails et téléphones professionnels avant tout envoi."
-        },
-        "tracking": {
-          "title": "Suivi et analyses",
-          "text": "Réponses, rendez-vous, absences et rebonds par campagne, avec un tableau de bord et une page d'analyses."
-        },
-        "workspace": {
-          "title": "Espace d'équipe",
-          "text": "Profil d'entreprise, produits, structures de messages, coéquipiers avec rôles et connexion HubSpot."
-        }
-      }
-    },
-    "steps": {
-      "title": "Le déroulé d'une campagne",
-      "items": {
-        "market": {
-          "title": "Choisir le marché",
-          "text": "Décrivez les entreprises auxquelles vous vendez et enregistrez les comptes qui correspondent."
-        },
-        "people": {
-          "title": "Choisir les personnes",
-          "text": "Ne gardez que les décideurs au sein de ces comptes."
-        },
-        "write": {
-          "title": "Générer la séquence",
-          "text": "Les messages sont construits à partir de vos structures et de votre produit, pour chaque lead et dans sa langue."
-        },
-        "track": {
-          "title": "Envoyer et relancer",
-          "text": "Les réponses et les rendez-vous arrivent, et les tableaux de bord montrent quel message fonctionne."
-        }
-      }
-    },
-    "portfolio": {
-      "title": "Ce qui change dans cette édition",
-      "text": "Chaque service tiers payant est remplacé par une simulation locale : l'application tourne sans coût et tout le monde peut l'essayer. La logique, le modèle de données et l'interface sont ceux de la production.",
-      "mocks_title": "Remplacé par des simulations",
-      "mocks": {
-        "linkedin": "Recherche LinkedIn et Sales Navigator : jeu de données généré",
-        "email": "Envoi d'e-mails : journalisé, avec réponses et rendez-vous simulés",
-        "llm": "Génération de messages : modèles au lieu d'un LLM",
-        "enrichment": "Enrichissement des contacts : e-mails et téléphones générés"
+        "tools": "Payer cinq outils qui communiquent à peine entre eux",
+        "crm": "Recopier des notes dans le CRM à la main",
+        "linkedin": "Rafraîchir LinkedIn toute la journée pour trouver des prospects",
+        "clones": "Envoyer des e-mails qui ressemblent à tous les autres",
+        "guessing": "Deviner quelle stratégie de croissance va marcher"
       },
-      "stack_title": "Stack",
-      "source": "Code source sur GitHub",
-      "real": "Produit réel sur willbe.ai"
+      "outro": "Willbe réunit toute votre prospection B2B dans un seul outil."
+    },
+    "pillars": {
+      "cta": "Commencer maintenant",
+      "leads": {
+        "label": "Leads",
+        "title": "Touchez exactement les personnes qui achètent chez vous",
+        "text": "Si votre persona existe et a un e-mail professionnel, Willbe l'a. Des données réelles et une segmentation aussi précise que votre stratégie.",
+        "points": {
+          "a": "Plus de 30 bases de contacts B2B pour le prix d'une",
+          "b": "Des données vérifiées et mises à jour en continu, toute l'année",
+          "c": "Des filtres avancés pour cibler votre client idéal"
+        },
+        "stat_value": "+85%",
+        "stat_label": "de couverture e-mail mondiale"
+      },
+      "prospecting": {
+        "label": "Prospection",
+        "title": "Écrivez à 500 leads, chacun se sentira unique",
+        "text": "Transformez la prospection à froid en conversations que l'on a envie d'avoir.",
+        "points": {
+          "a": "Pas de modèles : un orchestrateur IA apprend à écrire comme vous",
+          "b": "Une personnalisation à grande échelle sur e-mail et LinkedIn",
+          "c": "Parlez à chaque client comme un natif, dans plus de 80 langues"
+        },
+        "stat_value": "25%",
+        "stat_label": "de taux de réponse moyen"
+      },
+      "analytics": {
+        "label": "Analyses",
+        "title": "Grandissez avec des chiffres, pas des intuitions",
+        "text": "Mesurez ce qui compte, ajustez votre stratégie en temps réel et développez ce qui fonctionne.",
+        "points": {
+          "a": "Des KPI clairs par canal, message et profil d'acheteur",
+          "b": "Une vue complète de l'équipe : qui excelle et qui a besoin d'aide",
+          "c": "Des pistes sur où vous développer et quoi corriger en premier"
+        },
+        "stat_value": "+35%",
+        "stat_label": "de précision des prévisions de vente"
+      }
+    },
+    "visuals": {
+      "lead_list": "Liste de leads",
+      "search": "Rechercher par nom ou entreprise",
+      "found": "1 248 leads trouvés",
+      "filters": "Filtres",
+      "job_title": "Poste",
+      "seniority": "Séniorité",
+      "industry": "Secteur",
+      "headcount": "Effectif",
+      "email": "E-mail",
+      "linkedin": "LinkedIn",
+      "generated_for": "Généré pour Marco Rossi",
+      "language": "Italien détecté",
+      "funnel": "Entonnoir de campagne",
+      "opened": "Ouverts",
+      "replied": "Réponses",
+      "meetings": "Rendez-vous",
+      "sent": "Envoyés",
+      "this_quarter": "Ce trimestre"
+    },
+    "crm": {
+      "title": "Un outil au lieu de cinq",
+      "text": "Arrêtez de jongler entre fournisseurs et onglets. Willbe pilote toute votre stratégie outbound au même endroit et synchronise chaque interaction avec votre CRM : l'équipe passe moins de temps sur l'administratif et plus sur la vente.",
+      "points": {
+        "time": "Moins de temps sur les tâches répétitives",
+        "cost": "Un abonnement au lieu de plusieurs",
+        "sync": "Chaque réponse et rendez-vous arrive dans votre CRM"
+      }
+    },
+    "ai": {
+      "eyebrow": "Pas de modèles. Pas de textes génériques.",
+      "title": "Une IA qui comprend votre activité",
+      "text": "Willbe ne remplace pas vos commerciaux, il les rend plus rapides et plus pertinents. Chaque message s'appuie sur des signaux réels sur la personne, l'entreprise et le moment. La signature reste toujours la vôtre.",
+      "groups": {
+        "person": "Personne",
+        "company": "Entreprise",
+        "context": "Contexte"
+      },
+      "signals": {
+        "personality": "Personnalité",
+        "posts": "Publications récentes",
+        "role": "Poste",
+        "interests": "Centres d'intérêt",
+        "education": "Formation",
+        "industry": "Secteur",
+        "employees": "Effectif",
+        "vacancies": "Offres d'emploi",
+        "events": "Événements",
+        "news": "Actualités",
+        "language": "Langue",
+        "location": "Localisation",
+        "services": "Services",
+        "calendar": "Jour de l'année",
+        "channel": "Meilleur canal"
+      },
+      "result_title": "Prêt à envoyer",
+      "result_text": "Bonjour Laura, j'ai vu votre post sur la reconstruction de l'équipe SDR après la série B. Trois entreprises de votre taille ont divisé par deux leur temps de montée en charge avec un seul changement dans leur outbound. Je vous explique ?"
     },
     "cta": {
-      "title": "Essayez avec le compte démo",
-      "text": "Tout ici est une donnée de démo : créez, envoyez et supprimez librement.",
-      "button": "Ouvrir la démo"
+      "title": "Votre prochain client est déjà quelque part",
+      "text": "Laissez Willbe le trouver et lancer la conversation.",
+      "button": "Commencer"
     },
     "footer": {
-      "edition": "Willbe, édition portfolio",
-      "real": "Produit réel :"
+      "product": "Produit",
+      "account": "Compte",
+      "demo_note": "Environnement de démonstration. Site officiel :"
     }
+  },
+  "demoAccount": {
+    "title": "Compte démo",
+    "hint": "Connectez-vous avec ces identifiants pour découvrir le produit.",
+    "email": "E-mail",
+    "password": "Mot de passe"
   },
   "Errors": {
     "404_error": "Oups ! Erreur 404",

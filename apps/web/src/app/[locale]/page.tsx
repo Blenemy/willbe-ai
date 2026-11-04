@@ -1,20 +1,22 @@
 import Header from "@/components/layout/Header/Header";
 import { Hero } from "./components/Hero";
-import { Features } from "./components/Features";
-import { Steps } from "./components/Steps";
-import { PortfolioEdition } from "./components/PortfolioEdition";
+import { PainPoints } from "./components/PainPoints";
+import { Pillars } from "./components/Pillars";
+import { Integrations } from "./components/Integrations";
+import { AiSignals } from "./components/AiSignals";
 import { FinalCta } from "./components/FinalCta";
 import { Footer } from "./components/Footer";
 
 export default async function Home() {
   return (
-    <div className="min-h-screen bg-[#F6F7FB] text-[#030A27] font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen bg-[#030A27] text-white font-[family-name:var(--font-geist-sans)]">
       <Header />
       <main>
         <Hero />
-        <Features />
-        <Steps />
-        <PortfolioEdition />
+        <PainPoints />
+        <Pillars />
+        <Integrations />
+        <AiSignals />
         <FinalCta />
       </main>
       <Footer />
