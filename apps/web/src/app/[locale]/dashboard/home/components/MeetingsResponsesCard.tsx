@@ -32,9 +32,9 @@ export default function MeetingsResponsesCard() {
 
   return (
     <Card className="rounded-2xl h-full flex flex-col overflow-hidden">
-      <CardHeader className="flex justify-between flex-row">
-        <div className="flex flex-col gap-2">
-          <CardTitle>Meetings & responses</CardTitle>
+      <CardHeader className="flex justify-between flex-row space-y-0 px-6 py-4">
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-lg">Meetings & responses</CardTitle>
           <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
         <div>
@@ -53,7 +53,7 @@ export default function MeetingsResponsesCard() {
         {rates.map(({ label, value, icon: Icon }) => (
           <div
             key={label}
-            className="flex flex-col items-center justify-center gap-1 py-6"
+            className="flex flex-col items-center justify-center gap-1 py-4"
           >
             {isLoading ? (
               <Skeleton className="h-9 w-24 rounded-md" />

@@ -78,9 +78,9 @@ export default function QuarterlyGoalCard() {
 
   return (
     <Card className="rounded-2xl h-full flex flex-col overflow-hidden">
-      <CardHeader className="flex flex-row items-start justify-between space-y-0">
-        <div className="flex flex-col gap-2">
-          <CardTitle>Quarterly Goal</CardTitle>
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 px-6 py-4">
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-lg">Quarterly Goal</CardTitle>
           <p className="text-sm text-muted-foreground">{quarterLabel}</p>
         </div>
         <Button

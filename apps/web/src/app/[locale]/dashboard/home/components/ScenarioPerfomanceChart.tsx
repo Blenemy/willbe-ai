@@ -92,9 +92,9 @@ export default function ScenarioPerformanceChart() {
 
   return (
     <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
-      <CardHeader className="flex items-start justify-between flex-row">
-        <div className="flex flex-col gap-2">
-          <CardTitle>Scenario performance</CardTitle>
+      <CardHeader className="flex items-start justify-between flex-row space-y-0 px-6 py-4">
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-lg">Scenario performance</CardTitle>
           <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
         <Button

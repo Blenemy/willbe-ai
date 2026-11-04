@@ -59,9 +59,11 @@ export default function MeetingsList() {
 
   return (
     <Card className="border overflow-hidden bg-white h-full flex flex-col rounded-2xl">
-      <CardHeader className="flex justify-between flex-row">
-        <div className="flex flex-col gap-2">
-          <CardTitle>Meetings ({meetings.length})</CardTitle>
+      <CardHeader className="flex justify-between flex-row space-y-0 px-6 py-4">
+        <div className="flex flex-col gap-1">
+          <CardTitle className="text-lg">
+            Meetings ({meetings.length})
+          </CardTitle>
           <p className="text-sm text-muted-foreground">{subtitleText}</p>
         </div>
         <div>
@@ -114,12 +116,13 @@ export default function MeetingsList() {
 
       {!isLoading && meetings.length > 0 && (
         <div className="min-h-0 flex-1 overflow-auto">
-          <Table>
+          <Table className="table-fixed">
             <TableHeader>
               <TableRow>
-                <TableHead>Lead name</TableHead>
-                <TableHead>Position</TableHead>
+                <TableHead className="w-[38%]">Lead name</TableHead>
+                <TableHead className="w-[32%]">Position</TableHead>
                 <TableHead>Account name</TableHead>
+                <TableHead className="w-12" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -128,9 +131,9 @@ export default function MeetingsList() {
                   key={`${m.messageScenarioId}-${m.leadName}`}
                   className="h-14"
                 >
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
+                  <TableCell className="py-2">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <Avatar className="h-8 w-8 shrink-0">
                         <AvatarImage
                           src={m.leadProfilePictureUrl}
                           alt={m.leadName}
@@ -142,13 +145,13 @@ export default function MeetingsList() {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="truncate text-sm text-muted-foreground">
+                  <TableCell className="truncate py-2 text-sm text-muted-foreground">
                     {m.position}
                   </TableCell>
-                  <TableCell className="text-sm font-medium truncate">
+                  <TableCell className="truncate py-2 text-sm font-medium">
                     {m.accountName}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="py-2 text-right">
                     <a
                       href={m.accountUrl}
                       target="_blank"
