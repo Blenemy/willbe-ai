@@ -1,9 +1,111 @@
 {
   "homepage": {
     "header": {
-      "title": "blog",
-      "sign_in": "Se connecter",
-      "talk_to_sales": "Parler à un commercial"
+      "features": "Fonctionnalités",
+      "how_it_works": "Comment ça marche",
+      "portfolio": "Édition portfolio",
+      "real_product": "willbe.ai",
+      "sign_in": "Se connecter"
+    },
+    "hero": {
+      "badge": "Édition portfolio · intégrations payantes simulées",
+      "title": "La prospection B2B, de la première recherche au rendez-vous fixé",
+      "subtitle": "Willbe trouve les comptes cibles et les décideurs, rédige des séquences e-mail et LinkedIn personnalisées, les envoie et suit chaque réponse. Cette copie tourne sur des données de démo, vous pouvez donc parcourir tout le produit.",
+      "cta_demo": "Ouvrir la démo",
+      "cta_product": "Voir le vrai produit",
+      "demo_label": "Accès démo",
+      "stats": {
+        "companies": {
+          "value": "400",
+          "label": "entreprises dans le jeu de données"
+        },
+        "people": {
+          "value": "6 000",
+          "label": "décideurs à rechercher"
+        },
+        "channels": {
+          "value": "3",
+          "label": "canaux de prospection"
+        },
+        "languages": {
+          "value": "3",
+          "label": "langues de l'interface"
+        }
+      }
+    },
+    "features": {
+      "title": "Tout le travail d'une équipe outbound, dans un seul espace",
+      "subtitle": "Les mêmes parcours que l'application en production, avec des simulations locales à la place des API payantes.",
+      "items": {
+        "accounts": {
+          "title": "Scénarios de comptes",
+          "text": "Recherchez des entreprises par secteur, localisation, effectif et mots-clés, puis enregistrez les listes utiles."
+        },
+        "leads": {
+          "title": "Scénarios de leads",
+          "text": "Trouvez les personnes de ces entreprises par poste, séniorité et fonction, et choisissez qui contacter."
+        },
+        "campaigns": {
+          "title": "Campagnes de messages",
+          "text": "Créez des cadences qui combinent invitations LinkedIn, messages LinkedIn et e-mails."
+        },
+        "enrichment": {
+          "title": "Enrichissement et langue",
+          "text": "Détectez la langue de chaque lead et complétez e-mails et téléphones professionnels avant tout envoi."
+        },
+        "tracking": {
+          "title": "Suivi et analyses",
+          "text": "Réponses, rendez-vous, absences et rebonds par campagne, avec un tableau de bord et une page d'analyses."
+        },
+        "workspace": {
+          "title": "Espace d'équipe",
+          "text": "Profil d'entreprise, produits, structures de messages, coéquipiers avec rôles et connexion HubSpot."
+        }
+      }
+    },
+    "steps": {
+      "title": "Le déroulé d'une campagne",
+      "items": {
+        "market": {
+          "title": "Choisir le marché",
+          "text": "Décrivez les entreprises auxquelles vous vendez et enregistrez les comptes qui correspondent."
+        },
+        "people": {
+          "title": "Choisir les personnes",
+          "text": "Ne gardez que les décideurs au sein de ces comptes."
+        },
+        "write": {
+          "title": "Générer la séquence",
+          "text": "Les messages sont construits à partir de vos structures et de votre produit, pour chaque lead et dans sa langue."
+        },
+        "track": {
+          "title": "Envoyer et relancer",
+          "text": "Les réponses et les rendez-vous arrivent, et les tableaux de bord montrent quel message fonctionne."
+        }
+      }
+    },
+    "portfolio": {
+      "title": "Ce qui change dans cette édition",
+      "text": "Chaque service tiers payant est remplacé par une simulation locale : l'application tourne sans coût et tout le monde peut l'essayer. La logique, le modèle de données et l'interface sont ceux de la production.",
+      "mocks_title": "Remplacé par des simulations",
+      "mocks": {
+        "linkedin": "Recherche LinkedIn et Sales Navigator : jeu de données généré",
+        "email": "Envoi d'e-mails : journalisé, avec réponses et rendez-vous simulés",
+        "llm": "Génération de messages : modèles au lieu d'un LLM",
+        "enrichment": "Enrichissement des contacts : e-mails et téléphones générés"
+      },
+      "stack_title": "Stack",
+      "source": "Code source sur GitHub",
+      "real": "Produit réel sur willbe.ai"
+    },
+    "cta": {
+      "title": "Essayez avec le compte démo",
+      "text": "Tout ici est une donnée de démo : créez, envoyez et supprimez librement.",
+      "button": "Ouvrir la démo"
+    },
+    "footer": {
+      "edition": "Willbe, édition portfolio",
+      "real": "Produit réel :"
     }
   },
   "Errors": {

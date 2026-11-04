@@ -1,9 +1,111 @@
 {
   "homepage": {
     "header": {
-      "title": "blog",
-      "sign_in": "Conectarse",
-      "talk_to_sales": "¿Hablamos?"
+      "features": "Funciones",
+      "how_it_works": "Cómo funciona",
+      "portfolio": "Edición portfolio",
+      "real_product": "willbe.ai",
+      "sign_in": "Conectarse"
+    },
+    "hero": {
+      "badge": "Edición portfolio · integraciones de pago simuladas",
+      "title": "Outbound B2B, desde la primera búsqueda hasta la reunión agendada",
+      "subtitle": "Willbe encuentra cuentas objetivo y decisores, redacta secuencias personalizadas de email y LinkedIn, las envía y sigue cada respuesta. Esta copia funciona con datos de demo, así que puedes recorrer todo el producto.",
+      "cta_demo": "Abrir la demo",
+      "cta_product": "Ver el producto real",
+      "demo_label": "Acceso demo",
+      "stats": {
+        "companies": {
+          "value": "400",
+          "label": "empresas en el dataset"
+        },
+        "people": {
+          "value": "6.000",
+          "label": "decisores para buscar"
+        },
+        "channels": {
+          "value": "3",
+          "label": "canales de contacto"
+        },
+        "languages": {
+          "value": "3",
+          "label": "idiomas de la interfaz"
+        }
+      }
+    },
+    "features": {
+      "title": "Todo lo que hace un equipo de outbound, en un solo espacio",
+      "subtitle": "Los mismos flujos que la app en producción, con simulaciones locales en lugar de APIs de pago.",
+      "items": {
+        "accounts": {
+          "title": "Escenarios de cuentas",
+          "text": "Busca empresas por sector, ubicación, plantilla y palabras clave, y guarda las listas que valen la pena."
+        },
+        "leads": {
+          "title": "Escenarios de leads",
+          "text": "Encuentra personas en esas empresas por rol, seniority y función, y elige a quién contactar."
+        },
+        "campaigns": {
+          "title": "Campañas de mensajes",
+          "text": "Crea cadencias que combinan solicitudes de conexión en LinkedIn, mensajes de LinkedIn y emails."
+        },
+        "enrichment": {
+          "title": "Enriquecimiento e idioma",
+          "text": "Detecta el idioma de cada lead y completa emails y teléfonos de trabajo antes de enviar nada."
+        },
+        "tracking": {
+          "title": "Seguimiento y analítica",
+          "text": "Respuestas, reuniones, fuera de oficina y rebotes por campaña, con un panel de inicio y una página de analítica."
+        },
+        "workspace": {
+          "title": "Espacio de equipo",
+          "text": "Perfil de empresa, productos, estructuras de mensajes, compañeros con roles y conexión con HubSpot."
+        }
+      }
+    },
+    "steps": {
+      "title": "Cómo funciona una campaña",
+      "items": {
+        "market": {
+          "title": "Elige el mercado",
+          "text": "Describe las empresas a las que vendes y guarda las cuentas que encajan."
+        },
+        "people": {
+          "title": "Elige a las personas",
+          "text": "Quédate con los decisores dentro de esas cuentas."
+        },
+        "write": {
+          "title": "Genera la secuencia",
+          "text": "Los mensajes se crean a partir de tus estructuras y tu producto, para cada lead y en su idioma."
+        },
+        "track": {
+          "title": "Envía y da seguimiento",
+          "text": "Llegan respuestas y reuniones, y los paneles muestran qué mensaje funciona."
+        }
+      }
+    },
+    "portfolio": {
+      "title": "Qué cambia en esta edición",
+      "text": "Cada servicio externo de pago se sustituye por una simulación local, así que la app funciona sin coste y cualquiera puede probarla. La lógica, el modelo de datos y la interfaz son los mismos que en producción.",
+      "mocks_title": "Sustituido por simulaciones",
+      "mocks": {
+        "linkedin": "Búsqueda en LinkedIn y Sales Navigator: dataset generado",
+        "email": "Envío de emails: se registran, con respuestas y reuniones simuladas",
+        "llm": "Generación de mensajes: plantillas en lugar de un LLM",
+        "enrichment": "Enriquecimiento de contactos: emails y teléfonos generados"
+      },
+      "stack_title": "Stack",
+      "source": "Código fuente en GitHub",
+      "real": "Producto real en willbe.ai"
+    },
+    "cta": {
+      "title": "Pruébalo con la cuenta demo",
+      "text": "Todo aquí son datos de demo, así que puedes crear, enviar y borrar lo que quieras.",
+      "button": "Abrir la demo"
+    },
+    "footer": {
+      "edition": "Willbe, edición portfolio",
+      "real": "Producto real:"
     }
   },
   "Errors": {

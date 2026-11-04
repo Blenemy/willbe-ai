@@ -1,9 +1,111 @@
 {
   "homepage": {
     "header": {
-      "title": "blog",
-      "sign_in": "Sign in",
-      "talk_to_sales": "Talk to sales"
+      "features": "Features",
+      "how_it_works": "How it works",
+      "portfolio": "Portfolio edition",
+      "real_product": "willbe.ai",
+      "sign_in": "Sign in"
+    },
+    "hero": {
+      "badge": "Portfolio edition · paid integrations mocked",
+      "title": "B2B outbound, from the first search to the booked meeting",
+      "subtitle": "Willbe finds target accounts and decision makers, writes personal email and LinkedIn sequences, sends them and tracks every reply. This copy runs on demo data, so you can click through the whole product.",
+      "cta_demo": "Open the live demo",
+      "cta_product": "See the real product",
+      "demo_label": "Demo login",
+      "stats": {
+        "companies": {
+          "value": "400",
+          "label": "companies in the dataset"
+        },
+        "people": {
+          "value": "6,000",
+          "label": "decision makers to search"
+        },
+        "channels": {
+          "value": "3",
+          "label": "outreach channels"
+        },
+        "languages": {
+          "value": "3",
+          "label": "interface languages"
+        }
+      }
+    },
+    "features": {
+      "title": "Everything an outbound team does, in one workspace",
+      "subtitle": "The same flows as the production app, backed by local mocks instead of paid APIs.",
+      "items": {
+        "accounts": {
+          "title": "Account scenarios",
+          "text": "Search companies by industry, location, headcount and keywords, then save the lists worth working on."
+        },
+        "leads": {
+          "title": "Lead scenarios",
+          "text": "Find people at those companies by role, seniority and function, and choose who gets the outreach."
+        },
+        "campaigns": {
+          "title": "Message campaigns",
+          "text": "Build cadences that mix LinkedIn connection requests, LinkedIn messages and emails."
+        },
+        "enrichment": {
+          "title": "Enrichment and language",
+          "text": "Detect each lead's language and fill in work emails and phone numbers before anything is sent."
+        },
+        "tracking": {
+          "title": "Tracking and analytics",
+          "text": "Replies, meetings, out-of-office and bounces per campaign, plus a home dashboard and an analytics page."
+        },
+        "workspace": {
+          "title": "Team workspace",
+          "text": "Company profile, products, message structures, teammates with roles and a HubSpot connection."
+        }
+      }
+    },
+    "steps": {
+      "title": "How a campaign runs",
+      "items": {
+        "market": {
+          "title": "Pick the market",
+          "text": "Describe the companies you sell to and save the accounts that fit."
+        },
+        "people": {
+          "title": "Choose the people",
+          "text": "Narrow down to the decision makers inside those accounts."
+        },
+        "write": {
+          "title": "Generate the sequence",
+          "text": "Messages are built from your structures and product, per lead and in the lead's language."
+        },
+        "track": {
+          "title": "Send and follow up",
+          "text": "Replies and meetings come in, and the dashboards show which pitch works."
+        }
+      }
+    },
+    "portfolio": {
+      "title": "What is different in this edition",
+      "text": "Every paid third-party service is replaced by a local mock, so the app runs at zero cost and anyone can try it. The product logic, data model and UI are the same as in production.",
+      "mocks_title": "Replaced by mocks",
+      "mocks": {
+        "linkedin": "LinkedIn and Sales Navigator search: a generated dataset",
+        "email": "Email delivery: logged, with simulated replies and meetings",
+        "llm": "Message generation: templates instead of an LLM",
+        "enrichment": "Contact enrichment: generated work emails and phones"
+      },
+      "stack_title": "Stack",
+      "source": "Source code on GitHub",
+      "real": "Production product at willbe.ai"
+    },
+    "cta": {
+      "title": "Try it with the demo account",
+      "text": "Everything here is demo data, so feel free to create, send and delete anything.",
+      "button": "Open the live demo"
+    },
+    "footer": {
+      "edition": "Willbe, portfolio edition",
+      "real": "Production product:"
     }
   },
   "Errors": {
