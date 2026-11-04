@@ -92,6 +92,18 @@ export class MessageEntriesService {
     private readonly linkedinProvider: LinkedinProvider,
   ) {}
 
+  private generationEvents?: QueueEvents;
+
+  private async getGenerationEvents(): Promise<QueueEvents> {
+    if (!this.generationEvents) {
+      this.generationEvents = new QueueEvents('messages-generation', {
+        connection: this.messagesGenerationQueue.opts.connection,
+      });
+    }
+    await this.generationEvents.waitUntilReady();
+    return this.generationEvents;
+  }
+
   async create(dto: CreateMessageEntryReq): Promise<MessageEntry | null> {
     const messageScenario = await this.messageScenarioService.findById(
       dto.messageScenarioId,
@@ -913,8 +925,7 @@ export class MessageEntriesService {
     messageEntryLeadsData: MessageEntryLeadData[],
     userId: string,
   ) {
-    const queueEvents = new QueueEvents('messages-generation');
-    await queueEvents.waitUntilReady();
+    const queueEvents = await this.getGenerationEvents();
 
     const transaction = await this.sequelize.transaction();
     const updatePromises: Promise<[number]>[] = [];
@@ -1110,8 +1121,7 @@ export class MessageEntriesService {
       { removeOnComplete: true },
     );
 
-    const queueEvents = new QueueEvents('messages-generation');
-    await queueEvents.waitUntilReady();
+    const queueEvents = await this.getGenerationEvents();
 
     const result = await job.waitUntilFinished(queueEvents);
 
