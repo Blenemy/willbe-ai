@@ -91,6 +91,10 @@ jobs:
             compose="docker compose --env-file deploy/.env -f docker-compose.prod.yml"
             $compose pull
             $compose up -d --remove-orphans
+            docker images --format '{{.Repository}}:{{.Tag}}' \
+              | grep -E '^ghcr\.io/blenemy/willbe-(api|web):' \
+              | grep -v ":$IMAGE_TAG\$" \
+              | xargs -r docker rmi || true
             docker image prune -f
 
             ok() {

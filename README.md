@@ -83,10 +83,10 @@ GitHub Actions builds the images and pushes them to GHCR. The server only pulls 
 
 | | |
 | --- | --- |
-| RAM in use | about 600 MB for the whole stack after boot |
+| RAM in use | about 350 MB for the whole stack after boot |
 | RAM to buy | 2 GB if the VPS runs nothing else |
 | CPU | 1 vCPU is enough for a demo |
-| Disk | Images take about 2 GB, the database starts small |
+| Disk | About 1.8 GB for the images; each deploy removes the previous ones |
 
 ### One-time server setup
 
