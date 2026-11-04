@@ -20,9 +20,9 @@ const NAV = [
 ] as const;
 
 const BARS = [
-  { key: "sent", height: "h-28", color: "bg-slate-200" },
-  { key: "replies", height: "h-16", color: "bg-sky-300" },
-  { key: "meetings", height: "h-10", color: "bg-emerald-300" },
+  { key: "sent", height: "h-24", color: "bg-slate-200" },
+  { key: "replies", height: "h-14", color: "bg-sky-300" },
+  { key: "meetings", height: "h-9", color: "bg-emerald-300" },
 ] as const;
 
 const MEETINGS = [
@@ -82,7 +82,7 @@ export const DashboardPreview = async () => {
 
           <div className="hidden rounded-xl bg-white p-4 sm:block">
             <p className="text-xs font-medium text-slate-500">{t("performance")}</p>
-            <div className="mt-4 flex h-28 items-end justify-around gap-3">
+            <div className="mt-3 flex h-32 items-end justify-around gap-3">
               {BARS.map(({ key, height, color }) => (
                 <div key={key} className="flex flex-1 flex-col items-center gap-1">
                   <div className={`w-full max-w-10 rounded-md ${height} ${color}`} />
