@@ -25,8 +25,13 @@ export default function MeetingsResponsesCard() {
     }
   }, [error]);
 
+  const rates = [
+    { label: "Meeting rate", value: meetingRate, icon: Users },
+    { label: "Response rate", value: responseRate, icon: Reply },
+  ];
+
   return (
-    <Card className="rounded-2xl h-full">
+    <Card className="rounded-2xl h-full flex flex-col overflow-hidden">
       <CardHeader className="flex justify-between flex-row">
         <div className="flex flex-col gap-2">
           <CardTitle>Meetings & responses</CardTitle>
@@ -44,30 +49,23 @@ export default function MeetingsResponsesCard() {
         </div>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-2 gap-4 text-center">
-        <div>
-          <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground mb-1">
-            <Users className="w-4 h-4" />
-            Meeting rate
+      <CardContent className="grid flex-1 grid-cols-2 divide-x divide-slate-200 bg-slate-50 p-0">
+        {rates.map(({ label, value, icon: Icon }) => (
+          <div
+            key={label}
+            className="flex flex-col items-center justify-center gap-1 py-6"
+          >
+            {isLoading ? (
+              <Skeleton className="h-9 w-24 rounded-md" />
+            ) : (
+              <div className="flex items-center gap-2 text-3xl font-semibold text-[#030A27]">
+                <Icon className="h-7 w-7" />
+                <span>{value}%</span>
+              </div>
+            )}
+            <span className="text-sm text-muted-foreground">{label}</span>
           </div>
-          {isLoading ? (
-            <Skeleton className="w-16 h-6 mx-auto rounded-md" />
-          ) : (
-            <div className="text-2xl font-bold">{meetingRate}%</div>
-          )}
-        </div>
-
-        <div>
-          <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground mb-1">
-            <Reply className="w-4 h-4" />
-            Response rate
-          </div>
-          {isLoading ? (
-            <Skeleton className="w-16 h-6 mx-auto rounded-md" />
-          ) : (
-            <div className="text-2xl font-bold">{responseRate}%</div>
-          )}
-        </div>
+        ))}
       </CardContent>
     </Card>
   );

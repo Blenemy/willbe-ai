@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { v4 as uuidv4 } from "uuid";
 
 const ROWS_PER_PAGE = 7;
+const MEETINGS_LIMIT = 100;
 
 export default function MeetingsList() {
   const [page, setPage] = useState(0);
@@ -36,8 +37,7 @@ export default function MeetingsList() {
   } = useMeetings({
     enableFetch: true,
     daysInterval,
-    limit: ROWS_PER_PAGE,
-    offset,
+    limit: MEETINGS_LIMIT,
   });
 
   useEffect(() => {
@@ -45,6 +45,10 @@ export default function MeetingsList() {
       handleAxiosError(error, "Failed to load meetings");
     }
   }, [error]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [daysInterval]);
 
   const currentMeetings = meetings.slice(offset, offset + ROWS_PER_PAGE);
 
@@ -73,90 +77,101 @@ export default function MeetingsList() {
       </CardHeader>
 
       {isLoading && (
-        <Table className="flex-grow">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Lead name</TableHead>
-              <TableHead>Position</TableHead>
-              <TableHead>Account name</TableHead>
-              <TableHead />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {skeletonKeys.map((key) => (
-              <TableRow key={key} className="h-16">
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="h-8 w-8 rounded-full" />
-                    <Skeleton className="h-4 w-[120px] rounded-md" />
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <Skeleton className="h-4 w-[100px] rounded-md" />
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end items-center gap-2">
-                    <Skeleton className="h-4 w-[140px] rounded-md" />
-                    <Skeleton className="h-5 w-5 rounded-md" />
-                  </div>
-                </TableCell>
+        <div className="min-h-0 flex-1 overflow-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Lead name</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>Account name</TableHead>
+                <TableHead />
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {skeletonKeys.map((key) => (
+                <TableRow key={key} className="h-14">
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <Skeleton className="h-4 w-[120px] rounded-md" />
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-[100px] rounded-md" />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end items-center gap-2">
+                      <Skeleton className="h-4 w-[140px] rounded-md" />
+                      <Skeleton className="h-5 w-5 rounded-md" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
 
       {!isLoading && meetings.length > 0 && (
-        <Table className="flex-grow">
-          <TableHeader>
-            <TableRow>
-              <TableHead>Lead name</TableHead>
-              <TableHead>Position</TableHead>
-              <TableHead>Account name</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentMeetings.map((m) => (
-              <TableRow key={m.messageScenarioId} className="h-16">
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage
-                        src={m.leadProfilePictureUrl}
-                        alt={m.leadName}
-                      />
-                      <AvatarFallback>{m.leadName[0]}</AvatarFallback>
-                    </Avatar>
-                    <span className="truncate font-medium text-sm">
-                      {m.leadName}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell className="truncate text-sm text-muted-foreground">
-                  {m.position}
-                </TableCell>
-                <TableCell className="text-sm font-medium truncate">
-                  {m.accountName}
-                </TableCell>
-                <TableCell className="text-right">
-                  <a
-                    href={m.accountUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button size="icon" variant="ghost" className="h-5 w-5 p-0">
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </a>
-                </TableCell>
+        <div className="min-h-0 flex-1 overflow-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Lead name</TableHead>
+                <TableHead>Position</TableHead>
+                <TableHead>Account name</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {currentMeetings.map((m) => (
+                <TableRow
+                  key={`${m.messageScenarioId}-${m.leadName}`}
+                  className="h-14"
+                >
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage
+                          src={m.leadProfilePictureUrl}
+                          alt={m.leadName}
+                        />
+                        <AvatarFallback>{m.leadName[0]}</AvatarFallback>
+                      </Avatar>
+                      <span className="truncate font-medium text-sm">
+                        {m.leadName}
+                      </span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="truncate text-sm text-muted-foreground">
+                    {m.position}
+                  </TableCell>
+                  <TableCell className="text-sm font-medium truncate">
+                    {m.accountName}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <a
+                      href={m.accountUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-5 w-5 p-0"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       )}
 
       {!isLoading && meetings.length === 0 && (
-        <div className="h-[350px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
+        <div className="flex-1 min-h-[240px] flex flex-col items-center justify-center text-center py-12 text-muted-foreground">
           <CalendarDays className="w-10 h-10 mb-4" />
           <p className="text-lg font-medium mb-1">No meetings found</p>
           <p className="text-sm max-w-sm">
@@ -167,7 +182,7 @@ export default function MeetingsList() {
       )}
 
       {meetings.length > 0 && !isLoading && (
-        <div className="w-full flex mt-auto p-6">
+        <div className="w-full flex mt-auto p-4">
           <div className="mx-auto">
             <CustomPagination
               page={page}
