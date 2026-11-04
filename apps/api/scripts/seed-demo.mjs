@@ -40,10 +40,18 @@ const ACCOUNT_SCENARIOS = [
   },
   {
     name: 'Healthcare providers',
-    daysAgo: 11,
+    daysAgo: 6,
     save: 12,
     filters: [
       { key: 'industry', type: 'INDUSTRY', keywords: ['Hospitals and Health Care', 'Medical Equipment Manufacturing', 'Pharmaceutical Manufacturing'] },
+    ],
+  },
+  {
+    name: 'Logistics and supply chain',
+    daysAgo: 2,
+    save: 10,
+    filters: [
+      { key: 'industry', type: 'INDUSTRY', keywords: ['Transportation, Logistics, Supply Chain and Storage'] },
     ],
   },
 ];
@@ -51,7 +59,7 @@ const ACCOUNT_SCENARIOS = [
 const LEAD_SCENARIOS = [
   {
     name: 'Sales leaders at DACH SaaS',
-    daysAgo: 34,
+    daysAgo: 32,
     save: 22,
     filters: [
       { key: 'seniority', value: { include: ['vp', 'director', 'cxo'], exclude: [] } },
@@ -61,7 +69,7 @@ const LEAD_SCENARIOS = [
   },
   {
     name: 'Marketing heads in fintech',
-    daysAgo: 22,
+    daysAgo: 18,
     save: 18,
     filters: [
       { key: 'department', type: 'DEPARTMENT', keywords: ['Marketing'] },
@@ -71,8 +79,8 @@ const LEAD_SCENARIOS = [
   },
   {
     name: 'Engineering leaders, healthtech',
-    daysAgo: 12,
-    save: 16,
+    daysAgo: 6,
+    save: 20,
     filters: [
       { key: 'department', type: 'DEPARTMENT', keywords: ['Engineering'] },
       { key: 'seniority', value: { include: ['cxo', 'vp', 'director'], exclude: [] } },
@@ -81,21 +89,37 @@ const LEAD_SCENARIOS = [
   },
   {
     name: 'Founders of early-stage startups',
-    daysAgo: 3,
-    save: 12,
+    daysAgo: 4,
+    save: 20,
     filters: [
       { key: 'seniority', value: { include: ['owner/partner', 'cxo'], exclude: [] } },
       { key: 'company_headcount', value: { from: '1', to: '50' } },
+    ],
+  },
+  {
+    name: 'Operations leaders in logistics',
+    daysAgo: 1,
+    save: 12,
+    filters: [
+      { key: 'department', type: 'DEPARTMENT', keywords: ['Operations'] },
+      { key: 'seniority', value: { include: ['director', 'vp', 'cxo'], exclude: [] } },
+      { key: 'company_industry', type: 'INDUSTRY', keywords: ['Transportation, Logistics, Supply Chain and Storage'] },
     ],
   },
 ];
 
 // One campaign per lead scenario (same order). `daysAgo` is when the first emails went out.
 const CAMPAIGNS = [
-  { name: 'DACH SaaS: Q3 outbound', daysAgo: 30, status: 'done', send: true, linkedin: false },
-  { name: 'Fintech marketing push', daysAgo: 18, status: 'in_progress', send: true, linkedin: true },
-  { name: 'Healthtech CTO intro', daysAgo: 8, status: 'in_progress', send: true, linkedin: true },
-  { name: 'Founders: draft sequence', daysAgo: 1, status: 'not_started', send: false, linkedin: false },
+  { name: 'DACH SaaS: Q3 outbound', daysAgo: 28, status: 'done', send: true, linkedin: false },
+  { name: 'Fintech marketing push', daysAgo: 14, status: 'in_progress', send: true, linkedin: true },
+  { name: 'Healthtech CTO intro', daysAgo: 5, status: 'in_progress', send: true, linkedin: true },
+  { name: 'Founders: seed-stage intro', daysAgo: 3, status: 'in_progress', send: true, linkedin: false },
+  { name: 'Logistics operations: draft', daysAgo: 0, status: 'not_started', send: false, linkedin: false },
+];
+
+const OUTCOMES = [
+  'meeting', 'not_answered', 'response', 'out_of_office', 'not_answered', 'meeting',
+  'not_answered', 'response', 'bounced', 'not_answered', 'not_answered',
 ];
 
 const TEAMMATES = [
@@ -310,24 +334,26 @@ async function backdateCampaign(db, scenarioId, campaign) {
     [scenarioId],
   );
 
+  const shift = Math.floor(roll(campaign.name) * OUTCOMES.length);
+
   for (const [index, message] of sent.entries()) {
     const sentDaysAgo = Math.max(campaign.daysAgo - (index % 4), 0.2);
     const sentAt = new Date(Date.now() - sentDaysAgo * 86_400_000 + roll(`${message.id}:hour`) * 6 * 3_600_000);
     const replyAt = new Date(Math.min(sentAt.getTime() + (2 + roll(`${message.id}:reply-delay`) * 46) * 3_600_000, Date.now() - 60_000));
-    const outcome = roll(`${message.id}:outcome`);
+    const outcome = OUTCOMES[(index + shift) % OUTCOMES.length];
 
     let status = 'not_answered';
-    let leadStatus = null;
+    let leadStatus = 'in_cadence';
     let reply = null;
 
-    if (outcome < 0.32) {
+    if (outcome === 'meeting' || outcome === 'response') {
       status = 'responded';
       reply = REPLIES[Math.floor(roll(`${message.id}:text`) * REPLIES.length)];
-      leadStatus = roll(`${message.id}:meeting`) < 0.45 ? 'meeting' : 'response';
-    } else if (outcome < 0.4) {
+      leadStatus = outcome;
+    } else if (outcome === 'out_of_office') {
       status = 'out_of_office';
       reply = OUT_OF_OFFICE_REPLY;
-    } else if (outcome < 0.46) {
+    } else if (outcome === 'bounced') {
       status = 'bounced';
       leadStatus = 'bounced';
     }
@@ -339,6 +365,7 @@ async function backdateCampaign(db, scenarioId, campaign) {
        WHERE id = $1`,
       [message.id, status, sentAt, reply ? replyAt : null],
     );
+    await db.query(`DELETE FROM received_messages WHERE sent_email_message_id = $1`, [message.id]);
     if (reply) {
       await db.query(
         `INSERT INTO received_messages (id, message, sent_email_message_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $4)`,
@@ -347,9 +374,9 @@ async function backdateCampaign(db, scenarioId, campaign) {
     }
     await db.query(
       `UPDATE message_entries_leads_data
-       SET status = COALESCE($2::enum_message_entries_leads_data_status, status), updated_at = $3::timestamptz
+       SET status = $2::enum_message_entries_leads_data_status, updated_at = $3::timestamptz
        WHERE id = $1`,
-      [message.message_entry_lead_data_id, leadStatus, reply || leadStatus ? replyAt : sentAt],
+      [message.message_entry_lead_data_id, leadStatus, reply || leadStatus === 'bounced' ? replyAt : sentAt],
     );
   }
 }

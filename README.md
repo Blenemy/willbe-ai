@@ -62,7 +62,7 @@ Sign in at http://localhost:3001 with:
 - Email: `demo@willbe.dev`
 - Password: `Demo1234!`
 
-`npm run seed:demo` is re-runnable: it wipes scenarios and campaigns of the demo workspace and recreates account and lead scenarios, four campaigns at different stages with 30 days of backdated activity, and two teammates.
+`npm run seed:demo` is re-runnable: it wipes scenarios and campaigns of the demo workspace and recreates account and lead scenarios, five campaigns at different stages with a month of backdated activity (most of it in the last week, so the home dashboard is full), and two teammates.
 
 ## Checks
 
