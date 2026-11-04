@@ -1,5 +1,6 @@
 import { protectedAxiosInstance } from "@/api/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface Meeting {
   messageScenarioId: string;
@@ -123,4 +124,52 @@ export const useScenarioPerformance = ({
     error,
     refetch,
   };
+};
+
+export interface QuarterlyGoal {
+  quarter: string;
+  goal: number;
+  won: number;
+  pipeline: number;
+  currency: string;
+}
+
+export const useQuarterlyGoal = () => {
+  const { data, isLoading, error } = useQuery<QuarterlyGoal>({
+    queryKey: ["quarterly-goal"],
+    retry: false,
+    queryFn: async () => {
+      const response = await protectedAxiosInstance.get(
+        "/auth/home/quarterly-goal"
+      );
+      return response.data;
+    },
+  });
+
+  return {
+    quarterlyGoal: data,
+    isLoading,
+    error,
+  };
+};
+
+export const useUpdateQuarterlyGoal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (goal: number) => {
+      const response = await protectedAxiosInstance.put<QuarterlyGoal>(
+        "/auth/home/quarterly-goal",
+        { goal }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["quarterly-goal"], data);
+      toast("Quarterly goal updated");
+    },
+    onError: (error) => {
+      toast(`Failed to update the quarterly goal: ${error.message}`);
+    },
+  });
 };
